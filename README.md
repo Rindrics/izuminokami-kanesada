@@ -25,6 +25,7 @@
 | [ADR-0002](adr/0002-character-data-structure.md) | 人物データ構造 | ピンインベースの ID 命名規則 |
 | [ADR-0003](adr/0003-infrastructure-architecture.md) | インフラアーキテクチャ | Firebase + Next.js、NoSQL + ビルド時統計 |
 | [ADR-0004](adr/0004-port-number-convention.md) | ポート番号規則 | 30600〜30699 番の使用 |
+| [ADR-0005](adr/0005-japanese-ruby-structure.md) | 読み下し文ルビ構造 | japanese_ruby 配列による訓読みルビ管理 |
 
 ## ライセンス
 
