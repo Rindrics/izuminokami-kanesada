@@ -10,7 +10,9 @@
     "start": "next start -p 30600",
     "lint": "eslint",
     "check": "biome check src",
-    "format": "biome format --write src"
+    "format": "biome format --write src",
+    "deploy": "pnpm build && firebase deploy --only hosting",
+    "emulators": "firebase emulators:start"
   },
   "dependencies": {
     "next": "16.1.3",
