@@ -4,12 +4,13 @@ import { getAllContentIds, getContentById } from '@/data/sample-contents';
 import type { JapaneseRuby, Segment } from '@/types/content';
 
 interface Props {
-  params: Promise<{ id: string }>;
+  params: Promise<{ id: string[] }>;
 }
 
 export async function generateStaticParams() {
   const ids = getAllContentIds();
-  return ids.map((id) => ({ id }));
+  // "lunyu/1/1" → ["lunyu", "1", "1"]
+  return ids.map((id) => ({ id: id.split('/') }));
 }
 
 function SegmentView({ segment }: { segment: Segment }) {
@@ -115,7 +116,9 @@ function JapaneseTextWithRuby({
 
 export default async function ContentPage({ params }: Props) {
   const { id } = await params;
-  const content = getContentById(id);
+  // ["lunyu", "1", "1"] → "lunyu/1/1"
+  const contentId = id.join('/');
+  const content = getContentById(contentId);
 
   if (!content) {
     notFound();

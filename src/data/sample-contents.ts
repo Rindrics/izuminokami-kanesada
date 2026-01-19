@@ -2,7 +2,7 @@ import type { Content } from '@/types/content';
 
 export const sampleContents: Content[] = [
   {
-    content_id: 'lunyu_1_1',
+    content_id: 'lunyu/1/1',
     book_id: 'lunyu',
     section: '学而第一',
     chapter: '1-1',
