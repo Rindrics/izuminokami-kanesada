@@ -33,7 +33,7 @@ export const sampleContents: Content[] = [
     content_id: 'lunyu/1/1',
     book_id: 'lunyu',
     section: '学而第一',
-    chapter: '1-1',
+    chapter: '1',
     text: '子曰 學而時習之 不亦說乎 有朋自遠方來 不亦樂乎 人不知而不慍 不亦君子乎',
     segments: [
       { text: '子曰', start_pos: 0, end_pos: 2, speaker: null },

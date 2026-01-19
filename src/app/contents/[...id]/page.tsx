@@ -269,7 +269,7 @@ function ContentPage({
             <span>{content.chapter}</span>
           </nav>
           <h1 className="text-2xl font-bold text-black dark:text-white">
-            {section.name} {content.chapter}
+            {section.name}: {content.chapter}
           </h1>
         </header>
 
