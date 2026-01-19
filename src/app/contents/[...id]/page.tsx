@@ -290,18 +290,7 @@ function ContentPage({
             </div>
           </section>
 
-          <section className="flex gap-4 text-sm">
-            <div className="flex items-center gap-2">
-              <span className="inline-block h-3 w-3 rounded bg-amber-50 dark:bg-amber-900/20" />
-              <span className="text-zinc-600 dark:text-zinc-400">発言</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="inline-block h-3 w-3 rounded bg-zinc-100 dark:bg-zinc-800" />
-              <span className="text-zinc-600 dark:text-zinc-400">
-                ナレーション
-              </span>
-            </div>
-          </section>
+
 
           {content.japanese && (
             <section>
