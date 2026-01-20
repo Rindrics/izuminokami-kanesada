@@ -158,9 +158,13 @@ function buildRubyMap(
   while (i < text.length) {
     const override = overrideMap.get(i);
     if (override) {
-      rubyMap.set(i, { ruby: override.ruby, length: override.text.length });
-      i += override.text.length;
-      continue;
+      // Guard: verify override text matches actual text at position
+      const target = text.slice(i, i + override.text.length);
+      if (target === override.text) {
+        rubyMap.set(i, { ruby: override.ruby, length: override.text.length });
+        i += override.text.length;
+        continue;
+      }
     }
 
     const match = findLongestMatch(text, i);
