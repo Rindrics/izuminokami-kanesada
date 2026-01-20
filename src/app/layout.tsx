@@ -14,7 +14,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: '和泉守兼定',
-  description: '四書五経およびその他の中国古典を学習するためのWebアプリケーション',
+  description:
+    '四書五経およびその他の中国古典を学習するためのWebアプリケーション',
 };
 
 export default function RootLayout({
