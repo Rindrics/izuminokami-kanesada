@@ -1,18 +1,7 @@
+import type { Book, Section } from '@/types/book';
 import type { Content } from '@/types/content';
 
-// Book metadata
-export interface Book {
-  id: string; // "lunyu"
-  name: string; // "論語"
-  sections: Section[];
-}
-
-// Section (編) metadata
-export interface Section {
-  id: string; // "1"
-  name: string; // "学而第一"
-  chapters: string[]; // ["1", "2", "3", ...]
-}
+export type { Book, Section };
 
 export const books: Book[] = [
   {
