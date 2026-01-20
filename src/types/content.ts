@@ -32,12 +32,20 @@ export interface JapaneseRuby {
   reading_id?: string; // Reference to KunyomiReading.id
 }
 
+// ADR-0003: Tone change information
+export interface ToneChange {
+  original_tone: number;
+  changed_tone: number;
+  reason: string; // e.g., "不+4声→2声", "3声+3声→2声+3声"
+}
+
 // ADR-0003: Content-specific hanzi usage
-// Override default readings for specific positions in white text
+// Override default readings or tone changes for specific positions
 export interface ContentHanzi {
   hanzi_id: string; // "說"
-  meaning_id: string; // "說-yuè" - which meaning to use
+  meaning_id?: string; // "說-yuè" - which meaning to use (optional)
   position: number; // Position in the full text (0-indexed)
+  tone_change?: ToneChange; // Tone sandhi information
 }
 
 export interface Content {

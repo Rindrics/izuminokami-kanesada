@@ -259,10 +259,7 @@ function ContentPage({
         </header>
 
         <article className="space-y-6">
-          <HakubunWithTabs
-            segments={content.segments}
-            contentHanzi={content.content_hanzi}
-          />
+          <HakubunWithTabs segments={content.segments} />
 
           {content.japanese && (
             <section>

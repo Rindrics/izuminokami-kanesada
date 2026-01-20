@@ -34,13 +34,15 @@ export const sampleContents: Content[] = [
     book_id: 'lunyu',
     section: '学而第一',
     chapter: '1',
-    text: '子曰 學而時習之 不亦說乎 有朋自遠方來 不亦樂乎 人不知而不慍 不亦君子乎',
+    // Use - to mark connected characters for tone sandhi detection
+    // 不-亦 means 不 and 亦 are connected (4声+4声 → 2声+4声)
+    text: '子曰 學而時習之 不-亦說乎 有朋自遠方來 不-亦樂乎 人不知而不慍 不-亦君子乎',
     segments: [
       { text: '子曰', start_pos: 0, end_pos: 2, speaker: null },
       {
-        text: '學而時習之 不亦說乎 有朋自遠方來 不亦樂乎 人不知而不慍 不亦君子乎',
+        text: '學而時習之 不-亦說乎 有朋自遠方來 不-亦樂乎 人不知而不慍 不-亦君子乎',
         start_pos: 3,
-        end_pos: 38,
+        end_pos: 41, // +3 for the hyphens
         speaker: 'kongzi',
       },
     ],
@@ -50,6 +52,7 @@ export const sampleContents: Content[] = [
     },
     japanese:
       '子曰く、学びて之を時習す、亦た説ばしからずや。朋遠方より来る有り、亦た楽しからずや。人知らずして慍らず、亦た君子ならずや。',
+    // Tone sandhi is now auto-detected from - markers
   },
 ];
 
