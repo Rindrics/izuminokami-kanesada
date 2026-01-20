@@ -53,7 +53,6 @@ export default async function SectionPage({ params }: Props) {
             {section.chapters.map((chapter) => {
               const contentId = `${book.id}/${section.id}/${chapter}`;
               const content = getContentById(contentId);
-              console.log('contentId:', contentId, 'content:', content);
               // Remove hyphens (tone sandhi markers) for display
               const previewText = content?.text.replace(/-/g, '') ?? '';
               const maxLength = 20;
@@ -64,10 +63,10 @@ export default async function SectionPage({ params }: Props) {
 
               return (
                 <li key={chapter}>
-                  <Link
-                    href={`/contents/${book.id}/${section.id}/${chapter}`}
-                    className="block rounded-lg bg-white p-4 shadow-sm transition hover:bg-zinc-50 dark:bg-zinc-900 dark:hover:bg-zinc-800"
-                  >
+                <Link
+                  href={`/books/${book.id}/${section.id}/${chapter}`}
+                  className="block rounded-lg bg-white p-4 shadow-sm transition hover:bg-zinc-50 dark:bg-zinc-900 dark:hover:bg-zinc-800"
+                >
                     <div className="flex items-baseline gap-3">
                       <span className="text-lg font-medium text-black dark:text-white">
                         {chapter}
