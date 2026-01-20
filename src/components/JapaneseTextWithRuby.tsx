@@ -47,19 +47,12 @@ interface Props {
 export function JapaneseTextWithRuby({ text, rubyData }: Props) {
   const rubyMap = buildRubyMap(text, rubyData);
 
-  const skipPositions = new Set<number>();
-  for (const [pos, { length }] of rubyMap) {
-    for (let j = 1; j < length; j++) {
-      skipPositions.add(pos + j);
-    }
-  }
+  // Sort ruby positions for efficient lookup of next match
+  const sortedPositions = Array.from(rubyMap.keys()).sort((a, b) => a - b);
 
   const elements: React.ReactNode[] = [];
-  for (let i = 0; i < text.length; i++) {
-    if (skipPositions.has(i)) {
-      continue;
-    }
-
+  let i = 0;
+  while (i < text.length) {
     const match = rubyMap.get(i);
 
     if (match) {
@@ -72,8 +65,19 @@ export function JapaneseTextWithRuby({ text, rubyData }: Props) {
           </rt>
         </ruby>,
       );
+      i += match.length;
     } else {
-      elements.push(<span key={i}>{text[i]}</span>);
+      // Find the next ruby position to group non-ruby text
+      let nextMatchIndex = text.length;
+      for (const pos of sortedPositions) {
+        if (pos > i) {
+          nextMatchIndex = pos;
+          break;
+        }
+      }
+      const nonRubyText = text.slice(i, nextMatchIndex);
+      elements.push(nonRubyText);
+      i = nextMatchIndex;
     }
   }
 
