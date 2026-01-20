@@ -116,6 +116,116 @@ export const kunyomiDictionary: KunyomiEntry[] = [
     text: '時習',
     readings: [{ id: '時習-じしゅう', ruby: 'じしゅう', is_default: true }],
   },
+  {
+    id: '其',
+    text: '其',
+    readings: [{ id: '其-そ', ruby: 'そ', okurigana: 'の', is_default: true }],
+  },
+  {
+    id: '為',
+    text: '為',
+    readings: [
+      { id: '為-な', ruby: 'な', okurigana: 'り', is_default: true },
+      { id: '為-ため', ruby: 'ため', is_default: false },
+    ],
+  },
+  {
+    id: '孝弟',
+    text: '孝弟',
+    readings: [{ id: '孝弟-こうてい', ruby: 'こうてい', is_default: true }],
+  },
+  {
+    id: '上',
+    text: '上',
+    readings: [
+      { id: '上-かみ', ruby: 'かみ', is_default: true },
+      { id: '上-うえ', ruby: 'うえ', is_default: false },
+    ],
+  },
+  {
+    id: '犯',
+    text: '犯',
+    readings: [
+      { id: '犯-おか', ruby: 'おか', okurigana: 'す', is_default: true },
+    ],
+  },
+  {
+    id: '好',
+    text: '好',
+    readings: [
+      { id: '好-この', ruby: 'この', okurigana: 'む', is_default: true },
+    ],
+  },
+  {
+    id: '者',
+    text: '者',
+    readings: [{ id: '者-もの', ruby: 'もの', is_default: true }],
+  },
+  {
+    id: '鮮',
+    text: '鮮',
+    readings: [
+      { id: '鮮-すくな', ruby: 'すくな', okurigana: 'し', is_default: true },
+    ],
+  },
+  {
+    id: '乱',
+    text: '乱',
+    readings: [
+      { id: '乱-らん', ruby: 'らん', is_default: true },
+      { id: '乱-みだ', ruby: 'みだ', okurigana: 'れ', is_default: false },
+    ],
+  },
+  {
+    id: '作',
+    text: '作',
+    readings: [
+      { id: '作-な', ruby: 'な', okurigana: 'す', is_default: true },
+      { id: '作-つく', ruby: 'つく', okurigana: 'る', is_default: false },
+    ],
+  },
+  {
+    id: '未',
+    text: '未',
+    readings: [
+      { id: '未-いま', ruby: 'いま', okurigana: 'だ', is_default: true },
+    ],
+  },
+  {
+    id: '本',
+    text: '本',
+    readings: [{ id: '本-もと', ruby: 'もと', is_default: true }],
+  },
+  {
+    id: '務',
+    text: '務',
+    readings: [
+      { id: '務-つと', ruby: 'つと', okurigana: 'む', is_default: true },
+    ],
+  },
+  {
+    id: '立',
+    text: '立',
+    readings: [{ id: '立-た', ruby: 'た', okurigana: 'つ', is_default: true }],
+  },
+  {
+    id: '道',
+    text: '道',
+    readings: [{ id: '道-みち', ruby: 'みち', is_default: true }],
+  },
+  {
+    id: '生',
+    text: '生',
+    readings: [
+      { id: '生-しょう', ruby: 'しょう', okurigana: 'ず', is_default: true },
+      { id: '生-う', ruby: 'う', okurigana: 'まれる', is_default: false },
+    ],
+  },
+  {
+    id: '仁',
+    text: '仁',
+    readings: [{ id: '仁-じん', ruby: 'じん', is_default: true }],
+  },
 ];
 
 export function getKunyomiEntry(text: string): KunyomiEntry | undefined {
