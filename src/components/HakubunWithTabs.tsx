@@ -383,12 +383,16 @@ export function HakubunWithTabs({ segments }: Props) {
   return (
     <section>
       {/* Tabs */}
-      <div className="mb-3 flex flex-wrap gap-1">
+      <div className="mb-3 flex flex-wrap gap-1" role="tablist">
         {tabs.map((tab) => (
           <button
             key={tab.id}
             type="button"
             onClick={() => setMode(tab.id)}
+            role="tab"
+            id={`hakubun-tab-${tab.id}`}
+            aria-selected={mode === tab.id}
+            aria-controls="hakubun-panel"
             className={`rounded-t-lg px-4 py-2 text-sm font-medium transition ${
               mode === tab.id
                 ? 'bg-white text-black dark:bg-zinc-900 dark:text-white'
@@ -401,7 +405,12 @@ export function HakubunWithTabs({ segments }: Props) {
       </div>
 
       {/* Content */}
-      <div className="rounded-lg rounded-tl-none bg-white p-6 shadow-sm dark:bg-zinc-900">
+      <div
+        id="hakubun-panel"
+        role="tabpanel"
+        aria-labelledby={`hakubun-tab-${mode}`}
+        className="rounded-lg rounded-tl-none bg-white p-6 shadow-sm dark:bg-zinc-900"
+      >
         <p className="text-2xl leading-loose tracking-wider">
           {segments.map((segment) => (
             <TextWithRuby
