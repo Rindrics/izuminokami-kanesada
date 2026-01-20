@@ -14,7 +14,8 @@
     "deploy": "pnpm build && firebase deploy --only hosting",
     "emulators": "firebase emulators:start",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "prepare": "husky"
   },
   "dependencies": {
     "firebase-admin": "^13.6.0",
