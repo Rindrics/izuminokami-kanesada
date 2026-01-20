@@ -1,6 +1,6 @@
-import { describe, it, expect } from 'vitest';
-import { validateContent } from './content';
+import { describe, expect, it } from 'vitest';
 import type { Content } from '@/types/content';
+import { validateContent } from './content';
 
 // Helper to create a valid Content for testing
 function createValidContent(overrides: Partial<Content> = {}): Content {
@@ -206,7 +206,9 @@ describe('validateContent', () => {
     it('should fail when hyphen has no character before', () => {
       const content = createValidContent({
         text: '-亦說乎',
-        segments: [{ text: '-亦說乎', start_pos: 0, end_pos: 4, speaker: null }],
+        segments: [
+          { text: '-亦說乎', start_pos: 0, end_pos: 4, speaker: null },
+        ],
       });
       const result = validateContent(content);
       expect(result.valid).toBe(false);
@@ -221,7 +223,9 @@ describe('validateContent', () => {
     it('should fail when hyphen has no character after', () => {
       const content = createValidContent({
         text: '不亦說-',
-        segments: [{ text: '不亦說-', start_pos: 0, end_pos: 4, speaker: null }],
+        segments: [
+          { text: '不亦說-', start_pos: 0, end_pos: 4, speaker: null },
+        ],
       });
       const result = validateContent(content);
       expect(result.valid).toBe(false);

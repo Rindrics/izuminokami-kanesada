@@ -88,7 +88,9 @@ function validateSegments(
   }
 
   // Sort segments by start_pos for coverage check
-  const sortedSegments = [...segments].sort((a, b) => a.start_pos - b.start_pos);
+  const sortedSegments = [...segments].sort(
+    (a, b) => a.start_pos - b.start_pos,
+  );
 
   for (let i = 0; i < sortedSegments.length; i++) {
     const segment = sortedSegments[i];
