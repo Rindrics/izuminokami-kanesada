@@ -32,6 +32,14 @@ export interface JapaneseRuby {
   reading_id?: string; // Reference to KunyomiReading.id
 }
 
+// ADR-0003: Content-specific hanzi usage
+// Override default readings for specific positions in white text
+export interface ContentHanzi {
+  hanzi_id: string; // "說"
+  meaning_id: string; // "說-yuè" - which meaning to use
+  position: number; // Position in the full text (0-indexed)
+}
+
 export interface Content {
   content_id: string;
   book_id: string;
@@ -45,4 +53,5 @@ export interface Content {
   };
   japanese?: string;
   japanese_ruby?: JapaneseRuby[];
+  content_hanzi?: ContentHanzi[]; // Override hanzi readings in white text
 }

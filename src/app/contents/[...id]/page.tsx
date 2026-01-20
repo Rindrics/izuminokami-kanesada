@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { HakubunWithTabs } from '@/components/HakubunWithTabs';
 import { findLongestMatch } from '@/data/kunyomi-dictionary';
 import {
   getAllBookIds,
@@ -9,7 +10,7 @@ import {
   getContentById,
   getSectionById,
 } from '@/data/sample-contents';
-import type { JapaneseRuby, Segment } from '@/types/content';
+import type { JapaneseRuby } from '@/types/content';
 
 interface Props {
   params: Promise<{ id: string[] }>;
@@ -140,22 +141,6 @@ function SectionPage({
 // ============================================
 // Content Page: /contents/lunyu/1/1
 // ============================================
-function SegmentView({ segment }: { segment: Segment }) {
-  const isNarration = segment.speaker === null;
-
-  return (
-    <span
-      className={`
-        inline
-        ${isNarration ? 'text-zinc-500 dark:text-zinc-400' : 'text-black dark:text-white'}
-        ${!isNarration ? 'bg-amber-50 dark:bg-amber-900/20 px-1 rounded' : ''}
-      `}
-    >
-      {segment.text}
-    </span>
-  );
-}
-
 function buildRubyMap(
   text: string,
   overrides?: JapaneseRuby[],
@@ -274,23 +259,10 @@ function ContentPage({
         </header>
 
         <article className="space-y-6">
-          <section>
-            <h2 className="mb-3 text-sm font-medium text-zinc-500 dark:text-zinc-400">
-              白文
-            </h2>
-            <div className="rounded-lg bg-white p-6 shadow-sm dark:bg-zinc-900">
-              <p className="text-2xl leading-relaxed tracking-wider">
-                {content.segments.map((segment) => (
-                  <SegmentView
-                    key={`${segment.start_pos}-${segment.end_pos}`}
-                    segment={segment}
-                  />
-                ))}
-              </p>
-            </div>
-          </section>
-
-
+          <HakubunWithTabs
+            segments={content.segments}
+            contentHanzi={content.content_hanzi}
+          />
 
           {content.japanese && (
             <section>
@@ -332,4 +304,4 @@ export default async function Page({ params }: Props) {
     default:
       notFound();
   }
-  }
+}
