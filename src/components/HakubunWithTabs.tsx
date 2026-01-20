@@ -293,9 +293,11 @@ function TextWithRuby({
     }
   }
 
-  // For visual mode, don't apply the isNarration color
-  const wrapperClass =
-    mode === 'visual' ? `inline ${bgClass}` : `inline ${baseClass} ${bgClass}`;
+  // For visual mode, use non-narration color even for narration segments
+  const effectiveBaseClass =
+    mode === 'visual' && isNarration ? 'text-black dark:text-white' : baseClass;
+
+  const wrapperClass = `inline ${effectiveBaseClass} ${bgClass}`;
 
   return <span className={wrapperClass}>{elements}</span>;
 }
