@@ -12,7 +12,9 @@
     "check": "biome check src",
     "format": "biome format --write src",
     "deploy": "pnpm build && firebase deploy --only hosting",
-    "emulators": "firebase emulators:start"
+    "emulators": "firebase emulators:start",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "firebase-admin": "^13.6.0",
@@ -34,6 +36,7 @@
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^4.0.17"
   }
 }
