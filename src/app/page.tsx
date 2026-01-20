@@ -10,7 +10,7 @@ export default function Home() {
             漢文学習支援アプリ
           </h1>
           <p className="mt-2 text-zinc-600 dark:text-zinc-400">
-            漢文素読の子供と実践する "指導者"
+            漢文素読の子供と実践する &quot;指導者&quot;
             の学習を支援する意図で作っています。
           </p>
         </header>
