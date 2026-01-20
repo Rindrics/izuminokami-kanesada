@@ -1,3 +1,5 @@
+import { hanziDictionary } from '@/data/hanzi-dictionary';
+import { kunyomiDictionary } from '@/data/kunyomi-dictionary';
 import type { Content, Segment } from '@/types/content';
 
 export interface ValidationError {
@@ -283,6 +285,100 @@ function validateSpeakers(content: Content): ValidationError[] {
 }
 
 /**
+ * Check if a character is a CJK ideograph (hanzi/kanji)
+ */
+function isHanzi(char: string): boolean {
+  const code = char.charCodeAt(0);
+  // CJK Unified Ideographs: U+4E00 - U+9FFF
+  // CJK Unified Ideographs Extension A: U+3400 - U+4DBF
+  return (
+    (code >= 0x4e00 && code <= 0x9fff) || (code >= 0x3400 && code <= 0x4dbf)
+  );
+}
+
+/**
+ * Extract unique hanzi characters from text
+ */
+function extractHanzi(text: string): string[] {
+  const hanziSet = new Set<string>();
+  for (const char of text) {
+    if (isHanzi(char)) {
+      hanziSet.add(char);
+    }
+  }
+  return Array.from(hanziSet);
+}
+
+/**
+ * Validate that all hanzi in text are registered in hanzi-dictionary (pinyin)
+ */
+function validateHanziInDictionary(text: string): ValidationError[] {
+  const errors: ValidationError[] = [];
+  const hanziChars = extractHanzi(text);
+  const registeredHanzi = new Set(hanziDictionary.map((e) => e.id));
+
+  const missingHanzi: string[] = [];
+  for (const hanzi of hanziChars) {
+    if (!registeredHanzi.has(hanzi)) {
+      missingHanzi.push(hanzi);
+    }
+  }
+
+  if (missingHanzi.length > 0) {
+    errors.push({
+      path: 'text',
+      message: `hanzi not registered in hanzi-dictionary (missing pinyin): ${missingHanzi.join(', ')}`,
+      severity: 'error',
+    });
+  }
+
+  return errors;
+}
+
+/**
+ * Validate that all kanji in japanese text are registered in kunyomi-dictionary (reading)
+ * Only validates if japanese field is present
+ */
+function validateKunyomiInDictionary(
+  japanese: string | undefined,
+): ValidationError[] {
+  if (!japanese) {
+    return [];
+  }
+
+  const errors: ValidationError[] = [];
+  const kanjiChars = extractHanzi(japanese);
+
+  // Build a set of all kanji covered by kunyomi dictionary
+  // Note: kunyomi dictionary can have compound entries like "遠方", "君子"
+  const coveredKanji = new Set<string>();
+  for (const entry of kunyomiDictionary) {
+    for (const char of entry.text) {
+      if (isHanzi(char)) {
+        coveredKanji.add(char);
+      }
+    }
+  }
+
+  const missingKanji: string[] = [];
+  for (const kanji of kanjiChars) {
+    if (!coveredKanji.has(kanji)) {
+      missingKanji.push(kanji);
+    }
+  }
+
+  if (missingKanji.length > 0) {
+    errors.push({
+      path: 'japanese',
+      message: `kanji not registered in kunyomi-dictionary (missing reading): ${missingKanji.join(', ')}`,
+      severity: 'error',
+    });
+  }
+
+  return errors;
+}
+
+/**
  * Validate a Content object
  */
 export function validateContent(content: Content): ValidationResult {
@@ -304,6 +400,12 @@ export function validateContent(content: Content): ValidationResult {
 
   // 4. Validate speakers
   errors.push(...validateSpeakers(content));
+
+  // 5. Validate hanzi in text are in hanzi-dictionary (pinyin)
+  errors.push(...validateHanziInDictionary(content.text));
+
+  // 6. Validate kanji in japanese are in kunyomi-dictionary (reading)
+  errors.push(...validateKunyomiInDictionary(content.japanese));
 
   const hasErrors = errors.some((e) => e.severity === 'error');
   return { valid: !hasErrors, errors };

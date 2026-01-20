@@ -181,6 +181,10 @@ describe('validateContent', () => {
         segments: [
           { text: '不-亦說乎', start_pos: 0, end_pos: 5, speaker: null },
         ],
+        characters: {
+          speakers: [],
+          mentioned: [],
+        },
       });
       const result = validateContent(content);
       expect(result.valid).toBe(true);
@@ -192,6 +196,10 @@ describe('validateContent', () => {
         segments: [
           { text: '不--亦說乎', start_pos: 0, end_pos: 6, speaker: null },
         ],
+        characters: {
+          speakers: [],
+          mentioned: [],
+        },
       });
       const result = validateContent(content);
       expect(result.valid).toBe(false);
@@ -209,6 +217,10 @@ describe('validateContent', () => {
         segments: [
           { text: '-亦說乎', start_pos: 0, end_pos: 4, speaker: null },
         ],
+        characters: {
+          speakers: [],
+          mentioned: [],
+        },
       });
       const result = validateContent(content);
       expect(result.valid).toBe(false);
@@ -226,6 +238,10 @@ describe('validateContent', () => {
         segments: [
           { text: '不亦說-', start_pos: 0, end_pos: 4, speaker: null },
         ],
+        characters: {
+          speakers: [],
+          mentioned: [],
+        },
       });
       const result = validateContent(content);
       expect(result.valid).toBe(false);
@@ -243,6 +259,10 @@ describe('validateContent', () => {
         segments: [
           { text: '不 -亦說乎', start_pos: 0, end_pos: 6, speaker: null },
         ],
+        characters: {
+          speakers: [],
+          mentioned: [],
+        },
       });
       const result = validateContent(content);
       expect(result.valid).toBe(false);
@@ -260,6 +280,10 @@ describe('validateContent', () => {
         segments: [
           { text: '不- 亦說乎', start_pos: 0, end_pos: 6, speaker: null },
         ],
+        characters: {
+          speakers: [],
+          mentioned: [],
+        },
       });
       const result = validateContent(content);
       expect(result.valid).toBe(false);
@@ -317,6 +341,60 @@ describe('validateContent', () => {
           speakers: [],
           mentioned: [],
         },
+      });
+      const result = validateContent(content);
+      expect(result.valid).toBe(true);
+    });
+  });
+
+  describe('dictionary validation', () => {
+    it('should fail when hanzi in text is not in hanzi-dictionary (missing pinyin)', () => {
+      const content = createValidContent({
+        text: '龍虎',
+        segments: [{ text: '龍虎', start_pos: 0, end_pos: 2, speaker: null }],
+        characters: {
+          speakers: [],
+          mentioned: [],
+        },
+      });
+      const result = validateContent(content);
+      expect(result.valid).toBe(false);
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          path: 'text',
+          message: expect.stringContaining(
+            'hanzi not registered in hanzi-dictionary',
+          ),
+        }),
+      );
+    });
+
+    it('should fail when kanji in japanese is not in kunyomi-dictionary (missing reading)', () => {
+      const content = createValidContent({
+        japanese: '龍虎が現れた',
+      });
+      const result = validateContent(content);
+      expect(result.valid).toBe(false);
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          path: 'japanese',
+          message: expect.stringContaining(
+            'kanji not registered in kunyomi-dictionary',
+          ),
+        }),
+      );
+    });
+
+    it('should pass when japanese is not provided', () => {
+      const content = createValidContent();
+      delete content.japanese;
+      const result = validateContent(content);
+      expect(result.valid).toBe(true);
+    });
+
+    it('should pass when all hanzi and kanji are registered in dictionaries', () => {
+      const content = createValidContent({
+        japanese: '子曰く',
       });
       const result = validateContent(content);
       expect(result.valid).toBe(true);
