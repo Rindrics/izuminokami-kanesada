@@ -54,7 +54,7 @@ export default async function SectionPage({ params }: Props) {
               const contentId = `${book.id}/${section.id}/${chapter}`;
               const content = getContentById(contentId);
               // Remove hyphens (tone sandhi markers) for display
-              const previewText = content?.text.replace(/-/g, '') ?? '';
+              const previewText = content?.text?.replace(/-/g, '') ?? '';
 
               return (
                 <li key={chapter}>
