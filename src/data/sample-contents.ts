@@ -40,7 +40,7 @@ export const sampleContents: Content[] = [
       {
         text: '學而時習之 不亦說乎 有朋自遠方來 不亦樂乎 人不知而不慍 不亦君子乎',
         start_pos: 3,
-        end_pos: 35,
+        end_pos: 38,
         speaker: 'kongzi',
       },
     ],
