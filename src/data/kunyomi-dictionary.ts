@@ -244,7 +244,7 @@ export const kunyomiDictionary: KunyomiEntry[] = [
   {
     id: '言',
     text: '言',
-    readings: [{ id: '言-げん', ruby: 'げん', is_default: true }],
+    readings: [{ id: '言-い', ruby: 'い', is_default: true }],
   },
   {
     id: '謀',
@@ -334,7 +334,7 @@ export const kunyomiDictionary: KunyomiEntry[] = [
   {
     id: '敬',
     text: '敬',
-    readings: [{ id: '敬-つつし', ruby: 'つつし', is_default: true }],
+    readings: [{ id: '敬-けい', ruby: 'けい', is_default: true }],
   },
   {
     id: '用',
@@ -399,7 +399,7 @@ export const kunyomiDictionary: KunyomiEntry[] = [
   {
     id: '親',
     text: '親',
-    readings: [{ id: '親-した', ruby: 'した', is_default: true }],
+    readings: [{ id: '親-ちか', ruby: 'ちか', is_default: true }],
   },
   {
     id: '行',
@@ -429,7 +429,7 @@ export const kunyomiDictionary: KunyomiEntry[] = [
   {
     id: '易',
     text: '易',
-    readings: [{ id: '易-か', ruby: 'か', is_default: true }],
+    readings: [{ id: '易-やす', ruby: 'やす', is_default: true }],
   },
   {
     id: '父',
@@ -442,6 +442,11 @@ export const kunyomiDictionary: KunyomiEntry[] = [
     readings: [{ id: '母-はは', ruby: 'はは', is_default: true }],
   },
   {
+    id: '父母',
+    text: '父母',
+    readings: [{ id: '父母-ふぼ', ruby: 'ふぼ', is_default: true }],
+  },
+  {
     id: '能',
     text: '能',
     readings: [{ id: '能-よ', ruby: 'よ', is_default: true }],
@@ -449,7 +454,7 @@ export const kunyomiDictionary: KunyomiEntry[] = [
   {
     id: '竭',
     text: '竭',
-    readings: [{ id: '竭-つく', ruby: 'つく', is_default: true }],
+    readings: [{ id: '竭-つ', ruby: 'つ', is_default: true }],
   },
   {
     id: '致',
@@ -499,7 +504,7 @@ export const kunyomiDictionary: KunyomiEntry[] = [
   {
     id: '固',
     text: '固',
-    readings: [{ id: '固-かた', ruby: 'かた', is_default: true }],
+    readings: [{ id: '固-こ', ruby: 'こ', is_default: true }],
   },
   {
     id: '主',
@@ -539,12 +544,12 @@ export const kunyomiDictionary: KunyomiEntry[] = [
   {
     id: '勿',
     text: '勿',
-    readings: [{ id: '勿-なか', ruby: 'なか', is_default: true }],
+    readings: [{ id: '勿-な', ruby: 'な', is_default: true }],
   },
   {
     id: '終',
     text: '終',
-    readings: [{ id: '終-おわ', ruby: 'おわ', is_default: true }],
+    readings: [{ id: '終-お', ruby: 'お', is_default: true }],
   },
   {
     id: '慎',
@@ -654,7 +659,7 @@ export const kunyomiDictionary: KunyomiEntry[] = [
   {
     id: '諸',
     text: '諸',
-    readings: [{ id: '諸-これ', ruby: 'これ', is_default: true }],
+    readings: [{ id: '諸-こ', ruby: 'こ', is_default: true }],
   },
   {
     id: '異',
@@ -720,6 +725,26 @@ export const kunyomiDictionary: KunyomiEntry[] = [
     id: '夏',
     text: '夏',
     readings: [{ id: '夏-か', ruby: 'か', is_default: true }],
+  },
+  {
+    id: '三省',
+    text: '三省',
+    readings: [{ id: '三省-さんせい', ruby: 'さんせい', is_default: true }],
+  },
+  {
+    id: '朋友',
+    text: '朋友',
+    readings: [{ id: '朋友-ほうゆう', ruby: 'ほうゆう', is_default: true }],
+  },
+  {
+    id: '余力',
+    text: '余力',
+    readings: [{ id: '余力-よりょく', ruby: 'よりょく', is_default: true }],
+  },
+  {
+    id: '三年',
+    text: '三年',
+    readings: [{ id: '三年-さんねん', ruby: 'さんねん', is_default: true }],
   },
 ];
 
