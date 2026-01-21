@@ -28,7 +28,21 @@ export default function Home() {
                 (sum, s) => sum + s.chapters.length,
                 0,
               );
-              const hasContent = currentSections > 0;
+              const totalChapters = book.sections.reduce(
+                (sum, s) => sum + s.totalChapters,
+                0,
+              );
+              const hasContent = currentChapters > 0;
+              const isSingleSection = book.totalSections === 1;
+
+              const progressText = isSingleSection
+                ? `${currentChapters}/${totalChapters}章`
+                : `${currentSections}/${book.totalSections}編、計${currentChapters}章`;
+
+              const disabledText = isSingleSection
+                ? `0/${totalChapters}章`
+                : `0/${book.totalSections}編`;
+
               return (
                 <li key={book.id}>
                   {hasContent ? (
@@ -40,8 +54,7 @@ export default function Home() {
                         {book.name}
                       </span>
                       <span className="ml-2 text-sm text-zinc-500">
-                        ({currentSections}/{book.totalSections}編、計
-                        {currentChapters}章)
+                        ({progressText})
                       </span>
                     </Link>
                   ) : (
@@ -50,7 +63,7 @@ export default function Home() {
                         {book.name}
                       </span>
                       <span className="ml-2 text-sm text-zinc-400 dark:text-zinc-500">
-                        (0/{book.totalSections}編)
+                        ({disabledText})
                       </span>
                     </div>
                   )}
