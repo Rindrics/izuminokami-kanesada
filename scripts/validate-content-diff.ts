@@ -2,14 +2,14 @@
  * Validate content diff between current branch and main branch
  *
  * This script:
- * 1. Gets the diff of sample-contents.ts from origin/main
+ * 1. Gets the diff of contents directory from origin/main
  * 2. Identifies added content_ids
  * 3. Validates those contents using validateContent()
  * 4. Exits with code 1 if any validation errors are found
  */
 
 import { execSync } from 'node:child_process';
-import { sampleContents } from '../src/data/sample-contents';
+import { contents } from '../src/data/contents';
 import { validateContent } from '../src/lib/validators/content';
 
 interface DiffResult {
@@ -27,14 +27,14 @@ function parseContentDiff(): DiffResult {
   };
 
   try {
-    // Get diff of sample-contents.ts
+    // Get diff of contents directory
     const diff = execSync(
-      'git diff origin/main...HEAD -- src/data/sample-contents.ts',
+      'git diff origin/main...HEAD -- src/data/contents/',
       { encoding: 'utf-8' },
     );
 
     if (!diff) {
-      console.log('No changes in sample-contents.ts');
+      console.log('No changes in contents directory');
       return result;
     }
 
@@ -74,7 +74,7 @@ function parseContentDiff(): DiffResult {
     console.warn(
       'Could not get diff from origin/main, validating all contents',
     );
-    result.addedContentIds = sampleContents.map((c) => c.content_id);
+    result.addedContentIds = contents.map((c) => c.content_id);
     return result;
   }
 }
@@ -100,7 +100,7 @@ function main(): void {
   let hasErrors = false;
 
   for (const contentId of contentIdsToValidate) {
-    const content = sampleContents.find((c) => c.content_id === contentId);
+    const content = contents.find((c) => c.content_id === contentId);
 
     if (!content) {
       console.error(`ERROR: Content not found: ${contentId}`);
