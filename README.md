@@ -1,31 +1,34 @@
-# 四書五経学習サイト
+# 素読庵
 
-四書五経およびその他の中国古典を学習するための Web アプリケーション
+漢文素読を子供と実践する "指導者" の学習を支援するための Web アプリケーション
 
-## 機能
+## 開発
 
-- **3つの表示モード**: 白文、音読み（ルビ）、ピンイン（ルビ）
-- **声調変化対応**: ピンインモードで声調変化を視覚的に表示
-- **人物・漢字索引**: 人物別・漢字別にコンテンツを検索
-- **ダッシュボード**: 統計情報の表示
-- **オープンデータ**: JSON 形式でデータを公開
+```bash
+pnpm install
+pnpm dev
+```
 
-## 技術スタック
+## MCP サーバー
 
-- **フロントエンド**: Next.js (React)
-- **データベース**: Firebase Firestore
-- **認証**: Firebase Authentication
-- **ホスティング**: Firebase Hosting
+コンテンツ生成を支援する MCP サーバーを提供しています。
+
+### Cursor での使い方
+
+1. このプロジェクトを Cursor で開く
+2. `.cursor/mcp.json` が読み込まれる
+3. Cursor Settings → Features → MCP Servers で「sodokuan」が有効になっていることを確認
+
+### 利用可能なツール
+
+- `write_content_yaml` - コンテンツ YAML を生成
+- `validate_contents` - コンテンツを検証
+- `add_hanzi_entry` - 漢字辞書にエントリを追加
+- `add_kunyomi_entry` - 訓読み辞書にエントリを追加
 
 ## アーキテクチャ決定記録 (ADR)
 
-| ADR | タイトル | 概要 |
-| --- | -------- | ---- |
-| [ADR-0001](adr/0001-content-data-structure.md) | コンテンツデータ構造 | segments による発言・ナレーション管理 |
-| [ADR-0002](adr/0002-character-data-structure.md) | 人物データ構造 | ピンインベースの ID 命名規則 |
-| [ADR-0003](adr/0003-infrastructure-architecture.md) | インフラアーキテクチャ | Firebase + Next.js、NoSQL + ビルド時統計 |
-| [ADR-0004](adr/0004-port-number-convention.md) | ポート番号規則 | 30600〜30699 番の使用 |
-| [ADR-0005](adr/0005-japanese-ruby-structure.md) | 読み下し文ルビ構造 | japanese_ruby 配列による訓読みルビ管理 |
+設計上の意思決定は [adr/](adr/) ディレクトリに記録しています。
 
 ## ライセンス
 
