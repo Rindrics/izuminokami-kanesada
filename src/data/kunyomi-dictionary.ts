@@ -77,6 +77,11 @@ export const kunyomiDictionary: KunyomiEntry[] = [
     readings: [{ id: '有-あ', ruby: 'あ', okurigana: 'り', is_default: true }],
   },
   {
+    id: '有子',
+    text: '有子',
+    readings: [{ id: '有子-ゆうし', ruby: 'ゆうし', is_default: true }],
+  },
+  {
     id: '楽',
     text: '楽',
     readings: [
