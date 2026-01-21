@@ -11,6 +11,7 @@
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { inspect } from 'node:util';
+import { watch } from 'chokidar';
 import yaml from 'js-yaml';
 
 interface InputSegment {
@@ -72,7 +73,7 @@ interface OutputBook {
 let booksData: InputBook[] = [];
 
 function loadBooksYaml(): void {
-  const booksYamlPath = path.join(__dirname, '../contents/books.yaml');
+  const booksYamlPath = path.join(process.cwd(), 'contents/books.yaml');
   const content = fs.readFileSync(booksYamlPath, 'utf-8');
   booksData = yaml.load(content) as InputBook[];
 }
@@ -208,8 +209,8 @@ export function getAllSectionPaths(): string[] {
 }
 
 function main(): void {
-  const inputDir = path.join(__dirname, '../contents/input');
-  const outputDir = path.join(__dirname, '../src/generated');
+  const inputDir = path.join(process.cwd(), 'contents/input');
+  const outputDir = path.join(process.cwd(), 'src/generated');
   const contentsOutputDir = path.join(outputDir, 'contents');
 
   // Ensure output directories exist
@@ -264,8 +265,16 @@ function main(): void {
 
   // Generate TypeScript files for each book's contents
   for (const [bookId, contents] of contentsByBook) {
-    // Sort by content_id
-    contents.sort((a, b) => a.content_id.localeCompare(b.content_id));
+    // Sort by section (numeric) then chapter (numeric)
+    contents.sort((a, b) => {
+      const [, sectionA, chapterA] = a.content_id.split('/');
+      const [, sectionB, chapterB] = b.content_id.split('/');
+
+      const sectionDiff = Number(sectionA) - Number(sectionB);
+      if (sectionDiff !== 0) return sectionDiff;
+
+      return Number(chapterA) - Number(chapterB);
+    });
 
     const tsContent = generateContentTypeScriptFile(bookId, contents);
     const outputPath = path.join(contentsOutputDir, `${bookId}.ts`);
@@ -298,6 +307,25 @@ export function getContentById(id: string): Content | undefined {
 export function getAllContentIds(): string[] {
   return contents.map((c) => c.content_id);
 }
+
+/**
+ * Get adjacent content IDs (previous and next) for navigation
+ * Returns null if there is no previous/next content
+ */
+export function getAdjacentContentIds(
+  currentId: string,
+): { prev: string | null; next: string | null } {
+  const index = contents.findIndex((c) => c.content_id === currentId);
+
+  if (index === -1) {
+    return { prev: null, next: null };
+  }
+
+  const prev = index > 0 ? contents[index - 1].content_id : null;
+  const next = index < contents.length - 1 ? contents[index + 1].content_id : null;
+
+  return { prev, next };
+}
 `;
 
   const indexPath = path.join(contentsOutputDir, 'index.ts');
@@ -323,4 +351,58 @@ export function getAllContentIds(): string[] {
   console.log('\n=== Generation Complete ===');
 }
 
-main();
+// Check for --watch flag
+const isWatchMode = process.argv.includes('--watch');
+
+if (isWatchMode) {
+  const watchPath = path.join(process.cwd(), 'contents/input');
+
+  console.log('=== Watch Mode ===');
+  console.log(`Watching: ${watchPath}`);
+  console.log('Press Ctrl+C to stop.\n');
+
+  // Initial generation
+  main();
+
+  // Watch for changes in contents/input directory
+  const watcher = watch(watchPath, {
+    ignored: /(^|[/\\])\../, // ignore dotfiles
+    persistent: true,
+    ignoreInitial: true,
+    awaitWriteFinish: {
+      stabilityThreshold: 300,
+      pollInterval: 100,
+    },
+  });
+
+  watcher
+    .on('ready', () => {
+      console.log('Watching for changes...\n');
+    })
+    .on('change', (filePath) => {
+      console.log(`\n[change] ${filePath}`);
+      try {
+        main();
+      } catch (error) {
+        console.error('Generation failed:', error);
+      }
+    })
+    .on('add', (filePath) => {
+      console.log(`\n[add] ${filePath}`);
+      try {
+        main();
+      } catch (error) {
+        console.error('Generation failed:', error);
+      }
+    })
+    .on('unlink', (filePath) => {
+      console.log(`\n[delete] ${filePath}`);
+      try {
+        main();
+      } catch (error) {
+        console.error('Generation failed:', error);
+      }
+    });
+} else {
+  main();
+}
