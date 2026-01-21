@@ -182,7 +182,7 @@ function HanziWithRuby({
         flexDirection: 'column',
         alignItems: 'center',
         verticalAlign: 'bottom',
-        margin: '0 0.1em',
+        margin: '0 0.2em',
       }}
     >
       {/* Ruby text on top */}
