@@ -98,6 +98,50 @@ function validateSegments(
     const segment = sortedSegments[i];
     const segmentIndex = segments.indexOf(segment);
 
+    // Runtime type guards - validate field types before positional checks
+    let hasTypeError = false;
+
+    if (!Number.isInteger(segment.start_pos)) {
+      errors.push({
+        path: `segments[${segmentIndex}].start_pos`,
+        message: 'start_pos must be an integer',
+        severity: 'error',
+      });
+      hasTypeError = true;
+    }
+
+    if (!Number.isInteger(segment.end_pos)) {
+      errors.push({
+        path: `segments[${segmentIndex}].end_pos`,
+        message: 'end_pos must be an integer',
+        severity: 'error',
+      });
+      hasTypeError = true;
+    }
+
+    if (typeof segment.text !== 'string') {
+      errors.push({
+        path: `segments[${segmentIndex}].text`,
+        message: 'text must be a string',
+        severity: 'error',
+      });
+      hasTypeError = true;
+    }
+
+    if (segment.speaker !== null && typeof segment.speaker !== 'string') {
+      errors.push({
+        path: `segments[${segmentIndex}].speaker`,
+        message: 'speaker must be a string',
+        severity: 'error',
+      });
+      hasTypeError = true;
+    }
+
+    // Skip positional checks if types are invalid
+    if (hasTypeError) {
+      continue;
+    }
+
     // Check start_pos is valid
     if (segment.start_pos < 0) {
       errors.push({
