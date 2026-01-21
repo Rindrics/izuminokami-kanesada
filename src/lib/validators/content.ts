@@ -394,13 +394,13 @@ function validateKunyomiInDictionary(
   const kanjiChars = extractHanzi(japanese);
 
   // Build a set of all kanji covered by kunyomi dictionary
-  // Note: kunyomi dictionary can have compound entries like "遠方", "君子"
+  // Only single-character entries count as coverage for individual kanji
+  // Compound entries like "君子" only cover the compound, not individual characters
   const coveredKanji = new Set<string>();
   for (const entry of kunyomiDictionary) {
-    for (const char of entry.text) {
-      if (isHanzi(char)) {
-        coveredKanji.add(char);
-      }
+    // Only add single-character entries
+    if (entry.text.length === 1 && isHanzi(entry.text)) {
+      coveredKanji.add(entry.text);
     }
   }
 
