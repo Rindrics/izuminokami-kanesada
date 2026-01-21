@@ -11,10 +11,13 @@ interface Props {
 }
 
 // Parse text with - markers and detect tone sandhi
-// Returns: { chars: string[], tones: number[] } where tones have sandhi applied
+// Returns: { chars, originalTones, effectiveTones }
+// - originalTones: base tones from dictionary (for color)
+// - effectiveTones: tones after sandhi applied (for contour shape)
 function parseTextWithToneSandhi(text: string): {
   chars: string[];
-  tones: (number | undefined)[];
+  originalTones: (number | undefined)[];
+  effectiveTones: (number | undefined)[];
 } {
   const chars: string[] = [];
   const originalTones: (number | undefined)[] = [];
@@ -29,7 +32,7 @@ function parseTextWithToneSandhi(text: string): {
   }
 
   // Second pass: detect connected groups and apply tone sandhi
-  const tones = [...originalTones];
+  const effectiveTones = [...originalTones];
   let i = 0;
   let textIndex = 0;
 
@@ -59,11 +62,11 @@ function parseTextWithToneSandhi(text: string): {
 
           // Rule: 4声+4声 → 2声+4声
           if (current === 4 && next === 4) {
-            tones[groupIndices[j]] = 2;
+            effectiveTones[groupIndices[j]] = 2;
           }
           // Rule: 3声+3声 → 2声+3声
           if (current === 3 && next === 3) {
-            tones[groupIndices[j]] = 2;
+            effectiveTones[groupIndices[j]] = 2;
           }
         }
 
@@ -80,7 +83,7 @@ function parseTextWithToneSandhi(text: string): {
     textIndex++;
   }
 
-  return { chars, tones };
+  return { chars, originalTones, effectiveTones };
 }
 
 // Tone colors
@@ -92,8 +95,16 @@ const toneColors = {
 };
 
 // SVG tone contour backgrounds
-function ToneContour({ tone }: { tone: number }) {
-  const color = toneColors[tone as keyof typeof toneColors] || '#71717a';
+// - shapeTone: determines the contour shape (after sandhi)
+// - colorTone: determines the color (original tone, before sandhi)
+function ToneContour({
+  shapeTone,
+  colorTone,
+}: {
+  shapeTone: number;
+  colorTone: number;
+}) {
+  const color = toneColors[colorTone as keyof typeof toneColors] || '#71717a';
 
   const contourStyle: React.CSSProperties = {
     position: 'absolute',
@@ -104,7 +115,7 @@ function ToneContour({ tone }: { tone: number }) {
     pointerEvents: 'none',
   };
 
-  switch (tone) {
+  switch (shapeTone) {
     case 1:
       // High flat tone: horizontal line at top
       return (
@@ -218,18 +229,20 @@ function TextWithRuby({
   }
 
   // Parse text and apply tone sandhi
-  const { chars, tones } = parseTextWithToneSandhi(text);
+  const { chars, originalTones, effectiveTones } =
+    parseTextWithToneSandhi(text);
 
   // Build elements based on mode
   const elements: React.ReactNode[] = [];
   for (let i = 0; i < chars.length; i++) {
     const char = chars[i];
-    const effectiveTone = tones[i];
+    const originalTone = originalTones[i];
+    const effectiveTone = effectiveTones[i];
     const meaning = getDefaultMeaning(char);
 
     if (mode === 'visual') {
       // Visual mode: SVG contour background with normal character style
-      if (effectiveTone !== undefined) {
+      if (effectiveTone !== undefined && originalTone !== undefined) {
         elements.push(
           <span
             key={i}
@@ -242,8 +255,8 @@ function TextWithRuby({
               textAlign: 'center',
             }}
           >
-            {/* Background tone contour - uses effective tone (with sandhi) */}
-            <ToneContour tone={effectiveTone} />
+            {/* Background tone contour - shape from effectiveTone, color from originalTone */}
+            <ToneContour shapeTone={effectiveTone} colorTone={originalTone} />
             {/* Character - normal style */}
             <span
               style={{
