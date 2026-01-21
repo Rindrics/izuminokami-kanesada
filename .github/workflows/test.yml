@@ -37,14 +37,11 @@ jobs:
       - name: Lint and format check
         run: pnpm run check
 
-      - name: Run tests
-        run: pnpm test
-
-      - name: Generate contents
-        run: pnpm run generate:contents
+      - name: Build
+        run: pnpm run build
 
       - name: Validate content diff
         run: pnpm run validate:contents
 
-      - name: Build
-        run: pnpm run build
+      - name: Run tests
+        run: pnpm test
