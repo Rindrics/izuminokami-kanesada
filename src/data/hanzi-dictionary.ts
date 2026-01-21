@@ -685,6 +685,538 @@ export const hanziDictionary: HanziEntry[] = [
     ],
     is_common: true,
   },
+  {
+    id: '巧',
+    meanings: [
+      {
+        id: '巧-qiǎo',
+        onyomi: 'コウ',
+        pinyin: 'qiǎo',
+        tone: 3,
+        meaning_ja: '巧みな',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '言',
+    meanings: [
+      {
+        id: '言-yán',
+        onyomi: 'ゲン',
+        pinyin: 'yán',
+        tone: 2,
+        meaning_ja: '言葉',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '令',
+    meanings: [
+      {
+        id: '令-lìng',
+        onyomi: 'レイ',
+        pinyin: 'lìng',
+        tone: 4,
+        meaning_ja: '令、よい',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '色',
+    meanings: [
+      {
+        id: '色-sè',
+        onyomi: 'ショク',
+        pinyin: 'sè',
+        tone: 4,
+        meaning_ja: '色、顔色',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '曾',
+    meanings: [
+      {
+        id: '曾-zēng',
+        onyomi: 'ソウ',
+        pinyin: 'zēng',
+        tone: 1,
+        meaning_ja: '曾（人名）',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '吾',
+    meanings: [
+      {
+        id: '吾-wú',
+        onyomi: 'ム',
+        pinyin: 'wú',
+        tone: 2,
+        meaning_ja: '我、私',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '日',
+    meanings: [
+      {
+        id: '日-rì',
+        onyomi: 'ニチ',
+        pinyin: 'rì',
+        tone: 4,
+        meaning_ja: '日',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '三',
+    meanings: [
+      {
+        id: '三-sān',
+        onyomi: 'サン',
+        pinyin: 'sān',
+        tone: 1,
+        meaning_ja: '三',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '省',
+    meanings: [
+      {
+        id: '省-xǐng',
+        onyomi: 'セイ',
+        pinyin: 'xǐng',
+        tone: 3,
+        meaning_ja: '省みる',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '身',
+    meanings: [
+      {
+        id: '身-shēn',
+        onyomi: 'シン',
+        pinyin: 'shēn',
+        tone: 1,
+        meaning_ja: '身、自分',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '謀',
+    meanings: [
+      {
+        id: '謀-móu',
+        onyomi: 'ボウ',
+        pinyin: 'móu',
+        tone: 2,
+        meaning_ja: '謀る',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '忠',
+    meanings: [
+      {
+        id: '忠-zhōng',
+        onyomi: 'チュウ',
+        pinyin: 'zhōng',
+        tone: 1,
+        meaning_ja: '忠、誠実',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '友',
+    meanings: [
+      {
+        id: '友-yǒu',
+        onyomi: 'ユウ',
+        pinyin: 'yǒu',
+        tone: 3,
+        meaning_ja: '友',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '交',
+    meanings: [
+      {
+        id: '交-jiāo',
+        onyomi: 'コウ',
+        pinyin: 'jiāo',
+        tone: 1,
+        meaning_ja: '交わる',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '信',
+    meanings: [
+      {
+        id: '信-xìn',
+        onyomi: 'シン',
+        pinyin: 'xìn',
+        tone: 4,
+        meaning_ja: '信、信用',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '傳',
+    meanings: [
+      {
+        id: '傳-chuán',
+        onyomi: 'デン',
+        pinyin: 'chuán',
+        tone: 2,
+        meaning_ja: '伝える',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '千',
+    meanings: [
+      {
+        id: '千-qiān',
+        onyomi: 'セン',
+        pinyin: 'qiān',
+        tone: 1,
+        meaning_ja: '千',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '乘',
+    meanings: [
+      {
+        id: '乘-shèng',
+        onyomi: 'セイ',
+        pinyin: 'shèng',
+        tone: 4,
+        meaning_ja: '乗り物、車',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '國',
+    meanings: [
+      {
+        id: '國-guó',
+        onyomi: 'コク',
+        pinyin: 'guó',
+        tone: 2,
+        meaning_ja: '国',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '敬',
+    meanings: [
+      {
+        id: '敬-jìng',
+        onyomi: 'ケイ',
+        pinyin: 'jìng',
+        tone: 4,
+        meaning_ja: '敬う、慎む',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '事',
+    meanings: [
+      {
+        id: '事-shì',
+        onyomi: 'ジ',
+        pinyin: 'shì',
+        tone: 4,
+        meaning_ja: '事、仕事',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '節',
+    meanings: [
+      {
+        id: '節-jié',
+        onyomi: 'セツ',
+        pinyin: 'jié',
+        tone: 2,
+        meaning_ja: '節約する',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '用',
+    meanings: [
+      {
+        id: '用-yòng',
+        onyomi: 'ヨウ',
+        pinyin: 'yòng',
+        tone: 4,
+        meaning_ja: '用いる、費用',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '愛',
+    meanings: [
+      {
+        id: '愛-ài',
+        onyomi: 'アイ',
+        pinyin: 'ài',
+        tone: 4,
+        meaning_ja: '愛する',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '使',
+    meanings: [
+      {
+        id: '使-shǐ',
+        onyomi: 'ジ',
+        pinyin: 'shǐ',
+        tone: 3,
+        meaning_ja: '使う、使わせる',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '民',
+    meanings: [
+      {
+        id: '民-mín',
+        onyomi: 'ミン',
+        pinyin: 'mín',
+        tone: 2,
+        meaning_ja: '民、人民',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '以',
+    meanings: [
+      {
+        id: '以-yǐ',
+        onyomi: 'イ',
+        pinyin: 'yǐ',
+        tone: 3,
+        meaning_ja: '以て、用いる',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '入',
+    meanings: [
+      {
+        id: '入-rù',
+        onyomi: 'TODO',
+        pinyin: 'rù',
+        tone: 4,
+        meaning_ja: '入る',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '則',
+    meanings: [
+      {
+        id: '則-zé',
+        onyomi: 'TODO',
+        pinyin: 'zé',
+        tone: 2,
+        meaning_ja: '則ち、すなわち',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '出',
+    meanings: [
+      {
+        id: '出-chū',
+        onyomi: 'TODO',
+        pinyin: 'chū',
+        tone: 1,
+        meaning_ja: '出る',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '謹',
+    meanings: [
+      {
+        id: '謹-jǐn',
+        onyomi: 'TODO',
+        pinyin: 'jǐn',
+        tone: 3,
+        meaning_ja: '慎む',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '汎',
+    meanings: [
+      {
+        id: '汎-fàn',
+        onyomi: 'ハン',
+        pinyin: 'fàn',
+        tone: 4,
+        meaning_ja: '広く',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '衆',
+    meanings: [
+      {
+        id: '衆-zhòng',
+        onyomi: 'チュウ',
+        pinyin: 'zhòng',
+        tone: 4,
+        meaning_ja: '衆、多くの人',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '親',
+    meanings: [
+      {
+        id: '親-qīn',
+        onyomi: 'TODO',
+        pinyin: 'qīn',
+        tone: 1,
+        meaning_ja: '親しむ',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '行',
+    meanings: [
+      {
+        id: '行-xíng',
+        onyomi: 'セイ',
+        pinyin: 'xíng',
+        tone: 2,
+        meaning_ja: '行う',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '餘',
+    meanings: [
+      {
+        id: '餘-yú',
+        onyomi: 'TODO',
+        pinyin: 'yú',
+        tone: 2,
+        meaning_ja: '余り',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '力',
+    meanings: [
+      {
+        id: '力-lì',
+        onyomi: 'リツ',
+        pinyin: 'lì',
+        tone: 4,
+        meaning_ja: '力',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '文',
+    meanings: [
+      {
+        id: '文-wén',
+        onyomi: 'TODO',
+        pinyin: 'wén',
+        tone: 2,
+        meaning_ja: '文、学問',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
 ];
 
 const hanziMap = new Map(hanziDictionary.map((e) => [e.id, e]));

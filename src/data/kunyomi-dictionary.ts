@@ -231,6 +231,196 @@ export const kunyomiDictionary: KunyomiEntry[] = [
     text: '仁',
     readings: [{ id: '仁-じん', ruby: 'じん', is_default: true }],
   },
+  {
+    id: '巧',
+    text: '巧',
+    readings: [{ id: '巧-たく', ruby: 'たく', is_default: true }],
+  },
+  {
+    id: '省',
+    text: '省',
+    readings: [{ id: '省-かえり', ruby: 'かえり', is_default: true }],
+  },
+  {
+    id: '言',
+    text: '言',
+    readings: [{ id: '言-げん', ruby: 'げん', is_default: true }],
+  },
+  {
+    id: '謀',
+    text: '謀',
+    readings: [{ id: '謀-はか', ruby: 'はか', is_default: true }],
+  },
+  {
+    id: '令',
+    text: '令',
+    readings: [{ id: '令-れい', ruby: 'れい', is_default: true }],
+  },
+  {
+    id: '忠',
+    text: '忠',
+    readings: [{ id: '忠-ちゅう', ruby: 'ちゅう', is_default: true }],
+  },
+  {
+    id: '色',
+    text: '色',
+    readings: [{ id: '色-しょく', ruby: 'しょく', is_default: true }],
+  },
+  {
+    id: '曾',
+    text: '曾',
+    readings: [{ id: '曾-そう', ruby: 'そう', is_default: true }],
+  },
+  {
+    id: '吾',
+    text: '吾',
+    readings: [{ id: '吾-われ', ruby: 'われ', is_default: true }],
+  },
+  {
+    id: '日',
+    text: '日',
+    readings: [{ id: '日-ひ', ruby: 'ひ', is_default: true }],
+  },
+  {
+    id: '三',
+    text: '三',
+    readings: [{ id: '三-み', ruby: 'み', is_default: true }],
+  },
+  {
+    id: '身',
+    text: '身',
+    readings: [{ id: '身-み', ruby: 'み', is_default: true }],
+  },
+  {
+    id: '友',
+    text: '友',
+    readings: [{ id: '友-とも', ruby: 'とも', is_default: true }],
+  },
+  {
+    id: '交',
+    text: '交',
+    readings: [{ id: '交-まじ', ruby: 'まじ', is_default: true }],
+  },
+  {
+    id: '信',
+    text: '信',
+    readings: [{ id: '信-しん', ruby: 'しん', is_default: true }],
+  },
+  {
+    id: '伝',
+    text: '伝',
+    readings: [{ id: '伝-つた', ruby: 'つた', is_default: true }],
+  },
+  {
+    id: '千',
+    text: '千',
+    readings: [{ id: '千-せん', ruby: 'せん', is_default: true }],
+  },
+  {
+    id: '乗',
+    text: '乗',
+    readings: [{ id: '乗-じょう', ruby: 'じょう', is_default: true }],
+  },
+  {
+    id: '国',
+    text: '国',
+    readings: [{ id: '国-くに', ruby: 'くに', is_default: true }],
+  },
+  {
+    id: '事',
+    text: '事',
+    readings: [{ id: '事-こと', ruby: 'こと', is_default: true }],
+  },
+  {
+    id: '敬',
+    text: '敬',
+    readings: [{ id: '敬-つつし', ruby: 'つつし', is_default: true }],
+  },
+  {
+    id: '用',
+    text: '用',
+    readings: [{ id: '用-よう', ruby: 'よう', is_default: true }],
+  },
+  {
+    id: '節',
+    text: '節',
+    readings: [{ id: '節-せっ', ruby: 'せっ', is_default: true }],
+  },
+  {
+    id: '愛',
+    text: '愛',
+    readings: [{ id: '愛-あい', ruby: 'あい', is_default: true }],
+  },
+  {
+    id: '民',
+    text: '民',
+    readings: [{ id: '民-たみ', ruby: 'たみ', is_default: true }],
+  },
+  {
+    id: '使',
+    text: '使',
+    readings: [{ id: '使-つか', ruby: 'つか', is_default: true }],
+  },
+  {
+    id: '以',
+    text: '以',
+    readings: [{ id: '以-もっ', ruby: 'もっ', is_default: true }],
+  },
+  {
+    id: '入',
+    text: '入',
+    readings: [{ id: '入-い', ruby: 'い', is_default: true }],
+  },
+  {
+    id: '則',
+    text: '則',
+    readings: [{ id: '則-すなわ', ruby: 'すなわ', is_default: true }],
+  },
+  {
+    id: '出',
+    text: '出',
+    readings: [{ id: '出-い', ruby: 'い', is_default: true }],
+  },
+  {
+    id: '謹',
+    text: '謹',
+    readings: [{ id: '謹-つつし', ruby: 'つつし', is_default: true }],
+  },
+  {
+    id: '汎',
+    text: '汎',
+    readings: [{ id: '汎-ひろ', ruby: 'ひろ', is_default: true }],
+  },
+  {
+    id: '衆',
+    text: '衆',
+    readings: [{ id: '衆-しゅう', ruby: 'しゅう', is_default: true }],
+  },
+  {
+    id: '親',
+    text: '親',
+    readings: [{ id: '親-した', ruby: 'した', is_default: true }],
+  },
+  {
+    id: '行',
+    text: '行',
+    readings: [{ id: '行-おこな', ruby: 'おこな', is_default: true }],
+  },
+  {
+    id: '余',
+    text: '余',
+    readings: [{ id: '余-よ', ruby: 'よ', is_default: true }],
+  },
+  {
+    id: '力',
+    text: '力',
+    readings: [{ id: '力-ちから', ruby: 'ちから', is_default: true }],
+  },
+  {
+    id: '文',
+    text: '文',
+    readings: [{ id: '文-ぶん', ruby: 'ぶん', is_default: true }],
+  },
 ];
 
 export function getKunyomiEntry(text: string): KunyomiEntry | undefined {
