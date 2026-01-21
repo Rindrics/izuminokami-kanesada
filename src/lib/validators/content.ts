@@ -244,6 +244,61 @@ function validateSegments(
 }
 
 /**
+ * Punctuation characters that are not allowed in segment text
+ */
+const FORBIDDEN_PUNCTUATION = [
+  '。',
+  '、',
+  '，',
+  '；',
+  '：',
+  '！',
+  '？',
+  '「',
+  '」',
+  '『',
+  '』',
+  '（',
+  '）',
+  '【',
+  '】',
+  '…',
+  '・',
+  // Full-width punctuation
+  '．',
+  '，',
+];
+
+/**
+ * Validate that segment text does not contain punctuation
+ */
+function validateNoPunctuation(segments: Segment[]): ValidationError[] {
+  const errors: ValidationError[] = [];
+
+  for (let i = 0; i < segments.length; i++) {
+    const segment = segments[i];
+    const foundPunctuation: string[] = [];
+
+    for (const char of segment.text) {
+      if (FORBIDDEN_PUNCTUATION.includes(char)) {
+        foundPunctuation.push(char);
+      }
+    }
+
+    if (foundPunctuation.length > 0) {
+      const uniquePunctuation = [...new Set(foundPunctuation)];
+      errors.push({
+        path: `segments[${i}].text`,
+        message: `segment text contains forbidden punctuation: ${uniquePunctuation.join(' ')}`,
+        severity: 'error',
+      });
+    }
+  }
+
+  return errors;
+}
+
+/**
  * Validate connection markers (ADR-0007)
  * - `-` must have characters before and after
  * - No consecutive `-`
@@ -355,16 +410,26 @@ function extractHanzi(text: string): string[] {
 
 /**
  * Validate that all hanzi in text are registered in hanzi-dictionary (pinyin)
+ * Also checks that onyomi is not 'TODO'
  */
 function validateHanziInDictionary(text: string): ValidationError[] {
   const errors: ValidationError[] = [];
   const hanziChars = extractHanzi(text);
-  const registeredHanzi = new Set(hanziDictionary.map((e) => e.id));
+  const hanziMap = new Map(hanziDictionary.map((e) => [e.id, e]));
 
   const missingHanzi: string[] = [];
+  const todoOnyomiHanzi: string[] = [];
+
   for (const hanzi of hanziChars) {
-    if (!registeredHanzi.has(hanzi)) {
+    const entry = hanziMap.get(hanzi);
+    if (!entry) {
       missingHanzi.push(hanzi);
+    } else {
+      // Check if default meaning has TODO onyomi
+      const defaultMeaning = entry.meanings.find((m) => m.is_default);
+      if (defaultMeaning?.onyomi === 'TODO') {
+        todoOnyomiHanzi.push(hanzi);
+      }
     }
   }
 
@@ -372,6 +437,14 @@ function validateHanziInDictionary(text: string): ValidationError[] {
     errors.push({
       path: 'text',
       message: `hanzi not registered in hanzi-dictionary (missing pinyin): ${missingHanzi.join(', ')}`,
+      severity: 'error',
+    });
+  }
+
+  if (todoOnyomiHanzi.length > 0) {
+    errors.push({
+      path: 'text',
+      message: `hanzi has incomplete onyomi (TODO): ${todoOnyomiHanzi.join(', ')}`,
       severity: 'error',
     });
   }
@@ -394,13 +467,13 @@ function validateKunyomiInDictionary(
   const kanjiChars = extractHanzi(japanese);
 
   // Build a set of all kanji covered by kunyomi dictionary
-  // Note: kunyomi dictionary can have compound entries like "遠方", "君子"
+  // Only single-character entries count as coverage for individual kanji
+  // Compound entries like "君子" only cover the compound, not individual characters
   const coveredKanji = new Set<string>();
   for (const entry of kunyomiDictionary) {
-    for (const char of entry.text) {
-      if (isHanzi(char)) {
-        coveredKanji.add(char);
-      }
+    // Only add single-character entries
+    if (entry.text.length === 1 && isHanzi(entry.text)) {
+      coveredKanji.add(entry.text);
     }
   }
 
@@ -439,16 +512,19 @@ export function validateContent(content: Content): ValidationResult {
   // 2. Validate segments
   errors.push(...validateSegments(content.segments, content.text));
 
-  // 3. Validate connection markers
+  // 3. Validate no punctuation in segments
+  errors.push(...validateNoPunctuation(content.segments));
+
+  // 4. Validate connection markers
   errors.push(...validateConnectionMarkers(content.text));
 
-  // 4. Validate speakers
+  // 5. Validate speakers
   errors.push(...validateSpeakers(content));
 
-  // 5. Validate hanzi in text are in hanzi-dictionary (pinyin)
+  // 6. Validate hanzi in text are in hanzi-dictionary (pinyin)
   errors.push(...validateHanziInDictionary(content.text));
 
-  // 6. Validate kanji in japanese are in kunyomi-dictionary (reading)
+  // 7. Validate kanji in japanese are in kunyomi-dictionary (reading)
   errors.push(...validateKunyomiInDictionary(content.japanese));
 
   const hasErrors = errors.some((e) => e.severity === 'error');

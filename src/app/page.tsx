@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { books } from '@/data/books';
+import { books } from '@/generated/books';
 
 export default function Home() {
   return (

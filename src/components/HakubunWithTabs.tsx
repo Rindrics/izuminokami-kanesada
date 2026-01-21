@@ -251,10 +251,11 @@ function TextWithRuby({
   const bgClass = '';
 
   // For plain mode, show text without hyphens, with nowrap per semantic unit
-  // Semicolons mark preferred line break positions (not displayed)
+  // - Semicolons: mandatory line break (must)
+  // - Spaces: optional line break to prevent overflow (may)
   if (mode === 'plain') {
     const displayText = text.replace(/-/g, '');
-    // Split by semicolons first (preferred break points), then by spaces (semantic units)
+    // Split by semicolons first (mandatory breaks), then by spaces (semantic units)
     const clauses = displayText.split(';').filter((c) => c.trim().length > 0);
     const elements: React.ReactNode[] = [];
     const seenGroups = new Map<string, number>();
@@ -269,7 +270,7 @@ function TextWithRuby({
         const count = seenGroups.get(group) ?? 0;
         seenGroups.set(group, count + 1);
         const isLastInClause = i === groups.length - 1;
-        // Larger margin after last group in clause (before wbr) to encourage line break there
+        // Larger margin after last group in clause (before mandatory break)
         const marginRight =
           isLastInClause && isLastClause
             ? undefined
@@ -303,7 +304,8 @@ function TextWithRuby({
 
   // Group characters by semantic units (split by spaces)
   // Each group will be wrapped in nowrap span to prevent mid-word line breaks
-  // Semicolons mark preferred line break positions
+  // - Semicolons: mandatory line break (must)
+  // - Spaces: optional line break to prevent overflow (may)
   const groups: (React.ReactNode[] | 'wbr')[] = [[]];
   let currentGroupIndex = 0;
 
@@ -320,7 +322,7 @@ function TextWithRuby({
       continue;
     }
 
-    // Semicolon marks preferred line break position
+    // Semicolon marks mandatory line break position
     if (char === ';') {
       currentGroupIndex++;
       groups[currentGroupIndex] = 'wbr';
@@ -391,7 +393,7 @@ function TextWithRuby({
 
   // Build final elements with nowrap groups
   // Use margin-right instead of separator elements to avoid leading space on new lines
-  // 'wbr' markers become <wbr> elements for preferred line breaks
+  // 'wbr' markers become <br> elements for mandatory line breaks
   const elements: React.ReactNode[] = [];
   const nonEmptyGroups = groups.filter(
     (g) => g === 'wbr' || (Array.isArray(g) && g.length > 0),
@@ -404,7 +406,7 @@ function TextWithRuby({
     }
     const isLastGroup = g === nonEmptyGroups.length - 1;
     const nextIsWbr = nonEmptyGroups[g + 1] === 'wbr';
-    // Larger margin before wbr to encourage line break there
+    // Larger margin before mandatory break
     const marginRight = isLastGroup ? undefined : nextIsWbr ? '1.5em' : '0.8em';
     elements.push(
       <span

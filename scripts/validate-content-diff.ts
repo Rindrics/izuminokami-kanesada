@@ -22,46 +22,97 @@ function deriveContentId(filePath: string): string | null {
 }
 
 /**
- * Get changed content_ids from git diff
+ * Get changed YAML files from various git sources
  */
-function getChangedContentIds(): string[] {
-  // Check if origin/main exists
+function getChangedYamlFiles(): string[] {
+  const changedFiles = new Set<string>();
+
+  // 1. Committed changes from origin/main (if origin/main exists)
   try {
     execSync('git show-ref --verify --quiet refs/remotes/origin/main', {
       stdio: 'ignore',
     });
-  } catch {
-    console.warn('origin/main not found. Validating all contents.');
-    return contents.map((c) => c.content_id);
-  }
-
-  try {
-    // Get list of changed YAML files
-    const output = execSync(
+    const committed = execSync(
       'git diff --name-only origin/main...HEAD -- contents/input/',
       { encoding: 'utf-8' },
-    );
-
-    if (!output.trim()) {
-      console.log('No changes in input YAML files');
-      return [];
-    }
-
-    const changedFiles = output.trim().split('\n');
-    const contentIds: string[] = [];
-
-    for (const file of changedFiles) {
-      const contentId = deriveContentId(file);
-      if (contentId) {
-        contentIds.push(contentId);
+    ).trim();
+    if (committed) {
+      for (const file of committed.split('\n')) {
+        changedFiles.add(file);
       }
     }
-
-    return [...new Set(contentIds)]; // Remove duplicates
-  } catch (error) {
-    console.error('Failed to get git diff:', error);
-    process.exit(1);
+  } catch {
+    // origin/main doesn't exist, skip committed changes check
   }
+
+  // 2. Staged changes (not yet committed)
+  try {
+    const staged = execSync(
+      'git diff --cached --name-only -- contents/input/',
+      { encoding: 'utf-8' },
+    ).trim();
+    if (staged) {
+      for (const file of staged.split('\n')) {
+        changedFiles.add(file);
+      }
+    }
+  } catch {
+    // Ignore errors
+  }
+
+  // 3. Unstaged changes (modified but not staged)
+  try {
+    const unstaged = execSync('git diff --name-only -- contents/input/', {
+      encoding: 'utf-8',
+    }).trim();
+    if (unstaged) {
+      for (const file of unstaged.split('\n')) {
+        changedFiles.add(file);
+      }
+    }
+  } catch {
+    // Ignore errors
+  }
+
+  // 4. Untracked new files
+  try {
+    const untracked = execSync(
+      'git ls-files --others --exclude-standard -- contents/input/',
+      { encoding: 'utf-8' },
+    ).trim();
+    if (untracked) {
+      for (const file of untracked.split('\n')) {
+        changedFiles.add(file);
+      }
+    }
+  } catch {
+    // Ignore errors
+  }
+
+  return [...changedFiles];
+}
+
+/**
+ * Get changed content_ids from git diff
+ */
+function getChangedContentIds(): string[] {
+  const changedFiles = getChangedYamlFiles();
+
+  if (changedFiles.length === 0) {
+    console.log('No changes in input YAML files');
+    return [];
+  }
+
+  const contentIds: string[] = [];
+
+  for (const file of changedFiles) {
+    const contentId = deriveContentId(file);
+    if (contentId) {
+      contentIds.push(contentId);
+    }
+  }
+
+  return [...new Set(contentIds)]; // Remove duplicates
 }
 
 /**

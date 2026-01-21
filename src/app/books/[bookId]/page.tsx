@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { getAllBookIds, getBookById } from '@/data/books';
+import { getAllBookIds, getBookById } from '@/generated/books';
 
 interface Props {
   params: Promise<{ bookId: string }>;
