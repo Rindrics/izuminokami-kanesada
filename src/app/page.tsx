@@ -3,7 +3,7 @@ import { books } from '@/generated/books';
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-zinc-50 dark:bg-black">
+    <div className="bg-zinc-50 dark:bg-black">
       <main className="mx-auto max-w-3xl px-4 py-8 sm:px-6 lg:px-8">
         <header className="mb-8">
           <h1 className="text-3xl font-bold text-black dark:text-white">
