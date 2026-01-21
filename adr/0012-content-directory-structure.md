@@ -14,68 +14,65 @@
 
 ## 決定
 
-コンテンツデータをディレクトリ構造で管理する。
+コンテンツデータをディレクトリ構造で管理する。**生成物は gitignore し、ビルド時に生成する。**
 
 ### ディレクトリ構造
 
 ```text
-src/data/
-  contents/
-    index.ts        # 全コンテンツのエクスポート
-    lunyu.ts        # 論語のコンテンツ
-    # 将来的に他の書籍を追加
-    # mengzi.ts     # 孟子
-    # laozi.ts      # 老子
-  books.ts          # 書籍メタデータ（現在は contents/index.ts 内）
-  hanzi-dictionary.ts
-  kunyomi-dictionary.ts
+contents/
+  input/                # 入力データ（YAML）- git 管理
+    lunyu/
+      1/
+        1.yaml
+        2.yaml
+
+src/
+  generated/            # 自動生成物 - gitignore
+    contents/
+      index.ts          # 全コンテンツのエクスポート（自動生成）
+      lunyu.ts          # 論語のコンテンツ（自動生成）
+  data/
+    books.ts            # 書籍メタデータ（手動管理）
+    hanzi-dictionary.ts
+    kunyomi-dictionary.ts
 ```
 
 ### ファイルの役割
 
-| ファイル | 役割 |
-|----------|------|
-| `contents/index.ts` | 全書籍のコンテンツを集約してエクスポート |
-| `contents/lunyu.ts` | 論語の章ごとのコンテンツデータ |
-| `books.ts` | 書籍メタデータ（ID、名前、章構成） |
+| ファイル | 役割 | 管理方法 |
+|----------|------|----------|
+| `contents/input/*.yaml` | 入力データ（最小限の情報） | 手動/AI 生成 |
+| `src/generated/contents/*.ts` | 出力データ（導出フィールド含む） | 自動生成 |
+| `src/data/books.ts` | 書籍メタデータ | 手動管理 |
 
-### エクスポート例
+### ビルドプロセス
 
-```typescript
-// contents/lunyu.ts
-export const lunyuContents: Content[] = [
-  { content_id: 'lunyu/1/1', ... },
-  { content_id: 'lunyu/1/2', ... },
-];
-
-// contents/index.ts
-import { lunyuContents } from './lunyu';
-
-export const contents: Content[] = [
-  ...lunyuContents,
-  // ...mengziContents,
-];
-
-export * from './lunyu';
+```bash
+# package.json
+"prebuild": "pnpm generate:contents",
+"generate:contents": "tsx scripts/generate-contents.ts"
 ```
+
+1. `pnpm build` 実行時に `prebuild` が自動実行
+2. `generate-contents.ts` が YAML → TypeScript 変換
+3. 生成された `.ts` ファイルを Next.js がビルド
 
 ## 根拠
 
 - **明確な命名**: 「sample」を排除し、本番用データとして適切な名前に
 - **スケーラビリティ**: 書籍ごとにファイルを分割し、肥大化を防止
-- **管理性**: 書籍単位で編集・レビュー・差分確認が容易
-- **段階的移行**: 現在の構造から少ない変更で移行可能
+- **管理性**: YAML 入力のみを管理、生成物はリポジトリに含めない
+- **冗長性の排除**: 導出可能なフィールドはビルド時に計算
 
 ## 影響
 
-- `sample-contents.ts` を `contents/` ディレクトリ構造に移行
-- インポートパスの変更が必要なファイル：
-  - `src/lib/validators/content.ts`
-  - `src/lib/validators/content.test.ts`
-  - `scripts/validate-content-diff.ts`
-  - 各ページコンポーネント
+- `sample-contents.ts` を削除
+- `src/data/contents/` を `.gitignore` に追加
+- `prebuild` スクリプトで生成を自動化
+- ローカル開発時は `pnpm generate:contents` を明示的に実行
 
 ## 関連
 
 - [ADR-0006: コンテンツ保存戦略](./0006-content-storage-strategy.md)
-- Issue: コンテンツデータ構造の最適化と CD 自動生成
+- [ADR-0013: コンテンツ入力データ形式](./0013-content-input-format.md)
+- [Issue #30: コンテンツデータ構造の最適化と CD 自動生成](https://github.com/Rindrics/izuminokami-kanesada/issues/30)

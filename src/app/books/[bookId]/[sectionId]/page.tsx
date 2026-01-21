@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getAllSectionPaths, getBookById, getSectionById } from '@/data/books';
-import { getContentById } from '@/data/contents';
+import { getContentById } from '@/generated/contents';
 
 interface Props {
   params: Promise<{ bookId: string; sectionId: string }>;

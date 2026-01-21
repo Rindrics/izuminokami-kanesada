@@ -6,7 +6,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev -p 30600",
+    "prebuild": "pnpm generate:contents",
     "build": "next build",
+    "generate:contents": "tsx scripts/generate-contents.ts",
     "start": "next start -p 30600",
     "lint": "eslint",
     "check": "biome check src",
