@@ -3,6 +3,8 @@ import * as path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+import { registerDictionaryResources } from './resources/dictionary';
+import { registerSchemaResources } from './resources/schema';
 import { registerContentTools } from './tools/content';
 import { registerDictionaryTools } from './tools/dictionary';
 
@@ -16,6 +18,10 @@ async function main() {
     name: pkg.name,
     version: pkg.version,
   });
+
+  // Register resources
+  registerSchemaResources(server);
+  registerDictionaryResources(server);
 
   // Register tools
   registerContentTools(server);
