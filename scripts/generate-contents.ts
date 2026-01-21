@@ -265,8 +265,22 @@ interface Stats {
   personFrequencies: PersonFrequency[];
   chapterLengths: ChapterLength[];
   charIndex: CharIndex[];
+  frequencyBlacklist: string[];
   totalChars: number;
   totalChapters: number;
+}
+
+function loadFrequencyBlacklist(): string[] {
+  const blacklistPath = path.join(
+    process.cwd(),
+    'contents/input/frequency-blacklist.yaml',
+  );
+  if (!fs.existsSync(blacklistPath)) {
+    return [];
+  }
+  const content = fs.readFileSync(blacklistPath, 'utf-8');
+  const data = yaml.load(content) as string[];
+  return data ?? [];
 }
 
 function generateStatsTypeScript(contents: OutputContent[]): string {
@@ -352,11 +366,14 @@ function generateStatsTypeScript(contents: OutputContent[]): string {
     }))
     .sort((a, b) => b.contentIds.length - a.contentIds.length);
 
+  const frequencyBlacklist = loadFrequencyBlacklist();
+
   const stats: Stats = {
     charFrequencies,
     personFrequencies,
     chapterLengths,
     charIndex,
+    frequencyBlacklist,
     totalChars,
     totalChapters: contents.length,
   };
@@ -401,6 +418,7 @@ export interface Stats {
   personFrequencies: PersonFrequency[];
   chapterLengths: ChapterLength[];
   charIndex: CharIndex[];
+  frequencyBlacklist: string[];
   totalChars: number;
   totalChapters: number;
 }
