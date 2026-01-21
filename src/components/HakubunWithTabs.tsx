@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { ClickableChar } from '@/components/ClickableChar';
 import { getDefaultMeaning } from '@/data/hanzi-dictionary';
 import type { Segment } from '@/types/content';
 
@@ -237,7 +238,9 @@ function HanziWithRuby({
           </svg>
         )}
         {/* Character text - positioned above contour */}
-        <span style={{ position: 'relative', zIndex: 1 }}>{char}</span>
+        <span style={{ position: 'relative', zIndex: 1 }}>
+          <ClickableChar char={char} />
+        </span>
       </span>
     </span>
   );
@@ -291,7 +294,10 @@ function TextWithRuby({
             key={`plain-${group}-${count}`}
             className={`sm:whitespace-nowrap ${marginClass}`}
           >
-            {group}
+            {[...group].map((char, charIdx) => (
+              // biome-ignore lint/suspicious/noArrayIndexKey: characters in a group are stable and index is part of unique key
+              <ClickableChar key={`${group}-${count}-${charIdx}`} char={char} />
+            ))}
           </span>,
         );
       }

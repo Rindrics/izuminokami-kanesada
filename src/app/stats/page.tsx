@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { ClickableChar } from '@/components/ClickableChar';
 import { books } from '@/generated/books';
 import type { CharIndex } from '@/generated/stats';
 import { stats } from '@/generated/stats';
@@ -160,7 +161,7 @@ function KeyConceptsHeatmap({
                     className="text-lg text-black dark:text-white"
                     title={concept.desc}
                   >
-                    {concept.char}
+                    <ClickableChar char={concept.char} />
                   </span>
                 </td>
                 {units.map((unit) => {
@@ -323,7 +324,7 @@ export default function StatsPage() {
                   >
                     <td className="px-4 py-2 text-zinc-500">{i + 1}</td>
                     <td className="px-4 py-2 text-2xl text-black dark:text-white">
-                      {cf.char}
+                      <ClickableChar char={cf.char} />
                     </td>
                     <td className="px-4 py-2 text-right text-black dark:text-white">
                       {cf.count}
@@ -357,7 +358,7 @@ export default function StatsPage() {
                 .sort((a, b) => b.count - a.count)
                 .map(({ char, count }) => (
                   <span key={char} className="text-zinc-600 dark:text-zinc-400">
-                    {char}（{count}回）
+                    <ClickableChar char={char} />（{count}回）
                   </span>
                 ))}
             </div>
