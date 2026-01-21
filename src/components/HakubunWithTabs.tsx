@@ -22,7 +22,8 @@ function parseTextWithToneSandhi(text: string): {
   const chars: string[] = [];
   const originalTones: (number | undefined)[] = [];
 
-  // First pass: extract characters and their base tones (skip hyphens)
+  // First pass: extract characters and their base tones (skip hyphens only)
+  // Semicolons are kept as preferred line break markers
   for (const char of text) {
     if (char !== '-') {
       chars.push(char);
@@ -250,27 +251,48 @@ function TextWithRuby({
   const bgClass = '';
 
   // For plain mode, show text without hyphens, with nowrap per semantic unit
+  // Semicolons mark preferred line break positions (not displayed)
   if (mode === 'plain') {
     const displayText = text.replace(/-/g, '');
-    const groups = displayText.split(' ').filter((g) => g.length > 0);
+    // Split by semicolons first (preferred break points), then by spaces (semantic units)
+    const clauses = displayText.split(';').filter((c) => c.trim().length > 0);
     const elements: React.ReactNode[] = [];
     const seenGroups = new Map<string, number>();
-    for (let i = 0; i < groups.length; i++) {
-      const group = groups[i];
-      const count = seenGroups.get(group) ?? 0;
-      seenGroups.set(group, count + 1);
-      const isLast = i === groups.length - 1;
-      elements.push(
-        <span
-          key={`plain-${group}-${count}`}
-          style={{
-            whiteSpace: 'nowrap',
-            marginRight: isLast ? undefined : '0.8em',
-          }}
-        >
-          {group}
-        </span>,
-      );
+
+    for (let clauseIdx = 0; clauseIdx < clauses.length; clauseIdx++) {
+      const clause = clauses[clauseIdx].trim();
+      const groups = clause.split(' ').filter((g) => g.length > 0);
+      const isLastClause = clauseIdx === clauses.length - 1;
+
+      for (let i = 0; i < groups.length; i++) {
+        const group = groups[i];
+        const count = seenGroups.get(group) ?? 0;
+        seenGroups.set(group, count + 1);
+        const isLastInClause = i === groups.length - 1;
+        // Larger margin after last group in clause (before wbr) to encourage line break there
+        const marginRight =
+          isLastInClause && isLastClause
+            ? undefined
+            : isLastInClause
+              ? '1.5em'
+              : '0.8em';
+        elements.push(
+          <span
+            key={`plain-${group}-${count}`}
+            style={{
+              whiteSpace: 'nowrap',
+              marginRight,
+            }}
+          >
+            {group}
+          </span>,
+        );
+      }
+
+      // Force line break after each clause (except the last)
+      if (!isLastClause) {
+        elements.push(<br key={`br-${clauseIdx}`} />);
+      }
     }
     return <span className={`inline ${baseClass} ${bgClass}`}>{elements}</span>;
   }
@@ -281,7 +303,8 @@ function TextWithRuby({
 
   // Group characters by semantic units (split by spaces)
   // Each group will be wrapped in nowrap span to prevent mid-word line breaks
-  const groups: React.ReactNode[][] = [[]];
+  // Semicolons mark preferred line break positions
+  const groups: (React.ReactNode[] | 'wbr')[] = [[]];
   let currentGroupIndex = 0;
 
   for (let i = 0; i < chars.length; i++) {
@@ -297,10 +320,22 @@ function TextWithRuby({
       continue;
     }
 
+    // Semicolon marks preferred line break position
+    if (char === ';') {
+      currentGroupIndex++;
+      groups[currentGroupIndex] = 'wbr';
+      currentGroupIndex++;
+      groups[currentGroupIndex] = [];
+      continue;
+    }
+
+    const currentGroup = groups[currentGroupIndex];
+    if (currentGroup === 'wbr') continue;
+
     if (mode === 'visual') {
       // Visual mode: SVG contour background with normal character style
       if (effectiveTone !== undefined && originalTone !== undefined) {
-        groups[currentGroupIndex].push(
+        currentGroup.push(
           <span
             key={i}
             style={{
@@ -327,7 +362,7 @@ function TextWithRuby({
           </span>,
         );
       } else {
-        groups[currentGroupIndex].push(
+        currentGroup.push(
           <span
             key={i}
             style={{
@@ -350,27 +385,36 @@ function TextWithRuby({
           : meaning.pinyin
         : undefined;
 
-      groups[currentGroupIndex].push(
-        <HanziWithRuby key={i} char={char} ruby={ruby} />,
-      );
+      currentGroup.push(<HanziWithRuby key={i} char={char} ruby={ruby} />);
     }
   }
 
   // Build final elements with nowrap groups
   // Use margin-right instead of separator elements to avoid leading space on new lines
+  // 'wbr' markers become <wbr> elements for preferred line breaks
   const elements: React.ReactNode[] = [];
-  const nonEmptyGroups = groups.filter((g) => g.length > 0);
+  const nonEmptyGroups = groups.filter(
+    (g) => g === 'wbr' || (Array.isArray(g) && g.length > 0),
+  );
   for (let g = 0; g < nonEmptyGroups.length; g++) {
+    const group = nonEmptyGroups[g];
+    if (group === 'wbr') {
+      elements.push(<br key={`br-${g}`} />);
+      continue;
+    }
     const isLastGroup = g === nonEmptyGroups.length - 1;
+    const nextIsWbr = nonEmptyGroups[g + 1] === 'wbr';
+    // Larger margin before wbr to encourage line break there
+    const marginRight = isLastGroup ? undefined : nextIsWbr ? '1.5em' : '0.8em';
     elements.push(
       <span
         key={`group-${g}`}
         style={{
           whiteSpace: 'nowrap',
-          marginRight: isLastGroup ? undefined : '0.8em',
+          marginRight,
         }}
       >
-        {nonEmptyGroups[g]}
+        {group}
       </span>,
     );
   }
