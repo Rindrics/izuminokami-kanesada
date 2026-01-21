@@ -25,6 +25,16 @@ function deriveContentId(filePath: string): string | null {
  * Get changed content_ids from git diff
  */
 function getChangedContentIds(): string[] {
+  // Check if origin/main exists
+  try {
+    execSync('git show-ref --verify --quiet refs/remotes/origin/main', {
+      stdio: 'ignore',
+    });
+  } catch {
+    console.warn('origin/main not found. Validating all contents.');
+    return contents.map((c) => c.content_id);
+  }
+
   try {
     // Get list of changed YAML files
     const output = execSync(
@@ -48,12 +58,9 @@ function getChangedContentIds(): string[] {
     }
 
     return [...new Set(contentIds)]; // Remove duplicates
-  } catch {
-    // If git diff fails (e.g., origin/main doesn't exist), validate all contents
-    console.warn(
-      'Could not get diff from origin/main, validating all contents',
-    );
-    return contents.map((c) => c.content_id);
+  } catch (error) {
+    console.error('Failed to get git diff:', error);
+    process.exit(1);
   }
 }
 
