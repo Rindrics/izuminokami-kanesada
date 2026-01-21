@@ -317,7 +317,7 @@ describe('validateContent', () => {
     it('should warn when characters.speakers contains unused speaker', () => {
       const content = createValidContent({
         characters: {
-          speakers: ['kongzi', 'menzi'], // 'menzi' is not used
+          speakers: ['kongzi', 'zengzi'], // 'zengzi' is not used
           mentioned: [],
         },
       });
@@ -395,6 +395,59 @@ describe('validateContent', () => {
     it('should pass when all hanzi and kanji are registered in dictionaries', () => {
       const content = createValidContent({
         japanese: '子曰く',
+      });
+      const result = validateContent(content);
+      expect(result.valid).toBe(true);
+    });
+  });
+
+  describe('character master validation', () => {
+    it('should fail when speaker is not registered in character master', () => {
+      const content = createValidContent({
+        characters: {
+          speakers: ['kongzi', 'unknown_person'],
+          mentioned: [],
+        },
+      });
+      const result = validateContent(content);
+      expect(result.valid).toBe(false);
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          path: 'characters.speakers',
+          message: expect.stringContaining(
+            'speakers not registered in character master',
+          ),
+          severity: 'error',
+        }),
+      );
+    });
+
+    it('should fail when mentioned character is not registered in character master', () => {
+      const content = createValidContent({
+        characters: {
+          speakers: ['kongzi'],
+          mentioned: ['unknown_person'],
+        },
+      });
+      const result = validateContent(content);
+      expect(result.valid).toBe(false);
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          path: 'characters.mentioned',
+          message: expect.stringContaining(
+            'mentioned characters not registered in character master',
+          ),
+          severity: 'error',
+        }),
+      );
+    });
+
+    it('should pass when all speakers and mentioned are registered in character master', () => {
+      const content = createValidContent({
+        characters: {
+          speakers: ['kongzi'],
+          mentioned: ['zengzi'],
+        },
       });
       const result = validateContent(content);
       expect(result.valid).toBe(true);

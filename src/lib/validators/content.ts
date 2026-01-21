@@ -1,5 +1,6 @@
 import { hanziDictionary } from '@/data/hanzi-dictionary';
 import { kunyomiDictionary } from '@/data/kunyomi-dictionary';
+import { characters as characterMaster } from '@/generated/characters';
 import type { Content, Segment } from '@/types/content';
 
 export interface ValidationError {
@@ -384,6 +385,50 @@ function validateSpeakers(content: Content): ValidationError[] {
 }
 
 /**
+ * Validate that all speakers and mentioned characters are registered in character master data
+ */
+function validateCharactersInMaster(content: Content): ValidationError[] {
+  const errors: ValidationError[] = [];
+
+  // Build set of registered character IDs
+  const registeredIds = new Set(characterMaster.map((c) => c.id));
+
+  // Check speakers
+  const unregisteredSpeakers: string[] = [];
+  for (const speaker of content.characters.speakers) {
+    if (!registeredIds.has(speaker)) {
+      unregisteredSpeakers.push(speaker);
+    }
+  }
+
+  if (unregisteredSpeakers.length > 0) {
+    errors.push({
+      path: 'characters.speakers',
+      message: `speakers not registered in character master (contents/characters.yaml): ${unregisteredSpeakers.join(', ')}`,
+      severity: 'error',
+    });
+  }
+
+  // Check mentioned
+  const unregisteredMentioned: string[] = [];
+  for (const mentioned of content.characters.mentioned) {
+    if (!registeredIds.has(mentioned)) {
+      unregisteredMentioned.push(mentioned);
+    }
+  }
+
+  if (unregisteredMentioned.length > 0) {
+    errors.push({
+      path: 'characters.mentioned',
+      message: `mentioned characters not registered in character master (contents/characters.yaml): ${unregisteredMentioned.join(', ')}`,
+      severity: 'error',
+    });
+  }
+
+  return errors;
+}
+
+/**
  * Check if a character is a CJK ideograph (hanzi/kanji)
  */
 function isHanzi(char: string): boolean {
@@ -521,10 +566,13 @@ export function validateContent(content: Content): ValidationResult {
   // 5. Validate speakers
   errors.push(...validateSpeakers(content));
 
-  // 6. Validate hanzi in text are in hanzi-dictionary (pinyin)
+  // 6. Validate speakers and mentioned are in character master
+  errors.push(...validateCharactersInMaster(content));
+
+  // 7. Validate hanzi in text are in hanzi-dictionary (pinyin)
   errors.push(...validateHanziInDictionary(content.text));
 
-  // 7. Validate kanji in japanese are in kunyomi-dictionary (reading)
+  // 8. Validate kanji in japanese are in kunyomi-dictionary (reading)
   errors.push(...validateKunyomiInDictionary(content.japanese));
 
   const hasErrors = errors.some((e) => e.severity === 'error');

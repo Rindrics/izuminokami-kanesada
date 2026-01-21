@@ -59,6 +59,13 @@ interface InputBook {
   sections: InputSection[];
 }
 
+interface Character {
+  id: string;
+  name: string;
+  courtesy?: string;
+  given?: string;
+}
+
 interface OutputSection {
   id: string;
   name: string;
@@ -104,6 +111,53 @@ function loadBooksYaml(): void {
 
   // Validate required fields
   validateBooksYaml(booksData);
+}
+
+function loadCharactersYaml(): Character[] {
+  const charactersYamlPath = path.join(
+    process.cwd(),
+    'contents/characters.yaml',
+  );
+  if (!fs.existsSync(charactersYamlPath)) {
+    return [];
+  }
+  const content = fs.readFileSync(charactersYamlPath, 'utf-8');
+  return (yaml.load(content) as Character[]) ?? [];
+}
+
+function generateCharactersTypeScript(characters: Character[]): string {
+  const charactersStr = inspect(characters, {
+    depth: null,
+    compact: false,
+    maxArrayLength: null,
+  });
+
+  return `/**
+ * Character master data
+ * Auto-generated from contents/characters.yaml
+ */
+
+export interface Character {
+  id: string;
+  name: string;
+  courtesy?: string;
+  given?: string;
+}
+
+export const characters: Character[] = ${charactersStr};
+
+const characterMap = new Map<string, Character>(
+  characters.map((c) => [c.id, c]),
+);
+
+export function getCharacterById(id: string): Character | undefined {
+  return characterMap.get(id);
+}
+
+export function getCharacterName(id: string): string {
+  return characterMap.get(id)?.name ?? id;
+}
+`;
 }
 
 function getSectionName(bookId: string, sectionId: string): string {
@@ -575,6 +629,13 @@ export function getAdjacentContentIds(
   const statsOutputPath = path.join(outputDir, 'stats.ts');
   fs.writeFileSync(statsOutputPath, statsContent);
   console.log(`Generated: ${statsOutputPath}`);
+
+  // Generate characters.ts
+  const characters = loadCharactersYaml();
+  const charactersContent = generateCharactersTypeScript(characters);
+  const charactersOutputPath = path.join(outputDir, 'characters.ts');
+  fs.writeFileSync(charactersOutputPath, charactersContent);
+  console.log(`Generated: ${charactersOutputPath}`);
 
   console.log('\n=== Generation Complete ===');
 }
