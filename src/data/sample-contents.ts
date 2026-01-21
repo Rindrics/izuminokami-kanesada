@@ -29,7 +29,7 @@ export const sampleContents: Content[] = [
     segments: [
       { text: '子曰', start_pos: 0, end_pos: 2, speaker: null },
       {
-        text: '學而時習之 不-亦說乎 有朋自遠方來 不-亦樂乎 人不知而不慍 不-亦君子乎',
+        text: '學而時習之 不-亦說乎; 有朋自遠方來 不-亦樂乎; 人不知而不慍 不-亦君子乎',
         start_pos: 3,
         end_pos: 41, // +3 for the hyphens
         speaker: 'kongzi',
