@@ -39,7 +39,7 @@ interface OutputContent {
   chapter: string;
   text: string;
   segments: OutputSegment[];
-  characters: {
+  persons: {
     speakers: string[];
     mentioned: string[];
   };
@@ -59,7 +59,7 @@ interface InputBook {
   sections: InputSection[];
 }
 
-interface Character {
+interface Person {
   id: string;
   name: string;
   courtesy?: string;
@@ -113,49 +113,46 @@ function loadBooksYaml(): void {
   validateBooksYaml(booksData);
 }
 
-function loadCharactersYaml(): Character[] {
-  const charactersYamlPath = path.join(
-    process.cwd(),
-    'contents/characters.yaml',
-  );
-  if (!fs.existsSync(charactersYamlPath)) {
+function loadPersonsYaml(): Person[] {
+  const personsYamlPath = path.join(process.cwd(), 'contents/persons.yaml');
+  if (!fs.existsSync(personsYamlPath)) {
     return [];
   }
-  const content = fs.readFileSync(charactersYamlPath, 'utf-8');
-  return (yaml.load(content) as Character[]) ?? [];
+  const content = fs.readFileSync(personsYamlPath, 'utf-8');
+  return (yaml.load(content) as Person[]) ?? [];
 }
 
-function generateCharactersTypeScript(characters: Character[]): string {
-  const charactersStr = inspect(characters, {
+function generatePersonsTypeScript(persons: Person[]): string {
+  const personsStr = inspect(persons, {
     depth: null,
     compact: false,
     maxArrayLength: null,
   });
 
   return `/**
- * Character master data
- * Auto-generated from contents/characters.yaml
+ * Person master data
+ * Auto-generated from contents/persons.yaml
  */
 
-export interface Character {
+export interface Person {
   id: string;
   name: string;
   courtesy?: string;
   given?: string;
 }
 
-export const characters: Character[] = ${charactersStr};
+export const persons: Person[] = ${personsStr};
 
-const characterMap = new Map<string, Character>(
-  characters.map((c) => [c.id, c]),
+const personMap = new Map<string, Person>(
+  persons.map((p) => [p.id, p]),
 );
 
-export function getCharacterById(id: string): Character | undefined {
-  return characterMap.get(id);
+export function getPersonById(id: string): Person | undefined {
+  return personMap.get(id);
 }
 
-export function getCharacterName(id: string): string {
-  return characterMap.get(id)?.name ?? id;
+export function getPersonName(id: string): string {
+  return personMap.get(id)?.name ?? id;
 }
 `;
 }
@@ -223,7 +220,7 @@ function deriveContent(
     chapter: chapterId,
     text,
     segments: outputSegments,
-    characters: {
+    persons: {
       speakers,
       mentioned: input.mentioned,
     },
@@ -368,10 +365,10 @@ function generateStatsTypeScript(contents: OutputContent[]): string {
   const mentionedCounts = new Map<string, number>();
 
   for (const content of contents) {
-    for (const speaker of content.characters.speakers) {
+    for (const speaker of content.persons.speakers) {
       speakerCounts.set(speaker, (speakerCounts.get(speaker) ?? 0) + 1);
     }
-    for (const mentioned of content.characters.mentioned) {
+    for (const mentioned of content.persons.mentioned) {
       mentionedCounts.set(mentioned, (mentionedCounts.get(mentioned) ?? 0) + 1);
     }
   }
@@ -630,12 +627,12 @@ export function getAdjacentContentIds(
   fs.writeFileSync(statsOutputPath, statsContent);
   console.log(`Generated: ${statsOutputPath}`);
 
-  // Generate characters.ts
-  const characters = loadCharactersYaml();
-  const charactersContent = generateCharactersTypeScript(characters);
-  const charactersOutputPath = path.join(outputDir, 'characters.ts');
-  fs.writeFileSync(charactersOutputPath, charactersContent);
-  console.log(`Generated: ${charactersOutputPath}`);
+  // Generate persons.ts
+  const persons = loadPersonsYaml();
+  const personsContent = generatePersonsTypeScript(persons);
+  const personsOutputPath = path.join(outputDir, 'persons.ts');
+  fs.writeFileSync(personsOutputPath, personsContent);
+  console.log(`Generated: ${personsOutputPath}`);
 
   console.log('\n=== Generation Complete ===');
 }

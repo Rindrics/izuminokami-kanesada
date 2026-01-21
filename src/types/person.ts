@@ -1,6 +1,6 @@
-// ADR-0002: Character data structure
+// ADR-0002: Person data structure
 
-export interface Character {
+export interface Person {
   id: string; // Pinyin-based ID (e.g., "kongzi")
   name: string; // Display name (e.g., "孔子")
   courtesy_name?: string; // 字 (e.g., "仲尼")

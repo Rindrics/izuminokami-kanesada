@@ -14,7 +14,7 @@ function createValidContent(overrides: Partial<Content> = {}): Content {
       { text: '子曰', start_pos: 0, end_pos: 2, speaker: null },
       { text: '學而時習之', start_pos: 3, end_pos: 8, speaker: 'kongzi' },
     ],
-    characters: {
+    persons: {
       speakers: ['kongzi'],
       mentioned: [],
     },
@@ -181,7 +181,7 @@ describe('validateContent', () => {
         segments: [
           { text: '不-亦說乎', start_pos: 0, end_pos: 5, speaker: null },
         ],
-        characters: {
+        persons: {
           speakers: [],
           mentioned: [],
         },
@@ -196,7 +196,7 @@ describe('validateContent', () => {
         segments: [
           { text: '不--亦說乎', start_pos: 0, end_pos: 6, speaker: null },
         ],
-        characters: {
+        persons: {
           speakers: [],
           mentioned: [],
         },
@@ -217,7 +217,7 @@ describe('validateContent', () => {
         segments: [
           { text: '-亦說乎', start_pos: 0, end_pos: 4, speaker: null },
         ],
-        characters: {
+        persons: {
           speakers: [],
           mentioned: [],
         },
@@ -238,7 +238,7 @@ describe('validateContent', () => {
         segments: [
           { text: '不亦說-', start_pos: 0, end_pos: 4, speaker: null },
         ],
-        characters: {
+        persons: {
           speakers: [],
           mentioned: [],
         },
@@ -259,7 +259,7 @@ describe('validateContent', () => {
         segments: [
           { text: '不 -亦說乎', start_pos: 0, end_pos: 6, speaker: null },
         ],
-        characters: {
+        persons: {
           speakers: [],
           mentioned: [],
         },
@@ -280,7 +280,7 @@ describe('validateContent', () => {
         segments: [
           { text: '不- 亦說乎', start_pos: 0, end_pos: 6, speaker: null },
         ],
-        characters: {
+        persons: {
           speakers: [],
           mentioned: [],
         },
@@ -297,9 +297,9 @@ describe('validateContent', () => {
   });
 
   describe('speakers validation', () => {
-    it('should fail when segment speaker is not in characters.speakers', () => {
+    it('should fail when segment speaker is not in persons.speakers', () => {
       const content = createValidContent({
-        characters: {
+        persons: {
           speakers: [], // Missing 'kongzi'
           mentioned: [],
         },
@@ -308,15 +308,15 @@ describe('validateContent', () => {
       expect(result.valid).toBe(false);
       expect(result.errors).toContainEqual(
         expect.objectContaining({
-          path: 'characters.speakers',
-          message: expect.stringContaining('not listed in characters.speakers'),
+          path: 'persons.speakers',
+          message: expect.stringContaining('not listed in persons.speakers'),
         }),
       );
     });
 
-    it('should warn when characters.speakers contains unused speaker', () => {
+    it('should warn when persons.speakers contains unused speaker', () => {
       const content = createValidContent({
-        characters: {
+        persons: {
           speakers: ['kongzi', 'zengzi'], // 'zengzi' is not used
           mentioned: [],
         },
@@ -326,7 +326,7 @@ describe('validateContent', () => {
       expect(result.valid).toBe(true);
       expect(result.errors).toContainEqual(
         expect.objectContaining({
-          path: 'characters.speakers',
+          path: 'persons.speakers',
           message: expect.stringContaining('not used in any segment'),
           severity: 'warning',
         }),
@@ -337,7 +337,7 @@ describe('validateContent', () => {
       const content = createValidContent({
         text: '子曰',
         segments: [{ text: '子曰', start_pos: 0, end_pos: 2, speaker: null }],
-        characters: {
+        persons: {
           speakers: [],
           mentioned: [],
         },
@@ -352,7 +352,7 @@ describe('validateContent', () => {
       const content = createValidContent({
         text: '龍虎',
         segments: [{ text: '龍虎', start_pos: 0, end_pos: 2, speaker: null }],
-        characters: {
+        persons: {
           speakers: [],
           mentioned: [],
         },
@@ -401,10 +401,10 @@ describe('validateContent', () => {
     });
   });
 
-  describe('character master validation', () => {
-    it('should fail when speaker is not registered in character master', () => {
+  describe('person master validation', () => {
+    it('should fail when speaker is not registered in person master', () => {
       const content = createValidContent({
-        characters: {
+        persons: {
           speakers: ['kongzi', 'unknown_person'],
           mentioned: [],
         },
@@ -413,18 +413,18 @@ describe('validateContent', () => {
       expect(result.valid).toBe(false);
       expect(result.errors).toContainEqual(
         expect.objectContaining({
-          path: 'characters.speakers',
+          path: 'persons.speakers',
           message: expect.stringContaining(
-            'speakers not registered in character master',
+            'speakers not registered in person master',
           ),
           severity: 'error',
         }),
       );
     });
 
-    it('should fail when mentioned character is not registered in character master', () => {
+    it('should fail when mentioned person is not registered in person master', () => {
       const content = createValidContent({
-        characters: {
+        persons: {
           speakers: ['kongzi'],
           mentioned: ['unknown_person'],
         },
@@ -433,18 +433,18 @@ describe('validateContent', () => {
       expect(result.valid).toBe(false);
       expect(result.errors).toContainEqual(
         expect.objectContaining({
-          path: 'characters.mentioned',
+          path: 'persons.mentioned',
           message: expect.stringContaining(
-            'mentioned characters not registered in character master',
+            'mentioned persons not registered in person master',
           ),
           severity: 'error',
         }),
       );
     });
 
-    it('should pass when all speakers and mentioned are registered in character master', () => {
+    it('should pass when all speakers and mentioned are registered in person master', () => {
       const content = createValidContent({
-        characters: {
+        persons: {
           speakers: ['kongzi'],
           mentioned: ['zengzi'],
         },

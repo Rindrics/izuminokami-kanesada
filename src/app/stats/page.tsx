@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { ClickableChar } from '@/components/ClickableChar';
 import { books, getBookById } from '@/generated/books';
-import { getCharacterName } from '@/generated/characters';
+import { getPersonName } from '@/generated/persons';
 import type { CharIndex } from '@/generated/stats';
 import { stats } from '@/generated/stats';
 
@@ -396,7 +396,7 @@ export default function StatsPage() {
                     className="border-b border-zinc-100 dark:border-zinc-800"
                   >
                     <td className="px-4 py-2 text-black dark:text-white">
-                      {getCharacterName(pf.person)}
+                      {getPersonName(pf.person)}
                     </td>
                     <td className="px-4 py-2 text-right text-black dark:text-white">
                       {pf.speakerCount}

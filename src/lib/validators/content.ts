@@ -1,6 +1,6 @@
 import { hanziDictionary } from '@/data/hanzi-dictionary';
 import { kunyomiDictionary } from '@/data/kunyomi-dictionary';
-import { characters as characterMaster } from '@/generated/characters';
+import { persons as personMaster } from '@/generated/persons';
 import type { Content, Segment } from '@/types/content';
 
 export interface ValidationError {
@@ -46,24 +46,24 @@ function validateRequiredFields(content: Content): ValidationError[] {
     });
   }
 
-  if (!content.characters) {
+  if (!content.persons) {
     errors.push({
-      path: 'characters',
-      message: 'characters is required',
+      path: 'persons',
+      message: 'persons is required',
       severity: 'error',
     });
   } else {
-    if (!Array.isArray(content.characters.speakers)) {
+    if (!Array.isArray(content.persons.speakers)) {
       errors.push({
-        path: 'characters.speakers',
-        message: 'characters.speakers is required and must be an array',
+        path: 'persons.speakers',
+        message: 'persons.speakers is required and must be an array',
         severity: 'error',
       });
     }
-    if (!Array.isArray(content.characters.mentioned)) {
+    if (!Array.isArray(content.persons.mentioned)) {
       errors.push({
-        path: 'characters.mentioned',
-        message: 'characters.mentioned is required and must be an array',
+        path: 'persons.mentioned',
+        message: 'persons.mentioned is required and must be an array',
         severity: 'error',
       });
     }
@@ -346,7 +346,7 @@ function validateConnectionMarkers(text: string): ValidationError[] {
 }
 
 /**
- * Validate characters.speakers against segment speakers
+ * Validate persons.speakers against segment speakers
  */
 function validateSpeakers(content: Content): ValidationError[] {
   const errors: ValidationError[] = [];
@@ -359,23 +359,23 @@ function validateSpeakers(content: Content): ValidationError[] {
     }
   }
 
-  // Check that all segment speakers are in characters.speakers
+  // Check that all segment speakers are in persons.speakers
   for (const speaker of segmentSpeakers) {
-    if (!content.characters.speakers.includes(speaker)) {
+    if (!content.persons.speakers.includes(speaker)) {
       errors.push({
-        path: 'characters.speakers',
-        message: `segment speaker "${speaker}" is not listed in characters.speakers`,
+        path: 'persons.speakers',
+        message: `segment speaker "${speaker}" is not listed in persons.speakers`,
         severity: 'error',
       });
     }
   }
 
-  // Warn if characters.speakers contains speakers not in any segment
-  for (const speaker of content.characters.speakers) {
+  // Warn if persons.speakers contains speakers not in any segment
+  for (const speaker of content.persons.speakers) {
     if (!segmentSpeakers.has(speaker)) {
       errors.push({
-        path: 'characters.speakers',
-        message: `"${speaker}" is listed in characters.speakers but not used in any segment`,
+        path: 'persons.speakers',
+        message: `"${speaker}" is listed in persons.speakers but not used in any segment`,
         severity: 'warning',
       });
     }
@@ -385,17 +385,17 @@ function validateSpeakers(content: Content): ValidationError[] {
 }
 
 /**
- * Validate that all speakers and mentioned characters are registered in character master data
+ * Validate that all speakers and mentioned persons are registered in person master data
  */
-function validateCharactersInMaster(content: Content): ValidationError[] {
+function validatePersonsInMaster(content: Content): ValidationError[] {
   const errors: ValidationError[] = [];
 
-  // Build set of registered character IDs
-  const registeredIds = new Set(characterMaster.map((c) => c.id));
+  // Build set of registered person IDs
+  const registeredIds = new Set(personMaster.map((p) => p.id));
 
   // Check speakers
   const unregisteredSpeakers: string[] = [];
-  for (const speaker of content.characters.speakers) {
+  for (const speaker of content.persons.speakers) {
     if (!registeredIds.has(speaker)) {
       unregisteredSpeakers.push(speaker);
     }
@@ -403,15 +403,15 @@ function validateCharactersInMaster(content: Content): ValidationError[] {
 
   if (unregisteredSpeakers.length > 0) {
     errors.push({
-      path: 'characters.speakers',
-      message: `speakers not registered in character master (contents/characters.yaml): ${unregisteredSpeakers.join(', ')}`,
+      path: 'persons.speakers',
+      message: `speakers not registered in person master (contents/persons.yaml): ${unregisteredSpeakers.join(', ')}`,
       severity: 'error',
     });
   }
 
   // Check mentioned
   const unregisteredMentioned: string[] = [];
-  for (const mentioned of content.characters.mentioned) {
+  for (const mentioned of content.persons.mentioned) {
     if (!registeredIds.has(mentioned)) {
       unregisteredMentioned.push(mentioned);
     }
@@ -419,8 +419,8 @@ function validateCharactersInMaster(content: Content): ValidationError[] {
 
   if (unregisteredMentioned.length > 0) {
     errors.push({
-      path: 'characters.mentioned',
-      message: `mentioned characters not registered in character master (contents/characters.yaml): ${unregisteredMentioned.join(', ')}`,
+      path: 'persons.mentioned',
+      message: `mentioned persons not registered in person master (contents/persons.yaml): ${unregisteredMentioned.join(', ')}`,
       severity: 'error',
     });
   }
@@ -566,8 +566,8 @@ export function validateContent(content: Content): ValidationResult {
   // 5. Validate speakers
   errors.push(...validateSpeakers(content));
 
-  // 6. Validate speakers and mentioned are in character master
-  errors.push(...validateCharactersInMaster(content));
+  // 6. Validate speakers and mentioned are in person master
+  errors.push(...validatePersonsInMaster(content));
 
   // 7. Validate hanzi in text are in hanzi-dictionary (pinyin)
   errors.push(...validateHanziInDictionary(content.text));
