@@ -5,3 +5,6 @@
 versionFile = "package.json"
 	vPrefix = true
 	releaseBranch = main
+    vPrefix = true
+   	majorLabels = tagpr:major
+	minorLabels = tagpr:minor
