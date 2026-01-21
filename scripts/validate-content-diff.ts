@@ -2,80 +2,65 @@
  * Validate content diff between current branch and main branch
  *
  * This script:
- * 1. Gets the diff of sample-contents.ts from origin/main
- * 2. Identifies added content_ids
+ * 1. Gets the diff of input YAML files from origin/main
+ * 2. Derives content_ids from file paths
  * 3. Validates those contents using validateContent()
  * 4. Exits with code 1 if any validation errors are found
  */
 
 import { execSync } from 'node:child_process';
-import { sampleContents } from '../src/data/sample-contents';
+import { contents } from '../src/generated/contents';
 import { validateContent } from '../src/lib/validators/content';
 
-interface DiffResult {
-  addedContentIds: string[];
-  modifiedContentIds: string[];
+/**
+ * Derive content_id from input YAML file path
+ * Example: contents/input/lunyu/1/1.yaml -> lunyu/1/1
+ */
+function deriveContentId(filePath: string): string | null {
+  const match = filePath.match(/^contents\/input\/(.+)\.yaml$/);
+  return match ? match[1] : null;
 }
 
 /**
- * Parse git diff output to find added/modified content_ids
+ * Get changed content_ids from git diff
  */
-function parseContentDiff(): DiffResult {
-  const result: DiffResult = {
-    addedContentIds: [],
-    modifiedContentIds: [],
-  };
+function getChangedContentIds(): string[] {
+  // Check if origin/main exists
+  try {
+    execSync('git show-ref --verify --quiet refs/remotes/origin/main', {
+      stdio: 'ignore',
+    });
+  } catch {
+    console.warn('origin/main not found. Validating all contents.');
+    return contents.map((c) => c.content_id);
+  }
 
   try {
-    // Get diff of sample-contents.ts
-    const diff = execSync(
-      'git diff origin/main...HEAD -- src/data/sample-contents.ts',
+    // Get list of changed YAML files
+    const output = execSync(
+      'git diff --name-only origin/main...HEAD -- contents/input/',
       { encoding: 'utf-8' },
     );
 
-    if (!diff) {
-      console.log('No changes in sample-contents.ts');
-      return result;
+    if (!output.trim()) {
+      console.log('No changes in input YAML files');
+      return [];
     }
 
-    // Find added content_id lines (lines starting with +)
-    // Pattern: content_id: 'lunyu/1/2',
-    const contentIdPattern = /^\+\s*content_id:\s*['"]([^'"]+)['"]/gm;
-    let match: RegExpExecArray | null;
+    const changedFiles = output.trim().split('\n');
+    const contentIds: string[] = [];
 
-    while ((match = contentIdPattern.exec(diff)) !== null) {
-      const contentId = match[1];
-      result.addedContentIds.push(contentId);
-    }
-
-    // Find modified content_ids (lines that appear in both + and -)
-    const removedPattern = /^-\s*content_id:\s*['"]([^'"]+)['"]/gm;
-    const removedIds: string[] = [];
-
-    while ((match = removedPattern.exec(diff)) !== null) {
-      removedIds.push(match[1]);
-    }
-
-    // If a content_id appears in both added and removed, it's modified
-    for (const id of result.addedContentIds) {
-      if (removedIds.includes(id)) {
-        result.modifiedContentIds.push(id);
+    for (const file of changedFiles) {
+      const contentId = deriveContentId(file);
+      if (contentId) {
+        contentIds.push(contentId);
       }
     }
 
-    // Remove modified from added (they're tracked separately)
-    result.addedContentIds = result.addedContentIds.filter(
-      (id) => !result.modifiedContentIds.includes(id),
-    );
-
-    return result;
+    return [...new Set(contentIds)]; // Remove duplicates
   } catch (error) {
-    // If git diff fails (e.g., origin/main doesn't exist), validate all contents
-    console.warn(
-      'Could not get diff from origin/main, validating all contents',
-    );
-    result.addedContentIds = sampleContents.map((c) => c.content_id);
-    return result;
+    console.error('Failed to get git diff:', error);
+    process.exit(1);
   }
 }
 
@@ -85,22 +70,20 @@ function parseContentDiff(): DiffResult {
 function main(): void {
   console.log('=== Content Diff Validation ===\n');
 
-  const { addedContentIds, modifiedContentIds } = parseContentDiff();
-  const contentIdsToValidate = [...addedContentIds, ...modifiedContentIds];
+  const contentIdsToValidate = getChangedContentIds();
 
   if (contentIdsToValidate.length === 0) {
     console.log('No content changes to validate.');
     process.exit(0);
   }
 
-  console.log(`Found ${addedContentIds.length} added content(s)`);
-  console.log(`Found ${modifiedContentIds.length} modified content(s)`);
-  console.log(`Validating ${contentIdsToValidate.length} content(s)...\n`);
+  console.log(`Found ${contentIdsToValidate.length} changed content(s)`);
+  console.log(`Validating...\n`);
 
   let hasErrors = false;
 
   for (const contentId of contentIdsToValidate) {
-    const content = sampleContents.find((c) => c.content_id === contentId);
+    const content = contents.find((c) => c.content_id === contentId);
 
     if (!content) {
       console.error(`ERROR: Content not found: ${contentId}`);

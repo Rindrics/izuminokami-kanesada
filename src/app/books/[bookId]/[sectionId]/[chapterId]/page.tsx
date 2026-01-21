@@ -2,12 +2,8 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { HakubunWithTabs } from '@/components/HakubunWithTabs';
 import { JapaneseTextWithRuby } from '@/components/JapaneseTextWithRuby';
-import {
-  getAllContentIds,
-  getBookById,
-  getContentById,
-  getSectionById,
-} from '@/data/sample-contents';
+import { getBookById, getSectionById } from '@/data/books';
+import { getAllContentIds, getContentById } from '@/generated/contents';
 
 interface Props {
   params: Promise<{ bookId: string; sectionId: string; chapterId: string }>;
