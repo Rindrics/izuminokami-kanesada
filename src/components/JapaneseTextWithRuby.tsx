@@ -85,6 +85,117 @@ interface Props {
   rubyData?: JapaneseRuby[];
 }
 
+/**
+ * Line break priority for Japanese text:
+ * 1. Punctuation (。、) - highest priority
+ * 2. Space - medium priority
+ * 3. Any other position - lowest priority (natural wrap)
+ */
+type BreakPriority = 'punctuation' | 'space' | 'none';
+
+interface Segment {
+  text: string;
+  startPos: number;
+  breakAfter: BreakPriority;
+}
+
+/**
+ * Split text into segments by punctuation and spaces
+ */
+function splitIntoSegments(text: string): Segment[] {
+  const segments: Segment[] = [];
+  let currentSegment = '';
+  let startPos = 0;
+
+  for (let i = 0; i < text.length; i++) {
+    const char = text[i];
+
+    if (char === '。' || char === '、') {
+      // Include punctuation in current segment, then break
+      currentSegment += char;
+      segments.push({
+        text: currentSegment,
+        startPos,
+        breakAfter: 'punctuation',
+      });
+      currentSegment = '';
+      startPos = i + 1;
+    } else if (char === ' ') {
+      // Space: end current segment (don't include space)
+      if (currentSegment.length > 0) {
+        segments.push({
+          text: currentSegment,
+          startPos,
+          breakAfter: 'space',
+        });
+      }
+      currentSegment = '';
+      startPos = i + 1;
+    } else {
+      currentSegment += char;
+    }
+  }
+
+  // Add remaining segment
+  if (currentSegment.length > 0) {
+    segments.push({
+      text: currentSegment,
+      startPos,
+      breakAfter: 'none',
+    });
+  }
+
+  return segments;
+}
+
+/**
+ * Render a single segment with ruby annotations
+ */
+function SegmentWithRuby({
+  segment,
+  rubyMap,
+  basePosition,
+}: {
+  segment: string;
+  rubyMap: Map<number, { ruby: string; length: number }>;
+  basePosition: number;
+}) {
+  const elements: React.ReactNode[] = [];
+  let i = 0;
+
+  while (i < segment.length) {
+    const globalPos = basePosition + i;
+    const match = rubyMap.get(globalPos);
+
+    if (match) {
+      const rubyText = segment.slice(i, i + match.length);
+      elements.push(
+        <ruby key={globalPos} className="ruby-annotation">
+          {rubyText}
+          <rt className="text-xs text-zinc-500 dark:text-zinc-400">
+            {match.ruby}
+          </rt>
+        </ruby>,
+      );
+      i += match.length;
+    } else {
+      // Find next ruby position within this segment
+      let nextMatchIndex = segment.length;
+      for (const pos of rubyMap.keys()) {
+        const localPos = pos - basePosition;
+        if (localPos > i && localPos < nextMatchIndex) {
+          nextMatchIndex = localPos;
+        }
+      }
+      const nonRubyText = segment.slice(i, nextMatchIndex);
+      elements.push(nonRubyText);
+      i = nextMatchIndex;
+    }
+  }
+
+  return <>{elements}</>;
+}
+
 export function JapaneseTextWithRuby({ text, rubyData }: Props) {
   // Parse inline overrides from text (e.g., 為（た）る)
   const { cleanText, overrides: inlineOverrides } = parseInlineOverrides(text);
@@ -94,38 +205,41 @@ export function JapaneseTextWithRuby({ text, rubyData }: Props) {
 
   const rubyMap = buildRubyMap(cleanText, mergedOverrides);
 
-  // Sort ruby positions for efficient lookup of next match
-  const sortedPositions = Array.from(rubyMap.keys()).sort((a, b) => a - b);
+  // Split text into segments by punctuation and spaces
+  const segments = splitIntoSegments(cleanText);
 
+  // If no segments, render plain text
+  if (segments.length === 0) {
+    return (
+      <SegmentWithRuby segment={cleanText} rubyMap={rubyMap} basePosition={0} />
+    );
+  }
+
+  // Render each segment with appropriate break hints
+  // On mobile: free line breaks (no margin control)
+  // On desktop (sm+): priority-based breaks with margin
   const elements: React.ReactNode[] = [];
-  let i = 0;
-  while (i < cleanText.length) {
-    const match = rubyMap.get(i);
+  for (let i = 0; i < segments.length; i++) {
+    const { text: segmentText, startPos, breakAfter } = segments[i];
 
-    if (match) {
-      const rubyText = cleanText.slice(i, i + match.length);
-      elements.push(
-        <ruby key={i} className="ruby-annotation">
-          {rubyText}
-          <rt className="text-xs text-zinc-500 dark:text-zinc-400">
-            {match.ruby}
-          </rt>
-        </ruby>,
-      );
-      i += match.length;
-    } else {
-      // Find the next ruby position to group non-ruby text
-      let nextMatchIndex = cleanText.length;
-      for (const pos of sortedPositions) {
-        if (pos > i) {
-          nextMatchIndex = pos;
-          break;
-        }
-      }
-      const nonRubyText = cleanText.slice(i, nextMatchIndex);
-      elements.push(nonRubyText);
-      i = nextMatchIndex;
-    }
+    // Tailwind classes for responsive margin
+    // Mobile: no margin (free breaks), Desktop: priority-based margin
+    const marginClass =
+      breakAfter === 'punctuation'
+        ? 'sm:mr-3'
+        : breakAfter === 'space'
+          ? 'sm:mr-2'
+          : '';
+
+    elements.push(
+      <span key={startPos} className={`inline ${marginClass}`}>
+        <SegmentWithRuby
+          segment={segmentText}
+          rubyMap={rubyMap}
+          basePosition={startPos}
+        />
+      </span>,
+    );
   }
 
   return <>{elements}</>;

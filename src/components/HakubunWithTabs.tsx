@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { getDefaultMeaning } from '@/data/hanzi-dictionary';
 import type { Segment } from '@/types/content';
 
-type DisplayMode = 'plain' | 'onyomi' | 'pinyin' | 'visual';
+type DisplayMode = 'plain' | 'onyomi' | 'pinyin';
 
 interface Props {
   segments: Segment[];
@@ -95,12 +95,13 @@ const toneColors = {
   4: '#2563eb', // blue-600: falling
 };
 
-// Shared tone contour SVG content
-// Returns the SVG element (line or polyline) for a given tone
+// Tone contour SVG path for background
+// - shapeTone: determines the contour shape (after sandhi)
+// - colorTone: determines the color (original tone, before sandhi)
 function ToneContourPath({
   tone,
   color,
-  opacity = 0.8,
+  opacity = 0.9,
 }: {
   tone: number;
   color: string;
@@ -169,13 +170,23 @@ function ToneContourPath({
 
 // Hanzi character with ruby annotation (onyomi/pinyin)
 // Ensures ruby is always centered above the character regardless of ruby length
+// For pinyin mode, shows tone contour background behind character
 function HanziWithRuby({
   char,
   ruby,
+  effectiveTone,
+  originalTone,
 }: {
   char: string;
   ruby: string | undefined;
+  effectiveTone?: number;
+  originalTone?: number;
 }) {
+  const showContour = effectiveTone !== undefined && originalTone !== undefined;
+  const contourColor = originalTone
+    ? toneColors[originalTone as keyof typeof toneColors]
+    : undefined;
+
   return (
     <span
       style={{
@@ -183,7 +194,8 @@ function HanziWithRuby({
         flexDirection: 'column',
         alignItems: 'center',
         verticalAlign: 'bottom',
-        margin: '0 0.2em',
+        margin: '0 0.1em',
+        position: 'relative',
       }}
     >
       {/* Ruby text on top */}
@@ -197,42 +209,37 @@ function HanziWithRuby({
       >
         {ruby ?? ''}
       </span>
-      {/* Character below */}
-      <span style={{ lineHeight: 1.2 }}>{char}</span>
+      {/* Character with optional tone contour background */}
+      <span
+        style={{
+          position: 'relative',
+          display: 'inline-block',
+          lineHeight: 1.2,
+        }}
+      >
+        {/* Tone contour background for pinyin mode */}
+        {showContour && contourColor && (
+          <svg
+            style={{
+              position: 'absolute',
+              left: '-0.2em',
+              top: '-0.1em',
+              width: '1.4em',
+              height: '1.4em',
+              pointerEvents: 'none',
+              zIndex: 0,
+            }}
+            viewBox="0 0 40 50"
+            preserveAspectRatio="none"
+            aria-hidden="true"
+          >
+            <ToneContourPath tone={effectiveTone} color={contourColor} />
+          </svg>
+        )}
+        {/* Character text - positioned above contour */}
+        <span style={{ position: 'relative', zIndex: 1 }}>{char}</span>
+      </span>
     </span>
-  );
-}
-
-// SVG tone contour backgrounds for inline display
-// - shapeTone: determines the contour shape (after sandhi)
-// - colorTone: determines the color (original tone, before sandhi)
-function ToneContour({
-  shapeTone,
-  colorTone,
-}: {
-  shapeTone: number;
-  colorTone: number;
-}) {
-  const color = toneColors[colorTone as keyof typeof toneColors] || '#71717a';
-
-  const contourStyle: React.CSSProperties = {
-    position: 'absolute',
-    left: 0,
-    top: 0,
-    width: '100%',
-    height: '100%',
-    pointerEvents: 'none',
-  };
-
-  return (
-    <svg
-      style={contourStyle}
-      viewBox="0 0 40 50"
-      preserveAspectRatio="none"
-      aria-hidden="true"
-    >
-      <ToneContourPath tone={shapeTone} color={color} />
-    </svg>
   );
 }
 
@@ -253,6 +260,7 @@ function TextWithRuby({
   // For plain mode, show text without hyphens, with nowrap per semantic unit
   // - Semicolons: mandatory line break (must)
   // - Spaces: optional line break to prevent overflow (may)
+  // On mobile: free line breaks, On desktop (sm+): controlled breaks
   if (mode === 'plain') {
     const displayText = text.replace(/-/g, '');
     // Split by semicolons first (mandatory breaks), then by spaces (semantic units)
@@ -270,20 +278,18 @@ function TextWithRuby({
         const count = seenGroups.get(group) ?? 0;
         seenGroups.set(group, count + 1);
         const isLastInClause = i === groups.length - 1;
-        // Larger margin after last group in clause (before mandatory break)
-        const marginRight =
+        // Tailwind responsive classes for margin
+        // Mobile: no margin, Desktop: priority-based margin
+        const marginClass =
           isLastInClause && isLastClause
-            ? undefined
+            ? ''
             : isLastInClause
-              ? '1.5em'
-              : '0.8em';
+              ? 'sm:mr-6'
+              : 'sm:mr-3';
         elements.push(
           <span
             key={`plain-${group}-${count}`}
-            style={{
-              whiteSpace: 'nowrap',
-              marginRight,
-            }}
+            className={`sm:whitespace-nowrap ${marginClass}`}
           >
             {group}
           </span>,
@@ -334,66 +340,31 @@ function TextWithRuby({
     const currentGroup = groups[currentGroupIndex];
     if (currentGroup === 'wbr') continue;
 
-    if (mode === 'visual') {
-      // Visual mode: SVG contour background with normal character style
-      if (effectiveTone !== undefined && originalTone !== undefined) {
-        currentGroup.push(
-          <span
-            key={i}
-            style={{
-              position: 'relative',
-              display: 'inline-block',
-              width: '1.4em',
-              height: '1.8em',
-              verticalAlign: 'middle',
-              textAlign: 'center',
-            }}
-          >
-            {/* Background tone contour - shape from effectiveTone, color from originalTone */}
-            <ToneContour shapeTone={effectiveTone} colorTone={originalTone} />
-            {/* Character - normal style */}
-            <span
-              style={{
-                position: 'relative',
-                display: 'inline-block',
-                lineHeight: '1.8em',
-              }}
-            >
-              {char}
-            </span>
-          </span>,
-        );
-      } else {
-        currentGroup.push(
-          <span
-            key={i}
-            style={{
-              display: 'inline-block',
-              width: '1.4em',
-              height: '1.8em',
-              lineHeight: '1.8em',
-              textAlign: 'center',
-            }}
-          >
-            {char}
-          </span>,
-        );
-      }
-    } else {
-      // Onyomi or Pinyin mode with ruby
-      const ruby = meaning
-        ? mode === 'onyomi'
-          ? meaning.onyomi
-          : meaning.pinyin
-        : undefined;
+    // Onyomi or Pinyin mode with ruby
+    const ruby = meaning
+      ? mode === 'onyomi'
+        ? meaning.onyomi
+        : meaning.pinyin
+      : undefined;
 
-      currentGroup.push(<HanziWithRuby key={i} char={char} ruby={ruby} />);
-    }
+    // For pinyin mode, pass tone info for contour background
+    const showContour = mode === 'pinyin';
+
+    currentGroup.push(
+      <HanziWithRuby
+        key={i}
+        char={char}
+        ruby={ruby}
+        effectiveTone={showContour ? effectiveTone : undefined}
+        originalTone={showContour ? originalTone : undefined}
+      />,
+    );
   }
 
   // Build final elements with nowrap groups
   // Use margin-right instead of separator elements to avoid leading space on new lines
   // 'wbr' markers become <br> elements for mandatory line breaks
+  // On mobile: free line breaks, On desktop (sm+): nowrap with margin control
   const elements: React.ReactNode[] = [];
   const nonEmptyGroups = groups.filter(
     (g) => g === 'wbr' || (Array.isArray(g) && g.length > 0),
@@ -406,54 +377,22 @@ function TextWithRuby({
     }
     const isLastGroup = g === nonEmptyGroups.length - 1;
     const nextIsWbr = nonEmptyGroups[g + 1] === 'wbr';
-    // Larger margin before mandatory break
-    const marginRight = isLastGroup ? undefined : nextIsWbr ? '1.5em' : '0.8em';
+    // Tailwind responsive classes for margin
+    // Mobile: no margin, Desktop: priority-based margin
+    const marginClass = isLastGroup ? '' : nextIsWbr ? 'sm:mr-6' : 'sm:mr-3';
     elements.push(
       <span
         key={`group-${g}`}
-        style={{
-          whiteSpace: 'nowrap',
-          marginRight,
-        }}
+        className={`sm:whitespace-nowrap ${marginClass}`}
       >
         {group}
       </span>,
     );
   }
 
-  // For visual mode, use non-narration color even for narration segments
-  const effectiveBaseClass =
-    mode === 'visual' && isNarration ? 'text-black dark:text-white' : baseClass;
-
-  const wrapperClass = `inline ${effectiveBaseClass} ${bgClass}`;
+  const wrapperClass = `inline ${baseClass} ${bgClass}`;
 
   return <span className={wrapperClass}>{elements}</span>;
-}
-
-// Legend item with SVG contour (uses shared ToneContourPath)
-function LegendItem({ tone, label }: { tone: number; label: string }) {
-  const color = toneColors[tone as keyof typeof toneColors];
-
-  return (
-    <div className="flex items-center gap-2">
-      <svg width="28" height="24" viewBox="0 0 40 50" aria-hidden="true">
-        <ToneContourPath tone={tone} color={color} opacity={1} />
-      </svg>
-      <span className="text-zinc-600 dark:text-zinc-400">{label}</span>
-    </div>
-  );
-}
-
-// Legend for visual mode
-function ToneLegend() {
-  return (
-    <div className="mt-4 flex flex-wrap gap-6 text-sm">
-      <LegendItem tone={1} label="1声（高平）" />
-      <LegendItem tone={2} label="2声（上昇）" />
-      <LegendItem tone={3} label="3声（低抑）" />
-      <LegendItem tone={4} label="4声（下降）" />
-    </div>
-  );
 }
 
 export function HakubunWithTabs({ segments }: Props) {
@@ -463,7 +402,6 @@ export function HakubunWithTabs({ segments }: Props) {
     { id: 'plain', label: '白文' },
     { id: 'onyomi', label: '音読み' },
     { id: 'pinyin', label: 'ピンイン' },
-    { id: 'visual', label: 'ビジュアル' },
   ];
 
   return (
@@ -531,9 +469,6 @@ export function HakubunWithTabs({ segments }: Props) {
             );
           })}
         </div>
-
-        {/* Legend for visual mode */}
-        {mode === 'visual' && <ToneLegend />}
       </div>
     </section>
   );
