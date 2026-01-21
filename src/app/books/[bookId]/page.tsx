@@ -19,7 +19,7 @@ export default async function BookPage({ params }: Props) {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-50 dark:bg-black">
+    <div className="bg-zinc-50 dark:bg-black">
       <main className="mx-auto max-w-3xl px-4 py-8 sm:px-6 lg:px-8">
         <header className="mb-8">
           <nav className="mb-4 text-sm text-zinc-500 dark:text-zinc-400">
@@ -47,7 +47,10 @@ export default async function BookPage({ params }: Props) {
                     {section.name}
                   </span>
                   <span className="ml-2 text-sm text-zinc-500">
-                    ({section.chapters.length}章)
+                    ({section.chapters.length}
+                    {section.chapters.length < section.totalChapters &&
+                      `/${section.totalChapters}`}
+                    章)
                   </span>
                 </Link>
               </li>

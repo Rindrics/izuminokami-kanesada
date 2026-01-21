@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { Suspense } from 'react';
 import { HakubunWithTabs } from '@/components/HakubunWithTabs';
 import { JapaneseTextWithRuby } from '@/components/JapaneseTextWithRuby';
 import { KeyboardNavigation } from '@/components/KeyboardNavigation';
@@ -37,7 +38,7 @@ export default async function ContentPage({ params }: Props) {
   const nextUrl = next ? `/books/${next}` : null;
 
   return (
-    <div className="min-h-screen bg-zinc-50 dark:bg-black">
+    <div className="bg-zinc-50 dark:bg-black">
       <main className="mx-auto max-w-3xl px-4 py-8 sm:px-6 lg:px-8">
         <header className="mb-8">
           <nav className="mb-4 text-sm text-zinc-500 dark:text-zinc-400">
@@ -64,7 +65,11 @@ export default async function ContentPage({ params }: Props) {
         </header>
 
         <article className="space-y-6">
-          <HakubunWithTabs segments={content.segments} />
+          <Suspense
+            fallback={<div className="text-zinc-500">読み込み中...</div>}
+          >
+            <HakubunWithTabs segments={content.segments} />
+          </Suspense>
 
           {content.japanese && (
             <section>
@@ -82,6 +87,17 @@ export default async function ContentPage({ params }: Props) {
             </section>
           )}
         </article>
+
+        <div className="mt-6 text-sm text-zinc-500">
+          <a
+            href={`https://github.com/Rindrics/izuminokami-kanesada/blob/main/contents/input/${contentId}.yaml`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-zinc-700 dark:hover:text-zinc-300"
+          >
+            このページの元データを見る
+          </a>
+        </div>
 
         <KeyboardNavigation prevUrl={prevUrl} nextUrl={nextUrl} />
       </main>

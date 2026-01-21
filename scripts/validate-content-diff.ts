@@ -15,10 +15,20 @@ import { validateContent } from '../src/lib/validators/content';
 /**
  * Derive content_id from input YAML file path
  * Example: contents/input/lunyu/1/1.yaml -> lunyu/1/1
+ * Returns null for non-content files like frequency-blacklist.yaml
  */
 function deriveContentId(filePath: string): string | null {
   const match = filePath.match(/^contents\/input\/(.+)\.yaml$/);
-  return match ? match[1] : null;
+  if (!match) return null;
+
+  const contentId = match[1];
+
+  // Exclude non-content files
+  if (contentId === 'frequency-blacklist') {
+    return null;
+  }
+
+  return contentId;
 }
 
 /**

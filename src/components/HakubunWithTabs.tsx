@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { ClickableChar } from '@/components/ClickableChar';
 import { getDefaultMeaning } from '@/data/hanzi-dictionary';
 import type { Segment } from '@/types/content';
 
@@ -237,7 +238,9 @@ function HanziWithRuby({
           </svg>
         )}
         {/* Character text - positioned above contour */}
-        <span style={{ position: 'relative', zIndex: 1 }}>{char}</span>
+        <span style={{ position: 'relative', zIndex: 1 }}>
+          <ClickableChar char={char} />
+        </span>
       </span>
     </span>
   );
@@ -291,7 +294,10 @@ function TextWithRuby({
             key={`plain-${group}-${count}`}
             className={`sm:whitespace-nowrap ${marginClass}`}
           >
-            {group}
+            {[...group].map((char, charIdx) => (
+              // biome-ignore lint/suspicious/noArrayIndexKey: characters in a group are stable and index is part of unique key
+              <ClickableChar key={`${group}-${count}-${charIdx}`} char={char} />
+            ))}
           </span>,
         );
       }
@@ -396,7 +402,27 @@ function TextWithRuby({
 }
 
 export function HakubunWithTabs({ segments }: Props) {
-  const [mode, setMode] = useState<DisplayMode>('plain');
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // Read mode from query parameter, default to 'plain'
+  const modeParam = searchParams.get('mode');
+  const mode: DisplayMode =
+    modeParam === 'onyomi' || modeParam === 'pinyin' ? modeParam : 'plain';
+
+  // Update URL when mode changes
+  const handleModeChange = (newMode: DisplayMode) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (newMode === 'plain') {
+      params.delete('mode');
+    } else {
+      params.set('mode', newMode);
+    }
+    const query = params.toString();
+    router.replace(query ? `?${query}` : window.location.pathname, {
+      scroll: false,
+    });
+  };
 
   const tabs: { id: DisplayMode; label: string }[] = [
     { id: 'plain', label: '白文' },
@@ -412,7 +438,7 @@ export function HakubunWithTabs({ segments }: Props) {
           <button
             key={tab.id}
             type="button"
-            onClick={() => setMode(tab.id)}
+            onClick={() => handleModeChange(tab.id)}
             role="tab"
             id={`hakubun-tab-${tab.id}`}
             aria-selected={mode === tab.id}

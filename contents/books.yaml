@@ -1,5 +1,7 @@
 - id: lunyu
   name: 論語
+  totalSections: 20
   sections:
     - id: '1'
       name: 学而第一
+      totalChapters: 16

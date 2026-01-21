@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
@@ -12,6 +13,7 @@ interface KeyboardNavigationProps {
  * Keyboard navigation component for content pages
  * - Press 'n' to go to next content
  * - Press 'p' to go to previous content
+ * - Shows navigation buttons with tooltip hint on hover
  */
 export function KeyboardNavigation({
   prevUrl,
@@ -40,19 +42,36 @@ export function KeyboardNavigation({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [router, prevUrl, nextUrl]);
 
-  // Render navigation hints
   return (
-    <div className="fixed bottom-4 right-4 flex gap-2 text-xs text-zinc-400 dark:text-zinc-600">
-      {prevUrl && (
-        <span className="rounded bg-zinc-100 px-2 py-1 dark:bg-zinc-800">
-          p: 前へ
-        </span>
+    <nav className="mt-8 flex items-center justify-between border-t border-zinc-200 pt-6 dark:border-zinc-800">
+      {prevUrl ? (
+        <Link
+          href={prevUrl}
+          className="group relative flex items-center gap-2 rounded-lg bg-zinc-100 px-4 py-2 text-zinc-700 transition hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
+        >
+          <span>←</span>
+          <span>前の章</span>
+          <span className="pointer-events-none absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-zinc-800 px-2 py-1 text-xs text-white opacity-0 transition-opacity delay-100 group-hover:opacity-100 dark:bg-zinc-200 dark:text-black">
+            ショートカット: p
+          </span>
+        </Link>
+      ) : (
+        <div />
       )}
-      {nextUrl && (
-        <span className="rounded bg-zinc-100 px-2 py-1 dark:bg-zinc-800">
-          n: 次へ
-        </span>
+      {nextUrl ? (
+        <Link
+          href={nextUrl}
+          className="group relative flex items-center gap-2 rounded-lg bg-zinc-100 px-4 py-2 text-zinc-700 transition hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
+        >
+          <span>次の章</span>
+          <span>→</span>
+          <span className="pointer-events-none absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-zinc-800 px-2 py-1 text-xs text-white opacity-0 transition-opacity delay-100 group-hover:opacity-100 dark:bg-zinc-200 dark:text-black">
+            ショートカット: n
+          </span>
+        </Link>
+      ) : (
+        <div />
       )}
-    </div>
+    </nav>
   );
 }

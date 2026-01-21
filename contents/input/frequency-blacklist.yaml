@@ -1,0 +1,39 @@
+# Characters to exclude from frequency ranking
+# Grammatical particles, common function words that don't represent content
+
+# Particles
+- 之 # possessive particle
+- 也 # final particle
+- 乎 # question particle
+- 焉 # final particle
+- 矣 # final particle
+- 哉 # exclamatory particle
+
+# Pronouns and markers
+- 其 # pronoun
+- 夫 # topic marker
+
+# Nominalizers
+- 者 # nominalizer
+- 所 # nominalizer
+
+# Conjunctions and prepositions
+- 而 # conjunction
+- 於 # preposition
+- 以 # conjunction/preposition
+- 則 # conjunction
+- 與 # conjunction/preposition ("with", "and")
+
+# Negation
+- 不 # negation
+
+# Common verbs
+- 為 # common verb
+- 有 # common verb
+- 無 # common verb
+
+# Speech marker
+- 曰 # speech marker
+
+# Honorifics
+- 子 # honorific (e.g., 孔子, 子曰)
