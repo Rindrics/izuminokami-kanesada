@@ -40,8 +40,11 @@ jobs:
       - name: Run tests
         run: pnpm test
 
+      - name: Generate contents
+        run: pnpm run generate:contents
+
       - name: Validate content diff
-        run: pnpm tsx scripts/validate-content-diff.ts
+        run: pnpm run validate:contents
 
       - name: Build
         run: pnpm run build
