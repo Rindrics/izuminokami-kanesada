@@ -417,13 +417,19 @@ export function HakubunWithTabs({ segments }: Props) {
         className="rounded-lg rounded-tl-none bg-white p-6 shadow-sm dark:bg-zinc-900"
       >
         <p className="text-2xl leading-loose tracking-wider">
-          {segments.map((segment) => (
-            <TextWithRuby
+          {segments.map((segment, index) => (
+            <span
               key={`${segment.start_pos}-${segment.end_pos}`}
-              text={segment.text}
-              mode={mode}
-              isNarration={segment.speaker === null}
-            />
+              style={{
+                marginRight: index < segments.length - 1 ? '0.8em' : undefined,
+              }}
+            >
+              <TextWithRuby
+                text={segment.text}
+                mode={mode}
+                isNarration={segment.speaker === null}
+              />
+            </span>
           ))}
         </p>
 
