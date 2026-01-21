@@ -166,6 +166,42 @@ function ToneContourPath({
   }
 }
 
+// Hanzi character with ruby annotation (onyomi/pinyin)
+// Ensures ruby is always centered above the character regardless of ruby length
+function HanziWithRuby({
+  char,
+  ruby,
+}: {
+  char: string;
+  ruby: string | undefined;
+}) {
+  return (
+    <span
+      style={{
+        display: 'inline-flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        verticalAlign: 'bottom',
+        margin: '0 0.1em',
+      }}
+    >
+      {/* Ruby text on top */}
+      <span
+        className="text-xs text-zinc-500 dark:text-zinc-400"
+        style={{
+          lineHeight: 1,
+          whiteSpace: 'nowrap',
+          minHeight: '1em',
+        }}
+      >
+        {ruby ?? ''}
+      </span>
+      {/* Character below */}
+      <span style={{ lineHeight: 1.2 }}>{char}</span>
+    </span>
+  );
+}
+
 // SVG tone contour backgrounds for inline display
 // - shapeTone: determines the contour shape (after sandhi)
 // - colorTone: determines the color (original tone, before sandhi)
@@ -288,16 +324,7 @@ function TextWithRuby({
           : meaning.pinyin
         : undefined;
 
-      if (ruby) {
-        elements.push(
-          <ruby key={i}>
-            {char}
-            <rt className="text-xs text-zinc-500 dark:text-zinc-400">{ruby}</rt>
-          </ruby>,
-        );
-      } else {
-        elements.push(<span key={i}>{char}</span>);
-      }
+      elements.push(<HanziWithRuby key={i} char={char} ruby={ruby} />);
     }
   }
 
