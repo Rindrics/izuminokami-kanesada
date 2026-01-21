@@ -1,6 +1,6 @@
 {
   "mcpServers": {
-    "izuminokami": {
+    "sodokuan": {
       "command": "pnpm",
       "args": ["--dir", "mcp-server", "run", "dev"]
     }
