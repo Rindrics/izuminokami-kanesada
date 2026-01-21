@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { Suspense } from 'react';
 import { HakubunWithTabs } from '@/components/HakubunWithTabs';
 import { JapaneseTextWithRuby } from '@/components/JapaneseTextWithRuby';
 import { KeyboardNavigation } from '@/components/KeyboardNavigation';
@@ -64,7 +65,11 @@ export default async function ContentPage({ params }: Props) {
         </header>
 
         <article className="space-y-6">
-          <HakubunWithTabs segments={content.segments} />
+          <Suspense
+            fallback={<div className="text-zinc-500">読み込み中...</div>}
+          >
+            <HakubunWithTabs segments={content.segments} />
+          </Suspense>
 
           {content.japanese && (
             <section>
