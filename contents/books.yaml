@@ -125,3 +125,99 @@
     - id: '1'
       name: 中庸
       totalChapters: 33
+
+# 五経
+
+- id: yijing
+  name: 易経
+  totalSections: 2
+  sections:
+    - id: '1'
+      name: 上経
+      totalChapters: 30
+    - id: '2'
+      name: 下経
+      totalChapters: 34
+
+- id: shujing
+  name: 書経
+  totalSections: 4
+  sections:
+    - id: '1'
+      name: 虞書
+      totalChapters: 5
+    - id: '2'
+      name: 夏書
+      totalChapters: 4
+    - id: '3'
+      name: 商書
+      totalChapters: 17
+    - id: '4'
+      name: 周書
+      totalChapters: 32
+
+- id: shijing
+  name: 詩経
+  totalSections: 4
+  sections:
+    - id: '1'
+      name: 国風
+      totalChapters: 160
+    - id: '2'
+      name: 小雅
+      totalChapters: 74
+    - id: '3'
+      name: 大雅
+      totalChapters: 31
+    - id: '4'
+      name: 頌
+      totalChapters: 40
+
+- id: liji
+  name: 礼記
+  totalSections: 1
+  sections:
+    - id: '1'
+      name: 礼記
+      totalChapters: 49
+
+- id: chunqiu
+  name: 春秋左氏伝
+  totalSections: 12
+  sections:
+    - id: '1'
+      name: 隠公
+      totalChapters: 11
+    - id: '2'
+      name: 桓公
+      totalChapters: 18
+    - id: '3'
+      name: 荘公
+      totalChapters: 32
+    - id: '4'
+      name: 閔公
+      totalChapters: 2
+    - id: '5'
+      name: 僖公
+      totalChapters: 33
+    - id: '6'
+      name: 文公
+      totalChapters: 18
+    - id: '7'
+      name: 宣公
+      totalChapters: 18
+    - id: '8'
+      name: 成公
+      totalChapters: 18
+    - id: '9'
+      name: 襄公
+      totalChapters: 31
+    - id: '10'
+      name: 昭公
+      totalChapters: 32
+    - id: '11'
+      name: 定公
+      totalChapters: 15
+    - id: '12'
+      name: 哀公
+      totalChapters: 27
