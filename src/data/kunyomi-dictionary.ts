@@ -686,6 +686,41 @@ export const kunyomiDictionary: KunyomiEntry[] = [
     text: '年',
     readings: [{ id: '年-とし', ruby: 'とし', is_default: true }],
   },
+  {
+    id: '禽',
+    text: '禽',
+    readings: [{ id: '禽-きん', ruby: 'きん', is_default: true }],
+  },
+  {
+    id: '貢',
+    text: '貢',
+    readings: [{ id: '貢-こう', ruby: 'こう', is_default: true }],
+  },
+  {
+    id: '問',
+    text: '問',
+    readings: [{ id: '問-と', ruby: 'と', is_default: true }],
+  },
+  {
+    id: '可',
+    text: '可',
+    readings: [{ id: '可-べ', ruby: 'べ', is_default: true }],
+  },
+  {
+    id: '導',
+    text: '導',
+    readings: [{ id: '導-みちび', ruby: 'みちび', is_default: true }],
+  },
+  {
+    id: '悌',
+    text: '悌',
+    readings: [{ id: '悌-てい', ruby: 'てい', is_default: true }],
+  },
+  {
+    id: '夏',
+    text: '夏',
+    readings: [{ id: '夏-か', ruby: 'か', is_default: true }],
+  },
 ];
 
 export function getKunyomiEntry(text: string): KunyomiEntry | undefined {
