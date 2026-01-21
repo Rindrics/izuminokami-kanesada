@@ -11,6 +11,7 @@
     "generate:contents": "tsx scripts/generate-contents.ts",
     "generate:contents:watch": "tsx scripts/generate-contents.ts --watch",
     "validate:contents": "tsx scripts/validate-content-diff.ts",
+    "validate:contents:all": "tsx scripts/validate-content-diff.ts --all",
     "start": "next start -p 30600",
     "lint": "eslint",
     "check": "biome check src",
