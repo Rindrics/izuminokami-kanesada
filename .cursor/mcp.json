@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "izuminokami": {
+      "command": "pnpm",
+      "args": ["--dir", "mcp-server", "run", "dev"]
+    }
+  }
+}
