@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { ClickableChar } from '@/components/ClickableChar';
-import { books } from '@/generated/books';
+import { books, getBookById } from '@/generated/books';
+import { getCharacterName } from '@/generated/characters';
 import type { CharIndex } from '@/generated/stats';
 import { stats } from '@/generated/stats';
 
@@ -77,7 +78,7 @@ function KeyConceptsHeatmap({
     // Aggregate by book
     units = bookIds.sort().map((bookId) => ({
       id: bookId,
-      label: bookId,
+      label: getBookById(bookId)?.name ?? bookId,
       totalChapters: bookTotalChapters.get(bookId) ?? 1,
     }));
   } else {
@@ -395,7 +396,7 @@ export default function StatsPage() {
                     className="border-b border-zinc-100 dark:border-zinc-800"
                   >
                     <td className="px-4 py-2 text-black dark:text-white">
-                      {pf.person}
+                      {getCharacterName(pf.person)}
                     </td>
                     <td className="px-4 py-2 text-right text-black dark:text-white">
                       {pf.speakerCount}
