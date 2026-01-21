@@ -24,6 +24,7 @@
       "src/**/*.js",
       "src/**/*.jsx",
       "scripts/**/*.ts",
+      "mcp-server/src/**/*.ts",
       "!src/generated"
     ]
   }
