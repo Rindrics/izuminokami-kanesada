@@ -1,6 +1,10 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { getAllSectionPaths, getBookById, getSectionById } from '@/data/books';
+import {
+  getAllSectionPaths,
+  getBookById,
+  getSectionById,
+} from '@/generated/books';
 import { getContentById } from '@/generated/contents';
 
 interface Props {

@@ -2,16 +2,16 @@
  * Generate TypeScript content files from YAML input files
  *
  * This script:
- * 1. Reads YAML files from contents/input/{book}/{section}/{chapter}.yaml
- * 2. Derives fields (content_id, book_id, section, chapter, text, start_pos, end_pos, speakers)
- * 3. Generates src/generated/contents/{book}.ts files
+ * 1. Reads books.yaml for book metadata
+ * 2. Reads YAML files from contents/input/{book}/{section}/{chapter}.yaml
+ * 3. Derives fields (content_id, book_id, section, chapter, text, start_pos, end_pos, speakers)
+ * 4. Generates src/generated/books.ts and src/generated/contents/{book}.ts files
  */
 
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { inspect } from 'node:util';
 import yaml from 'js-yaml';
-import { books } from '../src/data/books';
 
 interface InputSegment {
   text: string;
@@ -45,10 +45,47 @@ interface OutputContent {
   japanese: string;
 }
 
+interface InputSection {
+  id: string;
+  name: string;
+}
+
+interface InputBook {
+  id: string;
+  name: string;
+  sections: InputSection[];
+}
+
+interface OutputSection {
+  id: string;
+  name: string;
+  chapters: string[];
+}
+
+interface OutputBook {
+  id: string;
+  name: string;
+  sections: OutputSection[];
+}
+
+// Global books data (loaded from YAML)
+let booksData: InputBook[] = [];
+
+function loadBooksYaml(): void {
+  const booksYamlPath = path.join(__dirname, '../contents/books.yaml');
+  const content = fs.readFileSync(booksYamlPath, 'utf-8');
+  booksData = yaml.load(content) as InputBook[];
+}
+
 function getSectionName(bookId: string, sectionId: string): string {
-  const book = books.find((b) => b.id === bookId);
+  const book = booksData.find((b) => b.id === bookId);
   const section = book?.sections.find((s) => s.id === sectionId);
   return section?.name ?? '';
+}
+
+function getBookName(bookId: string): string {
+  const book = booksData.find((b) => b.id === bookId);
+  return book?.name ?? bookId;
 }
 
 function parseInputFile(filePath: string): InputContent {
@@ -111,7 +148,7 @@ function deriveContent(
   };
 }
 
-function generateTypeScriptFile(
+function generateContentTypeScriptFile(
   bookId: string,
   contents: OutputContent[],
 ): string {
@@ -120,21 +157,71 @@ function generateTypeScriptFile(
   return `import type { Content } from '@/types/content';
 
 /**
- * ${books.find((b) => b.id === bookId)?.name ?? bookId}
+ * ${getBookName(bookId)}
  * Auto-generated from contents/input/${bookId}/
  */
 export const ${bookId}Contents: Content[] = ${contentsObjectStr};
 `;
 }
 
+function generateBooksTypeScript(outputBooks: OutputBook[]): string {
+  const booksObjectStr = inspect(outputBooks, { depth: null, compact: false });
+
+  return `import type { Book, Section } from '@/types/book';
+
+export type { Book, Section };
+
+/**
+ * Book metadata definitions
+ * Auto-generated from contents/books.yaml
+ */
+export const books: Book[] = ${booksObjectStr};
+
+// Book queries
+export function getBookById(id: string): Book | undefined {
+  return books.find((b) => b.id === id);
+}
+
+export function getAllBookIds(): string[] {
+  return books.map((b) => b.id);
+}
+
+// Section queries
+export function getSectionById(
+  bookId: string,
+  sectionId: string,
+): Section | undefined {
+  const book = getBookById(bookId);
+  return book?.sections.find((s) => s.id === sectionId);
+}
+
+export function getAllSectionPaths(): string[] {
+  const paths: string[] = [];
+  for (const book of books) {
+    for (const section of book.sections) {
+      paths.push(\`\${book.id}/\${section.id}\`);
+    }
+  }
+  return paths;
+}
+`;
+}
+
 function main(): void {
   const inputDir = path.join(__dirname, '../contents/input');
-  const outputDir = path.join(__dirname, '../src/generated/contents');
+  const outputDir = path.join(__dirname, '../src/generated');
+  const contentsOutputDir = path.join(outputDir, 'contents');
 
-  // Ensure output directory exists
-  fs.mkdirSync(outputDir, { recursive: true });
+  // Ensure output directories exist
+  fs.mkdirSync(contentsOutputDir, { recursive: true });
 
   console.log('=== Content Generation ===\n');
+
+  // Load books metadata from YAML
+  loadBooksYaml();
+
+  // Track chapters per book/section for books.ts generation
+  const chaptersBySection = new Map<string, string[]>();
 
   // Group contents by book
   const contentsByBook = new Map<string, OutputContent[]>();
@@ -148,10 +235,14 @@ function main(): void {
       const sectionDir = path.join(bookDir, sectionId);
       if (!fs.statSync(sectionDir).isDirectory()) continue;
 
+      const sectionKey = `${bookId}/${sectionId}`;
+      const chapters: string[] = [];
+
       for (const file of fs.readdirSync(sectionDir)) {
         if (!file.endsWith('.yaml')) continue;
 
         const chapterId = file.replace('.yaml', '');
+        chapters.push(chapterId);
         const filePath = path.join(sectionDir, file);
 
         console.log(`Processing: ${bookId}/${sectionId}/${chapterId}`);
@@ -164,22 +255,26 @@ function main(): void {
         }
         contentsByBook.get(bookId)?.push(output);
       }
+
+      // Sort chapters numerically
+      chapters.sort((a, b) => Number(a) - Number(b));
+      chaptersBySection.set(sectionKey, chapters);
     }
   }
 
-  // Generate TypeScript files for each book
+  // Generate TypeScript files for each book's contents
   for (const [bookId, contents] of contentsByBook) {
     // Sort by content_id
     contents.sort((a, b) => a.content_id.localeCompare(b.content_id));
 
-    const tsContent = generateTypeScriptFile(bookId, contents);
-    const outputPath = path.join(outputDir, `${bookId}.ts`);
+    const tsContent = generateContentTypeScriptFile(bookId, contents);
+    const outputPath = path.join(contentsOutputDir, `${bookId}.ts`);
 
     fs.writeFileSync(outputPath, tsContent);
     console.log(`Generated: ${outputPath}`);
   }
 
-  // Generate index.ts
+  // Generate contents/index.ts
   const bookIds = [...contentsByBook.keys()].sort();
   const indexContent = `import type { Content } from '@/types/content';
 ${bookIds.map((id) => `import { ${id}Contents } from './${id}';`).join('\n')}
@@ -205,59 +300,27 @@ export function getAllContentIds(): string[] {
 }
 `;
 
-  const indexPath = path.join(outputDir, 'index.ts');
+  const indexPath = path.join(contentsOutputDir, 'index.ts');
   fs.writeFileSync(indexPath, indexContent);
   console.log(`Generated: ${indexPath}`);
 
-  // Update books.ts chapters based on input directory
-  updateBooksChapters(inputDir);
+  // Generate books.ts with chapters derived from input directory
+  const outputBooks: OutputBook[] = booksData.map((book) => ({
+    id: book.id,
+    name: book.name,
+    sections: book.sections.map((section) => ({
+      id: section.id,
+      name: section.name,
+      chapters: chaptersBySection.get(`${book.id}/${section.id}`) ?? [],
+    })),
+  }));
+
+  const booksContent = generateBooksTypeScript(outputBooks);
+  const booksOutputPath = path.join(outputDir, 'books.ts');
+  fs.writeFileSync(booksOutputPath, booksContent);
+  console.log(`Generated: ${booksOutputPath}`);
 
   console.log('\n=== Generation Complete ===');
-}
-
-/**
- * Update books.ts chapters array based on input directory structure
- */
-function updateBooksChapters(inputDir: string): void {
-  const booksFilePath = path.join(__dirname, '../src/data/books.ts');
-  let booksContent = fs.readFileSync(booksFilePath, 'utf-8');
-
-  // Collect chapters for each book/section from input directory
-  for (const bookId of fs.readdirSync(inputDir)) {
-    const bookDir = path.join(inputDir, bookId);
-    if (!fs.statSync(bookDir).isDirectory()) continue;
-
-    for (const sectionId of fs.readdirSync(bookDir)) {
-      const sectionDir = path.join(bookDir, sectionId);
-      if (!fs.statSync(sectionDir).isDirectory()) continue;
-
-      // Get all chapter IDs from YAML files
-      const chapters = fs
-        .readdirSync(sectionDir)
-        .filter((f) => f.endsWith('.yaml'))
-        .map((f) => f.replace('.yaml', ''))
-        .sort((a, b) => Number(a) - Number(b));
-
-      // Update the chapters array in books.ts
-      // Match pattern: id: 'sectionId', name: '...', chapters: [...]
-      const chaptersArrayStr = `[${chapters.map((c) => `'${c}'`).join(', ')}]`;
-      const sectionPattern = new RegExp(
-        `(id:\\s*'${sectionId}',\\s*name:\\s*'[^']*',\\s*chapters:\\s*)\\[[^\\]]*\\]`,
-      );
-
-      if (sectionPattern.test(booksContent)) {
-        booksContent = booksContent.replace(
-          sectionPattern,
-          `$1${chaptersArrayStr}`,
-        );
-        console.log(
-          `Updated chapters for ${bookId}/${sectionId}: ${chapters.join(', ')}`,
-        );
-      }
-    }
-  }
-
-  fs.writeFileSync(booksFilePath, booksContent);
 }
 
 main();

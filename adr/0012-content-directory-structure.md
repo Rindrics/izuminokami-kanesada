@@ -20,6 +20,7 @@
 
 ```text
 contents/
+  books.yaml            # 書籍メタデータ（手動管理）- git 管理
   input/                # 入力データ（YAML）- git 管理
     lunyu/
       1/
@@ -28,11 +29,11 @@ contents/
 
 src/
   generated/            # 自動生成物 - gitignore
+    books.ts            # 書籍メタデータ + chapters（自動生成）
     contents/
       index.ts          # 全コンテンツのエクスポート（自動生成）
       lunyu.ts          # 論語のコンテンツ（自動生成）
   data/
-    books.ts            # 書籍メタデータ（手動管理）
     hanzi-dictionary.ts
     kunyomi-dictionary.ts
 ```
@@ -41,9 +42,10 @@ src/
 
 | ファイル | 役割 | 管理方法 |
 |----------|------|----------|
+| `contents/books.yaml` | 書籍メタデータ（id, name, sections） | 手動管理 |
 | `contents/input/*.yaml` | 入力データ（最小限の情報） | 手動/AI 生成 |
+| `src/generated/books.ts` | 書籍メタデータ + chapters 配列 | 自動生成 |
 | `src/generated/contents/*.ts` | 出力データ（導出フィールド含む） | 自動生成 |
-| `src/data/books.ts` | 書籍メタデータ | 手動管理 |
 
 ### ビルドプロセス
 

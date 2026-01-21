@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { HakubunWithTabs } from '@/components/HakubunWithTabs';
 import { JapaneseTextWithRuby } from '@/components/JapaneseTextWithRuby';
-import { getBookById, getSectionById } from '@/data/books';
+import { getBookById, getSectionById } from '@/generated/books';
 import { getAllContentIds, getContentById } from '@/generated/contents';
 
 interface Props {
