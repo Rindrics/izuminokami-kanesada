@@ -24,6 +24,10 @@ export default function Home() {
               const currentSections = book.sections.filter(
                 (s) => s.chapters.length > 0,
               ).length;
+              const currentChapters = book.sections.reduce(
+                (sum, s) => sum + s.chapters.length,
+                0,
+              );
               const hasContent = currentSections > 0;
               return (
                 <li key={book.id}>
@@ -36,7 +40,8 @@ export default function Home() {
                         {book.name}
                       </span>
                       <span className="ml-2 text-sm text-zinc-500">
-                        ({currentSections}/{book.totalSections}編)
+                        ({currentSections}/{book.totalSections}編、計
+                        {currentChapters}章)
                       </span>
                     </Link>
                   ) : (
