@@ -271,6 +271,20 @@ function TextWithRuby({
     const effectiveTone = effectiveTones[i];
     const meaning = getDefaultMeaning(char);
 
+    // Handle space as semantic separator with wider gap
+    if (char === ' ') {
+      elements.push(
+        <span
+          key={i}
+          style={{
+            display: 'inline-block',
+            width: '0.8em',
+          }}
+        />,
+      );
+      continue;
+    }
+
     if (mode === 'visual') {
       // Visual mode: SVG contour background with normal character style
       if (effectiveTone !== undefined && originalTone !== undefined) {
