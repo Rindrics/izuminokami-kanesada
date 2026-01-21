@@ -252,14 +252,19 @@ export default function StatsPage() {
             データソース
           </h2>
           <ul className="space-y-1 text-sm">
-            {books.map((book) => (
-              <li key={book.id} className="text-black dark:text-white">
-                {book.name}:{' '}
-                <span className="text-zinc-500">
-                  {book.sections.length}/{book.totalSections} 編
-                </span>
-              </li>
-            ))}
+            {books.map((book) => {
+              const sectionsWithContent = book.sections.filter(
+                (s) => s.chapters.length > 0,
+              ).length;
+              return (
+                <li key={book.id} className="text-black dark:text-white">
+                  {book.name}:{' '}
+                  <span className="text-zinc-500">
+                    {sectionsWithContent}/{book.totalSections} 編
+                  </span>
+                </li>
+              );
+            })}
           </ul>
         </section>
 
