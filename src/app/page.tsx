@@ -15,7 +15,7 @@ export default function Home() {
           </p>
         </header>
 
-        <section>
+        <section className="mb-8">
           <h2 className="mb-4 text-lg font-medium text-zinc-600 dark:text-zinc-400">
             経書一覧
           </h2>

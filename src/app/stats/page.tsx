@@ -227,18 +227,6 @@ export default function StatsPage() {
         10,
     ) / 10;
 
-  // Calculate total chapters across all books
-  const totalAvailableChapters = books.reduce(
-    (sum, book) =>
-      sum + book.sections.reduce((s, sec) => s + sec.chapters.length, 0),
-    0,
-  );
-  const totalPossibleChapters = books.reduce(
-    (sum, book) =>
-      sum + book.sections.reduce((s, sec) => s + sec.totalChapters, 0),
-    0,
-  );
-
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-black">
       <main className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
