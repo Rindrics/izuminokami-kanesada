@@ -442,18 +442,6 @@ function LegendItem({ tone, label }: { tone: number; label: string }) {
   );
 }
 
-// Legend for visual mode
-function ToneLegend() {
-  return (
-    <div className="mt-4 flex flex-wrap gap-6 text-sm">
-      <LegendItem tone={1} label="1声（高平）" />
-      <LegendItem tone={2} label="2声（上昇）" />
-      <LegendItem tone={3} label="3声（低抑）" />
-      <LegendItem tone={4} label="4声（下降）" />
-    </div>
-  );
-}
-
 export function HakubunWithTabs({ segments }: Props) {
   const [mode, setMode] = useState<DisplayMode>('plain');
 
@@ -529,9 +517,6 @@ export function HakubunWithTabs({ segments }: Props) {
             );
           })}
         </div>
-
-        {/* Legend for visual mode */}
-        {mode === 'visual' && <ToneLegend />}
       </div>
     </section>
   );
