@@ -495,22 +495,40 @@ export function HakubunWithTabs({ segments }: Props) {
         aria-labelledby={`hakubun-tab-${mode}`}
         className="rounded-lg rounded-tl-none bg-white p-6 shadow-sm dark:bg-zinc-900"
       >
-        <p className="text-2xl leading-loose tracking-wider">
-          {segments.map((segment, index) => (
-            <span
-              key={`${segment.start_pos}-${segment.end_pos}`}
-              style={{
-                marginRight: index < segments.length - 1 ? '0.8em' : undefined,
-              }}
-            >
-              <TextWithRuby
-                text={segment.text}
-                mode={mode}
-                isNarration={segment.speaker === null}
-              />
-            </span>
-          ))}
-        </p>
+        <div className="text-2xl leading-loose tracking-wider">
+          {segments.map((segment, index) => {
+            const isNarration = segment.speaker === null;
+            const prevSegment = segments[index - 1];
+            const prevIsNarration = prevSegment && prevSegment.speaker === null;
+
+            // Speech after narration: wrap in block with indent
+            if (!isNarration && prevIsNarration) {
+              return (
+                <div
+                  key={`${segment.start_pos}-${segment.end_pos}`}
+                  style={{ paddingLeft: '1em' }}
+                >
+                  <TextWithRuby
+                    text={segment.text}
+                    mode={mode}
+                    isNarration={false}
+                  />
+                </div>
+              );
+            }
+
+            // Narration or other segments: inline
+            return (
+              <span key={`${segment.start_pos}-${segment.end_pos}`}>
+                <TextWithRuby
+                  text={segment.text}
+                  mode={mode}
+                  isNarration={isNarration}
+                />
+              </span>
+            );
+          })}
+        </div>
 
         {/* Legend for visual mode */}
         {mode === 'visual' && <ToneLegend />}
