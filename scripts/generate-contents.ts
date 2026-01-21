@@ -236,6 +236,179 @@ export function getAllSectionPaths(): string[] {
 `;
 }
 
+interface CharFrequency {
+  char: string;
+  count: number;
+  percentage: number;
+}
+
+interface PersonFrequency {
+  person: string;
+  speakerCount: number;
+  mentionedCount: number;
+  totalCount: number;
+}
+
+interface ChapterLength {
+  contentId: string;
+  charCount: number;
+  segmentCount: number;
+}
+
+interface CharIndex {
+  char: string;
+  contentIds: string[];
+}
+
+interface Stats {
+  charFrequencies: CharFrequency[];
+  personFrequencies: PersonFrequency[];
+  chapterLengths: ChapterLength[];
+  charIndex: CharIndex[];
+  totalChars: number;
+  totalChapters: number;
+}
+
+function generateStatsTypeScript(contents: OutputContent[]): string {
+  // Count character frequencies (Chinese characters only)
+  const charCounts = new Map<string, number>();
+  let totalChars = 0;
+
+  for (const content of contents) {
+    // Remove punctuation, spaces, hyphens, semicolons
+    const cleanText = content.text.replace(/[，。？、；\s\-;]/g, '');
+    for (const char of cleanText) {
+      // Only count CJK characters
+      if (/[\u4e00-\u9fff]/.test(char)) {
+        charCounts.set(char, (charCounts.get(char) ?? 0) + 1);
+        totalChars++;
+      }
+    }
+  }
+
+  // Sort by frequency and calculate percentage
+  const charFrequencies: CharFrequency[] = [...charCounts.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .map(([char, count]) => ({
+      char,
+      count,
+      percentage: Math.round((count / totalChars) * 10000) / 100,
+    }));
+
+  // Count person frequencies
+  const speakerCounts = new Map<string, number>();
+  const mentionedCounts = new Map<string, number>();
+
+  for (const content of contents) {
+    for (const speaker of content.characters.speakers) {
+      speakerCounts.set(speaker, (speakerCounts.get(speaker) ?? 0) + 1);
+    }
+    for (const mentioned of content.characters.mentioned) {
+      mentionedCounts.set(mentioned, (mentionedCounts.get(mentioned) ?? 0) + 1);
+    }
+  }
+
+  // Combine all persons
+  const allPersons = new Set([
+    ...speakerCounts.keys(),
+    ...mentionedCounts.keys(),
+  ]);
+  const personFrequencies: PersonFrequency[] = [...allPersons]
+    .map((person) => ({
+      person,
+      speakerCount: speakerCounts.get(person) ?? 0,
+      mentionedCount: mentionedCounts.get(person) ?? 0,
+      totalCount:
+        (speakerCounts.get(person) ?? 0) + (mentionedCounts.get(person) ?? 0),
+    }))
+    .sort((a, b) => b.totalCount - a.totalCount);
+
+  // Calculate chapter lengths
+  const chapterLengths: ChapterLength[] = contents.map((content) => ({
+    contentId: content.content_id,
+    charCount: content.text.replace(/[，。？、；\s\-;]/g, '').length,
+    segmentCount: content.segments.length,
+  }));
+
+  // Build character index (which chapters contain each character)
+  const charToContentIds = new Map<string, Set<string>>();
+  for (const content of contents) {
+    const cleanText = content.text.replace(/[，。？、；\s\-;]/g, '');
+    for (const char of cleanText) {
+      if (/[\u4e00-\u9fff]/.test(char)) {
+        if (!charToContentIds.has(char)) {
+          charToContentIds.set(char, new Set());
+        }
+        charToContentIds.get(char)?.add(content.content_id);
+      }
+    }
+  }
+
+  // Sort index by frequency (most common characters first)
+  const charIndex: CharIndex[] = [...charToContentIds.entries()]
+    .map(([char, contentIds]) => ({
+      char,
+      contentIds: [...contentIds].sort(),
+    }))
+    .sort((a, b) => b.contentIds.length - a.contentIds.length);
+
+  const stats: Stats = {
+    charFrequencies,
+    personFrequencies,
+    chapterLengths,
+    charIndex,
+    totalChars,
+    totalChapters: contents.length,
+  };
+
+  const statsObjectStr = inspect(stats, {
+    depth: null,
+    compact: false,
+    maxArrayLength: null,
+  });
+
+  return `/**
+ * Statistics data
+ * Auto-generated from contents
+ */
+
+export interface CharFrequency {
+  char: string;
+  count: number;
+  percentage: number;
+}
+
+export interface PersonFrequency {
+  person: string;
+  speakerCount: number;
+  mentionedCount: number;
+  totalCount: number;
+}
+
+export interface ChapterLength {
+  contentId: string;
+  charCount: number;
+  segmentCount: number;
+}
+
+export interface CharIndex {
+  char: string;
+  contentIds: string[];
+}
+
+export interface Stats {
+  charFrequencies: CharFrequency[];
+  personFrequencies: PersonFrequency[];
+  chapterLengths: ChapterLength[];
+  charIndex: CharIndex[];
+  totalChars: number;
+  totalChapters: number;
+}
+
+export const stats: Stats = ${statsObjectStr};
+`;
+}
+
 function main(): void {
   const inputDir = path.join(process.cwd(), 'contents/input');
   const outputDir = path.join(process.cwd(), 'src/generated');
@@ -377,6 +550,13 @@ export function getAdjacentContentIds(
   const booksOutputPath = path.join(outputDir, 'books.ts');
   fs.writeFileSync(booksOutputPath, booksContent);
   console.log(`Generated: ${booksOutputPath}`);
+
+  // Generate stats.ts with statistics data
+  const allContents = [...contentsByBook.values()].flat();
+  const statsContent = generateStatsTypeScript(allContents);
+  const statsOutputPath = path.join(outputDir, 'stats.ts');
+  fs.writeFileSync(statsOutputPath, statsContent);
+  console.log(`Generated: ${statsOutputPath}`);
 
   console.log('\n=== Generation Complete ===');
 }
