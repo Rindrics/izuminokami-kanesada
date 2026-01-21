@@ -11,6 +11,7 @@ import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { inspect } from 'node:util';
 import yaml from 'js-yaml';
+import { books } from '../src/data/books';
 
 interface InputSegment {
   text: string;
@@ -43,15 +44,6 @@ interface OutputContent {
   };
   japanese: string;
 }
-
-// Book metadata (duplicated here to avoid import issues)
-const books = [
-  {
-    id: 'lunyu',
-    name: '論語',
-    sections: [{ id: '1', name: '学而第一', chapters: ['1', '2'] }],
-  },
-];
 
 function getSectionName(bookId: string, sectionId: string): string {
   const book = books.find((b) => b.id === bookId);
