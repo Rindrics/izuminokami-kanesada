@@ -2,8 +2,13 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { HakubunWithTabs } from '@/components/HakubunWithTabs';
 import { JapaneseTextWithRuby } from '@/components/JapaneseTextWithRuby';
+import { KeyboardNavigation } from '@/components/KeyboardNavigation';
 import { getBookById, getSectionById } from '@/generated/books';
-import { getAllContentIds, getContentById } from '@/generated/contents';
+import {
+  getAdjacentContentIds,
+  getAllContentIds,
+  getContentById,
+} from '@/generated/contents';
 
 interface Props {
   params: Promise<{ bookId: string; sectionId: string; chapterId: string }>;
@@ -26,6 +31,10 @@ export default async function ContentPage({ params }: Props) {
   if (!content || !book || !section) {
     notFound();
   }
+
+  const { prev, next } = getAdjacentContentIds(contentId);
+  const prevUrl = prev ? `/books/${prev}` : null;
+  const nextUrl = next ? `/books/${next}` : null;
 
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-black">
@@ -73,6 +82,8 @@ export default async function ContentPage({ params }: Props) {
             </section>
           )}
         </article>
+
+        <KeyboardNavigation prevUrl={prevUrl} nextUrl={nextUrl} />
       </main>
     </div>
   );
