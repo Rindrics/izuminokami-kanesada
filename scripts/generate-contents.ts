@@ -9,6 +9,7 @@
 
 import * as fs from 'node:fs';
 import * as path from 'node:path';
+import { inspect } from 'node:util';
 import yaml from 'js-yaml';
 
 interface InputSegment {
@@ -122,10 +123,7 @@ function generateTypeScriptFile(
   bookId: string,
   contents: OutputContent[],
 ): string {
-  const contentsJson = JSON.stringify(contents, null, 2)
-    // Convert to TypeScript format
-    .replace(/"([^"]+)":/g, '$1:')
-    .replace(/null/g, 'null');
+  const contentsObjectStr = inspect(contents, { depth: null, compact: false });
 
   return `import type { Content } from '@/types/content';
 
@@ -133,7 +131,7 @@ function generateTypeScriptFile(
  * ${books.find((b) => b.id === bookId)?.name ?? bookId}
  * Auto-generated from contents/input/${bookId}/
  */
-export const ${bookId}Contents: Content[] = ${contentsJson};
+export const ${bookId}Contents: Content[] = ${contentsObjectStr};
 `;
 }
 
