@@ -244,6 +244,61 @@ function validateSegments(
 }
 
 /**
+ * Punctuation characters that are not allowed in segment text
+ */
+const FORBIDDEN_PUNCTUATION = [
+  '。',
+  '、',
+  '，',
+  '；',
+  '：',
+  '！',
+  '？',
+  '「',
+  '」',
+  '『',
+  '』',
+  '（',
+  '）',
+  '【',
+  '】',
+  '…',
+  '・',
+  // Full-width punctuation
+  '．',
+  '，',
+];
+
+/**
+ * Validate that segment text does not contain punctuation
+ */
+function validateNoPunctuation(segments: Segment[]): ValidationError[] {
+  const errors: ValidationError[] = [];
+
+  for (let i = 0; i < segments.length; i++) {
+    const segment = segments[i];
+    const foundPunctuation: string[] = [];
+
+    for (const char of segment.text) {
+      if (FORBIDDEN_PUNCTUATION.includes(char)) {
+        foundPunctuation.push(char);
+      }
+    }
+
+    if (foundPunctuation.length > 0) {
+      const uniquePunctuation = [...new Set(foundPunctuation)];
+      errors.push({
+        path: `segments[${i}].text`,
+        message: `segment text contains forbidden punctuation: ${uniquePunctuation.join(' ')}`,
+        severity: 'error',
+      });
+    }
+  }
+
+  return errors;
+}
+
+/**
  * Validate connection markers (ADR-0007)
  * - `-` must have characters before and after
  * - No consecutive `-`
@@ -457,16 +512,19 @@ export function validateContent(content: Content): ValidationResult {
   // 2. Validate segments
   errors.push(...validateSegments(content.segments, content.text));
 
-  // 3. Validate connection markers
+  // 3. Validate no punctuation in segments
+  errors.push(...validateNoPunctuation(content.segments));
+
+  // 4. Validate connection markers
   errors.push(...validateConnectionMarkers(content.text));
 
-  // 4. Validate speakers
+  // 5. Validate speakers
   errors.push(...validateSpeakers(content));
 
-  // 5. Validate hanzi in text are in hanzi-dictionary (pinyin)
+  // 6. Validate hanzi in text are in hanzi-dictionary (pinyin)
   errors.push(...validateHanziInDictionary(content.text));
 
-  // 6. Validate kanji in japanese are in kunyomi-dictionary (reading)
+  // 7. Validate kanji in japanese are in kunyomi-dictionary (reading)
   errors.push(...validateKunyomiInDictionary(content.japanese));
 
   const hasErrors = errors.some((e) => e.severity === 'error');

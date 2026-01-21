@@ -8,16 +8,64 @@ import { z } from 'zod';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PROJECT_ROOT = path.resolve(__dirname, '../../..');
 
-const SegmentSchema = z.object({
-  text: z.string(),
-  speaker: z.string().nullable(),
-});
+/**
+ * Punctuation characters that are forbidden in segment text
+ */
+const FORBIDDEN_PUNCTUATION = [
+  '。',
+  '、',
+  '，',
+  '；',
+  '：',
+  '！',
+  '？',
+  '「',
+  '」',
+  '『',
+  '』',
+  '（',
+  '）',
+  '【',
+  '】',
+  '…',
+  '・',
+  '．',
+];
+
+/**
+ * Check if text contains forbidden punctuation
+ */
+function containsForbiddenPunctuation(text: string): string[] {
+  const found: string[] = [];
+  for (const char of text) {
+    if (FORBIDDEN_PUNCTUATION.includes(char)) {
+      found.push(char);
+    }
+  }
+  return [...new Set(found)];
+}
+
+const SegmentSchema = z
+  .object({
+    text: z.string(),
+    speaker: z.string().nullable(),
+  })
+  .refine(
+    (segment) => containsForbiddenPunctuation(segment.text).length === 0,
+    (segment) => ({
+      message: `Segment text contains forbidden punctuation: ${containsForbiddenPunctuation(segment.text).join(' ')}. Do not include punctuation marks in segment text.`,
+    }),
+  );
 
 const ContentYamlSchema = z.object({
   bookId: z.string().describe('Book ID (e.g., "lunyu")'),
   sectionId: z.string().describe('Section ID (e.g., "1")'),
   chapterId: z.string().describe('Chapter ID (e.g., "1")'),
-  segments: z.array(SegmentSchema).describe('Content segments'),
+  segments: z
+    .array(SegmentSchema)
+    .describe(
+      'Content segments. IMPORTANT: Do NOT include punctuation (。、；，！？ etc.) in segment text.',
+    ),
   mentioned: z.array(z.string()).describe('Mentioned character IDs'),
   japanese: z.string().describe('Japanese reading (書き下し文)'),
 });
