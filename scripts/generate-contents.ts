@@ -49,33 +49,61 @@ interface OutputContent {
 interface InputSection {
   id: string;
   name: string;
+  totalChapters: number;
 }
 
 interface InputBook {
   id: string;
   name: string;
+  totalSections: number;
   sections: InputSection[];
 }
 
 interface OutputSection {
   id: string;
   name: string;
+  totalChapters: number;
   chapters: string[];
 }
 
 interface OutputBook {
   id: string;
   name: string;
+  totalSections: number;
   sections: OutputSection[];
 }
 
 // Global books data (loaded from YAML)
 let booksData: InputBook[] = [];
 
+function validateBooksYaml(books: InputBook[]): void {
+  for (const book of books) {
+    if (typeof book.totalSections !== 'number' || book.totalSections <= 0) {
+      throw new Error(
+        `Book "${book.id}" is missing required field "totalSections" (must be a positive number)`,
+      );
+    }
+
+    for (const section of book.sections) {
+      if (
+        typeof section.totalChapters !== 'number' ||
+        section.totalChapters <= 0
+      ) {
+        throw new Error(
+          `Section "${section.id}" in book "${book.id}" is missing required field "totalChapters" (must be a positive number)`,
+        );
+      }
+    }
+  }
+}
+
 function loadBooksYaml(): void {
   const booksYamlPath = path.join(process.cwd(), 'contents/books.yaml');
   const content = fs.readFileSync(booksYamlPath, 'utf-8');
   booksData = yaml.load(content) as InputBook[];
+
+  // Validate required fields
+  validateBooksYaml(booksData);
 }
 
 function getSectionName(bookId: string, sectionId: string): string {
@@ -336,9 +364,11 @@ export function getAdjacentContentIds(
   const outputBooks: OutputBook[] = booksData.map((book) => ({
     id: book.id,
     name: book.name,
+    totalSections: book.totalSections,
     sections: book.sections.map((section) => ({
       id: section.id,
       name: section.name,
+      totalChapters: section.totalChapters,
       chapters: chaptersBySection.get(`${book.id}/${section.id}`) ?? [],
     })),
   }));

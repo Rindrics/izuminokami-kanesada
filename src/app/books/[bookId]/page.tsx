@@ -47,7 +47,10 @@ export default async function BookPage({ params }: Props) {
                     {section.name}
                   </span>
                   <span className="ml-2 text-sm text-zinc-500">
-                    ({section.chapters.length}章)
+                    ({section.chapters.length}
+                    {section.chapters.length < section.totalChapters &&
+                      `/${section.totalChapters}`}
+                    章)
                   </span>
                 </Link>
               </li>

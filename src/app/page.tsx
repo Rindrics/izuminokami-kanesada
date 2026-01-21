@@ -30,7 +30,10 @@ export default function Home() {
                     {book.name}
                   </span>
                   <span className="ml-2 text-sm text-zinc-500">
-                    ({book.sections.length}編)
+                    ({book.sections.length}
+                    {book.sections.length < book.totalSections &&
+                      `/${book.totalSections}`}
+                    編)
                   </span>
                 </Link>
               </li>
