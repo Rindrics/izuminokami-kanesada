@@ -253,6 +253,7 @@ function TextWithRuby({
   // For plain mode, show text without hyphens, with nowrap per semantic unit
   // - Semicolons: mandatory line break (must)
   // - Spaces: optional line break to prevent overflow (may)
+  // On mobile: free line breaks, On desktop (sm+): controlled breaks
   if (mode === 'plain') {
     const displayText = text.replace(/-/g, '');
     // Split by semicolons first (mandatory breaks), then by spaces (semantic units)
@@ -270,20 +271,18 @@ function TextWithRuby({
         const count = seenGroups.get(group) ?? 0;
         seenGroups.set(group, count + 1);
         const isLastInClause = i === groups.length - 1;
-        // Larger margin after last group in clause (before mandatory break)
-        const marginRight =
+        // Tailwind responsive classes for margin
+        // Mobile: no margin, Desktop: priority-based margin
+        const marginClass =
           isLastInClause && isLastClause
-            ? undefined
+            ? ''
             : isLastInClause
-              ? '1.5em'
-              : '0.8em';
+              ? 'sm:mr-6'
+              : 'sm:mr-3';
         elements.push(
           <span
             key={`plain-${group}-${count}`}
-            style={{
-              whiteSpace: 'nowrap',
-              marginRight,
-            }}
+            className={`sm:whitespace-nowrap ${marginClass}`}
           >
             {group}
           </span>,
@@ -394,6 +393,7 @@ function TextWithRuby({
   // Build final elements with nowrap groups
   // Use margin-right instead of separator elements to avoid leading space on new lines
   // 'wbr' markers become <br> elements for mandatory line breaks
+  // On mobile: free line breaks, On desktop (sm+): nowrap with margin control
   const elements: React.ReactNode[] = [];
   const nonEmptyGroups = groups.filter(
     (g) => g === 'wbr' || (Array.isArray(g) && g.length > 0),
@@ -406,15 +406,13 @@ function TextWithRuby({
     }
     const isLastGroup = g === nonEmptyGroups.length - 1;
     const nextIsWbr = nonEmptyGroups[g + 1] === 'wbr';
-    // Larger margin before mandatory break
-    const marginRight = isLastGroup ? undefined : nextIsWbr ? '1.5em' : '0.8em';
+    // Tailwind responsive classes for margin
+    // Mobile: no margin, Desktop: priority-based margin
+    const marginClass = isLastGroup ? '' : nextIsWbr ? 'sm:mr-6' : 'sm:mr-3';
     elements.push(
       <span
         key={`group-${g}`}
-        style={{
-          whiteSpace: 'nowrap',
-          marginRight,
-        }}
+        className={`sm:whitespace-nowrap ${marginClass}`}
       >
         {group}
       </span>,

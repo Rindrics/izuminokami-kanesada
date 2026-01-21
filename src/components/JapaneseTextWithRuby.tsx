@@ -216,26 +216,23 @@ export function JapaneseTextWithRuby({ text, rubyData }: Props) {
   }
 
   // Render each segment with appropriate break hints
+  // On mobile: free line breaks (no margin control)
+  // On desktop (sm+): priority-based breaks with margin
   const elements: React.ReactNode[] = [];
   for (let i = 0; i < segments.length; i++) {
     const { text: segmentText, startPos, breakAfter } = segments[i];
 
-    // Margin based on break priority (larger margin = more likely to break there)
-    const marginRight =
+    // Tailwind classes for responsive margin
+    // Mobile: no margin (free breaks), Desktop: priority-based margin
+    const marginClass =
       breakAfter === 'punctuation'
-        ? '0.8em'
+        ? 'sm:mr-3'
         : breakAfter === 'space'
-          ? '0.4em'
-          : undefined;
+          ? 'sm:mr-2'
+          : '';
 
     elements.push(
-      <span
-        key={startPos}
-        style={{
-          display: 'inline',
-          marginRight,
-        }}
-      >
+      <span key={startPos} className={`inline ${marginClass}`}>
         <SegmentWithRuby
           segment={segmentText}
           rubyMap={rubyMap}
