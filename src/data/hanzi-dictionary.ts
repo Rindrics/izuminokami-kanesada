@@ -1217,6 +1217,146 @@ export const hanziDictionary: HanziEntry[] = [
     ],
     is_common: true,
   },
+  {
+    id: '賢',
+    meanings: [
+      {
+        id: '賢-xián',
+        onyomi: 'セン',
+        pinyin: 'xián',
+        tone: 2,
+        meaning_ja: '賢い',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '易',
+    meanings: [
+      {
+        id: '易-yì',
+        onyomi: 'イ',
+        pinyin: 'yì',
+        tone: 4,
+        meaning_ja: '変える、易い',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '父',
+    meanings: [
+      {
+        id: '父-fù',
+        onyomi: 'TODO',
+        pinyin: 'fù',
+        tone: 4,
+        meaning_ja: '父',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '母',
+    meanings: [
+      {
+        id: '母-mǔ',
+        onyomi: 'TODO',
+        pinyin: 'mǔ',
+        tone: 3,
+        meaning_ja: '母',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '能',
+    meanings: [
+      {
+        id: '能-néng',
+        onyomi: 'TODO',
+        pinyin: 'néng',
+        tone: 2,
+        meaning_ja: '能く、できる',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '竭',
+    meanings: [
+      {
+        id: '竭-jié',
+        onyomi: 'セツ',
+        pinyin: 'jié',
+        tone: 2,
+        meaning_ja: '尽くす',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '致',
+    meanings: [
+      {
+        id: '致-zhì',
+        onyomi: 'シ',
+        pinyin: 'zhì',
+        tone: 4,
+        meaning_ja: '致す、届ける',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '雖',
+    meanings: [
+      {
+        id: '雖-suī',
+        onyomi: 'TODO',
+        pinyin: 'suī',
+        tone: 1,
+        meaning_ja: '雖も、たとえ',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '必',
+    meanings: [
+      {
+        id: '必-bì',
+        onyomi: 'TODO',
+        pinyin: 'bì',
+        tone: 4,
+        meaning_ja: '必ず',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '謂',
+    meanings: [
+      {
+        id: '謂-wèi',
+        onyomi: 'イ',
+        pinyin: 'wèi',
+        tone: 4,
+        meaning_ja: '謂う、言う',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
 ];
 
 const hanziMap = new Map(hanziDictionary.map((e) => [e.id, e]));
