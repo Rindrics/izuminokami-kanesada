@@ -356,28 +356,23 @@ function TextWithRuby({
     }
   }
 
-  // Build final elements with nowrap groups and separators
+  // Build final elements with nowrap groups
+  // Use margin-right instead of separator elements to avoid leading space on new lines
   const elements: React.ReactNode[] = [];
-  for (let g = 0; g < groups.length; g++) {
-    if (groups[g].length > 0) {
-      elements.push(
-        <span key={`group-${g}`} style={{ whiteSpace: 'nowrap' }}>
-          {groups[g]}
-        </span>,
-      );
-      // Add separator between groups (not after the last one)
-      if (g < groups.length - 1) {
-        elements.push(
-          <span
-            key={`sep-${g}`}
-            style={{
-              display: 'inline-block',
-              width: '0.8em',
-            }}
-          />,
-        );
-      }
-    }
+  const nonEmptyGroups = groups.filter((g) => g.length > 0);
+  for (let g = 0; g < nonEmptyGroups.length; g++) {
+    const isLastGroup = g === nonEmptyGroups.length - 1;
+    elements.push(
+      <span
+        key={`group-${g}`}
+        style={{
+          whiteSpace: 'nowrap',
+          marginRight: isLastGroup ? undefined : '0.8em',
+        }}
+      >
+        {nonEmptyGroups[g]}
+      </span>,
+    );
   }
 
   // For visual mode, use non-narration color even for narration segments
