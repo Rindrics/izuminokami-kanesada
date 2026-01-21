@@ -641,17 +641,24 @@ export function getAdjacentContentIds(
 const isWatchMode = process.argv.includes('--watch');
 
 if (isWatchMode) {
-  const watchPath = path.join(process.cwd(), 'contents/input');
+  const watchPaths = [
+    path.join(process.cwd(), 'contents/input'),
+    path.join(process.cwd(), 'contents/books.yaml'),
+    path.join(process.cwd(), 'contents/persons.yaml'),
+  ];
 
   console.log('=== Watch Mode ===');
-  console.log(`Watching: ${watchPath}`);
+  console.log('Watching:');
+  for (const p of watchPaths) {
+    console.log(`  - ${p}`);
+  }
   console.log('Press Ctrl+C to stop.\n');
 
   // Initial generation
   main();
 
-  // Watch for changes in contents/input directory
-  const watcher = watch(watchPath, {
+  // Watch for changes
+  const watcher = watch(watchPaths, {
     ignored: /(^|[/\\])\../, // ignore dotfiles
     persistent: true,
     ignoreInitial: true,
