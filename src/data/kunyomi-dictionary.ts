@@ -486,6 +486,96 @@ export const kunyomiDictionary: KunyomiEntry[] = [
     text: '孝',
     readings: [{ id: '孝-こう', ruby: 'こう', is_default: true }],
   },
+  {
+    id: '重',
+    text: '重',
+    readings: [{ id: '重-おも', ruby: 'おも', is_default: true }],
+  },
+  {
+    id: '威',
+    text: '威',
+    readings: [{ id: '威-い', ruby: 'い', is_default: true }],
+  },
+  {
+    id: '固',
+    text: '固',
+    readings: [{ id: '固-かた', ruby: 'かた', is_default: true }],
+  },
+  {
+    id: '主',
+    text: '主',
+    readings: [{ id: '主-しゅ', ruby: 'しゅ', is_default: true }],
+  },
+  {
+    id: '己',
+    text: '己',
+    readings: [{ id: '己-おのれ', ruby: 'おのれ', is_default: true }],
+  },
+  {
+    id: '如',
+    text: '如',
+    readings: [{ id: '如-し', ruby: 'し', is_default: true }],
+  },
+  {
+    id: '無',
+    text: '無',
+    readings: [{ id: '無-な', ruby: 'な', is_default: true }],
+  },
+  {
+    id: '過',
+    text: '過',
+    readings: [{ id: '過-あやま', ruby: 'あやま', is_default: true }],
+  },
+  {
+    id: '改',
+    text: '改',
+    readings: [{ id: '改-あらた', ruby: 'あらた', is_default: true }],
+  },
+  {
+    id: '憚',
+    text: '憚',
+    readings: [{ id: '憚-はばか', ruby: 'はばか', is_default: true }],
+  },
+  {
+    id: '勿',
+    text: '勿',
+    readings: [{ id: '勿-なか', ruby: 'なか', is_default: true }],
+  },
+  {
+    id: '終',
+    text: '終',
+    readings: [{ id: '終-おわ', ruby: 'おわ', is_default: true }],
+  },
+  {
+    id: '慎',
+    text: '慎',
+    readings: [{ id: '慎-つつし', ruby: 'つつし', is_default: true }],
+  },
+  {
+    id: '遠',
+    text: '遠',
+    readings: [{ id: '遠-とお', ruby: 'とお', is_default: true }],
+  },
+  {
+    id: '追',
+    text: '追',
+    readings: [{ id: '追-お', ruby: 'お', is_default: true }],
+  },
+  {
+    id: '徳',
+    text: '徳',
+    readings: [{ id: '徳-とく', ruby: 'とく', is_default: true }],
+  },
+  {
+    id: '厚',
+    text: '厚',
+    readings: [{ id: '厚-あつ', ruby: 'あつ', is_default: true }],
+  },
+  {
+    id: '帰',
+    text: '帰',
+    readings: [{ id: '帰-き', ruby: 'き', is_default: true }],
+  },
 ];
 
 export function getKunyomiEntry(text: string): KunyomiEntry | undefined {

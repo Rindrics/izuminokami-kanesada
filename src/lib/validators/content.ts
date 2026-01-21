@@ -355,16 +355,26 @@ function extractHanzi(text: string): string[] {
 
 /**
  * Validate that all hanzi in text are registered in hanzi-dictionary (pinyin)
+ * Also checks that onyomi is not 'TODO'
  */
 function validateHanziInDictionary(text: string): ValidationError[] {
   const errors: ValidationError[] = [];
   const hanziChars = extractHanzi(text);
-  const registeredHanzi = new Set(hanziDictionary.map((e) => e.id));
+  const hanziMap = new Map(hanziDictionary.map((e) => [e.id, e]));
 
   const missingHanzi: string[] = [];
+  const todoOnyomiHanzi: string[] = [];
+
   for (const hanzi of hanziChars) {
-    if (!registeredHanzi.has(hanzi)) {
+    const entry = hanziMap.get(hanzi);
+    if (!entry) {
       missingHanzi.push(hanzi);
+    } else {
+      // Check if default meaning has TODO onyomi
+      const defaultMeaning = entry.meanings.find((m) => m.is_default);
+      if (defaultMeaning?.onyomi === 'TODO') {
+        todoOnyomiHanzi.push(hanzi);
+      }
     }
   }
 
@@ -372,6 +382,14 @@ function validateHanziInDictionary(text: string): ValidationError[] {
     errors.push({
       path: 'text',
       message: `hanzi not registered in hanzi-dictionary (missing pinyin): ${missingHanzi.join(', ')}`,
+      severity: 'error',
+    });
+  }
+
+  if (todoOnyomiHanzi.length > 0) {
+    errors.push({
+      path: 'text',
+      message: `hanzi has incomplete onyomi (TODO): ${todoOnyomiHanzi.join(', ')}`,
       severity: 'error',
     });
   }
