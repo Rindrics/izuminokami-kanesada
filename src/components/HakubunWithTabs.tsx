@@ -94,7 +94,79 @@ const toneColors = {
   4: '#2563eb', // blue-600: falling
 };
 
-// SVG tone contour backgrounds
+// Shared tone contour SVG content
+// Returns the SVG element (line or polyline) for a given tone
+function ToneContourPath({
+  tone,
+  color,
+  opacity = 0.8,
+}: {
+  tone: number;
+  color: string;
+  opacity?: number;
+}) {
+  switch (tone) {
+    case 1:
+      // High flat tone: horizontal line at top
+      return (
+        <line
+          x1="5"
+          y1="12"
+          x2="35"
+          y2="12"
+          stroke={color}
+          strokeWidth="4"
+          strokeLinecap="round"
+          opacity={opacity}
+        />
+      );
+    case 2:
+      // Rising tone: line going up from bottom-left to top-right
+      return (
+        <line
+          x1="8"
+          y1="38"
+          x2="32"
+          y2="12"
+          stroke={color}
+          strokeWidth="4"
+          strokeLinecap="round"
+          opacity={opacity}
+        />
+      );
+    case 3:
+      // Dipping tone: V shape (down then up)
+      return (
+        <polyline
+          points="5,35 20,42 35,35"
+          fill="none"
+          stroke={color}
+          strokeWidth="4"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          opacity={opacity}
+        />
+      );
+    case 4:
+      // Falling tone: line going down from top-left to bottom-right
+      return (
+        <line
+          x1="8"
+          y1="12"
+          x2="32"
+          y2="38"
+          stroke={color}
+          strokeWidth="4"
+          strokeLinecap="round"
+          opacity={opacity}
+        />
+      );
+    default:
+      return null;
+  }
+}
+
+// SVG tone contour backgrounds for inline display
 // - shapeTone: determines the contour shape (after sandhi)
 // - colorTone: determines the color (original tone, before sandhi)
 function ToneContour({
@@ -115,93 +187,16 @@ function ToneContour({
     pointerEvents: 'none',
   };
 
-  switch (shapeTone) {
-    case 1:
-      // High flat tone: horizontal line at top
-      return (
-        <svg
-          style={contourStyle}
-          viewBox="0 0 40 50"
-          preserveAspectRatio="none"
-          aria-hidden="true"
-        >
-          <line
-            x1="5"
-            y1="12"
-            x2="35"
-            y2="12"
-            stroke={color}
-            strokeWidth="4"
-            strokeLinecap="round"
-            opacity="0.8"
-          />
-        </svg>
-      );
-    case 2:
-      // Rising tone: line going up from bottom-left to top-right
-      return (
-        <svg
-          style={contourStyle}
-          viewBox="0 0 40 50"
-          preserveAspectRatio="none"
-          aria-hidden="true"
-        >
-          <line
-            x1="8"
-            y1="38"
-            x2="32"
-            y2="12"
-            stroke={color}
-            strokeWidth="4"
-            strokeLinecap="round"
-            opacity="0.8"
-          />
-        </svg>
-      );
-    case 3:
-      // Dipping tone: V shape (down then up)
-      return (
-        <svg
-          style={contourStyle}
-          viewBox="0 0 40 50"
-          preserveAspectRatio="none"
-          aria-hidden="true"
-        >
-          <polyline
-            points="5,35 20,42 35,35"
-            fill="none"
-            stroke={color}
-            strokeWidth="4"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            opacity="0.8"
-          />
-        </svg>
-      );
-    case 4:
-      // Falling tone: line going down from top-left to bottom-right
-      return (
-        <svg
-          style={contourStyle}
-          viewBox="0 0 40 50"
-          preserveAspectRatio="none"
-          aria-hidden="true"
-        >
-          <line
-            x1="8"
-            y1="12"
-            x2="32"
-            y2="38"
-            stroke={color}
-            strokeWidth="4"
-            strokeLinecap="round"
-            opacity="0.8"
-          />
-        </svg>
-      );
-    default:
-      return null;
-  }
+  return (
+    <svg
+      style={contourStyle}
+      viewBox="0 0 40 50"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+    >
+      <ToneContourPath tone={shapeTone} color={color} />
+    </svg>
+  );
 }
 
 function TextWithRuby({
@@ -315,56 +310,14 @@ function TextWithRuby({
   return <span className={wrapperClass}>{elements}</span>;
 }
 
-// Legend item with SVG contour
+// Legend item with SVG contour (uses shared ToneContourPath)
 function LegendItem({ tone, label }: { tone: number; label: string }) {
   const color = toneColors[tone as keyof typeof toneColors];
 
   return (
     <div className="flex items-center gap-2">
       <svg width="28" height="24" viewBox="0 0 40 50" aria-hidden="true">
-        {tone === 1 && (
-          <line
-            x1="5"
-            y1="15"
-            x2="35"
-            y2="15"
-            stroke={color}
-            strokeWidth="4"
-            strokeLinecap="round"
-          />
-        )}
-        {tone === 2 && (
-          <line
-            x1="8"
-            y1="40"
-            x2="32"
-            y2="10"
-            stroke={color}
-            strokeWidth="4"
-            strokeLinecap="round"
-          />
-        )}
-        {tone === 3 && (
-          <polyline
-            points="5,18 20,42 35,22"
-            fill="none"
-            stroke={color}
-            strokeWidth="4"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        )}
-        {tone === 4 && (
-          <line
-            x1="8"
-            y1="10"
-            x2="32"
-            y2="40"
-            stroke={color}
-            strokeWidth="4"
-            strokeLinecap="round"
-          />
-        )}
+        <ToneContourPath tone={tone} color={color} opacity={1} />
       </svg>
       <span className="text-zinc-600 dark:text-zinc-400">{label}</span>
     </div>
