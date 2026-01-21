@@ -247,9 +247,7 @@ function TextWithRuby({
   const baseClass = isNarration
     ? 'text-zinc-500 dark:text-zinc-400'
     : 'text-black dark:text-white';
-  const bgClass = !isNarration
-    ? 'bg-amber-50 dark:bg-amber-900/20 px-1 rounded'
-    : '';
+  const bgClass = '';
 
   // For plain mode, just show text without hyphens
   if (mode === 'plain') {
