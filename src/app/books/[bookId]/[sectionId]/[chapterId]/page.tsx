@@ -83,6 +83,17 @@ export default async function ContentPage({ params }: Props) {
           )}
         </article>
 
+        <div className="mt-6 text-sm text-zinc-500">
+          <a
+            href={`https://github.com/Rindrics/izuminokami-kanesada/blob/main/contents/input/${contentId}.yaml`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-zinc-700 dark:hover:text-zinc-300"
+          >
+            このページの元データを見る
+          </a>
+        </div>
+
         <KeyboardNavigation prevUrl={prevUrl} nextUrl={nextUrl} />
       </main>
     </div>
