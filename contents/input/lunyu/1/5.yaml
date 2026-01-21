@@ -1,5 +1,7 @@
 segments:
-  - text: 道千乘之國 敬事而信 節用而愛人 使民以時
+  - text: 子曰
+    speaker: null
+  - text: 道千乘之國; 敬事而信 節用而愛人 使民以時
     speaker: kongzi
 mentioned: []
-japanese: 千乗の国を道びくには、事を敬みて信あり、用を節して人を愛し、民を使うに時を以てす。
+japanese: 子曰く、千乗の国を導くには、事を敬して信、用を節して人を愛し、民を使うに時を以てす。
