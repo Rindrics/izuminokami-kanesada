@@ -29,7 +29,7 @@ export const sampleContents: Content[] = [
     segments: [
       { text: '子曰', start_pos: 0, end_pos: 2, speaker: null },
       {
-        text: '學而時習之 不-亦說乎 有朋自遠方來 不-亦樂乎 人不知而不慍 不-亦君子乎',
+        text: '學而時習之 不-亦說乎; 有朋自遠方來 不-亦樂乎; 人不知而不慍 不-亦君子乎',
         start_pos: 3,
         end_pos: 41, // +3 for the hyphens
         speaker: 'kongzi',
@@ -48,13 +48,13 @@ export const sampleContents: Content[] = [
     book_id: 'lunyu',
     section: '学而第一',
     chapter: '2',
-    text: '有子曰 其為人也孝弟 而好犯上者 鮮矣 不-好犯上 而好作亂者 未之有也 君子務本 本立而道生 孝弟也者 其為仁之本與',
+    text: '有子曰 其為人也孝弟 而好犯上者 鮮矣; 不-好犯上 而好作亂者 未之有也; 君子務本 本立而道生; 孝弟也者 其為仁之本與',
     segments: [
       { text: '有子曰', start_pos: 0, end_pos: 3, speaker: null },
       {
-        text: '其為人也孝弟 而好犯上者 鮮矣 不-好犯上 而好作亂者 未之有也 君子務本 本立而道生 孝弟也者 其為仁之本與',
+        text: '其為人也孝弟 而好犯上者 鮮矣; 不-好犯上 而好作亂者 未之有也; 君子務本 本立而道生; 孝弟也者 其為仁之本與',
         start_pos: 4,
-        end_pos: 59,
+        end_pos: 62,
         speaker: 'youzi',
       },
     ],
