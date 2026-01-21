@@ -249,44 +249,58 @@ function TextWithRuby({
     : 'text-black dark:text-white';
   const bgClass = '';
 
-  // For plain mode, just show text without hyphens
+  // For plain mode, show text without hyphens, with nowrap per semantic unit
   if (mode === 'plain') {
     const displayText = text.replace(/-/g, '');
-    return (
-      <span className={`inline ${baseClass} ${bgClass}`}>{displayText}</span>
-    );
+    const groups = displayText.split(' ').filter((g) => g.length > 0);
+    const elements: React.ReactNode[] = [];
+    const seenGroups = new Map<string, number>();
+    for (let i = 0; i < groups.length; i++) {
+      const group = groups[i];
+      const count = seenGroups.get(group) ?? 0;
+      seenGroups.set(group, count + 1);
+      const isLast = i === groups.length - 1;
+      elements.push(
+        <span
+          key={`plain-${group}-${count}`}
+          style={{
+            whiteSpace: 'nowrap',
+            marginRight: isLast ? undefined : '0.8em',
+          }}
+        >
+          {group}
+        </span>,
+      );
+    }
+    return <span className={`inline ${baseClass} ${bgClass}`}>{elements}</span>;
   }
 
   // Parse text and apply tone sandhi
   const { chars, originalTones, effectiveTones } =
     parseTextWithToneSandhi(text);
 
-  // Build elements based on mode
-  const elements: React.ReactNode[] = [];
+  // Group characters by semantic units (split by spaces)
+  // Each group will be wrapped in nowrap span to prevent mid-word line breaks
+  const groups: React.ReactNode[][] = [[]];
+  let currentGroupIndex = 0;
+
   for (let i = 0; i < chars.length; i++) {
     const char = chars[i];
     const originalTone = originalTones[i];
     const effectiveTone = effectiveTones[i];
     const meaning = getDefaultMeaning(char);
 
-    // Handle space as semantic separator with wider gap
+    // Space starts a new group
     if (char === ' ') {
-      elements.push(
-        <span
-          key={i}
-          style={{
-            display: 'inline-block',
-            width: '0.8em',
-          }}
-        />,
-      );
+      currentGroupIndex++;
+      groups[currentGroupIndex] = [];
       continue;
     }
 
     if (mode === 'visual') {
       // Visual mode: SVG contour background with normal character style
       if (effectiveTone !== undefined && originalTone !== undefined) {
-        elements.push(
+        groups[currentGroupIndex].push(
           <span
             key={i}
             style={{
@@ -313,7 +327,7 @@ function TextWithRuby({
           </span>,
         );
       } else {
-        elements.push(
+        groups[currentGroupIndex].push(
           <span
             key={i}
             style={{
@@ -336,7 +350,33 @@ function TextWithRuby({
           : meaning.pinyin
         : undefined;
 
-      elements.push(<HanziWithRuby key={i} char={char} ruby={ruby} />);
+      groups[currentGroupIndex].push(
+        <HanziWithRuby key={i} char={char} ruby={ruby} />,
+      );
+    }
+  }
+
+  // Build final elements with nowrap groups and separators
+  const elements: React.ReactNode[] = [];
+  for (let g = 0; g < groups.length; g++) {
+    if (groups[g].length > 0) {
+      elements.push(
+        <span key={`group-${g}`} style={{ whiteSpace: 'nowrap' }}>
+          {groups[g]}
+        </span>,
+      );
+      // Add separator between groups (not after the last one)
+      if (g < groups.length - 1) {
+        elements.push(
+          <span
+            key={`sep-${g}`}
+            style={{
+              display: 'inline-block',
+              width: '0.8em',
+            }}
+          />,
+        );
+      }
     }
   }
 
