@@ -1595,6 +1595,244 @@ export const hanziDictionary: HanziEntry[] = [
     ],
     is_common: true,
   },
+  {
+    id: '夫',
+    meanings: [
+      {
+        id: '夫-fū',
+        onyomi: 'フ',
+        pinyin: 'fū',
+        tone: 1,
+        meaning_ja: '夫、それ',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '至',
+    meanings: [
+      {
+        id: '至-zhì',
+        onyomi: 'シ',
+        pinyin: 'zhì',
+        tone: 4,
+        meaning_ja: '至る',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '於',
+    meanings: [
+      {
+        id: '於-yú',
+        onyomi: 'オ',
+        pinyin: 'yú',
+        tone: 2,
+        meaning_ja: '於いて、に',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '是',
+    meanings: [
+      {
+        id: '是-shì',
+        onyomi: 'ジ',
+        pinyin: 'shì',
+        tone: 4,
+        meaning_ja: '是、これ',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '邦',
+    meanings: [
+      {
+        id: '邦-bāng',
+        onyomi: 'ホウ',
+        pinyin: 'bāng',
+        tone: 1,
+        meaning_ja: '邦、国',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '聞',
+    meanings: [
+      {
+        id: '聞-wén',
+        onyomi: 'ブン',
+        pinyin: 'wén',
+        tone: 2,
+        meaning_ja: '聞く',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '政',
+    meanings: [
+      {
+        id: '政-zhèng',
+        onyomi: 'セイ',
+        pinyin: 'zhèng',
+        tone: 4,
+        meaning_ja: '政、まつりごと',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '求',
+    meanings: [
+      {
+        id: '求-qíu',
+        onyomi: 'キュウ',
+        pinyin: 'qíu',
+        tone: 2,
+        meaning_ja: '求める',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '抑',
+    meanings: [
+      {
+        id: '抑-yì',
+        onyomi: 'イ',
+        pinyin: 'yì',
+        tone: 4,
+        meaning_ja: '抑、そもそも',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '溫',
+    meanings: [
+      {
+        id: '溫-wēn',
+        onyomi: 'オン',
+        pinyin: 'wēn',
+        tone: 1,
+        meaning_ja: '温かい',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '良',
+    meanings: [
+      {
+        id: '良-liáng',
+        onyomi: 'リョウ',
+        pinyin: 'liáng',
+        tone: 2,
+        meaning_ja: '良い',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '恭',
+    meanings: [
+      {
+        id: '恭-gōng',
+        onyomi: 'キョウ',
+        pinyin: 'gōng',
+        tone: 1,
+        meaning_ja: '恭しい',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '儉',
+    meanings: [
+      {
+        id: '儉-jiǎn',
+        onyomi: 'ケン',
+        pinyin: 'jiǎn',
+        tone: 3,
+        meaning_ja: '倹約',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '讓',
+    meanings: [
+      {
+        id: '讓-ràng',
+        onyomi: 'ジョウ',
+        pinyin: 'ràng',
+        tone: 4,
+        meaning_ja: '譲る',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '得',
+    meanings: [
+      {
+        id: '得-dé',
+        onyomi: 'トク',
+        pinyin: 'dé',
+        tone: 2,
+        meaning_ja: '得る',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '諸',
+    meanings: [
+      {
+        id: '諸-zhū',
+        onyomi: 'ショ',
+        pinyin: 'zhū',
+        tone: 1,
+        meaning_ja: '諸、これ',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '異',
+    meanings: [
+      {
+        id: '異-yì',
+        onyomi: 'イ',
+        pinyin: 'yì',
+        tone: 4,
+        meaning_ja: '異なる',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
 ];
 
 const hanziMap = new Map(hanziDictionary.map((e) => [e.id, e]));

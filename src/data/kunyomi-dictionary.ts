@@ -576,6 +576,91 @@ export const kunyomiDictionary: KunyomiEntry[] = [
     text: '帰',
     readings: [{ id: '帰-き', ruby: 'き', is_default: true }],
   },
+  {
+    id: '夫',
+    text: '夫',
+    readings: [{ id: '夫-ふう', ruby: 'ふう', is_default: true }],
+  },
+  {
+    id: '是',
+    text: '是',
+    readings: [{ id: '是-こ', ruby: 'こ', is_default: true }],
+  },
+  {
+    id: '邦',
+    text: '邦',
+    readings: [{ id: '邦-くに', ruby: 'くに', is_default: true }],
+  },
+  {
+    id: '至',
+    text: '至',
+    readings: [{ id: '至-いた', ruby: 'いた', is_default: true }],
+  },
+  {
+    id: '政',
+    text: '政',
+    readings: [{ id: '政-まつりごと', ruby: 'まつりごと', is_default: true }],
+  },
+  {
+    id: '聞',
+    text: '聞',
+    readings: [{ id: '聞-き', ruby: 'き', is_default: true }],
+  },
+  {
+    id: '求',
+    text: '求',
+    readings: [{ id: '求-もと', ruby: 'もと', is_default: true }],
+  },
+  {
+    id: '抑',
+    text: '抑',
+    readings: [{ id: '抑-そもそも', ruby: 'そもそも', is_default: true }],
+  },
+  {
+    id: '与',
+    text: '与',
+    readings: [{ id: '与-あた', ruby: 'あた', is_default: true }],
+  },
+  {
+    id: '温',
+    text: '温',
+    readings: [{ id: '温-おん', ruby: 'おん', is_default: true }],
+  },
+  {
+    id: '良',
+    text: '良',
+    readings: [{ id: '良-りょう', ruby: 'りょう', is_default: true }],
+  },
+  {
+    id: '恭',
+    text: '恭',
+    readings: [{ id: '恭-きょう', ruby: 'きょう', is_default: true }],
+  },
+  {
+    id: '倹',
+    text: '倹',
+    readings: [{ id: '倹-けん', ruby: 'けん', is_default: true }],
+  },
+  {
+    id: '譲',
+    text: '譲',
+    readings: [{ id: '譲-じょう', ruby: 'じょう', is_default: true }],
+  },
+  {
+    id: '得',
+    text: '得',
+    readings: [{ id: '得-え', ruby: 'え', is_default: true }],
+  },
+  {
+    id: '諸',
+    text: '諸',
+    readings: [{ id: '諸-これ', ruby: 'これ', is_default: true }],
+  },
+  {
+    id: '異',
+    text: '異',
+    readings: [{ id: '異-こと', ruby: 'こと', is_default: true }],
+  },
 ];
 
 export function getKunyomiEntry(text: string): KunyomiEntry | undefined {
