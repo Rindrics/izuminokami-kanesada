@@ -9,6 +9,7 @@
     "prebuild": "pnpm generate:contents",
     "build": "next build",
     "generate:contents": "tsx scripts/generate-contents.ts",
+    "validate:contents": "tsx scripts/validate-content-diff.ts",
     "start": "next start -p 30600",
     "lint": "eslint",
     "check": "biome check src",
