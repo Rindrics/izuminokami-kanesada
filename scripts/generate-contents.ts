@@ -209,7 +209,55 @@ export function getAllContentIds(): string[] {
   fs.writeFileSync(indexPath, indexContent);
   console.log(`Generated: ${indexPath}`);
 
+  // Update books.ts chapters based on input directory
+  updateBooksChapters(inputDir);
+
   console.log('\n=== Generation Complete ===');
+}
+
+/**
+ * Update books.ts chapters array based on input directory structure
+ */
+function updateBooksChapters(inputDir: string): void {
+  const booksFilePath = path.join(__dirname, '../src/data/books.ts');
+  let booksContent = fs.readFileSync(booksFilePath, 'utf-8');
+
+  // Collect chapters for each book/section from input directory
+  for (const bookId of fs.readdirSync(inputDir)) {
+    const bookDir = path.join(inputDir, bookId);
+    if (!fs.statSync(bookDir).isDirectory()) continue;
+
+    for (const sectionId of fs.readdirSync(bookDir)) {
+      const sectionDir = path.join(bookDir, sectionId);
+      if (!fs.statSync(sectionDir).isDirectory()) continue;
+
+      // Get all chapter IDs from YAML files
+      const chapters = fs
+        .readdirSync(sectionDir)
+        .filter((f) => f.endsWith('.yaml'))
+        .map((f) => f.replace('.yaml', ''))
+        .sort((a, b) => Number(a) - Number(b));
+
+      // Update the chapters array in books.ts
+      // Match pattern: id: 'sectionId', name: '...', chapters: [...]
+      const chaptersArrayStr = `[${chapters.map((c) => `'${c}'`).join(', ')}]`;
+      const sectionPattern = new RegExp(
+        `(id:\\s*'${sectionId}',\\s*name:\\s*'[^']*',\\s*chapters:\\s*)\\[[^\\]]*\\]`,
+      );
+
+      if (sectionPattern.test(booksContent)) {
+        booksContent = booksContent.replace(
+          sectionPattern,
+          `$1${chaptersArrayStr}`,
+        );
+        console.log(
+          `Updated chapters for ${bookId}/${sectionId}: ${chapters.join(', ')}`,
+        );
+      }
+    }
+  }
+
+  fs.writeFileSync(booksFilePath, booksContent);
 }
 
 main();

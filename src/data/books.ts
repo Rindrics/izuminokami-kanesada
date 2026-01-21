@@ -13,7 +13,7 @@ export const books: Book[] = [
       {
         id: '1',
         name: '学而第一',
-        chapters: ['1', '2'],
+        chapters: ['1', '2', '3', '4'],
       },
     ],
   },
