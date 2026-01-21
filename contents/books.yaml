@@ -62,3 +62,66 @@
     - id: '20'
       name: 堯曰第二十
       totalChapters: 3
+
+- id: mengzi
+  name: 孟子
+  totalSections: 14
+  sections:
+    - id: '1'
+      name: 梁惠王上
+      totalChapters: 7
+    - id: '2'
+      name: 梁惠王下
+      totalChapters: 16
+    - id: '3'
+      name: 公孫丑上
+      totalChapters: 9
+    - id: '4'
+      name: 公孫丑下
+      totalChapters: 14
+    - id: '5'
+      name: 滕文公上
+      totalChapters: 5
+    - id: '6'
+      name: 滕文公下
+      totalChapters: 10
+    - id: '7'
+      name: 離婁上
+      totalChapters: 28
+    - id: '8'
+      name: 離婁下
+      totalChapters: 33
+    - id: '9'
+      name: 萬章上
+      totalChapters: 9
+    - id: '10'
+      name: 萬章下
+      totalChapters: 9
+    - id: '11'
+      name: 告子上
+      totalChapters: 20
+    - id: '12'
+      name: 告子下
+      totalChapters: 16
+    - id: '13'
+      name: 盡心上
+      totalChapters: 46
+    - id: '14'
+      name: 盡心下
+      totalChapters: 38
+
+- id: daxue
+  name: 大学
+  totalSections: 1
+  sections:
+    - id: '1'
+      name: 大学
+      totalChapters: 11
+
+- id: zhongyong
+  name: 中庸
+  totalSections: 1
+  sections:
+    - id: '1'
+      name: 中庸
+      totalChapters: 33
