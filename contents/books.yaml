@@ -5,3 +5,60 @@
     - id: '1'
       name: 学而第一
       totalChapters: 16
+    - id: '2'
+      name: 為政第二
+      totalChapters: 24
+    - id: '3'
+      name: 八佾第三
+      totalChapters: 26
+    - id: '4'
+      name: 里仁第四
+      totalChapters: 26
+    - id: '5'
+      name: 公冶長第五
+      totalChapters: 28
+    - id: '6'
+      name: 雍也第六
+      totalChapters: 30
+    - id: '7'
+      name: 述而第七
+      totalChapters: 38
+    - id: '8'
+      name: 泰伯第八
+      totalChapters: 21
+    - id: '9'
+      name: 子罕第九
+      totalChapters: 31
+    - id: '10'
+      name: 郷党第十
+      totalChapters: 27
+    - id: '11'
+      name: 先進第十一
+      totalChapters: 26
+    - id: '12'
+      name: 顔淵第十二
+      totalChapters: 24
+    - id: '13'
+      name: 子路第十三
+      totalChapters: 30
+    - id: '14'
+      name: 憲問第十四
+      totalChapters: 44
+    - id: '15'
+      name: 衛霊公第十五
+      totalChapters: 42
+    - id: '16'
+      name: 季氏第十六
+      totalChapters: 14
+    - id: '17'
+      name: 陽貨第十七
+      totalChapters: 26
+    - id: '18'
+      name: 微子第十八
+      totalChapters: 11
+    - id: '19'
+      name: 子張第十九
+      totalChapters: 25
+    - id: '20'
+      name: 堯曰第二十
+      totalChapters: 3
