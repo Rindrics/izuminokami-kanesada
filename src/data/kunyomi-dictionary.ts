@@ -60,6 +60,11 @@ export const kunyomiDictionary: KunyomiEntry[] = [
     readings: [{ id: '朋-とも', ruby: 'とも', is_default: true }],
   },
   {
+    id: '方',
+    text: '方',
+    readings: [{ id: '方-ぽう', ruby: 'ほう', is_default: true }],
+  },
+  {
     id: '遠方',
     text: '遠方',
     readings: [{ id: '遠方-えんぽう', ruby: 'えんぽう', is_default: true }],
