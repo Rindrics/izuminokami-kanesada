@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { BackButton } from '@/components/BackButton';
 import { getDefaultMeaning } from '@/data/hanzi-dictionary';
+import { getBookById, getSectionById } from '@/generated/books';
 import { contents } from '@/generated/contents';
 import { stats } from '@/generated/stats';
 
@@ -65,6 +66,8 @@ export default async function CharPage({ params }: PageProps) {
                   (c) => c.content_id === contentId,
                 );
                 const preview = content?.text.slice(0, 50) ?? '';
+                const book = getBookById(bookId);
+                const section = getSectionById(bookId, sectionId);
                 return (
                   <li key={contentId}>
                     <Link
@@ -72,7 +75,8 @@ export default async function CharPage({ params }: PageProps) {
                       className="block rounded-lg bg-white p-4 shadow-sm transition hover:bg-zinc-50 dark:bg-zinc-900 dark:hover:bg-zinc-800"
                     >
                       <div className="text-black dark:text-white">
-                        {bookId} / 第{sectionId}編 / 第{chapterId}章
+                        {book?.name ?? bookId} /{' '}
+                        {section?.name ?? `第${sectionId}編`} / 第{chapterId}章
                       </div>
                       <div className="mt-1 text-sm text-zinc-500">
                         {preview}
