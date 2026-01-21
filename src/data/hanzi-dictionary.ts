@@ -1833,6 +1833,90 @@ export const hanziDictionary: HanziEntry[] = [
     ],
     is_common: true,
   },
+  {
+    id: '在',
+    meanings: [
+      {
+        id: '在-zài',
+        onyomi: 'ザイ',
+        pinyin: 'zài',
+        tone: 4,
+        meaning_ja: 'ある、いる',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '觀',
+    meanings: [
+      {
+        id: '觀-guān',
+        onyomi: 'カン',
+        pinyin: 'guān',
+        tone: 1,
+        meaning_ja: '観る、見る',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '志',
+    meanings: [
+      {
+        id: '志-zhì',
+        onyomi: 'シ',
+        pinyin: 'zhì',
+        tone: 4,
+        meaning_ja: '志',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '沒',
+    meanings: [
+      {
+        id: '沒-mò',
+        onyomi: 'ボツ',
+        pinyin: 'mò',
+        tone: 4,
+        meaning_ja: '没する',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '年',
+    meanings: [
+      {
+        id: '年-nián',
+        onyomi: 'ネン',
+        pinyin: 'nián',
+        tone: 2,
+        meaning_ja: '年',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '可',
+    meanings: [
+      {
+        id: '可-kě',
+        onyomi: 'カ',
+        pinyin: 'kě',
+        tone: 3,
+        meaning_ja: 'できる',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
 ];
 
 const hanziMap = new Map(hanziDictionary.map((e) => [e.id, e]));
