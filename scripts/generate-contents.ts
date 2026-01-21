@@ -11,10 +11,6 @@ import * as fs from 'node:fs';
 import * as path from 'node:path';
 import yaml from 'js-yaml';
 
-// Import books data for section name lookup
-// Note: Using relative path since this runs as a script
-const booksPath = path.join(__dirname, '../src/data/books.ts');
-
 interface InputSegment {
   text: string;
   speaker: string | null;
@@ -176,7 +172,7 @@ function main(): void {
         if (!contentsByBook.has(bookId)) {
           contentsByBook.set(bookId, []);
         }
-        contentsByBook.get(bookId)!.push(output);
+        contentsByBook.get(bookId)?.push(output);
       }
     }
   }

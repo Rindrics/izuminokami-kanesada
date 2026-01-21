@@ -48,7 +48,7 @@ function getChangedContentIds(): string[] {
     }
 
     return [...new Set(contentIds)]; // Remove duplicates
-  } catch (error) {
+  } catch {
     // If git diff fails (e.g., origin/main doesn't exist), validate all contents
     console.warn(
       'Could not get diff from origin/main, validating all contents',
