@@ -1,5 +1,8 @@
 # Changelog
 
+## [v0.1.1](https://github.com/Rindrics/izuminokami-kanesada/compare/v0.1.0...v0.1.1) - 2026-01-22
+- feat: add book metadata by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/37
+
 ## [v0.1.0](https://github.com/Rindrics/izuminokami-kanesada/compare/v0.0.1...v0.1.0) - 2026-01-21
 - fix: remove unnecessary semicolon from master text by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/28
 - docs(adr): content directory structure by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/31
