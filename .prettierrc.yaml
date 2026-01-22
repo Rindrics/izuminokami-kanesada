@@ -1,0 +1,7 @@
+# Prettier configuration for YAML files
+# TypeScript/JavaScript files are formatted by Biome
+overrides:
+  - files: '*.yaml'
+    options:
+      tabWidth: 2
+      singleQuote: true
