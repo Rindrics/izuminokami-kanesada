@@ -58,10 +58,40 @@ const SegmentSchema = z
     }),
   );
 
+/**
+ * Safe path segment pattern: alphanumeric, hyphen, underscore only
+ * Prevents path traversal attacks (e.g., "../", "/", etc.)
+ */
+const SAFE_PATH_SEGMENT_PATTERN = /^[a-zA-Z0-9_-]+$/;
+
+/**
+ * Validate that a path segment is safe (no path traversal)
+ */
+function isSafePathSegment(segment: string): boolean {
+  return SAFE_PATH_SEGMENT_PATTERN.test(segment) && !segment.includes('..');
+}
+
+/**
+ * Validate that the resolved path is within the allowed base directory
+ */
+function isPathWithinBase(filePath: string, baseDir: string): boolean {
+  const resolvedPath = path.resolve(filePath);
+  const resolvedBase = path.resolve(baseDir);
+  return resolvedPath.startsWith(resolvedBase + path.sep);
+}
+
+/**
+ * Zod schema for safe path segment (prevents path traversal)
+ */
+const SafePathSegmentSchema = z.string().refine(isSafePathSegment, {
+  message:
+    'Invalid path segment: must contain only alphanumeric characters, hyphens, or underscores',
+});
+
 const ContentYamlSchema = z.object({
-  bookId: z.string().describe('Book ID (e.g., "lunyu")'),
-  sectionId: z.string().describe('Section ID (e.g., "1")'),
-  chapterId: z.string().describe('Chapter ID (e.g., "1")'),
+  bookId: SafePathSegmentSchema.describe('Book ID (e.g., "lunyu")'),
+  sectionId: SafePathSegmentSchema.describe('Section ID (e.g., "1")'),
+  chapterId: SafePathSegmentSchema.describe('Chapter ID (e.g., "1")'),
   segments: z
     .array(SegmentSchema)
     .describe(
@@ -80,13 +110,22 @@ export function registerContentTools(server: McpServer): void {
       inputSchema: ContentYamlSchema.shape,
     },
     async ({ bookId, sectionId, chapterId, segments, mentioned, japanese }) => {
-      const dirPath = path.join(
-        PROJECT_ROOT,
-        'contents/input',
-        bookId,
-        sectionId,
-      );
+      const baseDir = path.join(PROJECT_ROOT, 'contents/input');
+      const dirPath = path.join(baseDir, bookId, sectionId);
       const filePath = path.join(dirPath, `${chapterId}.yaml`);
+
+      // Defense in depth: verify path is within allowed directory
+      if (!isPathWithinBase(filePath, baseDir)) {
+        return {
+          content: [
+            {
+              type: 'text',
+              text: 'Invalid path: access denied',
+            },
+          ],
+          isError: true,
+        };
+      }
 
       // Create directory if not exists
       fs.mkdirSync(dirPath, { recursive: true });
@@ -193,9 +232,9 @@ export function registerContentTools(server: McpServer): void {
 
   // Read content YAML file
   const ReadContentYamlSchema = z.object({
-    bookId: z.string().describe('Book ID (e.g., "lunyu")'),
-    sectionId: z.string().describe('Section ID (e.g., "1")'),
-    chapterId: z.string().describe('Chapter ID (e.g., "1")'),
+    bookId: SafePathSegmentSchema.describe('Book ID (e.g., "lunyu")'),
+    sectionId: SafePathSegmentSchema.describe('Section ID (e.g., "1")'),
+    chapterId: SafePathSegmentSchema.describe('Chapter ID (e.g., "1")'),
   });
 
   server.registerTool(
@@ -205,13 +244,26 @@ export function registerContentTools(server: McpServer): void {
       inputSchema: ReadContentYamlSchema.shape,
     },
     async ({ bookId, sectionId, chapterId }) => {
+      const baseDir = path.join(PROJECT_ROOT, 'contents/input');
       const filePath = path.join(
-        PROJECT_ROOT,
-        'contents/input',
+        baseDir,
         bookId,
         sectionId,
         `${chapterId}.yaml`,
       );
+
+      // Defense in depth: verify path is within allowed directory
+      if (!isPathWithinBase(filePath, baseDir)) {
+        return {
+          content: [
+            {
+              type: 'text',
+              text: 'Invalid path: access denied',
+            },
+          ],
+          isError: true,
+        };
+      }
 
       if (!fs.existsSync(filePath)) {
         return {
@@ -256,13 +308,26 @@ export function registerContentTools(server: McpServer): void {
       inputSchema: ReadContentYamlSchema.shape,
     },
     async ({ bookId, sectionId, chapterId }) => {
+      const baseDir = path.join(PROJECT_ROOT, 'contents/input');
       const filePath = path.join(
-        PROJECT_ROOT,
-        'contents/input',
+        baseDir,
         bookId,
         sectionId,
         `${chapterId}.yaml`,
       );
+
+      // Defense in depth: verify path is within allowed directory
+      if (!isPathWithinBase(filePath, baseDir)) {
+        return {
+          content: [
+            {
+              type: 'text',
+              text: 'Invalid path: access denied',
+            },
+          ],
+          isError: true,
+        };
+      }
 
       if (!fs.existsSync(filePath)) {
         return {
