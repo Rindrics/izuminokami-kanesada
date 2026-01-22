@@ -26,13 +26,11 @@
 - id: zixia
   name: 子夏
   family: 卜
-  courtesy: 卜商
   given: 商
 
 - id: zigong
   name: 子貢
   family: 端木
-  courtesy: 端木賜
   given: 賜
 
 - id: ziqin
