@@ -751,6 +751,81 @@ export const kunyomiDictionary: KunyomiEntry[] = [
     text: '三年',
     readings: [{ id: '三年-さんねん', ruby: 'さんねん', is_default: true }],
   },
+  {
+    id: '由',
+    text: '由',
+    readings: [{ id: '由-ゆう', ruby: 'ゆう', is_default: true }],
+  },
+  {
+    id: '女',
+    text: '女',
+    readings: [{ id: '女-なんじ', ruby: 'なんじ', is_default: true }],
+  },
+  {
+    id: '六',
+    text: '六',
+    readings: [{ id: '六-りく', ruby: 'りく', is_default: true }],
+  },
+  {
+    id: '蔽',
+    text: '蔽',
+    readings: [{ id: '蔽-へい', ruby: 'へい', is_default: true }],
+  },
+  {
+    id: '對',
+    text: '對',
+    readings: [{ id: '對-こた', ruby: 'こた', is_default: true }],
+  },
+  {
+    id: '居',
+    text: '居',
+    readings: [{ id: '居-お', ruby: 'お', is_default: true }],
+  },
+  {
+    id: '語',
+    text: '語',
+    readings: [{ id: '語-かた', ruby: 'かた', is_default: true }],
+  },
+  {
+    id: '愚',
+    text: '愚',
+    readings: [{ id: '愚-ぐ', ruby: 'ぐ', is_default: true }],
+  },
+  {
+    id: '蕩',
+    text: '蕩',
+    readings: [{ id: '蕩-とう', ruby: 'とう', is_default: true }],
+  },
+  {
+    id: '賊',
+    text: '賊',
+    readings: [{ id: '賊-ぞく', ruby: 'ぞく', is_default: true }],
+  },
+  {
+    id: '直',
+    text: '直',
+    readings: [{ id: '直-ちょく', ruby: 'ちょく', is_default: true }],
+  },
+  {
+    id: '絞',
+    text: '絞',
+    readings: [{ id: '絞-こう', ruby: 'こう', is_default: true }],
+  },
+  {
+    id: '勇',
+    text: '勇',
+    readings: [{ id: '勇-ゆう', ruby: 'ゆう', is_default: true }],
+  },
+  {
+    id: '剛',
+    text: '剛',
+    readings: [{ id: '剛-ごう', ruby: 'ごう', is_default: true }],
+  },
+  {
+    id: '狂',
+    text: '狂',
+    readings: [{ id: '狂-きょう', ruby: 'きょう', is_default: true }],
+  },
 ];
 
 export function getKunyomiEntry(text: string): KunyomiEntry | undefined {

@@ -1987,6 +1987,216 @@ export const hanziDictionary: HanziEntry[] = [
     ],
     is_common: true,
   },
+  {
+    id: '由',
+    meanings: [
+      {
+        id: '由-yóu',
+        onyomi: 'ユウ',
+        pinyin: 'yóu',
+        tone: 2,
+        meaning_ja: 'よる、由来',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '女',
+    meanings: [
+      {
+        id: '女-rǔ',
+        onyomi: 'ジョ',
+        pinyin: 'rǔ',
+        tone: 3,
+        meaning_ja: 'なんじ（汝）',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '六',
+    meanings: [
+      {
+        id: '六-lìu',
+        onyomi: 'リク',
+        pinyin: 'lìu',
+        tone: 4,
+        meaning_ja: '六',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '蔽',
+    meanings: [
+      {
+        id: '蔽-bì',
+        onyomi: 'ヘイ',
+        pinyin: 'bì',
+        tone: 4,
+        meaning_ja: 'おおう、弊害',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '對',
+    meanings: [
+      {
+        id: '對-duì',
+        onyomi: 'タイ',
+        pinyin: 'duì',
+        tone: 4,
+        meaning_ja: 'こたえる',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '居',
+    meanings: [
+      {
+        id: '居-jū',
+        onyomi: 'キョ',
+        pinyin: 'jū',
+        tone: 1,
+        meaning_ja: 'おる、居る',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '語',
+    meanings: [
+      {
+        id: '語-yù',
+        onyomi: 'ゴ',
+        pinyin: 'yù',
+        tone: 4,
+        meaning_ja: 'かたる',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '愚',
+    meanings: [
+      {
+        id: '愚-yú',
+        onyomi: 'グ',
+        pinyin: 'yú',
+        tone: 2,
+        meaning_ja: 'おろか',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '蕩',
+    meanings: [
+      {
+        id: '蕩-dàng',
+        onyomi: 'トウ',
+        pinyin: 'dàng',
+        tone: 4,
+        meaning_ja: 'うごく、放蕩',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '賊',
+    meanings: [
+      {
+        id: '賊-zéi',
+        onyomi: 'ゾク',
+        pinyin: 'zéi',
+        tone: 2,
+        meaning_ja: 'そこなう、害',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '直',
+    meanings: [
+      {
+        id: '直-zhí',
+        onyomi: 'シ',
+        pinyin: 'zhí',
+        tone: 2,
+        meaning_ja: 'なおい、正直',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '絞',
+    meanings: [
+      {
+        id: '絞-jiǎo',
+        onyomi: 'コウ',
+        pinyin: 'jiǎo',
+        tone: 3,
+        meaning_ja: 'しぼる、きびしい',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '勇',
+    meanings: [
+      {
+        id: '勇-yǒng',
+        onyomi: 'ヨウ',
+        pinyin: 'yǒng',
+        tone: 3,
+        meaning_ja: 'いさむ、勇気',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '剛',
+    meanings: [
+      {
+        id: '剛-gāng',
+        onyomi: 'ゴウ',
+        pinyin: 'gāng',
+        tone: 1,
+        meaning_ja: 'つよい、剛毅',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '狂',
+    meanings: [
+      {
+        id: '狂-kuáng',
+        onyomi: 'キョウ',
+        pinyin: 'kuáng',
+        tone: 2,
+        meaning_ja: 'くるう、狂う',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
 ];
 
 const hanziMap = new Map(hanziDictionary.map((e) => [e.id, e]));
