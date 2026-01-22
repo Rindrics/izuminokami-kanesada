@@ -1,0 +1,9 @@
+# Example Terraform variables
+# Copy this file to terraform.tfvars and fill in the values
+
+project_id = "your-gcp-project-id"
+region     = "asia-northeast1"
+
+# Note: Terraform Cloud settings are configured via environment variables:
+#   export TF_CLOUD_ORGANIZATION="your-organization"
+#   export TF_WORKSPACE="your-workspace"
