@@ -3,6 +3,7 @@
 export interface Person {
   id: string; // Pinyin-based ID (e.g., "kongzi")
   name: string; // Display name (e.g., "孔子")
+  family_name?: string; // 姓 (e.g., "孔")
   courtesy_name?: string; // 字 (e.g., "仲尼")
   personal_name?: string; // 諱 (e.g., "丘")
   aliases: string[]; // Alternative names (e.g., ["夫子", "孔丘"])

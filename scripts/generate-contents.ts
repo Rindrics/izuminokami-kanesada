@@ -62,6 +62,7 @@ interface InputBook {
 interface Person {
   id: string;
   name: string;
+  family?: string;
   courtesy?: string;
   given?: string;
 }
@@ -137,6 +138,7 @@ function generatePersonsTypeScript(persons: Person[]): string {
 export interface Person {
   id: string;
   name: string;
+  family?: string;
   courtesy?: string;
   given?: string;
 }
