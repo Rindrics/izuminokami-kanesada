@@ -72,7 +72,7 @@ function addToneMark(pinyin: string, tone: number): string {
     if (v === 'ou' && lowerPinyin.includes('ou')) {
       const idx = lowerPinyin.indexOf('o');
       return (
-        pinyin.slice(0, idx) + toneMarks['o'][tone - 1] + pinyin.slice(idx + 1)
+        pinyin.slice(0, idx) + toneMarks.o[tone - 1] + pinyin.slice(idx + 1)
       );
     }
     if (lowerPinyin.includes(v) && v !== 'ou') {
