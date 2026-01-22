@@ -1,5 +1,9 @@
 # Changelog
 
+## [v0.1.2](https://github.com/Rindrics/izuminokami-kanesada/compare/v0.1.1...v0.1.2) - 2026-01-22
+- feat: add 論語 17-8 by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/41
+- fix: preserve URL from user request by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/42
+
 ## [v0.1.1](https://github.com/Rindrics/izuminokami-kanesada/compare/v0.1.0...v0.1.1) - 2026-01-22
 - feat: add book metadata by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/37
 
