@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { ClickableChar } from '@/components/ClickableChar';
-import { books } from '@/generated/books';
+import { books, getBookById } from '@/generated/books';
+import { getPersonName } from '@/generated/persons';
 import type { CharIndex } from '@/generated/stats';
 import { stats } from '@/generated/stats';
 
@@ -77,7 +78,7 @@ function KeyConceptsHeatmap({
     // Aggregate by book
     units = bookIds.sort().map((bookId) => ({
       id: bookId,
-      label: bookId,
+      label: getBookById(bookId)?.name ?? bookId,
       totalChapters: bookTotalChapters.get(bookId) ?? 1,
     }));
   } else {
@@ -251,14 +252,19 @@ export default function StatsPage() {
             データソース
           </h2>
           <ul className="space-y-1 text-sm">
-            {books.map((book) => (
-              <li key={book.id} className="text-black dark:text-white">
-                {book.name}:{' '}
-                <span className="text-zinc-500">
-                  {book.sections.length}/{book.totalSections} 編
-                </span>
-              </li>
-            ))}
+            {books.map((book) => {
+              const sectionsWithContent = book.sections.filter(
+                (s) => s.chapters.length > 0,
+              ).length;
+              return (
+                <li key={book.id} className="text-black dark:text-white">
+                  {book.name}:{' '}
+                  <span className="text-zinc-500">
+                    {sectionsWithContent}/{book.totalSections} 編
+                  </span>
+                </li>
+              );
+            })}
           </ul>
         </section>
 
@@ -395,7 +401,7 @@ export default function StatsPage() {
                     className="border-b border-zinc-100 dark:border-zinc-800"
                   >
                     <td className="px-4 py-2 text-black dark:text-white">
-                      {pf.person}
+                      {getPersonName(pf.person)}
                     </td>
                     <td className="px-4 py-2 text-right text-black dark:text-white">
                       {pf.speakerCount}

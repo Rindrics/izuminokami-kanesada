@@ -126,19 +126,30 @@ function getChangedContentIds(): string[] {
 }
 
 /**
+ * Check if --all flag is passed
+ */
+const isAllMode = process.argv.includes('--all');
+
+/**
  * Main function
  */
 function main(): void {
-  console.log('=== Content Diff Validation ===\n');
+  let contentIdsToValidate: string[];
 
-  const contentIdsToValidate = getChangedContentIds();
+  if (isAllMode) {
+    console.log('=== Content Validation (All) ===\n');
+    contentIdsToValidate = contents.map((c) => c.content_id);
+  } else {
+    console.log('=== Content Diff Validation ===\n');
+    contentIdsToValidate = getChangedContentIds();
 
-  if (contentIdsToValidate.length === 0) {
-    console.log('No content changes to validate.');
-    process.exit(0);
+    if (contentIdsToValidate.length === 0) {
+      console.log('No content changes to validate.');
+      process.exit(0);
+    }
   }
 
-  console.log(`Found ${contentIdsToValidate.length} changed content(s)`);
+  console.log(`Found ${contentIdsToValidate.length} content(s) to validate`);
   console.log(`Validating...\n`);
 
   let hasErrors = false;

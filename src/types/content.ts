@@ -55,7 +55,7 @@ export interface Content {
   chapter: string;
   text: string;
   segments: Segment[];
-  characters: {
+  persons: {
     speakers: string[];
     mentioned: string[];
   };

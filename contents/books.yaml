@@ -5,3 +5,219 @@
     - id: '1'
       name: 学而第一
       totalChapters: 16
+    - id: '2'
+      name: 為政第二
+      totalChapters: 24
+    - id: '3'
+      name: 八佾第三
+      totalChapters: 26
+    - id: '4'
+      name: 里仁第四
+      totalChapters: 26
+    - id: '5'
+      name: 公冶長第五
+      totalChapters: 28
+    - id: '6'
+      name: 雍也第六
+      totalChapters: 30
+    - id: '7'
+      name: 述而第七
+      totalChapters: 38
+    - id: '8'
+      name: 泰伯第八
+      totalChapters: 21
+    - id: '9'
+      name: 子罕第九
+      totalChapters: 31
+    - id: '10'
+      name: 郷党第十
+      totalChapters: 27
+    - id: '11'
+      name: 先進第十一
+      totalChapters: 26
+    - id: '12'
+      name: 顔淵第十二
+      totalChapters: 24
+    - id: '13'
+      name: 子路第十三
+      totalChapters: 30
+    - id: '14'
+      name: 憲問第十四
+      totalChapters: 44
+    - id: '15'
+      name: 衛霊公第十五
+      totalChapters: 42
+    - id: '16'
+      name: 季氏第十六
+      totalChapters: 14
+    - id: '17'
+      name: 陽貨第十七
+      totalChapters: 26
+    - id: '18'
+      name: 微子第十八
+      totalChapters: 11
+    - id: '19'
+      name: 子張第十九
+      totalChapters: 25
+    - id: '20'
+      name: 堯曰第二十
+      totalChapters: 3
+
+- id: mengzi
+  name: 孟子
+  totalSections: 14
+  sections:
+    - id: '1'
+      name: 梁惠王上
+      totalChapters: 7
+    - id: '2'
+      name: 梁惠王下
+      totalChapters: 16
+    - id: '3'
+      name: 公孫丑上
+      totalChapters: 9
+    - id: '4'
+      name: 公孫丑下
+      totalChapters: 14
+    - id: '5'
+      name: 滕文公上
+      totalChapters: 5
+    - id: '6'
+      name: 滕文公下
+      totalChapters: 10
+    - id: '7'
+      name: 離婁上
+      totalChapters: 28
+    - id: '8'
+      name: 離婁下
+      totalChapters: 33
+    - id: '9'
+      name: 萬章上
+      totalChapters: 9
+    - id: '10'
+      name: 萬章下
+      totalChapters: 9
+    - id: '11'
+      name: 告子上
+      totalChapters: 20
+    - id: '12'
+      name: 告子下
+      totalChapters: 16
+    - id: '13'
+      name: 盡心上
+      totalChapters: 46
+    - id: '14'
+      name: 盡心下
+      totalChapters: 38
+
+- id: daxue
+  name: 大学
+  totalSections: 1
+  sections:
+    - id: '1'
+      name: 大学
+      totalChapters: 11
+
+- id: zhongyong
+  name: 中庸
+  totalSections: 1
+  sections:
+    - id: '1'
+      name: 中庸
+      totalChapters: 33
+
+# 五経
+
+- id: yijing
+  name: 易経
+  totalSections: 2
+  sections:
+    - id: '1'
+      name: 上経
+      totalChapters: 30
+    - id: '2'
+      name: 下経
+      totalChapters: 34
+
+- id: shujing
+  name: 書経
+  totalSections: 4
+  sections:
+    - id: '1'
+      name: 虞書
+      totalChapters: 5
+    - id: '2'
+      name: 夏書
+      totalChapters: 4
+    - id: '3'
+      name: 商書
+      totalChapters: 17
+    - id: '4'
+      name: 周書
+      totalChapters: 32
+
+- id: shijing
+  name: 詩経
+  totalSections: 4
+  sections:
+    - id: '1'
+      name: 国風
+      totalChapters: 160
+    - id: '2'
+      name: 小雅
+      totalChapters: 74
+    - id: '3'
+      name: 大雅
+      totalChapters: 31
+    - id: '4'
+      name: 頌
+      totalChapters: 40
+
+- id: liji
+  name: 礼記
+  totalSections: 1
+  sections:
+    - id: '1'
+      name: 礼記
+      totalChapters: 49
+
+- id: chunqiu
+  name: 春秋左氏伝
+  totalSections: 12
+  sections:
+    - id: '1'
+      name: 隠公
+      totalChapters: 11
+    - id: '2'
+      name: 桓公
+      totalChapters: 18
+    - id: '3'
+      name: 荘公
+      totalChapters: 32
+    - id: '4'
+      name: 閔公
+      totalChapters: 2
+    - id: '5'
+      name: 僖公
+      totalChapters: 33
+    - id: '6'
+      name: 文公
+      totalChapters: 18
+    - id: '7'
+      name: 宣公
+      totalChapters: 18
+    - id: '8'
+      name: 成公
+      totalChapters: 18
+    - id: '9'
+      name: 襄公
+      totalChapters: 31
+    - id: '10'
+      name: 昭公
+      totalChapters: 32
+    - id: '11'
+      name: 定公
+      totalChapters: 15
+    - id: '12'
+      name: 哀公
+      totalChapters: 27

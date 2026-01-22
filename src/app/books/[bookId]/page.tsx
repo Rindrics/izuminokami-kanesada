@@ -37,24 +37,35 @@ export default async function BookPage({ params }: Props) {
             編一覧
           </h2>
           <ul className="space-y-2">
-            {book.sections.map((section) => (
-              <li key={section.id}>
-                <Link
-                  href={`/books/${book.id}/${section.id}`}
-                  className="block rounded-lg bg-white p-4 shadow-sm transition hover:bg-zinc-50 dark:bg-zinc-900 dark:hover:bg-zinc-800"
-                >
-                  <span className="text-lg text-black dark:text-white">
-                    {section.name}
-                  </span>
-                  <span className="ml-2 text-sm text-zinc-500">
-                    ({section.chapters.length}
-                    {section.chapters.length < section.totalChapters &&
-                      `/${section.totalChapters}`}
-                    章)
-                  </span>
-                </Link>
-              </li>
-            ))}
+            {book.sections.map((section) => {
+              const hasContent = section.chapters.length > 0;
+              return (
+                <li key={section.id}>
+                  {hasContent ? (
+                    <Link
+                      href={`/books/${book.id}/${section.id}`}
+                      className="block rounded-lg bg-white p-4 shadow-sm transition hover:bg-zinc-50 dark:bg-zinc-900 dark:hover:bg-zinc-800"
+                    >
+                      <span className="text-lg text-black dark:text-white">
+                        {section.name}
+                      </span>
+                      <span className="ml-2 text-sm text-zinc-500">
+                        ({section.chapters.length}/{section.totalChapters}章)
+                      </span>
+                    </Link>
+                  ) : (
+                    <div className="block cursor-not-allowed rounded-lg bg-zinc-100 p-4 opacity-50 dark:bg-zinc-800">
+                      <span className="text-lg text-zinc-400 dark:text-zinc-500">
+                        {section.name}
+                      </span>
+                      <span className="ml-2 text-sm text-zinc-400 dark:text-zinc-500">
+                        (0/{section.totalChapters}章)
+                      </span>
+                    </div>
+                  )}
+                </li>
+              );
+            })}
           </ul>
         </section>
       </main>

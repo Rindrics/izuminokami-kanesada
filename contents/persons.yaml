@@ -1,0 +1,39 @@
+# 人物マスターデータ
+# id: ピンインベースの一意識別子
+# name: 通称・敬称（表示用）
+# family: 姓
+# courtesy: 字（あざな）
+# given: 名（諱）
+
+- id: kongzi
+  name: 孔子
+  family: 孔
+  courtesy: 仲尼
+  given: 丘
+
+- id: zengzi
+  name: 曾子
+  family: 曾
+  courtesy: 子輿
+  given: 參
+
+- id: youzi
+  name: 有子
+  family: 有
+  courtesy: 子有
+  given: 若
+
+- id: zixia
+  name: 子夏
+  family: 卜
+  given: 商
+
+- id: zigong
+  name: 子貢
+  family: 端木
+  given: 賜
+
+- id: ziqin
+  name: 子禽
+  family: 陳
+  given: 禽

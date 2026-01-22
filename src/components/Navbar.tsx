@@ -18,7 +18,7 @@ export function Navbar() {
             経書一覧
           </Link>
           <Link
-            href="/index"
+            href="/sakuin"
             className="text-zinc-600 hover:text-black dark:text-zinc-400 dark:hover:text-white"
           >
             索引
