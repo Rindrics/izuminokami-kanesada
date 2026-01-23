@@ -10,13 +10,91 @@
  * 2. Extracts Chinese text (白文) and Japanese text (書き下し文)
  * 3. Generates MP3 audio using Google Cloud TTS
  * 4. Saves to audio/{bookId}/{sectionId}/{chapterId}-{lang}.mp3
+ * 5. Updates audio-manifest.json with file metadata
  */
 
+import * as crypto from 'node:crypto';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import textToSpeech from '@google-cloud/text-to-speech';
 import yaml from 'js-yaml';
 import { convertToOnyomi, ONYOMI_PAUSE_PLACEHOLDER } from '../src/lib/ruby';
+
+// ============================================================================
+// Audio Manifest Types and Functions
+// ============================================================================
+
+interface AudioFileMetadata {
+  generatedAt?: string; // ISO 8601 timestamp - present when generated locally, removed after upload
+  uploadedAt?: string; // ISO 8601 timestamp - present after Firebase Storage upload
+  hash: string; // SHA-256 hash of the audio file
+}
+
+interface AudioManifestEntry {
+  zh: AudioFileMetadata;
+  ja: AudioFileMetadata;
+}
+
+type AudioManifest = Record<string, AudioManifestEntry>;
+
+const MANIFEST_PATH = path.join(process.cwd(), 'audio-manifest.json');
+
+/**
+ * Read audio manifest from file, or return empty object if not exists
+ */
+function readManifest(): AudioManifest {
+  if (!fs.existsSync(MANIFEST_PATH)) {
+    return {};
+  }
+  const content = fs.readFileSync(MANIFEST_PATH, 'utf-8');
+  return JSON.parse(content) as AudioManifest;
+}
+
+/**
+ * Write audio manifest to file (sorted by key for consistent diffs)
+ */
+function writeManifest(manifest: AudioManifest): void {
+  const sortedKeys = Object.keys(manifest).sort();
+  const sorted: AudioManifest = {};
+  for (const key of sortedKeys) {
+    sorted[key] = manifest[key];
+  }
+  fs.writeFileSync(MANIFEST_PATH, `${JSON.stringify(sorted, null, 2)}\n`);
+}
+
+/**
+ * Calculate SHA-256 hash of a file
+ */
+function calculateFileHash(filePath: string): string {
+  const content = fs.readFileSync(filePath);
+  return crypto.createHash('sha256').update(content).digest('hex');
+}
+
+/**
+ * Update manifest entry for a content (marks as generated, not yet uploaded)
+ */
+function updateManifestEntry(
+  manifest: AudioManifest,
+  contentId: string,
+  zhFilePath: string,
+  jaFilePath: string,
+): void {
+  const now = new Date().toISOString();
+  manifest[contentId] = {
+    zh: {
+      generatedAt: now,
+      hash: calculateFileHash(zhFilePath),
+    },
+    ja: {
+      generatedAt: now,
+      hash: calculateFileHash(jaFilePath),
+    },
+  };
+}
+
+// ============================================================================
+// Hanzi Dictionary
+// ============================================================================
 
 // Hanzi dictionary types
 interface HanziMeaning {
@@ -449,6 +527,18 @@ async function main(): Promise<void> {
   const japaneseOutputPath = path.join(outputDir, `${chapterId}-ja.mp3`);
   fs.writeFileSync(japaneseOutputPath, japaneseAudio);
   console.log(`    Saved: ${japaneseOutputPath}`);
+
+  // Update audio manifest
+  console.log('\nUpdating audio manifest...');
+  const manifest = readManifest();
+  updateManifestEntry(
+    manifest,
+    contentId,
+    chineseOutputPath,
+    japaneseOutputPath,
+  );
+  writeManifest(manifest);
+  console.log(`  Updated: ${MANIFEST_PATH}`);
 
   console.log('\n=== Generation Complete ===');
 }

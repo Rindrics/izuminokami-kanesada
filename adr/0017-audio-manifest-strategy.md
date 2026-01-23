@@ -34,8 +34,8 @@
     "ja": { "uploadedAt": "2026-01-22T10:00:00Z", "hash": "def456..." }
   },
   "lunyu/1/2": {
-    "zh": { "uploadedAt": "2026-01-22T10:05:00Z", "hash": "ghi789..." },
-    "ja": { "uploadedAt": "2026-01-22T10:05:00Z", "hash": "jkl012..." }
+    "zh": { "generatedAt": "2026-01-22T10:05:00Z", "hash": "ghi789..." },
+    "ja": { "generatedAt": "2026-01-22T10:05:00Z", "hash": "jkl012..." }
   }
 }
 ```
@@ -44,8 +44,9 @@
 |-----------|------|
 | キー | `{bookId}/{sectionId}/{chapterId}` 形式 |
 | `zh` | 中国語（ピンイン）音声のメタデータ |
-| `ja` | 日本語（書き下し文）音声のメタデータ |
-| `uploadedAt` | Firebase Storage へのアップロード日時 |
+| `ja` | 日本語（音読み）音声のメタデータ |
+| `generatedAt` | ローカルでの音声生成日時（アップロード前） |
+| `uploadedAt` | Firebase Storage へのアップロード日時（アップロード後、`generatedAt` は削除） |
 | `hash` | 音声ファイルのハッシュ値（再生成検知用） |
 
 ### ワークフロー
