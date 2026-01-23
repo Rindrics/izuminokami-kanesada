@@ -756,8 +756,8 @@ Then call set_pinyin_reviewed to mark the content as reviewed before generating 
     'generate_audio',
     {
       description:
-        'Generate audio files (Chinese and Japanese) for a content using Google Cloud TTS. ' +
-        'Requires pinyin_reviewed: true in the YAML file and GOOGLE_APPLICATION_CREDENTIALS environment variable.',
+        'Generate audio files (Chinese and Japanese) for a content using Google Cloud TTS and automatically upload to Cloud Storage. ' +
+        'Requires pinyin_reviewed: true in the YAML file, GOOGLE_APPLICATION_CREDENTIALS and GCS_BUCKET environment variables.',
       inputSchema: ReadContentYamlSchema.shape,
     },
     async ({ bookId, sectionId, chapterId }) => {
@@ -805,11 +805,11 @@ Please follow this workflow:
 
       try {
         const output = execSync(
-          `pnpm generate:audio ${bookId} ${sectionId} ${chapterId}`,
+          `pnpm tsx scripts/generate-and-upload-audio.ts ${bookId} ${sectionId} ${chapterId}`,
           {
             cwd: PROJECT_ROOT,
             encoding: 'utf-8',
-            timeout: 120000, // 2 minutes timeout for TTS API calls
+            timeout: 180000, // 3 minutes timeout (generation + upload)
           },
         );
 
@@ -1087,13 +1087,25 @@ Please follow this workflow:
         if (zhMissing) missingFiles.push('zh');
         if (jaMissing) missingFiles.push('ja');
 
-        // Regenerate audio files
+        // Regenerate and upload audio files using orchestrator
         try {
-          execSync(`pnpm generate:audio ${bookId} ${sectionId} ${chapterId}`, {
-            cwd: PROJECT_ROOT,
-            encoding: 'utf-8',
-            timeout: 120000,
-          });
+          const output = execSync(
+            `pnpm tsx scripts/generate-and-upload-audio.ts ${bookId} ${sectionId} ${chapterId}`,
+            {
+              cwd: PROJECT_ROOT,
+              encoding: 'utf-8',
+              timeout: 180000, // 3 minutes timeout (generation + upload)
+            },
+          );
+
+          return {
+            content: [
+              {
+                type: 'text',
+                text: `Missing local files (${missingFiles.join(', ')}). Regenerated and uploaded:\n${output}`,
+              },
+            ],
+          };
         } catch (error) {
           const errorMessage =
             error instanceof Error ? error.message : String(error);
@@ -1101,21 +1113,15 @@ Please follow this workflow:
             content: [
               {
                 type: 'text',
-                text: `Missing local files (${missingFiles.join(', ')}). Attempted regeneration but failed:\n${errorMessage}`,
+                text: `Missing local files (${missingFiles.join(', ')}). Attempted regeneration and upload but failed:\n${errorMessage}`,
               },
             ],
             isError: true,
           };
         }
-
-        // Re-read manifest after regeneration
-        const updatedManifest = JSON.parse(
-          fs.readFileSync(manifestPath, 'utf-8'),
-        );
-        manifest[contentId] = updatedManifest[contentId];
       }
 
-      // Run upload script
+      // Run upload script (files exist, only upload needed)
       try {
         const output = execSync(
           `pnpm upload:audio ${bookId} ${sectionId} ${chapterId}`,

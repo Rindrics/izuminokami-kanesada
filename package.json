@@ -12,7 +12,7 @@
     "generate:contents:watch": "tsx scripts/generate-contents.ts --watch",
     "validate:contents": "tsx scripts/validate-content-diff.ts",
     "validate:contents:all": "tsx scripts/validate-content-diff.ts --all",
-    "generate:audio": "tsx scripts/generate-audio.ts",
+    "generate:audio": "tsx scripts/generate-and-upload-audio.ts",
     "upload:audio": "tsx scripts/upload-audio.ts",
     "validate:audio-manifest": "tsx scripts/validate-audio-manifest.ts",
     "start": "next start -p 30600",

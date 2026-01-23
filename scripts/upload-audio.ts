@@ -114,6 +114,85 @@ async function uploadFile(
 // Main Functions
 // ============================================================================
 
+/**
+ * Upload audio files for a specific content
+ * Exported for use by other scripts
+ */
+export async function uploadContentAudio(
+  bookId: string,
+  sectionId: string,
+  chapterId: string,
+): Promise<void> {
+  const contentId = `${bookId}/${sectionId}/${chapterId}`;
+
+  // Read manifest
+  const manifest = readManifest();
+  const pendingUploads = findPendingUploads(manifest, contentId);
+
+  if (pendingUploads.length === 0) {
+    console.log(`No pending uploads found for ${contentId}.`);
+    return;
+  }
+
+  console.log(`Uploading ${pendingUploads.length} file(s) for ${contentId}:`);
+  for (const upload of pendingUploads) {
+    console.log(`  - ${upload.contentId} (${upload.lang})`);
+  }
+  console.log('');
+
+  // Initialize Cloud Storage
+  const { storage, bucketName } = initializeStorage();
+
+  // Upload files
+  let successCount = 0;
+  let errorCount = 0;
+
+  for (const upload of pendingUploads) {
+    try {
+      // Check if local file exists
+      if (!fs.existsSync(upload.localPath)) {
+        console.log(
+          `  ❌ ${upload.contentId} (${upload.lang}): Local file not found`,
+        );
+        errorCount++;
+        continue;
+      }
+
+      const url = await uploadFile(
+        storage,
+        bucketName,
+        upload.localPath,
+        upload.remotePath,
+      );
+      console.log(`  ✓ ${upload.contentId} (${upload.lang})`);
+      console.log(`    URL: ${url}`);
+
+      // Update manifest: remove generatedAt, add uploadedAt
+      const entry = manifest[upload.contentId];
+      const langEntry = entry[upload.lang];
+      const now = new Date().toISOString();
+
+      delete langEntry.generatedAt;
+      langEntry.uploadedAt = now;
+
+      successCount++;
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
+      console.log(`  ❌ ${upload.contentId} (${upload.lang}): ${errorMessage}`);
+      errorCount++;
+    }
+  }
+
+  // Save updated manifest
+  writeManifest(manifest);
+  console.log(`\nUpdated: ${MANIFEST_PATH}`);
+
+  if (errorCount > 0) {
+    throw new Error(`Upload failed for ${errorCount} file(s)`);
+  }
+}
+
 interface PendingUpload {
   contentId: string;
   lang: 'zh' | 'ja';
