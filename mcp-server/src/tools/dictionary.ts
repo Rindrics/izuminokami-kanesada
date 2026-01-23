@@ -285,12 +285,13 @@ export function registerDictionaryTools(server: McpServer): void {
 
         // Find the entry for this character and pinyin
         // Pattern: id: 'character-pinyin', onyomi: 'TODO', pinyin: 'pinyin', ...
+        // Use negative lookahead to ensure we don't match across multiple meaning objects
         const meaningId = `${character}-${pinyin}`;
         const pattern = new RegExp(
           `(id:\\s*'${meaningId.replace(
             /[.*+?^${}()|[\]\\]/g,
             '\\$&',
-          )}',[^}]*onyomi:\\s*')TODO'`,
+          )}',(?:(?!onyomi:)[^}])*onyomi:\\s*')TODO'`,
           's',
         );
 
