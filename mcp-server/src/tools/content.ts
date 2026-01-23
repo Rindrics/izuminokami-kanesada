@@ -1,7 +1,7 @@
 import { execSync } from 'node:child_process';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import * as yaml from 'yaml';
 import { z } from 'zod';
@@ -268,47 +268,27 @@ export function registerContentTools(server: McpServer): void {
       yamlLines.push('pinyin_reviewed: false'); // Default, will be updated
 
       // Analyze pinyin for polyphonic characters
+      // Dynamically import the dictionary to get the latest data without regex parsing
       const hanziDictPath = path.join(
         PROJECT_ROOT,
-        'src/data/hanzi-dictionary.ts',
+        'src/data/hanzi-dictionary.js',
       );
-      const hanziDictContent = fs.readFileSync(hanziDictPath, 'utf-8');
+      const hanziDictModule = await import(pathToFileURL(hanziDictPath).href);
+      const { hanziDictionary } = hanziDictModule;
 
       // Build a map of characters to their meanings
-      interface MeaningInfo {
+      type MeaningInfo = {
         id: string;
         pinyin: string;
         tone: number;
         meaning_ja: string;
         onyomi: string;
         is_default: boolean;
-      }
+      };
 
       const charMeanings = new Map<string, MeaningInfo[]>();
-      const entryRegex =
-        /\{\s*id:\s*'([^']+)',\s*meanings:\s*\[([\s\S]*?)\],\s*is_common/g;
-      const meaningRegex =
-        /\{\s*id:\s*'([^']+)',[\s\S]*?onyomi:\s*'([^']+)',[\s\S]*?pinyin:\s*'([^']+)',\s*tone:\s*(\d+),\s*meaning_ja:\s*'([^']+)',\s*is_default:\s*(true|false)/g;
-
-      for (const entryMatch of hanziDictContent.matchAll(entryRegex)) {
-        const charId = entryMatch[1];
-        const meaningsStr = entryMatch[2];
-        const meanings: MeaningInfo[] = [];
-
-        for (const meaningMatch of meaningsStr.matchAll(meaningRegex)) {
-          meanings.push({
-            id: meaningMatch[1],
-            onyomi: meaningMatch[2],
-            pinyin: meaningMatch[3],
-            tone: parseInt(meaningMatch[4], 10),
-            meaning_ja: meaningMatch[5],
-            is_default: meaningMatch[6] === 'true',
-          });
-        }
-
-        if (meanings.length > 0) {
-          charMeanings.set(charId, meanings);
-        }
+      for (const entry of hanziDictionary) {
+        charMeanings.set(entry.id, entry.meanings);
       }
 
       // Analyze each segment for polyphonic characters and missing onyomi
