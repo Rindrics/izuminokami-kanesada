@@ -428,6 +428,123 @@ Then call set_pinyin_reviewed to mark the content as reviewed before generating 
         responseText += `\n✓ pinyin_reviewed: true (多音字なし、音声生成可能)`;
       }
 
+      // Step 3: Generate contents and validate
+      responseText += `\n\n=== Validating Content ===\n`;
+      let hasValidationErrors = false;
+      try {
+        // Regenerate contents from YAML files
+        execSync('pnpm generate:contents', {
+          cwd: PROJECT_ROOT,
+          encoding: 'utf-8',
+          stdio: 'pipe',
+        });
+
+        // Run validate:contents script to check all changed contents
+        // This uses the same validation logic as the pre-push hook
+        try {
+          const validateOutput = execSync('pnpm run validate:contents', {
+            cwd: PROJECT_ROOT,
+            encoding: 'utf-8',
+            stdio: 'pipe',
+          });
+
+          // Check if the output contains the target content ID
+          const contentId = `${bookId}/${sectionId}/${chapterId}`;
+          if (validateOutput.includes(`PASS: ${contentId}`)) {
+            responseText += `✓ Validation PASSED for ${contentId}\n`;
+            // Extract warnings if any
+            const lines = validateOutput.split('\n');
+            const contentLines: string[] = [];
+            let inContentSection = false;
+            for (const line of lines) {
+              if (line.includes(`PASS: ${contentId}`)) {
+                inContentSection = true;
+                contentLines.push(line);
+              } else if (inContentSection && line.trim().startsWith('WARN:')) {
+                contentLines.push(line);
+              } else if (inContentSection && line.trim() !== '') {
+                inContentSection = false;
+              }
+            }
+            if (contentLines.length > 1) {
+              responseText += `\nWarnings:\n`;
+              for (const line of contentLines.slice(1)) {
+                responseText += `  ${line.trim()}\n`;
+              }
+            }
+          } else if (validateOutput.includes(`FAIL: ${contentId}`)) {
+            hasValidationErrors = true;
+            responseText += `❌ Validation FAILED for ${contentId}\n\n`;
+            // Extract errors for this content
+            const lines = validateOutput.split('\n');
+            const errorLines: string[] = [];
+            let inContentSection = false;
+            for (const line of lines) {
+              if (line.includes(`FAIL: ${contentId}`)) {
+                inContentSection = true;
+                errorLines.push(line);
+              } else if (inContentSection && line.trim().startsWith('- [')) {
+                errorLines.push(line);
+              } else if (inContentSection && line.trim().startsWith('WARN:')) {
+                errorLines.push(line);
+              } else if (
+                inContentSection &&
+                line.trim() !== '' &&
+                !line.trim().startsWith('-')
+              ) {
+                inContentSection = false;
+              }
+            }
+            for (const line of errorLines) {
+              responseText += `  ${line.trim()}\n`;
+            }
+          } else {
+            // Content not in validation output (might not be changed or not found)
+            responseText += `⚠️ Content "${contentId}" not found in validation output.\n`;
+            responseText += `Validation output:\n${validateOutput}\n`;
+          }
+        } catch (validateError) {
+          // validate:contents failed (exit code 1)
+          hasValidationErrors = true;
+          let errorOutput = '';
+          let stderrOutput = '';
+
+          if (validateError && typeof validateError === 'object') {
+            const execError = validateError as {
+              stdout?: string;
+              stderr?: string;
+              message?: string;
+            };
+            if (execError.stdout) {
+              errorOutput = execError.stdout;
+            }
+            if (execError.stderr) {
+              stderrOutput = execError.stderr;
+            }
+            if (!errorOutput && execError.message) {
+              errorOutput = execError.message;
+            }
+          } else if (validateError instanceof Error) {
+            errorOutput = validateError.message;
+          } else {
+            errorOutput = String(validateError);
+          }
+
+          responseText += `❌ Validation FAILED\n\n`;
+          if (errorOutput) {
+            responseText += `Output:\n${errorOutput}\n`;
+          }
+          if (stderrOutput) {
+            responseText += `Error:\n${stderrOutput}\n`;
+          }
+        }
+      } catch (error) {
+        const errorMessage =
+          error instanceof Error ? error.message : String(error);
+        responseText += `⚠️ Failed to generate contents: ${errorMessage}\n`;
+        hasValidationErrors = true;
+      }
+
       return {
         content: [
           {
@@ -435,6 +552,7 @@ Then call set_pinyin_reviewed to mark the content as reviewed before generating 
             text: responseText,
           },
         ],
+        isError: hasValidationErrors,
       };
     },
   );
@@ -1163,6 +1281,134 @@ Please follow this workflow:
             {
               type: 'text',
               text: `Upload failed:\n${errorMessage}\n${errorDetails}`,
+            },
+          ],
+          isError: true,
+        };
+      }
+    },
+  );
+
+  // Validate content (same validation as pre-push hook)
+  server.registerTool(
+    'validate_content',
+    {
+      description:
+        'Validate a content using the same validation logic as the pre-push hook. ' +
+        'This will regenerate contents from YAML files and validate the specified content. ' +
+        'Use this after write_content_yaml to catch validation errors before pushing.',
+      inputSchema: ReadContentYamlSchema.shape,
+    },
+    async ({ bookId, sectionId, chapterId }) => {
+      const contentId = `${bookId}/${sectionId}/${chapterId}`;
+
+      // Step 1: Regenerate contents from YAML files
+      console.log(`Regenerating contents for validation...`);
+      try {
+        execSync('pnpm generate:contents', {
+          cwd: PROJECT_ROOT,
+          encoding: 'utf-8',
+          stdio: 'pipe',
+        });
+      } catch (error) {
+        const errorMessage =
+          error instanceof Error ? error.message : String(error);
+        return {
+          content: [
+            {
+              type: 'text',
+              text: `Failed to regenerate contents:\n${errorMessage}`,
+            },
+          ],
+          isError: true,
+        };
+      }
+
+      // Step 2: Load generated contents and validate
+      try {
+        // Dynamic import to get the latest generated contents
+        const contentsModule = await import(
+          `${PROJECT_ROOT}/src/generated/contents.js`
+        );
+        const { contents } = contentsModule;
+        const { validateContent } = await import(
+          `${PROJECT_ROOT}/src/lib/validators/content.js`
+        );
+
+        const content = contents.find(
+          (c: { content_id: string }) => c.content_id === contentId,
+        );
+
+        if (!content) {
+          return {
+            content: [
+              {
+                type: 'text',
+                text: `Content "${contentId}" not found in generated contents. Make sure the YAML file exists and was generated correctly.`,
+              },
+            ],
+            isError: true,
+          };
+        }
+
+        const result = validateContent(content);
+        const errors = result.errors.filter(
+          (e: { severity: string }) => e.severity === 'error',
+        );
+        const warnings = result.errors.filter(
+          (e: { severity: string }) => e.severity === 'warning',
+        );
+
+        if (errors.length > 0) {
+          let errorText = `❌ Validation FAILED for ${contentId}\n\n`;
+          errorText += 'Errors:\n';
+          for (const error of errors) {
+            errorText += `  - [${error.path}] ${error.message}\n`;
+          }
+
+          if (warnings.length > 0) {
+            errorText += '\nWarnings:\n';
+            for (const warning of warnings) {
+              errorText += `  - [${warning.path}] ${warning.message}\n`;
+            }
+          }
+
+          return {
+            content: [
+              {
+                type: 'text',
+                text: errorText,
+              },
+            ],
+            isError: true,
+          };
+        }
+
+        let successText = `✓ Validation PASSED for ${contentId}\n`;
+
+        if (warnings.length > 0) {
+          successText += '\nWarnings:\n';
+          for (const warning of warnings) {
+            successText += `  - [${warning.path}] ${warning.message}\n`;
+          }
+        }
+
+        return {
+          content: [
+            {
+              type: 'text',
+              text: successText,
+            },
+          ],
+        };
+      } catch (error) {
+        const errorMessage =
+          error instanceof Error ? error.message : String(error);
+        return {
+          content: [
+            {
+              type: 'text',
+              text: `Validation failed:\n${errorMessage}`,
             },
           ],
           isError: true,
