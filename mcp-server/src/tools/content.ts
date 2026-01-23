@@ -46,10 +46,34 @@ function containsForbiddenPunctuation(text: string): string[] {
   return [...new Set(found)];
 }
 
+/**
+ * Schema for hanzi reading override within a segment
+ * Used to specify non-default readings for polyphonic characters
+ */
+const HanziOverrideSchema = z.object({
+  char: z.string().describe('The character to override (e.g., "說")'),
+  position: z
+    .number()
+    .describe(
+      'Position within the segment text (0-indexed, including markers)',
+    ),
+  meaning_id: z
+    .string()
+    .describe(
+      'The meaning ID from hanzi-dictionary (e.g., "說-yuè" for "喜ぶ")',
+    ),
+});
+
 const SegmentSchema = z
   .object({
     text: z.string(),
     speaker: z.string().nullable(),
+    hanzi_overrides: z
+      .array(HanziOverrideSchema)
+      .optional()
+      .describe(
+        'Override readings for polyphonic characters (e.g., 說 can be yuè/shuō/shuì)',
+      ),
   })
   .refine(
     (segment) => containsForbiddenPunctuation(segment.text).length === 0,
@@ -137,6 +161,15 @@ export function registerContentTools(server: McpServer): void {
         yamlLines.push(
           `    speaker: ${segment.speaker === null ? 'null' : segment.speaker}`,
         );
+        // Add hanzi_overrides if present
+        if (segment.hanzi_overrides && segment.hanzi_overrides.length > 0) {
+          yamlLines.push('    hanzi_overrides:');
+          for (const override of segment.hanzi_overrides) {
+            yamlLines.push(`      - char: ${override.char}`);
+            yamlLines.push(`        position: ${override.position}`);
+            yamlLines.push(`        meaning_id: ${override.meaning_id}`);
+          }
+        }
       }
       yamlLines.push(`mentioned: [${mentioned.join(', ')}]`);
       yamlLines.push(`japanese: ${japanese}`);
@@ -145,11 +178,138 @@ export function registerContentTools(server: McpServer): void {
 
       fs.writeFileSync(filePath, yamlContent);
 
+      // Analyze pinyin for polyphonic characters
+      const hanziDictPath = path.join(
+        PROJECT_ROOT,
+        'src/data/hanzi-dictionary.ts',
+      );
+      const hanziDictContent = fs.readFileSync(hanziDictPath, 'utf-8');
+
+      // Build a map of characters to their meanings
+      interface MeaningInfo {
+        id: string;
+        pinyin: string;
+        tone: number;
+        meaning_ja: string;
+        is_default: boolean;
+      }
+
+      const charMeanings = new Map<string, MeaningInfo[]>();
+      const entryRegex =
+        /\{\s*id:\s*'([^']+)',\s*meanings:\s*\[([\s\S]*?)\],\s*is_common/g;
+      const meaningRegex =
+        /\{\s*id:\s*'([^']+)',[\s\S]*?pinyin:\s*'([^']+)',\s*tone:\s*(\d+),\s*meaning_ja:\s*'([^']+)',\s*is_default:\s*(true|false)/g;
+
+      for (const entryMatch of hanziDictContent.matchAll(entryRegex)) {
+        const charId = entryMatch[1];
+        const meaningsStr = entryMatch[2];
+        const meanings: MeaningInfo[] = [];
+
+        for (const meaningMatch of meaningsStr.matchAll(meaningRegex)) {
+          meanings.push({
+            id: meaningMatch[1],
+            pinyin: meaningMatch[2],
+            tone: parseInt(meaningMatch[3], 10),
+            meaning_ja: meaningMatch[4],
+            is_default: meaningMatch[5] === 'true',
+          });
+        }
+
+        if (meanings.length > 0) {
+          charMeanings.set(charId, meanings);
+        }
+      }
+
+      // Analyze each segment for polyphonic characters
+      interface PinyinAnalysis {
+        segmentIndex: number;
+        position: number;
+        char: string;
+        defaultPinyin: string;
+        defaultMeaning: string;
+        isPolyphonic: boolean;
+        alternatives?: Array<{
+          meaning_id: string;
+          pinyin: string;
+          meaning_ja: string;
+        }>;
+      }
+
+      const pinyinAnalysis: PinyinAnalysis[] = [];
+
+      for (let segIdx = 0; segIdx < segments.length; segIdx++) {
+        const segment = segments[segIdx];
+        const text = segment.text;
+
+        for (let pos = 0; pos < text.length; pos++) {
+          const char = text[pos];
+
+          // Skip non-CJK characters
+          const code = char.charCodeAt(0);
+          const isCJK =
+            (code >= 0x4e00 && code <= 0x9fff) ||
+            (code >= 0x3400 && code <= 0x4dbf);
+          if (!isCJK) continue;
+
+          const meanings = charMeanings.get(char);
+          if (!meanings || meanings.length === 0) continue;
+
+          const defaultMeaning = meanings.find((m) => m.is_default);
+          if (!defaultMeaning) continue;
+
+          const analysis: PinyinAnalysis = {
+            segmentIndex: segIdx,
+            position: pos,
+            char,
+            defaultPinyin: defaultMeaning.pinyin,
+            defaultMeaning: defaultMeaning.meaning_ja,
+            isPolyphonic: meanings.length > 1,
+          };
+
+          // Include alternatives for polyphonic characters
+          if (meanings.length > 1) {
+            analysis.alternatives = meanings
+              .filter((m) => !m.is_default)
+              .map((m) => ({
+                meaning_id: m.id,
+                pinyin: m.pinyin,
+                meaning_ja: m.meaning_ja,
+              }));
+          }
+
+          pinyinAnalysis.push(analysis);
+        }
+      }
+
+      // Filter to only show polyphonic characters for review
+      const polyphonicChars = pinyinAnalysis.filter((a) => a.isPolyphonic);
+
+      const responseText =
+        polyphonicChars.length > 0
+          ? `Successfully wrote content to ${filePath}
+
+=== Pinyin Analysis (Review Required) ===
+The following polyphonic characters were found. Please verify the default reading is correct for the context:
+
+${polyphonicChars
+  .map(
+    (a) =>
+      `- Segment ${a.segmentIndex}, position ${a.position}: "${a.char}"
+    Default: ${a.defaultPinyin} (${a.defaultMeaning})
+    Alternatives: ${a.alternatives?.map((alt) => `${alt.pinyin} (${alt.meaning_ja}) → use meaning_id: "${alt.meaning_id}"`).join(', ')}`,
+  )
+  .join('\n\n')}
+
+If any reading needs to be changed, call write_content_yaml again with hanzi_overrides.`
+          : `Successfully wrote content to ${filePath}
+
+No polyphonic characters found that need review.`;
+
       return {
         content: [
           {
             type: 'text',
-            text: `Successfully wrote content to ${filePath}`,
+            text: responseText,
           },
         ],
       };
@@ -289,6 +449,113 @@ export function registerContentTools(server: McpServer): void {
                 path: filePath,
                 raw: yamlContent,
                 parsed,
+              },
+              null,
+              2,
+            ),
+          },
+        ],
+      };
+    },
+  );
+
+  // Get polyphonic character information
+  const GetPolyphonicInfoSchema = z.object({
+    char: z
+      .string()
+      .optional()
+      .describe(
+        'Specific character to look up. If omitted, returns all polyphonic characters.',
+      ),
+  });
+
+  server.registerTool(
+    'get_polyphonic_info',
+    {
+      description:
+        'Get information about polyphonic characters (多音字) from hanzi-dictionary. ' +
+        'Use this to determine which meaning_id to use for hanzi_overrides.',
+      inputSchema: GetPolyphonicInfoSchema.shape,
+    },
+    async ({ char }) => {
+      // Load hanzi dictionary
+      const hanziDictPath = path.join(
+        PROJECT_ROOT,
+        'src/data/hanzi-dictionary.ts',
+      );
+      const hanziDictContent = fs.readFileSync(hanziDictPath, 'utf-8');
+
+      // Parse the dictionary to find entries with multiple meanings
+      interface Meaning {
+        id: string;
+        pinyin: string;
+        tone: number;
+        meaning_ja: string;
+        is_default: boolean;
+      }
+
+      interface PolyphonicEntry {
+        char: string;
+        meanings: Meaning[];
+      }
+
+      const polyphonics: PolyphonicEntry[] = [];
+
+      // Use regex to extract entries (simplified parsing)
+      const entryRegex =
+        /\{\s*id:\s*'([^']+)',\s*meanings:\s*\[([\s\S]*?)\],\s*is_common/g;
+      const meaningRegex =
+        /\{\s*id:\s*'([^']+)',[\s\S]*?pinyin:\s*'([^']+)',\s*tone:\s*(\d+),\s*meaning_ja:\s*'([^']+)',\s*is_default:\s*(true|false)/g;
+
+      for (const entryMatch of hanziDictContent.matchAll(entryRegex)) {
+        const charId = entryMatch[1];
+        const meaningsStr = entryMatch[2];
+
+        // Only include if looking for specific char or if it has multiple meanings
+        const meanings: Meaning[] = [];
+        for (const meaningMatch of meaningsStr.matchAll(meaningRegex)) {
+          meanings.push({
+            id: meaningMatch[1],
+            pinyin: meaningMatch[2],
+            tone: parseInt(meaningMatch[3], 10),
+            meaning_ja: meaningMatch[4],
+            is_default: meaningMatch[5] === 'true',
+          });
+        }
+
+        // Filter: only polyphonic (2+ meanings) or matching specific char
+        if (char) {
+          if (charId === char && meanings.length > 0) {
+            polyphonics.push({ char: charId, meanings });
+          }
+        } else if (meanings.length >= 2) {
+          polyphonics.push({ char: charId, meanings });
+        }
+      }
+
+      if (polyphonics.length === 0) {
+        return {
+          content: [
+            {
+              type: 'text',
+              text: char
+                ? `Character "${char}" not found or has only one meaning.`
+                : 'No polyphonic characters found.',
+            },
+          ],
+        };
+      }
+
+      return {
+        content: [
+          {
+            type: 'text',
+            text: JSON.stringify(
+              {
+                count: polyphonics.length,
+                polyphonics,
+                usage:
+                  'Use meaning_id in hanzi_overrides to specify which reading to use for TTS.',
               },
               null,
               2,
