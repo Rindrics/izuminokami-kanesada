@@ -45,5 +45,8 @@ next-env.d.ts
 # auto-generated files
 src/generated/
 
-# Google Cloud redential files
+# generated audio files (uploaded to Firebase Storage)
+audio/
+
+# Google Cloud credential files
 pj-*.json

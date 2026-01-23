@@ -7,6 +7,9 @@ settings:
 importers:
   .:
     dependencies:
+      '@google-cloud/text-to-speech':
+        specifier: ^6.4.0
+        version: 6.4.0
       firebase-admin:
         specifier: ^13.6.0
         version: 13.6.0(encoding@0.1.13)
@@ -934,6 +937,13 @@ packages:
         integrity: sha512-r3ZwDMiz4nwW6R922Z1pwpePxyRwE5GdevYX63hRmAQUkUQJcBH/79EnQPDv5cOv1mFBgevdNWQfi3tie3dHrQ==,
       }
     engines: { node: '>=14' }
+
+  '@google-cloud/text-to-speech@6.4.0':
+    resolution:
+      {
+        integrity: sha512-KUnK+mBYz9aegxHrBbwEignOkGRqXvqOXs/EGY7CAJhMFKuNSieW02/PV/ipVRsJM11MP69qgTgEetoyAN0HAg==,
+      }
+    engines: { node: '>=18' }
 
   '@googleapis/sqladmin@35.0.0':
     resolution:
@@ -9445,6 +9455,12 @@ snapshots:
       - encoding
       - supports-color
     optional: true
+
+  '@google-cloud/text-to-speech@6.4.0':
+    dependencies:
+      google-gax: 5.0.6
+    transitivePeerDependencies:
+      - supports-color
 
   '@googleapis/sqladmin@35.0.0':
     dependencies:
