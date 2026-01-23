@@ -154,6 +154,64 @@ export function registerContentTools(server: McpServer): void {
       // Create directory if not exists
       fs.mkdirSync(dirPath, { recursive: true });
 
+      // Detect narration patterns and validate speaker assignments (ADR-0021)
+      // Narration verbs that indicate third-person narration
+      const NARRATION_VERBS = ['問', '曰', '答', '對', '謂', '告', '言', '云'];
+
+      interface NarrationWarning {
+        segmentIndex: number;
+        text: string;
+        currentSpeaker: string | null;
+        suggestedSpeaker: null;
+        reason: string;
+      }
+
+      const narrationWarnings: NarrationWarning[] = [];
+
+      for (let i = 0; i < segments.length; i++) {
+        const segment = segments[i];
+        const text = segment.text;
+
+        // Skip if speaker is already null (narrator)
+        if (segment.speaker === null) {
+          continue;
+        }
+
+        // Check if segment matches narration pattern: "CharacterName + NarrationVerb + ..."
+        // Pattern: 1-3 characters (potential character name) followed by a narration verb
+        for (
+          let nameLen = 1;
+          nameLen <= 3 && nameLen < text.length;
+          nameLen++
+        ) {
+          const potentialName = text.slice(0, nameLen);
+          const nextChar = text[nameLen];
+
+          if (NARRATION_VERBS.includes(nextChar)) {
+            // This looks like narration: "CharacterName + Verb"
+            // If speaker is set to a character ID, it should be null (narrator)
+            // We check if the speaker matches the potential name or is in mentioned list
+            const isSpeakerMatchingName =
+              segment.speaker === potentialName ||
+              (mentioned.includes(segment.speaker) &&
+                mentioned.includes(potentialName));
+
+            if (isSpeakerMatchingName || segment.speaker !== null) {
+              narrationWarnings.push({
+                segmentIndex: i,
+                text,
+                currentSpeaker: segment.speaker,
+                suggestedSpeaker: null,
+                reason: `This appears to be narration ("${potentialName}${nextChar}"), not direct speech. Speaker should be null (narrator) per ADR-0021.`,
+              });
+              // Auto-fix: set speaker to null
+              segment.speaker = null;
+              break; // Found a match, no need to check other lengths
+            }
+          }
+        }
+      }
+
       // Build YAML content
       const yamlLines: string[] = ['segments:'];
       for (const segment of segments) {
@@ -293,11 +351,23 @@ export function registerContentTools(server: McpServer): void {
       const yamlContent = `${yamlLines.join('\n')}\n`;
       fs.writeFileSync(filePath, yamlContent);
 
-      const responseText =
-        polyphonicChars.length > 0
-          ? `Successfully wrote content to ${filePath}
+      // Build response text with warnings
+      let responseText = `Successfully wrote content to ${filePath}\n`;
 
-⚠️ pinyin_reviewed: false (多音字の確認が必要)
+      // Add narration warnings if any
+      if (narrationWarnings.length > 0) {
+        responseText += `\n⚠️ Narration pattern detected and auto-corrected (ADR-0021):\n`;
+        for (const warning of narrationWarnings) {
+          responseText += `- Segment ${warning.segmentIndex}: "${warning.text}"
+    Changed speaker from "${warning.currentSpeaker}" to null (narrator)
+    Reason: ${warning.reason}\n`;
+        }
+        responseText += `\n`;
+      }
+
+      // Add pinyin review status
+      if (polyphonicChars.length > 0) {
+        responseText += `⚠️ pinyin_reviewed: false (多音字の確認が必要)
 
 === Pinyin Analysis (Review Required) ===
 The following polyphonic characters were found. Please verify the default reading is correct for the context:
@@ -312,10 +382,10 @@ ${polyphonicChars
   .join('\n\n')}
 
 After reviewing, call write_content_yaml again with hanzi_overrides if needed.
-Then call set_pinyin_reviewed to mark the content as reviewed before generating audio.`
-          : `Successfully wrote content to ${filePath}
-
-✓ pinyin_reviewed: true (多音字なし、音声生成可能)`;
+Then call set_pinyin_reviewed to mark the content as reviewed before generating audio.`;
+      } else {
+        responseText += `\n✓ pinyin_reviewed: true (多音字なし、音声生成可能)`;
+      }
 
       return {
         content: [
