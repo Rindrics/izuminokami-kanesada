@@ -46,7 +46,7 @@ next-env.d.ts
 src/generated/
 
 # generated audio files (uploaded to Firebase Storage)
-audio/
+/audio/
 
 # Google Cloud credential files
 pj-*.json
