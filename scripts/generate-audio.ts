@@ -212,12 +212,19 @@ function getPinyinWithTone(
 const VOICE_CONFIG = {
   chinese: {
     languageCode: 'cmn-CN',
-    name: 'cmn-CN-Wavenet-C',
-    ssmlGender: 'MALE' as const,
+    // Default voice (used for single-voice generation)
+    name: 'cmn-CN-Wavenet-A',
+    ssmlGender: 'FEMALE' as const,
+    // Speaker-specific voices for multi-voice generation
+    speakers: {
+      narrator: 'cmn-CN-Wavenet-A', // Female - for narration (子曰, etc.)
+      kongzi: 'cmn-CN-Wavenet-C', // Male - Confucius
+      other: 'cmn-CN-Wavenet-B', // Male - other characters
+    },
   },
   japanese: {
     languageCode: 'ja-JP',
-    name: 'ja-JP-Wavenet-B',
+    name: 'ja-JP-Wavenet-C',
     ssmlGender: 'MALE' as const,
   },
 };
@@ -291,12 +298,27 @@ function placeholdersToSsml(text: string): string {
 }
 
 /**
+ * Get the voice name for a speaker
+ */
+function getVoiceForSpeaker(speaker: string | null): string {
+  const speakers = VOICE_CONFIG.chinese.speakers;
+  if (speaker === null) {
+    return speakers.narrator;
+  }
+  if (speaker === 'kongzi') {
+    return speakers.kongzi;
+  }
+  return speakers.other;
+}
+
+/**
  * Convert a segment to SSML with phoneme tags for each character
  * e.g., "子曰" -> '<phoneme alphabet="x-pinyin" ph="zi3">子</phoneme><phoneme alphabet="x-pinyin" ph="yue1">曰</phoneme>'
  */
 function segmentToSsmlWithPhonemes(
   hanziDict: Map<string, HanziMeaning[]>,
   segment: InputSegment,
+  options?: { wrapWithVoice?: boolean },
 ): string {
   const text = segment.text;
   const overrides = segment.hanzi_overrides ?? [];
@@ -355,27 +377,35 @@ function segmentToSsmlWithPhonemes(
     }
   }
 
+  // Wrap with voice tag if requested (for multi-voice Chinese)
+  if (options?.wrapWithVoice) {
+    const voiceName = getVoiceForSpeaker(segment.speaker);
+    result = `<voice name="${voiceName}">${result}</voice>`;
+  }
+
   return result;
 }
 
 /**
- * Convert Chinese text to SSML with phoneme tags
+ * Convert Chinese text to SSML with phoneme tags and multi-voice support
  * - Uses <phoneme alphabet="x-pinyin" ph="...">漢字</phoneme> for each character
+ * - Uses <voice name="..."> tags to switch voices by speaker
  * - Adds pauses between segments and after punctuation
  */
 export function toChineseSsml(
   hanziDict: Map<string, HanziMeaning[]>,
   segments: InputSegment[],
 ): string {
-  // Convert each segment to SSML with phoneme tags
+  // Convert each segment to SSML with phoneme tags and voice tags
   const ssmlSegments = segments.map((s) =>
-    segmentToSsmlWithPhonemes(hanziDict, s),
+    segmentToSsmlWithPhonemes(hanziDict, s, { wrapWithVoice: true }),
   );
 
   // Join segments with clause pause placeholder
   let text = ssmlSegments.join(PLACEHOLDER.clauseEnd);
 
-  // Add pause placeholders after punctuation
+  // Add pause placeholders after punctuation (but not inside voice tags)
+  // We need to handle this carefully since punctuation is inside voice tags
   text = text
     .replace(/。/g, `。${PLACEHOLDER.sentenceEnd}`)
     .replace(/，/g, `，${PLACEHOLDER.clauseEnd}`);
@@ -510,15 +540,19 @@ async function main(): Promise<void> {
 
   console.log('\nGenerating audio...');
 
-  // Chinese audio
-  console.log('  - Chinese (cmn-CN-Wavenet-C)...');
+  // Chinese audio (multi-voice)
+  const { speakers } = VOICE_CONFIG.chinese;
+  console.log('  - Chinese (multi-voice)...');
+  console.log(`      Narrator: ${speakers.narrator}`);
+  console.log(`      Kongzi: ${speakers.kongzi}`);
+  console.log(`      Others: ${speakers.other}`);
   const chineseAudio = await generateAudio(client, chineseSsml, 'chinese');
   const chineseOutputPath = path.join(outputDir, `${chapterId}-zh.mp3`);
   fs.writeFileSync(chineseOutputPath, chineseAudio);
   console.log(`    Saved: ${chineseOutputPath}`);
 
   // Japanese onyomi audio
-  console.log('  - Japanese Onyomi (ja-JP-Wavenet-B)...');
+  console.log(`  - Japanese Onyomi (${VOICE_CONFIG.japanese.name})...`);
   const japaneseAudio = await generateAudio(
     client,
     japaneseOnyomiSsml,
