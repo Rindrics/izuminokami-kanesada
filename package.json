@@ -13,6 +13,7 @@
     "validate:contents": "tsx scripts/validate-content-diff.ts",
     "validate:contents:all": "tsx scripts/validate-content-diff.ts --all",
     "generate:audio": "tsx scripts/generate-audio.ts",
+    "validate:audio-manifest": "tsx scripts/validate-audio-manifest.ts",
     "start": "next start -p 30600",
     "lint": "eslint",
     "check": "biome check src",
