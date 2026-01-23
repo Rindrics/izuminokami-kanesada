@@ -466,6 +466,9 @@ export function HakubunWithTabs({ segments }: Props) {
             const isNarration = segment.speaker === null;
             const prevSegment = segments[index - 1];
             const prevIsNarration = prevSegment && prevSegment.speaker === null;
+            const prevSpeaker = prevSegment?.speaker;
+            const speakerChanged =
+              prevSegment && prevSpeaker !== segment.speaker;
 
             // Speech after narration: wrap in block with indent
             if (!isNarration && prevIsNarration) {
@@ -478,6 +481,19 @@ export function HakubunWithTabs({ segments }: Props) {
                     text={segment.text}
                     mode={mode}
                     isNarration={false}
+                  />
+                </div>
+              );
+            }
+
+            // Speaker changed: force line break
+            if (speakerChanged) {
+              return (
+                <div key={`${segment.start_pos}-${segment.end_pos}`}>
+                  <TextWithRuby
+                    text={segment.text}
+                    mode={mode}
+                    isNarration={isNarration}
                   />
                 </div>
               );
