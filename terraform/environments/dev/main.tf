@@ -27,3 +27,18 @@ module "tts_service_account" {
   project_id  = var.project_id
   environment = var.environment
 }
+
+module "audio_storage" {
+  source = "../../modules/audio-storage"
+
+  project_id            = var.project_id
+  environment           = var.environment
+  location              = var.region
+  service_account_email = module.tts_service_account.service_account_email
+
+  cors_origins = [
+    "http://localhost:30600",
+    "https://${var.project_id}.web.app",
+    "https://${var.project_id}.firebaseapp.com"
+  ]
+}
