@@ -174,9 +174,10 @@ export function registerContentTools(server: McpServer): void {
       yamlLines.push(`mentioned: [${mentioned.join(', ')}]`);
       yamlLines.push(`japanese: ${japanese}`);
 
-      const yamlContent = `${yamlLines.join('\n')}\n`;
-
-      fs.writeFileSync(filePath, yamlContent);
+      // Will be set after polyphonic character analysis
+      // Placeholder - actual value determined below
+      const pinyinReviewedLineIndex = yamlLines.length;
+      yamlLines.push('pinyin_reviewed: false'); // Default, will be updated
 
       // Analyze pinyin for polyphonic characters
       const hanziDictPath = path.join(
@@ -284,9 +285,19 @@ export function registerContentTools(server: McpServer): void {
       // Filter to only show polyphonic characters for review
       const polyphonicChars = pinyinAnalysis.filter((a) => a.isPolyphonic);
 
+      // Set pinyin_reviewed based on whether there are polyphonic characters
+      const pinyinReviewed = polyphonicChars.length === 0;
+      yamlLines[pinyinReviewedLineIndex] = `pinyin_reviewed: ${pinyinReviewed}`;
+
+      // Write the YAML file with the correct pinyin_reviewed value
+      const yamlContent = `${yamlLines.join('\n')}\n`;
+      fs.writeFileSync(filePath, yamlContent);
+
       const responseText =
         polyphonicChars.length > 0
           ? `Successfully wrote content to ${filePath}
+
+⚠️ pinyin_reviewed: false (多音字の確認が必要)
 
 === Pinyin Analysis (Review Required) ===
 The following polyphonic characters were found. Please verify the default reading is correct for the context:
@@ -300,10 +311,11 @@ ${polyphonicChars
   )
   .join('\n\n')}
 
-If any reading needs to be changed, call write_content_yaml again with hanzi_overrides.`
+After reviewing, call write_content_yaml again with hanzi_overrides if needed.
+Then call set_pinyin_reviewed to mark the content as reviewed before generating audio.`
           : `Successfully wrote content to ${filePath}
 
-No polyphonic characters found that need review.`;
+✓ pinyin_reviewed: true (多音字なし、音声生成可能)`;
 
       return {
         content: [
@@ -563,6 +575,154 @@ No polyphonic characters found that need review.`;
           },
         ],
       };
+    },
+  );
+
+  // Set pinyin_reviewed flag
+  server.registerTool(
+    'set_pinyin_reviewed',
+    {
+      description:
+        'Mark content as pinyin-reviewed after verifying polyphonic character readings. ' +
+        'Call this after reviewing and setting hanzi_overrides if needed.',
+      inputSchema: ReadContentYamlSchema.shape,
+    },
+    async ({ bookId, sectionId, chapterId }) => {
+      const yamlPath = path.join(
+        PROJECT_ROOT,
+        'contents/input',
+        bookId,
+        sectionId,
+        `${chapterId}.yaml`,
+      );
+
+      if (!fs.existsSync(yamlPath)) {
+        return {
+          content: [
+            {
+              type: 'text',
+              text: `Content file not found: ${yamlPath}`,
+            },
+          ],
+          isError: true,
+        };
+      }
+
+      const yamlContent = fs.readFileSync(yamlPath, 'utf-8');
+      const parsed = yaml.parse(yamlContent);
+
+      if (parsed.pinyin_reviewed === true) {
+        return {
+          content: [
+            {
+              type: 'text',
+              text: `Content is already marked as pinyin_reviewed: true`,
+            },
+          ],
+        };
+      }
+
+      // Update the flag
+      parsed.pinyin_reviewed = true;
+
+      // Write back (preserving structure)
+      const updatedYaml = yaml.stringify(parsed, { lineWidth: 0 });
+      fs.writeFileSync(yamlPath, updatedYaml);
+
+      return {
+        content: [
+          {
+            type: 'text',
+            text: `✓ Set pinyin_reviewed: true for ${bookId}/${sectionId}/${chapterId}\n\nYou can now call generate_audio.`,
+          },
+        ],
+      };
+    },
+  );
+
+  // Generate audio for content
+  server.registerTool(
+    'generate_audio',
+    {
+      description:
+        'Generate audio files (Chinese and Japanese) for a content using Google Cloud TTS. ' +
+        'Requires pinyin_reviewed: true in the YAML file and GOOGLE_APPLICATION_CREDENTIALS environment variable.',
+      inputSchema: ReadContentYamlSchema.shape,
+    },
+    async ({ bookId, sectionId, chapterId }) => {
+      const yamlPath = path.join(
+        PROJECT_ROOT,
+        'contents/input',
+        bookId,
+        sectionId,
+        `${chapterId}.yaml`,
+      );
+
+      if (!fs.existsSync(yamlPath)) {
+        return {
+          content: [
+            {
+              type: 'text',
+              text: `Content file not found: ${yamlPath}`,
+            },
+          ],
+          isError: true,
+        };
+      }
+
+      // Check pinyin_reviewed flag
+      const yamlContent = fs.readFileSync(yamlPath, 'utf-8');
+      const parsed = yaml.parse(yamlContent);
+
+      if (parsed.pinyin_reviewed !== true) {
+        return {
+          content: [
+            {
+              type: 'text',
+              text: `❌ Cannot generate audio: pinyin_reviewed is not true.
+
+Please follow this workflow:
+1. Review polyphonic characters using get_polyphonic_info
+2. Update hanzi_overrides if needed using write_content_yaml
+3. Call set_pinyin_reviewed to mark as reviewed
+4. Then call generate_audio again`,
+            },
+          ],
+          isError: true,
+        };
+      }
+
+      try {
+        const output = execSync(
+          `pnpm generate:audio ${bookId} ${sectionId} ${chapterId}`,
+          {
+            cwd: PROJECT_ROOT,
+            encoding: 'utf-8',
+            timeout: 120000, // 2 minutes timeout for TTS API calls
+          },
+        );
+
+        return {
+          content: [
+            {
+              type: 'text',
+              text: `Audio generation successful:\n${output}`,
+            },
+          ],
+        };
+      } catch (error) {
+        const errorMessage =
+          error instanceof Error ? error.message : String(error);
+        return {
+          content: [
+            {
+              type: 'text',
+              text: `Audio generation failed:\n${errorMessage}`,
+            },
+          ],
+          isError: true,
+        };
+      }
     },
   );
 
