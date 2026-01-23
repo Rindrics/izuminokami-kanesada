@@ -298,17 +298,20 @@ function placeholdersToSsml(text: string): string {
 }
 
 /**
- * Get the voice name for a speaker
+ * Get the voice name and pitch for a speaker
  */
-function getVoiceForSpeaker(speaker: string | null): string {
+function getVoiceForSpeaker(speaker: string | null): {
+  name: string;
+  pitch?: string;
+} {
   const speakers = VOICE_CONFIG.chinese.speakers;
   if (speaker === null) {
-    return speakers.narrator;
+    return { name: speakers.narrator };
   }
   if (speaker === 'kongzi') {
-    return speakers.kongzi;
+    return { name: speakers.kongzi, pitch: '-40%' }; // Lower pitch for Confucius
   }
-  return speakers.other;
+  return { name: speakers.other, pitch: '+20%' }; // Higher pitch for other characters
 }
 
 /**
@@ -379,8 +382,13 @@ function segmentToSsmlWithPhonemes(
 
   // Wrap with voice tag if requested (for multi-voice Chinese)
   if (options?.wrapWithVoice) {
-    const voiceName = getVoiceForSpeaker(segment.speaker);
-    result = `<voice name="${voiceName}">${result}</voice>`;
+    const { name: voiceName, pitch } = getVoiceForSpeaker(segment.speaker);
+    if (pitch) {
+      // Add prosody tag for pitch adjustment
+      result = `<voice name="${voiceName}"><prosody pitch="${pitch}">${result}</prosody></voice>`;
+    } else {
+      result = `<voice name="${voiceName}">${result}</voice>`;
+    }
   }
 
   return result;
