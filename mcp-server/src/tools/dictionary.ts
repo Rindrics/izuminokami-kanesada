@@ -27,6 +27,12 @@ const KunyomiEntrySchema = z.object({
     .describe('Ruby reading in hiragana (e.g., "まな" or "ゆうし")'),
 });
 
+const UpdateOnyomiSchema = z.object({
+  character: z.string().describe('Chinese character (e.g., "天")'),
+  pinyin: z.string().describe('Pinyin with tone mark (e.g., "tiān")'),
+  onyomi: z.string().describe('Onyomi reading in katakana (e.g., "テン")'),
+});
+
 /**
  * Append an entry to an array in a TypeScript file
  * Looks for the closing `];` of the array and inserts before it
@@ -254,6 +260,73 @@ export function registerDictionaryTools(server: McpServer): void {
             {
               type: 'text',
               text: `Failed to add Kunyomi entry: ${errorMessage}`,
+            },
+          ],
+          isError: true,
+        };
+      }
+    },
+  );
+
+  // Update onyomi for existing hanzi entry
+  server.registerTool(
+    'update_hanzi_onyomi',
+    {
+      description:
+        'Update the onyomi reading for an existing hanzi dictionary entry. ' +
+        'Use this when onyomi is set to "TODO" and needs to be registered.',
+      inputSchema: UpdateOnyomiSchema,
+    },
+    async ({ character, pinyin, onyomi }) => {
+      const filePath = path.join(PROJECT_ROOT, 'src/data/hanzi-dictionary.ts');
+
+      try {
+        let content = fs.readFileSync(filePath, 'utf-8');
+
+        // Find the entry for this character and pinyin
+        // Pattern: id: 'character-pinyin', onyomi: 'TODO', pinyin: 'pinyin', ...
+        const meaningId = `${character}-${pinyin}`;
+        const pattern = new RegExp(
+          `(id:\\s*'${meaningId.replace(
+            /[.*+?^${}()|[\]\\]/g,
+            '\\$&',
+          )}',[^}]*onyomi:\\s*')TODO'`,
+          's',
+        );
+
+        if (!pattern.test(content)) {
+          return {
+            content: [
+              {
+                type: 'text',
+                text: `Entry not found for character "${character}" with pinyin "${pinyin}" and onyomi "TODO". Please check the dictionary file.`,
+              },
+            ],
+            isError: true,
+          };
+        }
+
+        // Replace 'TODO' with the actual onyomi
+        content = content.replace(pattern, `$1${onyomi}'`);
+
+        fs.writeFileSync(filePath, content);
+
+        return {
+          content: [
+            {
+              type: 'text',
+              text: `Successfully updated onyomi for ${character} (${pinyin}): TODO -> ${onyomi}`,
+            },
+          ],
+        };
+      } catch (error) {
+        const errorMessage =
+          error instanceof Error ? error.message : String(error);
+        return {
+          content: [
+            {
+              type: 'text',
+              text: `Failed to update onyomi: ${errorMessage}`,
             },
           ],
           isError: true,

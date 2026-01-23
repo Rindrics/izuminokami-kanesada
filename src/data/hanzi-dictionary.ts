@@ -2197,6 +2197,286 @@ export const hanziDictionary: HanziEntry[] = [
     ],
     is_common: true,
   },
+  {
+    id: '顏',
+    meanings: [
+      {
+        id: '顏-yán',
+        onyomi: 'ガン',
+        pinyin: 'yán',
+        tone: 2,
+        meaning_ja: 'かお',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '淵',
+    meanings: [
+      {
+        id: '淵-yuān',
+        onyomi: 'エン',
+        pinyin: 'yuān',
+        tone: 1,
+        meaning_ja: 'ふち',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '克',
+    meanings: [
+      {
+        id: '克-kè',
+        onyomi: 'コク',
+        pinyin: 'kè',
+        tone: 4,
+        meaning_ja: 'かつ',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '復',
+    meanings: [
+      {
+        id: '復-fù',
+        onyomi: 'フク',
+        pinyin: 'fù',
+        tone: 4,
+        meaning_ja: 'また',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '禮',
+    meanings: [
+      {
+        id: '禮-lǐ',
+        onyomi: 'リツ',
+        pinyin: 'lǐ',
+        tone: 3,
+        meaning_ja: 'れい',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '一',
+    meanings: [
+      {
+        id: '一-yī',
+        onyomi: 'イ',
+        pinyin: 'yī',
+        tone: 1,
+        meaning_ja: 'いち',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '天',
+    meanings: [
+      {
+        id: '天-tiān',
+        onyomi: 'テン',
+        pinyin: 'tiān',
+        tone: 1,
+        meaning_ja: 'てん',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '下',
+    meanings: [
+      {
+        id: '下-xià',
+        onyomi: 'カ',
+        pinyin: 'xià',
+        tone: 4,
+        meaning_ja: 'した',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '焉',
+    meanings: [
+      {
+        id: '焉-yān',
+        onyomi: 'ゲン',
+        pinyin: 'yān',
+        tone: 1,
+        meaning_ja: 'これ',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '哉',
+    meanings: [
+      {
+        id: '哉-zāi',
+        onyomi: 'サイ',
+        pinyin: 'zāi',
+        tone: 1,
+        meaning_ja: 'かな',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '請',
+    meanings: [
+      {
+        id: '請-qǐng',
+        onyomi: 'セイ',
+        pinyin: 'qǐng',
+        tone: 3,
+        meaning_ja: 'こ',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '目',
+    meanings: [
+      {
+        id: '目-mù',
+        onyomi: 'モク',
+        pinyin: 'mù',
+        tone: 4,
+        meaning_ja: 'もく',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '非',
+    meanings: [
+      {
+        id: '非-fēi',
+        onyomi: 'ヒ',
+        pinyin: 'fēi',
+        tone: 1,
+        meaning_ja: 'あらず',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '視',
+    meanings: [
+      {
+        id: '視-shì',
+        onyomi: 'ジ',
+        pinyin: 'shì',
+        tone: 4,
+        meaning_ja: 'みる',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '聽',
+    meanings: [
+      {
+        id: '聽-tīng',
+        onyomi: 'チョウ',
+        pinyin: 'tīng',
+        tone: 1,
+        meaning_ja: 'きく',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '動',
+    meanings: [
+      {
+        id: '動-dòng',
+        onyomi: 'ドウ',
+        pinyin: 'dòng',
+        tone: 4,
+        meaning_ja: 'うごく',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '回',
+    meanings: [
+      {
+        id: '回-huí',
+        onyomi: 'カイ',
+        pinyin: 'huí',
+        tone: 2,
+        meaning_ja: 'まわす',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '敏',
+    meanings: [
+      {
+        id: '敏-mǐn',
+        onyomi: 'ミン',
+        pinyin: 'mǐn',
+        tone: 3,
+        meaning_ja: 'さとい',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '斯',
+    meanings: [
+      {
+        id: '斯-sī',
+        onyomi: 'シ',
+        pinyin: 'sī',
+        tone: 1,
+        meaning_ja: 'これ',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '歸',
+    meanings: [
+      {
+        id: '歸-guī',
+        onyomi: 'キ',
+        pinyin: 'guī',
+        tone: 1,
+        meaning_ja: 'かえる',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
 ];
 
 const hanziMap = new Map(hanziDictionary.map((e) => [e.id, e]));

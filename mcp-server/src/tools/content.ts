@@ -280,6 +280,7 @@ export function registerContentTools(server: McpServer): void {
         pinyin: string;
         tone: number;
         meaning_ja: string;
+        onyomi: string;
         is_default: boolean;
       }
 
@@ -287,7 +288,7 @@ export function registerContentTools(server: McpServer): void {
       const entryRegex =
         /\{\s*id:\s*'([^']+)',\s*meanings:\s*\[([\s\S]*?)\],\s*is_common/g;
       const meaningRegex =
-        /\{\s*id:\s*'([^']+)',[\s\S]*?pinyin:\s*'([^']+)',\s*tone:\s*(\d+),\s*meaning_ja:\s*'([^']+)',\s*is_default:\s*(true|false)/g;
+        /\{\s*id:\s*'([^']+)',[\s\S]*?onyomi:\s*'([^']+)',[\s\S]*?pinyin:\s*'([^']+)',\s*tone:\s*(\d+),\s*meaning_ja:\s*'([^']+)',\s*is_default:\s*(true|false)/g;
 
       for (const entryMatch of hanziDictContent.matchAll(entryRegex)) {
         const charId = entryMatch[1];
@@ -297,10 +298,11 @@ export function registerContentTools(server: McpServer): void {
         for (const meaningMatch of meaningsStr.matchAll(meaningRegex)) {
           meanings.push({
             id: meaningMatch[1],
-            pinyin: meaningMatch[2],
-            tone: parseInt(meaningMatch[3], 10),
-            meaning_ja: meaningMatch[4],
-            is_default: meaningMatch[5] === 'true',
+            onyomi: meaningMatch[2],
+            pinyin: meaningMatch[3],
+            tone: parseInt(meaningMatch[4], 10),
+            meaning_ja: meaningMatch[5],
+            is_default: meaningMatch[6] === 'true',
           });
         }
 
@@ -309,13 +311,14 @@ export function registerContentTools(server: McpServer): void {
         }
       }
 
-      // Analyze each segment for polyphonic characters
+      // Analyze each segment for polyphonic characters and missing onyomi
       interface PinyinAnalysis {
         segmentIndex: number;
         position: number;
         char: string;
         defaultPinyin: string;
         defaultMeaning: string;
+        defaultOnyomi: string;
         isPolyphonic: boolean;
         alternatives?: Array<{
           meaning_id: string;
@@ -325,6 +328,13 @@ export function registerContentTools(server: McpServer): void {
       }
 
       const pinyinAnalysis: PinyinAnalysis[] = [];
+      const missingOnyomiChars: Array<{
+        segmentIndex: number;
+        position: number;
+        char: string;
+        pinyin: string;
+        meaning_ja: string;
+      }> = [];
 
       for (let segIdx = 0; segIdx < segments.length; segIdx++) {
         const segment = segments[segIdx];
@@ -352,8 +362,20 @@ export function registerContentTools(server: McpServer): void {
             char,
             defaultPinyin: defaultMeaning.pinyin,
             defaultMeaning: defaultMeaning.meaning_ja,
+            defaultOnyomi: defaultMeaning.onyomi,
             isPolyphonic: meanings.length > 1,
           };
+
+          // Check if onyomi is missing (TODO)
+          if (defaultMeaning.onyomi === 'TODO') {
+            missingOnyomiChars.push({
+              segmentIndex: segIdx,
+              position: pos,
+              char,
+              pinyin: defaultMeaning.pinyin,
+              meaning_ja: defaultMeaning.meaning_ja,
+            });
+          }
 
           // Include alternatives for polyphonic characters
           if (meanings.length > 1) {
@@ -426,6 +448,26 @@ After reviewing, call write_content_yaml again with hanzi_overrides if needed.
 Then call set_pinyin_reviewed to mark the content as reviewed before generating audio.`;
       } else {
         responseText += `\n✓ pinyin_reviewed: true (多音字なし、音声生成可能)`;
+      }
+
+      // Check for missing onyomi (TODO)
+      if (missingOnyomiChars.length > 0) {
+        responseText += `\n\n⚠️ Missing Onyomi (音読み未登録)
+
+=== Onyomi Registration Required ===
+The following characters have onyomi set to "TODO" in hanzi-dictionary. Please register onyomi readings:
+
+${missingOnyomiChars
+  .map(
+    (a) =>
+      `- Segment ${a.segmentIndex}, position ${a.position}: "${a.char}"
+    Pinyin: ${a.pinyin}
+    Meaning: ${a.meaning_ja}
+    Action: Use update_hanzi_onyomi tool with character="${a.char}", pinyin="${a.pinyin}", onyomi="適切な音読み"`,
+  )
+  .join('\n\n')}
+
+Note: Onyomi is required for Japanese audio generation (onyomi reading).`;
       }
 
       // Step 3: Generate contents and validate
