@@ -16,18 +16,7 @@ import * as fs from 'node:fs';
 import * as path from 'node:path';
 import textToSpeech from '@google-cloud/text-to-speech';
 import yaml from 'js-yaml';
-
-// Kunyomi dictionary types (simplified for this script)
-interface KunyomiReading {
-  ruby: string;
-  okurigana?: string;
-  is_default: boolean;
-}
-
-interface KunyomiEntry {
-  text: string;
-  readings: KunyomiReading[];
-}
+import { convertToOnyomi, ONYOMI_PAUSE_PLACEHOLDER } from '../src/lib/ruby';
 
 // Hanzi dictionary types
 interface HanziMeaning {
@@ -35,29 +24,6 @@ interface HanziMeaning {
   pinyin: string;
   tone: number;
   is_default: boolean;
-}
-
-interface HanziEntry {
-  id: string;
-  meanings: HanziMeaning[];
-}
-
-// Load kunyomi dictionary dynamically
-function loadKunyomiDictionary(): KunyomiEntry[] {
-  const dictPath = path.join(process.cwd(), 'src/data/kunyomi-dictionary.ts');
-  const content = fs.readFileSync(dictPath, 'utf-8');
-
-  const match = content.match(
-    /export const kunyomiDictionary: KunyomiEntry\[\] = (\[[\s\S]*?\]);/,
-  );
-  if (!match) {
-    console.warn('Warning: Could not load kunyomi dictionary');
-    return [];
-  }
-
-  // biome-ignore lint/security/noGlobalEval: Safe - reading from local file
-  const data = eval(match[1]) as KunyomiEntry[];
-  return data;
 }
 
 // Load hanzi dictionary dynamically
@@ -162,57 +128,6 @@ function getPinyinWithTone(
   // Convert to numeric tone format: "yuè" + tone 4 -> "yue4"
   const plainPinyin = removeToneMarks(meaning.pinyin);
   return `${plainPinyin}${meaning.tone}`;
-}
-
-// Get default reading from dictionary
-function getDefaultReading(
-  dictionary: KunyomiEntry[],
-  text: string,
-): string | undefined {
-  const entry = dictionary.find((e) => e.text === text);
-  if (!entry) return undefined;
-  const defaultReading = entry.readings.find((r) => r.is_default);
-  if (!defaultReading) return undefined;
-  return defaultReading.ruby + (defaultReading.okurigana ?? '');
-}
-
-// Find longest matching entry starting at position in text
-function findLongestMatch(
-  dictionary: KunyomiEntry[],
-  fullText: string,
-  startPos: number,
-): { text: string; reading: string; length: number } | undefined {
-  // Try longer matches first (up to 4 characters for compound words)
-  for (let len = 4; len >= 1; len--) {
-    const substr = fullText.slice(startPos, startPos + len);
-    if (substr.length < len) continue;
-
-    const reading = getDefaultReading(dictionary, substr);
-    if (reading) {
-      return { text: substr, reading, length: len };
-    }
-  }
-  return undefined;
-}
-
-// Convert Japanese text to hiragana using kunyomi dictionary
-function convertToHiragana(dictionary: KunyomiEntry[], text: string): string {
-  let result = '';
-  let pos = 0;
-
-  while (pos < text.length) {
-    const match = findLongestMatch(dictionary, text, pos);
-    if (match) {
-      result += match.reading;
-      pos += match.length;
-    } else {
-      // Keep the character as-is (hiragana, punctuation, etc.)
-      result += text[pos];
-      pos++;
-    }
-  }
-
-  return result;
 }
 
 // Voice configuration
@@ -394,20 +309,27 @@ export function toChineseSsml(
 }
 
 /**
- * Convert Japanese text to SSML with pauses
- * - Converts kanji to hiragana using kunyomi dictionary
- * - Adds pauses after punctuation for natural reading
+ * Convert Chinese segments to Japanese onyomi SSML
+ * - Converts each hanzi to its Japanese onyomi (katakana) reading
+ * - Adds pauses at same positions as Chinese (spaces, semicolons, segment boundaries)
  */
-export function toJapaneseSsml(
-  dictionary: KunyomiEntry[],
-  japanese: string,
-): string {
-  // Convert kanji to hiragana
-  const hiragana = convertToHiragana(dictionary, japanese);
+export function toJapaneseOnyomiSsml(segments: InputSegment[]): string {
+  // Convert each segment to onyomi (with pause placeholders)
+  const onyomiSegments = segments.map((s) => convertToOnyomi(s.text));
+
+  // Join segments with clause pause placeholder
+  let text = onyomiSegments.join(PLACEHOLDER.clauseEnd);
+
+  // Convert onyomi pause placeholders to our standard placeholders
+  text = text.replace(
+    new RegExp(ONYOMI_PAUSE_PLACEHOLDER, 'g'),
+    PLACEHOLDER.clauseEnd,
+  );
 
   // Add pause placeholders after punctuation
-  const text = hiragana
+  text = text
     .replace(/。/g, `。${PLACEHOLDER.sentenceEnd}`)
+    .replace(/，/g, `，${PLACEHOLDER.clauseEnd}`)
     .replace(/、/g, `、${PLACEHOLDER.clauseEnd}`);
 
   // Convert placeholders to SSML (with deduplication)
@@ -489,19 +411,17 @@ async function main(): Promise<void> {
   console.log(`Reading: ${yamlPath}`);
   const content = parseYamlContent(yamlPath);
 
-  // Load dictionaries
-  console.log('Loading dictionaries...');
-  const kunyomiDict = loadKunyomiDictionary();
-  console.log(`  Kunyomi: ${kunyomiDict.length} entries`);
+  // Load hanzi dictionary
+  console.log('Loading hanzi dictionary...');
   const hanziDict = loadHanziDictionary();
   console.log(`  Hanzi: ${hanziDict.size} entries`);
 
   // Convert to SSML with pauses and phonemes
   const chineseSsml = toChineseSsml(hanziDict, content.segments);
-  const japaneseSsml = toJapaneseSsml(kunyomiDict, content.japanese);
+  const japaneseOnyomiSsml = toJapaneseOnyomiSsml(content.segments);
 
   console.log(`\nChinese SSML:\n${chineseSsml}`);
-  console.log(`\nJapanese SSML:\n${japaneseSsml}`);
+  console.log(`\nJapanese Onyomi SSML:\n${japaneseOnyomiSsml}`);
 
   // Initialize TTS client
   const client = new textToSpeech.TextToSpeechClient();
@@ -519,9 +439,13 @@ async function main(): Promise<void> {
   fs.writeFileSync(chineseOutputPath, chineseAudio);
   console.log(`    Saved: ${chineseOutputPath}`);
 
-  // Japanese audio
-  console.log('  - Japanese (ja-JP-Wavenet-B)...');
-  const japaneseAudio = await generateAudio(client, japaneseSsml, 'japanese');
+  // Japanese onyomi audio
+  console.log('  - Japanese Onyomi (ja-JP-Wavenet-B)...');
+  const japaneseAudio = await generateAudio(
+    client,
+    japaneseOnyomiSsml,
+    'japanese',
+  );
   const japaneseOutputPath = path.join(outputDir, `${chapterId}-ja.mp3`);
   fs.writeFileSync(japaneseOutputPath, japaneseAudio);
   console.log(`    Saved: ${japaneseOutputPath}`);
