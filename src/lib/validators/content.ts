@@ -300,6 +300,38 @@ function validateNoPunctuation(segments: Segment[]): ValidationError[] {
 }
 
 /**
+ * Validate that consecutive segments by the same speaker are merged
+ * Same speaker's consecutive speech should be in a single segment
+ * separated by spaces or semicolons, not split into multiple segments
+ */
+function validateConsecutiveSameSpeaker(
+  segments: Segment[],
+): ValidationError[] {
+  const errors: ValidationError[] = [];
+
+  for (let i = 1; i < segments.length; i++) {
+    const prevSegment = segments[i - 1];
+    const currentSegment = segments[i];
+
+    // Skip if either segment is narration (speaker: null)
+    if (prevSegment.speaker === null || currentSegment.speaker === null) {
+      continue;
+    }
+
+    // Check if same speaker
+    if (prevSegment.speaker === currentSegment.speaker) {
+      errors.push({
+        path: `segments[${i - 1}].speaker`,
+        message: `Consecutive segments by the same speaker "${prevSegment.speaker}" should be merged into a single segment. Use spaces or semicolons to separate phrases within the segment text instead of splitting into multiple segments.`,
+        severity: 'warning',
+      });
+    }
+  }
+
+  return errors;
+}
+
+/**
  * Validate connection markers (ADR-0007)
  * - `-` must have characters before and after
  * - No consecutive `-`
@@ -560,19 +592,22 @@ export function validateContent(content: Content): ValidationResult {
   // 3. Validate no punctuation in segments
   errors.push(...validateNoPunctuation(content.segments));
 
-  // 4. Validate connection markers
+  // 4. Validate consecutive same speaker segments
+  errors.push(...validateConsecutiveSameSpeaker(content.segments));
+
+  // 5. Validate connection markers
   errors.push(...validateConnectionMarkers(content.text));
 
-  // 5. Validate speakers
+  // 6. Validate speakers
   errors.push(...validateSpeakers(content));
 
-  // 6. Validate speakers and mentioned are in person master
+  // 7. Validate speakers and mentioned are in person master
   errors.push(...validatePersonsInMaster(content));
 
-  // 7. Validate hanzi in text are in hanzi-dictionary (pinyin)
+  // 8. Validate hanzi in text are in hanzi-dictionary (pinyin)
   errors.push(...validateHanziInDictionary(content.text));
 
-  // 8. Validate kanji in japanese are in kunyomi-dictionary (reading)
+  // 9. Validate kanji in japanese are in kunyomi-dictionary (reading)
   errors.push(...validateKunyomiInDictionary(content.japanese));
 
   const hasErrors = errors.some((e) => e.severity === 'error');

@@ -212,6 +212,36 @@ export function registerContentTools(server: McpServer): void {
         }
       }
 
+      // Detect consecutive segments by the same speaker
+      interface ConsecutiveSpeakerWarning {
+        segmentIndex: number;
+        prevSegmentIndex: number;
+        speaker: string;
+        reason: string;
+      }
+
+      const consecutiveSpeakerWarnings: ConsecutiveSpeakerWarning[] = [];
+
+      for (let i = 1; i < segments.length; i++) {
+        const prevSegment = segments[i - 1];
+        const currentSegment = segments[i];
+
+        // Skip if either segment is narration (speaker: null)
+        if (prevSegment.speaker === null || currentSegment.speaker === null) {
+          continue;
+        }
+
+        // Check if same speaker
+        if (prevSegment.speaker === currentSegment.speaker) {
+          consecutiveSpeakerWarnings.push({
+            segmentIndex: i,
+            prevSegmentIndex: i - 1,
+            speaker: currentSegment.speaker,
+            reason: `Consecutive segments by the same speaker "${currentSegment.speaker}" should be merged into a single segment. Use spaces or semicolons to separate phrases within the segment text instead of splitting into multiple segments.`,
+          });
+        }
+      }
+
       // Build YAML content
       const yamlLines: string[] = ['segments:'];
       for (const segment of segments) {
@@ -361,6 +391,17 @@ export function registerContentTools(server: McpServer): void {
           responseText += `- Segment ${warning.segmentIndex}: "${warning.text}"
     Changed speaker from "${warning.currentSpeaker}" to null (narrator)
     Reason: ${warning.reason}\n`;
+        }
+        responseText += `\n`;
+      }
+
+      // Add consecutive same speaker warnings if any
+      if (consecutiveSpeakerWarnings.length > 0) {
+        responseText += `\n⚠️ Consecutive segments by the same speaker detected:\n`;
+        for (const warning of consecutiveSpeakerWarnings) {
+          responseText += `- Segments ${warning.prevSegmentIndex} and ${warning.segmentIndex}: speaker "${warning.speaker}"
+    Reason: ${warning.reason}
+    Suggestion: Merge these segments into one, using spaces or semicolons to separate phrases.\n`;
         }
         responseText += `\n`;
       }
