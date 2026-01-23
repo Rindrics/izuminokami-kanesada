@@ -909,4 +909,148 @@ Please follow this workflow:
       };
     },
   );
+
+  // Upload audio to Cloud Storage
+  server.registerTool(
+    'upload_audio',
+    {
+      description:
+        'Upload generated audio files to Cloud Storage. ' +
+        'If local files are missing, automatically regenerates them first. ' +
+        'Requires GCS_BUCKET and GOOGLE_APPLICATION_CREDENTIALS environment variables.',
+      inputSchema: ReadContentYamlSchema.shape,
+    },
+    async ({ bookId, sectionId, chapterId }) => {
+      const contentId = `${bookId}/${sectionId}/${chapterId}`;
+      const manifestPath = path.join(PROJECT_ROOT, 'audio-manifest.json');
+      const audioDir = path.join(PROJECT_ROOT, 'audio');
+
+      // Check manifest exists
+      if (!fs.existsSync(manifestPath)) {
+        return {
+          content: [
+            {
+              type: 'text',
+              text: `Audio manifest not found: ${manifestPath}\nRun generate_audio first.`,
+            },
+          ],
+          isError: true,
+        };
+      }
+
+      // Read manifest
+      const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf-8'));
+      const entry = manifest[contentId];
+
+      if (!entry) {
+        return {
+          content: [
+            {
+              type: 'text',
+              text: `Content "${contentId}" not found in manifest.\nRun generate_audio first.`,
+            },
+          ],
+          isError: true,
+        };
+      }
+
+      // Check if local files exist, regenerate if missing
+      const zhPath = path.join(
+        audioDir,
+        bookId,
+        sectionId,
+        `${chapterId}-zh.mp3`,
+      );
+      const jaPath = path.join(
+        audioDir,
+        bookId,
+        sectionId,
+        `${chapterId}-ja.mp3`,
+      );
+
+      const zhMissing = !fs.existsSync(zhPath);
+      const jaMissing = !fs.existsSync(jaPath);
+
+      if (zhMissing || jaMissing) {
+        const missingFiles = [];
+        if (zhMissing) missingFiles.push('zh');
+        if (jaMissing) missingFiles.push('ja');
+
+        // Regenerate audio files
+        try {
+          execSync(`pnpm generate:audio ${bookId} ${sectionId} ${chapterId}`, {
+            cwd: PROJECT_ROOT,
+            encoding: 'utf-8',
+            timeout: 120000,
+          });
+        } catch (error) {
+          const errorMessage =
+            error instanceof Error ? error.message : String(error);
+          return {
+            content: [
+              {
+                type: 'text',
+                text: `Missing local files (${missingFiles.join(', ')}). Attempted regeneration but failed:\n${errorMessage}`,
+              },
+            ],
+            isError: true,
+          };
+        }
+
+        // Re-read manifest after regeneration
+        const updatedManifest = JSON.parse(
+          fs.readFileSync(manifestPath, 'utf-8'),
+        );
+        manifest[contentId] = updatedManifest[contentId];
+      }
+
+      // Run upload script
+      try {
+        const output = execSync(
+          `pnpm upload:audio ${bookId} ${sectionId} ${chapterId}`,
+          {
+            cwd: PROJECT_ROOT,
+            encoding: 'utf-8',
+            timeout: 120000,
+          },
+        );
+
+        return {
+          content: [
+            {
+              type: 'text',
+              text: `Upload successful:\n${output}`,
+            },
+          ],
+        };
+      } catch (error: unknown) {
+        // Extract detailed error information from execSync
+        let errorDetails = '';
+        if (error && typeof error === 'object') {
+          const execError = error as {
+            stdout?: string;
+            stderr?: string;
+            message?: string;
+          };
+          if (execError.stdout) {
+            errorDetails += `stdout:\n${execError.stdout}\n`;
+          }
+          if (execError.stderr) {
+            errorDetails += `stderr:\n${execError.stderr}\n`;
+          }
+        }
+        const errorMessage =
+          error instanceof Error ? error.message : String(error);
+        return {
+          content: [
+            {
+              type: 'text',
+              text: `Upload failed:\n${errorMessage}\n${errorDetails}`,
+            },
+          ],
+          isError: true,
+        };
+      }
+    },
+  );
 }

@@ -50,3 +50,5 @@ audio/
 
 # Google Cloud credential files
 pj-*.json
+
+.cursor/

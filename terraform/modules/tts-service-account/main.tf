@@ -16,7 +16,7 @@ resource "google_project_iam_member" "service_usage_consumer" {
   member  = "serviceAccount:${google_service_account.tts.email}"
 }
 
-# Storage Object Admin (for Firebase Storage)
+# Storage Object Admin (for Cloud Storage)
 resource "google_project_iam_member" "storage_admin" {
   project = var.project_id
   role    = "roles/storage.objectAdmin"

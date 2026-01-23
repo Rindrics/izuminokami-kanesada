@@ -7,6 +7,9 @@ settings:
 importers:
   .:
     dependencies:
+      '@google-cloud/storage':
+        specifier: ^7.16.0
+        version: 7.18.0(encoding@0.1.13)
       '@google-cloud/text-to-speech':
         specifier: ^6.4.0
         version: 6.4.0
@@ -9396,7 +9399,6 @@ snapshots:
     dependencies:
       arrify: 2.0.1
       extend: 3.0.2
-    optional: true
 
   '@google-cloud/paginator@6.0.0':
     dependencies:
@@ -9404,13 +9406,11 @@ snapshots:
 
   '@google-cloud/precise-date@5.0.0': {}
 
-  '@google-cloud/projectify@4.0.0':
-    optional: true
+  '@google-cloud/projectify@4.0.0': {}
 
   '@google-cloud/projectify@5.0.0': {}
 
-  '@google-cloud/promisify@4.0.0':
-    optional: true
+  '@google-cloud/promisify@4.0.0': {}
 
   '@google-cloud/promisify@5.0.0': {}
 
@@ -9454,7 +9454,6 @@ snapshots:
     transitivePeerDependencies:
       - encoding
       - supports-color
-    optional: true
 
   '@google-cloud/text-to-speech@6.4.0':
     dependencies:
@@ -10093,8 +10092,7 @@ snapshots:
       tslib: 2.8.1
     optional: true
 
-  '@types/caseless@0.12.5':
-    optional: true
+  '@types/caseless@0.12.5': {}
 
   '@types/chai@5.2.3':
     dependencies:
@@ -10147,10 +10145,8 @@ snapshots:
       '@types/node': 20.19.30
       '@types/tough-cookie': 4.0.5
       form-data: 2.5.5
-    optional: true
 
-  '@types/tough-cookie@4.0.5':
-    optional: true
+  '@types/tough-cookie@4.0.5': {}
 
   '@types/triple-beam@1.3.5': {}
 
@@ -10553,7 +10549,6 @@ snapshots:
   async-retry@1.3.3:
     dependencies:
       retry: 0.13.1
-    optional: true
 
   async@3.2.6: {}
 
@@ -11640,7 +11635,6 @@ snapshots:
   fast-xml-parser@4.5.3:
     dependencies:
       strnum: 1.1.2
-    optional: true
 
   fastq@1.20.1:
     dependencies:
@@ -11855,7 +11849,6 @@ snapshots:
       hasown: 2.0.2
       mime-types: 2.1.35
       safe-buffer: 5.2.1
-    optional: true
 
   form-data@4.0.5:
     dependencies:
@@ -12177,8 +12170,7 @@ snapshots:
     dependencies:
       lru-cache: 10.4.3
 
-  html-entities@2.6.0:
-    optional: true
+  html-entities@2.6.0: {}
 
   http-cache-semantics@4.2.0:
     optional: true
@@ -12874,8 +12866,7 @@ snapshots:
 
   mime@2.6.0: {}
 
-  mime@3.0.0:
-    optional: true
+  mime@3.0.0: {}
 
   mimic-fn@2.1.0: {}
 
@@ -13607,7 +13598,6 @@ snapshots:
     transitivePeerDependencies:
       - encoding
       - supports-color
-    optional: true
 
   retry-request@8.0.2:
     dependencies:
@@ -14041,8 +14031,7 @@ snapshots:
 
   strip-json-comments@3.1.1: {}
 
-  strnum@1.1.2:
-    optional: true
+  strnum@1.1.2: {}
 
   stubs@3.0.0: {}
 
@@ -14137,7 +14126,6 @@ snapshots:
     transitivePeerDependencies:
       - encoding
       - supports-color
-    optional: true
 
   text-decoder@1.2.3:
     dependencies:

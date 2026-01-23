@@ -26,7 +26,7 @@ import { convertToOnyomi, ONYOMI_PAUSE_PLACEHOLDER } from '../src/lib/ruby';
 
 interface AudioFileMetadata {
   generatedAt?: string; // ISO 8601 timestamp - present when generated locally, removed after upload
-  uploadedAt?: string; // ISO 8601 timestamp - present after Firebase Storage upload
+  uploadedAt?: string; // ISO 8601 timestamp - present after Cloud Storage upload
   hash: string; // SHA-256 hash of the audio file
 }
 

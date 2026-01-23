@@ -1,42 +1,42 @@
 {
   "lunyu/1/1": {
     "zh": {
-      "generatedAt": "2026-01-23T07:51:12.274Z",
-      "hash": "6dc027267cee0493918b393e0752363d07c75d45004b680d08f8c1ba7e113dab"
+      "hash": "6dc027267cee0493918b393e0752363d07c75d45004b680d08f8c1ba7e113dab",
+      "uploadedAt": "2026-01-23T13:25:19.823Z"
     },
     "ja": {
-      "generatedAt": "2026-01-23T07:51:12.274Z",
-      "hash": "82b579785049570c258346065a9d273d8f064c5265b4031503e5685ce74c0598"
+      "hash": "82b579785049570c258346065a9d273d8f064c5265b4031503e5685ce74c0598",
+      "uploadedAt": "2026-01-23T13:25:19.977Z"
     }
   },
   "lunyu/1/2": {
     "zh": {
-      "generatedAt": "2026-01-23T07:51:17.383Z",
-      "hash": "d8dc2b9092821a71344d54c57414093c0920ecb694f55b9d6187b2ffa50d8889"
+      "hash": "d8dc2b9092821a71344d54c57414093c0920ecb694f55b9d6187b2ffa50d8889",
+      "uploadedAt": "2026-01-23T13:27:00.763Z"
     },
     "ja": {
-      "generatedAt": "2026-01-23T07:51:17.383Z",
-      "hash": "4021fb8b94e0c0a529a9c239e19fa5ff39cedd12a56f3a3c5a2fc745baafeb6c"
+      "hash": "4021fb8b94e0c0a529a9c239e19fa5ff39cedd12a56f3a3c5a2fc745baafeb6c",
+      "uploadedAt": "2026-01-23T13:27:00.901Z"
     }
   },
   "lunyu/1/3": {
     "zh": {
-      "generatedAt": "2026-01-23T07:52:00.801Z",
-      "hash": "bf836c34ea81bca1d1a94792ad7cfeb328adcd69812d9cda0c7e66de9113db66"
+      "hash": "bf836c34ea81bca1d1a94792ad7cfeb328adcd69812d9cda0c7e66de9113db66",
+      "uploadedAt": "2026-01-23T13:27:02.018Z"
     },
     "ja": {
-      "generatedAt": "2026-01-23T07:52:00.801Z",
-      "hash": "878e474b810736f179947524732bbb76a42dd5ca304fcbe0244ba1590b3c4497"
+      "hash": "878e474b810736f179947524732bbb76a42dd5ca304fcbe0244ba1590b3c4497",
+      "uploadedAt": "2026-01-23T13:27:02.170Z"
     }
   },
   "lunyu/1/4": {
     "zh": {
-      "generatedAt": "2026-01-23T08:12:43.952Z",
-      "hash": "ec41f655e0faf738363dab445171e96fa86c3adf0298e943bfe5abae114e29e3"
+      "hash": "ec41f655e0faf738363dab445171e96fa86c3adf0298e943bfe5abae114e29e3",
+      "uploadedAt": "2026-01-23T13:27:03.371Z"
     },
     "ja": {
-      "generatedAt": "2026-01-23T08:12:43.952Z",
-      "hash": "eea07ecf4fe8fc97a861768b7a58cb1ae6a3643c2e6cb668c70207faf62d3b04"
+      "hash": "eea07ecf4fe8fc97a861768b7a58cb1ae6a3643c2e6cb668c70207faf62d3b04",
+      "uploadedAt": "2026-01-23T13:27:03.503Z"
     }
   }
 }
