@@ -14,7 +14,19 @@
  *   GCS_BUCKET - Cloud Storage bucket name (required for upload)
  */
 
-import { execSync } from 'node:child_process';
+import { execFileSync } from 'node:child_process';
+
+/**
+ * Validate input IDs to prevent command injection
+ * Only allows alphanumeric characters, dashes, and underscores
+ */
+function validateId(id: string, name: string): void {
+  if (!/^[a-zA-Z0-9_-]+$/.test(id)) {
+    throw new Error(
+      `Invalid ${name}: "${id}". Only alphanumeric characters, dashes, and underscores are allowed.`,
+    );
+  }
+}
 
 async function main(): Promise<void> {
   const args = process.argv.slice(2);
@@ -28,6 +40,18 @@ async function main(): Promise<void> {
   }
 
   const [bookId, sectionId, chapterId] = args;
+
+  // Validate inputs to prevent command injection
+  try {
+    validateId(bookId, 'bookId');
+    validateId(sectionId, 'sectionId');
+    validateId(chapterId, 'chapterId');
+  } catch (error) {
+    console.error('❌ Input validation failed:');
+    console.error(error instanceof Error ? error.message : String(error));
+    process.exit(1);
+  }
+
   const contentId = `${bookId}/${sectionId}/${chapterId}`;
 
   console.log(`=== Generate and Upload Audio: ${contentId} ===\n`);
@@ -35,8 +59,9 @@ async function main(): Promise<void> {
   // Step 1: Generate audio files
   console.log('Step 1: Generating audio files...\n');
   try {
-    execSync(
-      `pnpm tsx scripts/generate-audio.ts ${bookId} ${sectionId} ${chapterId}`,
+    execFileSync(
+      'pnpm',
+      ['tsx', 'scripts/generate-audio.ts', bookId, sectionId, chapterId],
       {
         stdio: 'inherit',
       },
@@ -49,8 +74,9 @@ async function main(): Promise<void> {
   // Step 2: Upload audio files
   console.log('\nStep 2: Uploading audio files to Cloud Storage...\n');
   try {
-    execSync(
-      `pnpm tsx scripts/upload-audio.ts ${bookId} ${sectionId} ${chapterId}`,
+    execFileSync(
+      'pnpm',
+      ['tsx', 'scripts/upload-audio.ts', bookId, sectionId, chapterId],
       {
         stdio: 'inherit',
       },
