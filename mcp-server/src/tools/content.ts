@@ -196,7 +196,8 @@ export function registerContentTools(server: McpServer): void {
               (mentioned.includes(segment.speaker) &&
                 mentioned.includes(potentialName));
 
-            if (isSpeakerMatchingName || segment.speaker !== null) {
+            if (isSpeakerMatchingName) {
+              // Auto-fix: speaker matches the name in narration, set to null
               narrationWarnings.push({
                 segmentIndex: i,
                 text,
@@ -204,9 +205,19 @@ export function registerContentTools(server: McpServer): void {
                 suggestedSpeaker: null,
                 reason: `This appears to be narration ("${potentialName}${nextChar}"), not direct speech. Speaker should be null (narrator) per ADR-0021.`,
               });
-              // Auto-fix: set speaker to null
               segment.speaker = null;
               break; // Found a match, no need to check other lengths
+            } else if (segment.speaker !== null) {
+              // Warning only: narration pattern detected but speaker doesn't match
+              // Don't auto-fix since we're not certain
+              narrationWarnings.push({
+                segmentIndex: i,
+                text,
+                currentSpeaker: segment.speaker,
+                suggestedSpeaker: null,
+                reason: `Narration pattern detected ("${potentialName}${nextChar}"), but speaker "${segment.speaker}" doesn't match "${potentialName}". Please review per ADR-0021.`,
+              });
+              // Don't modify segment.speaker - let user decide
             }
           }
         }
