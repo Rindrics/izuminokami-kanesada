@@ -48,17 +48,11 @@ export function MentionGraph({ graph, height = '600px' }: MentionGraphProps) {
       {
         selector: 'node[type = "person"]',
         style: {
-          width: chartTheme.cytoscape.node.width,
-          height: chartTheme.cytoscape.node.height,
-          shape: chartTheme.cytoscape.node.shape,
-          'border-width': chartTheme.cytoscape.node.borderWidth,
-          'border-color': chartTheme.cytoscape.node.borderColor,
-          label: chartTheme.cytoscape.node.label,
-          'text-valign': chartTheme.cytoscape.node.textValign,
-          'text-halign': chartTheme.cytoscape.node.textHalign,
-          color: chartTheme.cytoscape.node.textColor,
-          'font-size': chartTheme.cytoscape.node.fontSize,
-          'font-weight': chartTheme.cytoscape.node.fontWeight,
+          width: 'label',
+          height: 'label',
+          shape: 'round-rectangle',
+          'border-width': 2,
+          'border-color': chartTheme.colors.neutral[200],
           'background-color': (node) => {
             const nodeData = node.data() as { id: string };
             return (
@@ -66,6 +60,15 @@ export function MentionGraph({ graph, height = '600px' }: MentionGraphProps) {
               chartTheme.colors.primary[500]
             );
           },
+          label: chartTheme.cytoscape.node.label,
+          'text-valign': 'center',
+          'text-halign': 'center',
+          'text-wrap': 'wrap',
+          'text-max-width': 100,
+          color: chartTheme.cytoscape.node.textColor,
+          'font-size': chartTheme.cytoscape.node.fontSize,
+          'font-weight': chartTheme.cytoscape.node.fontWeight,
+          padding: 8,
         },
       },
       {
@@ -73,7 +76,7 @@ export function MentionGraph({ graph, height = '600px' }: MentionGraphProps) {
         style: {
           width: 50,
           height: 50,
-          shape: 'round-rectangle',
+          shape: 'ellipse', // Circle shape
           'border-width': 2,
           'border-color': chartTheme.colors.neutral[200],
           label: chartTheme.cytoscape.node.label,

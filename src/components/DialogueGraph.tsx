@@ -64,29 +64,46 @@ export function DialogueGraph({ graph, height = '600px' }: DialogueGraphProps) {
     // Cytoscape stylesheet
     const stylesheet: Stylesheet[] = [
       {
-        selector: 'node',
+        selector: 'node[type = "person"]',
         style: {
-          width: chartTheme.cytoscape.node.width,
-          height: chartTheme.cytoscape.node.height,
-          shape: chartTheme.cytoscape.node.shape,
-          'border-width': chartTheme.cytoscape.node.borderWidth,
-          'border-color': chartTheme.cytoscape.node.borderColor,
-          label: chartTheme.cytoscape.node.label,
-          'text-valign': chartTheme.cytoscape.node.textValign,
-          'text-halign': chartTheme.cytoscape.node.textHalign,
-          color: chartTheme.cytoscape.node.textColor,
-          'font-size': chartTheme.cytoscape.node.fontSize,
-          'font-weight': chartTheme.cytoscape.node.fontWeight,
+          width: 'label',
+          height: 'label',
+          shape: 'round-rectangle',
+          'border-width': 2,
+          'border-color': chartTheme.colors.neutral[200],
           'background-color': (node) => {
-            const nodeData = node.data() as { type: string; id: string };
-            if (nodeData.type === 'concept') {
-              return chartTheme.conceptColor;
-            }
+            const nodeData = node.data() as { id: string };
             return (
               chartTheme.personColors[nodeData.id] ||
               chartTheme.colors.primary[500]
             );
           },
+          label: chartTheme.cytoscape.node.label,
+          'text-valign': 'center',
+          'text-halign': 'center',
+          'text-wrap': 'wrap',
+          'text-max-width': 100,
+          color: chartTheme.cytoscape.node.textColor,
+          'font-size': chartTheme.cytoscape.node.fontSize,
+          'font-weight': chartTheme.cytoscape.node.fontWeight,
+          padding: 8,
+        },
+      },
+      {
+        selector: 'node[type = "concept"]',
+        style: {
+          width: 50,
+          height: 50,
+          shape: 'ellipse', // Circle shape
+          'border-width': 2,
+          'border-color': chartTheme.colors.neutral[200],
+          label: chartTheme.cytoscape.node.label,
+          'text-valign': chartTheme.cytoscape.node.textValign,
+          'text-halign': chartTheme.cytoscape.node.textHalign,
+          color: chartTheme.cytoscape.node.textColor,
+          'font-size': 18,
+          'font-weight': 'bold',
+          'background-color': chartTheme.conceptColor,
         },
       },
       {
