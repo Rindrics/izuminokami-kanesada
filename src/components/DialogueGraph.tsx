@@ -47,6 +47,7 @@ export function DialogueGraph({ graph, height = '600px' }: DialogueGraphProps) {
     x: number;
     y: number;
   } | null>(null);
+  const [isPinned, setIsPinned] = useState(false);
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -211,10 +212,32 @@ export function DialogueGraph({ graph, height = '600px' }: DialogueGraphProps) {
       tilingPaddingHorizontal: 50,
     });
 
-    layout.run();
+    cyRef.current = cy;
+
+    // Cleanup
+    return () => {
+      if (cyRef.current) {
+        cyRef.current.destroy();
+        cyRef.current = null;
+      }
+    };
+  }, [graph]);
+
+  // Separate effect for event handlers (doesn't trigger layout)
+  useEffect(() => {
+    if (!cyRef.current) return;
+
+    const cy = cyRef.current;
+
+    // Remove existing event handlers to avoid duplicates
+    cy.off('mouseover', 'edge');
+    cy.off('mouseout', 'edge');
+    cy.off('tap', 'edge');
+    cy.off('tap', 'node');
 
     // Handle edge hover to show popup with content links
     cy.on('mouseover', 'edge', (evt) => {
+      if (isPinned) return; // Don't update position if pinned
       const edge = evt.target;
       const edgeData = edge.data() as {
         originalEdge: GraphEdgeWithContentIds;
@@ -229,10 +252,30 @@ export function DialogueGraph({ graph, height = '600px' }: DialogueGraphProps) {
       });
     });
 
-    // Close popup when mouse leaves edge
+    // Handle edge click to pin popup
+    cy.on('tap', 'edge', (evt) => {
+      evt.stopPropagation(); // Prevent layout from being triggered
+      const edge = evt.target;
+      const edgeData = edge.data() as {
+        originalEdge: GraphEdgeWithContentIds;
+        contentIds: string[];
+      };
+      const pos = evt.renderedPosition || evt.position;
+
+      setSelectedEdge(edgeData.originalEdge);
+      setPopupPosition({
+        x: pos.x + (containerRef.current?.offsetLeft || 0),
+        y: pos.y + (containerRef.current?.offsetTop || 0),
+      });
+      setIsPinned(true);
+    });
+
+    // Close popup when mouse leaves edge (only if not pinned)
     cy.on('mouseout', 'edge', () => {
-      setSelectedEdge(null);
-      setPopupPosition(null);
+      if (!isPinned) {
+        setSelectedEdge(null);
+        setPopupPosition(null);
+      }
     });
 
     // Enable zoom and pan
@@ -240,17 +283,24 @@ export function DialogueGraph({ graph, height = '600px' }: DialogueGraphProps) {
       const node = evt.target;
       console.log('Node clicked:', node.data());
     });
+  }, [isPinned]);
 
-    cyRef.current = cy;
-
-    // Cleanup
-    return () => {
-      if (cyRef.current) {
-        cyRef.current.destroy();
-        cyRef.current = null;
+  // Handle ESC key to close popup (both hover and pinned states)
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && selectedEdge) {
+        setIsPinned(false);
+        setSelectedEdge(null);
+        setPopupPosition(null);
       }
     };
-  }, [graph]);
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [selectedEdge]);
 
   return (
     <div className="relative w-full rounded-lg border border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-900">
@@ -265,8 +315,15 @@ export function DialogueGraph({ graph, height = '600px' }: DialogueGraphProps) {
             marginTop: '-10px',
           }}
         >
-          <div className="mb-2 text-sm font-semibold text-zinc-900 dark:text-zinc-100">
-            関連コンテンツ ({selectedEdge.contentIds.length} 件)
+          <div className="mb-2 flex items-center justify-between">
+            <div className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+              関連コンテンツ ({selectedEdge.contentIds.length} 件)
+            </div>
+            {isPinned && (
+              <div className="text-xs text-zinc-400 dark:text-zinc-500">
+                ESC で閉じる
+              </div>
+            )}
           </div>
           <div className="max-h-60 space-y-1 overflow-y-auto">
             {selectedEdge.contentIds.map((contentId) => {
