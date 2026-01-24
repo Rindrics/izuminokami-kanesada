@@ -90,10 +90,7 @@ export function DialogueGraph({ graph, height = '600px' }: DialogueGraphProps) {
           'border-color': chartTheme.colors.neutral[200],
           'background-color': (node) => {
             const nodeData = node.data() as { id: string };
-            return (
-              chartTheme.personColors[nodeData.id] ||
-              chartTheme.colors.neutral[600]
-            );
+            return chartTheme.personColor;
           },
           label: chartTheme.cytoscape.node.label,
           'text-valign': 'center',

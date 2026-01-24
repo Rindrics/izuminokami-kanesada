@@ -51,25 +51,15 @@ const colors = {
   },
 } as const;
 
-// Person-specific colors (monochrome palette)
-// Using different shades of gray to distinguish persons
-const personColors: Record<string, string> = {
-  kongzi: '#1F2937', // gray-800 (darkest for Confucius)
-  zengzi: '#374151', // gray-700
-  youzi: '#4B5563', // gray-600
-  zixia: '#6B7280', // gray-500
-  zigong: '#9CA3AF', // gray-400
-  ziqin: '#D1D5DB', // gray-300
-  zilu: '#6B7280', // gray-500
-  yanyuan: '#4B5563', // gray-600
-};
+// Person node color (unified monochrome)
+const personColor = '#52525B'; // zinc-600
 
 // Concept colors (monochrome - using gray shades)
 const conceptColor = '#9CA3AF'; // gray-400
 
 export const chartTheme = {
   colors,
-  personColors,
+  personColor,
   conceptColor,
   fonts: {
     family: 'Noto Sans JP, sans-serif',
@@ -98,7 +88,7 @@ export const chartTheme = {
         if (node.data.type === 'concept') {
           return conceptColor;
         }
-        return personColors[node.data.id] || colors.primary[500];
+        return personColor;
       },
       borderWidth: 2,
       borderColor: colors.neutral[200],
