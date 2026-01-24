@@ -13,27 +13,11 @@ import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { getBookById, getSectionById } from '@/generated/books';
 import { getContentById } from '@/generated/contents';
-import type { GraphEdge } from '@/generated/stats';
+import type { GraphEdge, GraphNode, SpeakerGraph } from '@/generated/stats';
 import { chartTheme } from '@/lib/chart-theme';
 
 // Register fcose layout
 cytoscape.use(fcose);
-
-// Graph data types (temporary, will be imported from generated/stats.ts later)
-export interface GraphNode {
-  id: string;
-  type: 'person' | 'concept';
-  label: string;
-}
-
-export interface GraphEdgeWithContentIds extends GraphEdge {
-  contentIds: string[];
-}
-
-export interface SpeakerGraph {
-  nodes: GraphNode[];
-  edges: GraphEdgeWithContentIds[];
-}
 
 interface DialogueGraphProps {
   graph: SpeakerGraph;
@@ -43,8 +27,7 @@ interface DialogueGraphProps {
 export function DialogueGraph({ graph, height = '600px' }: DialogueGraphProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const cyRef = useRef<Core | null>(null);
-  const [selectedEdge, setSelectedEdge] =
-    useState<GraphEdgeWithContentIds | null>(null);
+  const [selectedEdge, setSelectedEdge] = useState<GraphEdge | null>(null);
   const [popupPosition, setPopupPosition] = useState<{
     x: number;
     y: number;
@@ -240,7 +223,7 @@ export function DialogueGraph({ graph, height = '600px' }: DialogueGraphProps) {
       if (isPinned) return; // Don't update position if pinned
       const edge = evt.target;
       const edgeData = edge.data() as {
-        originalEdge: GraphEdgeWithContentIds;
+        originalEdge: GraphEdge;
         contentIds: string[];
       };
       const pos = evt.renderedPosition || evt.position;
@@ -257,7 +240,7 @@ export function DialogueGraph({ graph, height = '600px' }: DialogueGraphProps) {
       evt.stopPropagation(); // Prevent layout from being triggered
       const edge = evt.target;
       const edgeData = edge.data() as {
-        originalEdge: GraphEdgeWithContentIds;
+        originalEdge: GraphEdge;
         contentIds: string[];
       };
       const pos = evt.renderedPosition || evt.position;

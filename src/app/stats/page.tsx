@@ -445,7 +445,7 @@ export default function StatsPage() {
               <p className="mb-3 text-sm text-zinc-500">
                 人物間の対話関係と人物から概念への言及関係を可視化（エッジの太さは言及回数に比例）
               </p>
-              <DialogueGraph graph={stats.dialogueGraph as any} />
+              <DialogueGraph graph={stats.dialogueGraph} />
             </section>
           )}
       </main>
