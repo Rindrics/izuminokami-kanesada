@@ -119,21 +119,24 @@ export function DialogueGraph({ graph, height = '600px' }: DialogueGraphProps) {
       style: stylesheet,
       layout: {
         name: 'cose',
-        idealEdgeLength: 100,
+        idealEdgeLength: 150,
         nodeOverlap: 20,
         refresh: 20,
         fit: true,
-        padding: 30,
+        padding: 50,
         randomize: false,
         componentSpacing: 100,
-        nodeRepulsion: 4500,
+        nodeRepulsion: 8000, // Increased to prevent node overlap
         edgeElasticity: 0.45,
         nestingFactor: 0.1,
         gravity: 0.25,
-        numIter: 2500,
+        numIter: 3000, // Increased iterations for better layout
         initialTemp: 200,
         coolingFactor: 0.95,
         minTemp: 1.0,
+        // Prevent node overlap
+        avoidOverlap: true,
+        nodeDimensionsIncludeLabels: true,
       },
     });
 
