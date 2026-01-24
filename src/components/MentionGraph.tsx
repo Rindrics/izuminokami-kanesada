@@ -7,9 +7,12 @@ import cytoscape, {
 } from 'cytoscape';
 // @ts-expect-error - cytoscape-fcose doesn't have TypeScript definitions
 import fcose from 'cytoscape-fcose';
-import { useEffect, useRef } from 'react';
+import Link from 'next/link';
+import { useEffect, useRef, useState } from 'react';
+import { getBookById, getSectionById } from '@/generated/books';
+import { getContentById } from '@/generated/contents';
 import { chartTheme } from '@/lib/chart-theme';
-import type { SpeakerGraph } from './DialogueGraph';
+import type { GraphEdgeWithContentIds, SpeakerGraph } from './DialogueGraph';
 
 // Register fcose layout
 cytoscape.use(fcose);
@@ -22,6 +25,12 @@ interface MentionGraphProps {
 export function MentionGraph({ graph, height = '600px' }: MentionGraphProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const cyRef = useRef<Core | null>(null);
+  const [selectedEdge, setSelectedEdge] =
+    useState<GraphEdgeWithContentIds | null>(null);
+  const [popupPosition, setPopupPosition] = useState<{
+    x: number;
+    y: number;
+  } | null>(null);
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -44,6 +53,8 @@ export function MentionGraph({ graph, height = '600px' }: MentionGraphProps) {
           target: edge.target,
           topic: edge.topic,
           weight: edge.weight,
+          contentIds: edge.contentIds,
+          originalEdge: edge, // Store original edge for popup
         },
       })),
     ];
@@ -164,6 +175,28 @@ export function MentionGraph({ graph, height = '600px' }: MentionGraphProps) {
 
     layout.run();
 
+    // Handle edge hover to show popup with content links
+    cy.on('mouseover', 'edge', (evt) => {
+      const edge = evt.target;
+      const edgeData = edge.data() as {
+        originalEdge: GraphEdgeWithContentIds;
+        contentIds: string[];
+      };
+      const pos = evt.renderedPosition || evt.position;
+
+      setSelectedEdge(edgeData.originalEdge);
+      setPopupPosition({
+        x: pos.x + (containerRef.current?.offsetLeft || 0),
+        y: pos.y + (containerRef.current?.offsetTop || 0),
+      });
+    });
+
+    // Close popup when mouse leaves edge
+    cy.on('mouseout', 'edge', () => {
+      setSelectedEdge(null);
+      setPopupPosition(null);
+    });
+
     // Enable zoom and pan
     cy.on('tap', 'node', (evt) => {
       const node = evt.target;
@@ -182,8 +215,50 @@ export function MentionGraph({ graph, height = '600px' }: MentionGraphProps) {
   }, [graph]);
 
   return (
-    <div className="w-full rounded-lg border border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-900">
+    <div className="relative w-full rounded-lg border border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-900">
       <div ref={containerRef} style={{ width: '100%', height }} />
+      {selectedEdge && popupPosition && (
+        <div
+          className="absolute z-10 rounded-lg border border-zinc-300 bg-white p-4 shadow-lg dark:border-zinc-600 dark:bg-zinc-800"
+          style={{
+            left: `${popupPosition.x}px`,
+            top: `${popupPosition.y}px`,
+            transform: 'translate(-50%, -100%)',
+            marginTop: '-10px',
+          }}
+        >
+          <div className="mb-2 text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+            関連コンテンツ ({selectedEdge.contentIds.length} 件)
+          </div>
+          <div className="max-h-60 space-y-1 overflow-y-auto">
+            {selectedEdge.contentIds.map((contentId) => {
+              const [bookId, sectionId, chapterId] = contentId.split('/');
+              const book = getBookById(bookId);
+              const section = getSectionById(bookId, sectionId);
+              const content = getContentById(contentId);
+              const preview = content?.text.slice(0, 30) ?? '';
+              return (
+                <Link
+                  key={contentId}
+                  href={`/books/${bookId}/${sectionId}/${chapterId}`}
+                  className="block rounded px-2 py-1 text-sm text-zinc-700 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-700"
+                >
+                  <div className="font-medium">
+                    {book?.name ?? bookId} /{' '}
+                    {section?.name ?? `第${sectionId}編`} / 第{chapterId}章
+                  </div>
+                  {preview && (
+                    <div className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
+                      {preview}
+                      {content && content.text.length > 30 && '…'}
+                    </div>
+                  )}
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

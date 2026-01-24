@@ -325,6 +325,7 @@ interface GraphEdge {
   target: string; // node id
   topic: string; // topic/concept (e.g., "仁", "禮")
   weight: number; // number of mentions (for edge thickness)
+  contentIds: string[]; // content IDs where this edge appears
 }
 
 interface SpeakerGraph {
@@ -529,12 +530,16 @@ function generateSpeakerGraphs(contents: OutputContent[]): {
           const existingEdge = mentionEdges.get(edgeKey);
           if (existingEdge) {
             existingEdge.weight += 1;
+            if (!existingEdge.contentIds.includes(content.content_id)) {
+              existingEdge.contentIds.push(content.content_id);
+            }
           } else {
             mentionEdges.set(edgeKey, {
               source: segment.speaker,
               target: concept,
               topic: concept,
               weight: 1,
+              contentIds: [content.content_id],
             });
           }
 
@@ -579,12 +584,16 @@ function generateSpeakerGraphs(contents: OutputContent[]): {
           const existingEdge = dialogueEdges.get(edgeKey);
           if (existingEdge) {
             existingEdge.weight += 1;
+            if (!existingEdge.contentIds.includes(content.content_id)) {
+              existingEdge.contentIds.push(content.content_id);
+            }
           } else {
             dialogueEdges.set(edgeKey, {
               source: prevSpeaker,
               target: segment.speaker,
               topic,
               weight: 1,
+              contentIds: [content.content_id],
             });
           }
 
@@ -623,12 +632,16 @@ function generateSpeakerGraphs(contents: OutputContent[]): {
             const existingEdge = dialogueEdges.get(edgeKey);
             if (existingEdge) {
               existingEdge.weight += 1;
+              if (!existingEdge.contentIds.includes(content.content_id)) {
+                existingEdge.contentIds.push(content.content_id);
+              }
             } else {
               dialogueEdges.set(edgeKey, {
                 source: segment.speaker,
                 target: concept,
                 topic: '', // Empty topic for person->concept edges
                 weight: 1,
+                contentIds: [content.content_id],
               });
             }
           }
@@ -678,12 +691,16 @@ function generateSpeakerGraphs(contents: OutputContent[]): {
             const existingEdge = dialogueEdges.get(edgeKey);
             if (existingEdge) {
               existingEdge.weight += 1;
+              if (!existingEdge.contentIds.includes(content.content_id)) {
+                existingEdge.contentIds.push(content.content_id);
+              }
             } else {
               dialogueEdges.set(edgeKey, {
                 source: questionerId,
                 target: addresseeId,
                 topic: questionMatch.topic,
                 weight: 1,
+                contentIds: [content.content_id],
               });
             }
 
@@ -945,6 +962,7 @@ export interface GraphEdge {
   target: string;
   topic: string;
   weight: number;
+  contentIds: string[];
 }
 
 export interface SpeakerGraph {
