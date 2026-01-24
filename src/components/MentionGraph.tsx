@@ -13,8 +13,8 @@ import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { getBookById, getSectionById } from '@/generated/books';
 import { getContentById } from '@/generated/contents';
+import type { GraphEdge, SpeakerGraph } from '@/generated/stats';
 import { chartTheme } from '@/lib/chart-theme';
-import type { GraphEdgeWithContentIds, SpeakerGraph } from './DialogueGraph';
 
 // Register fcose layout
 cytoscape.use(fcose);
@@ -27,8 +27,7 @@ interface MentionGraphProps {
 export function MentionGraph({ graph, height = '600px' }: MentionGraphProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const cyRef = useRef<Core | null>(null);
-  const [selectedEdge, setSelectedEdge] =
-    useState<GraphEdgeWithContentIds | null>(null);
+  const [selectedEdge, setSelectedEdge] = useState<GraphEdge | null>(null);
   const [popupPosition, setPopupPosition] = useState<{
     x: number;
     y: number;
@@ -204,7 +203,7 @@ export function MentionGraph({ graph, height = '600px' }: MentionGraphProps) {
       if (isPinned) return; // Don't update position if pinned
       const edge = evt.target;
       const edgeData = edge.data() as {
-        originalEdge: GraphEdgeWithContentIds;
+        originalEdge: GraphEdge;
         contentIds: string[];
       };
       const pos = evt.renderedPosition || evt.position;
@@ -221,7 +220,7 @@ export function MentionGraph({ graph, height = '600px' }: MentionGraphProps) {
       evt.stopPropagation(); // Prevent layout from being triggered
       const edge = evt.target;
       const edgeData = edge.data() as {
-        originalEdge: GraphEdgeWithContentIds;
+        originalEdge: GraphEdge;
         contentIds: string[];
       };
       const pos = evt.renderedPosition || evt.position;
