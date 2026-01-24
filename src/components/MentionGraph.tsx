@@ -73,7 +73,7 @@ export function MentionGraph({ graph, height = '600px' }: MentionGraphProps) {
             const nodeData = node.data() as { id: string };
             return (
               chartTheme.personColors[nodeData.id] ||
-              chartTheme.colors.primary[500]
+              chartTheme.colors.neutral[600]
             );
           },
           label: chartTheme.cytoscape.node.label,
@@ -98,7 +98,7 @@ export function MentionGraph({ graph, height = '600px' }: MentionGraphProps) {
           label: chartTheme.cytoscape.node.label,
           'text-valign': chartTheme.cytoscape.node.textValign,
           'text-halign': chartTheme.cytoscape.node.textHalign,
-          color: chartTheme.cytoscape.node.textColor,
+          color: '#FFFFFF', // White text for concept nodes
           'font-size': 18,
           'font-weight': 'bold',
           'background-color': chartTheme.conceptColor,

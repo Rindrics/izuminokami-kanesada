@@ -51,21 +51,21 @@ const colors = {
   },
 } as const;
 
-// Person-specific colors (for node coloring)
-// These can be extended as more persons are added
+// Person-specific colors (monochrome palette)
+// Using different shades of gray to distinguish persons
 const personColors: Record<string, string> = {
-  kongzi: '#EF4444', // red-500
-  zengzi: '#3B82F6', // blue-500
-  youzi: '#10B981', // emerald-500
-  zixia: '#8B5CF6', // violet-500
-  zigong: '#F59E0B', // amber-500
-  ziqin: '#06B6D4', // cyan-500
-  zilu: '#EC4899', // pink-500
-  yanyuan: '#14B8A6', // teal-500
+  kongzi: '#1F2937', // gray-800 (darkest for Confucius)
+  zengzi: '#374151', // gray-700
+  youzi: '#4B5563', // gray-600
+  zixia: '#6B7280', // gray-500
+  zigong: '#9CA3AF', // gray-400
+  ziqin: '#D1D5DB', // gray-300
+  zilu: '#6B7280', // gray-500
+  yanyuan: '#4B5563', // gray-600
 };
 
-// Concept colors (for concept nodes)
-const conceptColor = '#6366F1'; // indigo-500
+// Concept colors (monochrome - using gray shades)
+const conceptColor = '#9CA3AF'; // gray-400
 
 export const chartTheme = {
   colors,
@@ -117,8 +117,8 @@ export const chartTheme = {
         const normalizedWeight = Math.min(edge.data.weight || 1, 10);
         return min + (normalizedWeight / 10) * (max - min);
       },
-      lineColor: colors.primary[500],
-      targetArrowColor: colors.primary[500],
+      lineColor: '#000000', // Black edges
+      targetArrowColor: '#000000', // Black arrows
       targetArrowShape: 'triangle',
       curveStyle: 'bezier',
       label: 'data(topic)',
