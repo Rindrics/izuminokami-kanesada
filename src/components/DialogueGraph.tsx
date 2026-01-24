@@ -1,7 +1,11 @@
 'use client';
 
-import type { ElementDefinition, Stylesheet } from 'cytoscape';
-import CytoscapeComponent from 'react-cytoscapejs';
+import cytoscape, {
+  type Core,
+  type ElementDefinition,
+  type Stylesheet,
+} from 'cytoscape';
+import { useEffect, useRef } from 'react';
 import { chartTheme } from '@/lib/chart-theme';
 
 // Graph data types (temporary, will be imported from generated/stats.ts later)
@@ -29,114 +33,130 @@ interface DialogueGraphProps {
 }
 
 export function DialogueGraph({ graph, height = '600px' }: DialogueGraphProps) {
-  // Convert graph data to Cytoscape format
-  const elements: ElementDefinition[] = [
-    // Add nodes
-    ...graph.nodes.map((node) => ({
-      data: {
-        id: node.id,
-        label: node.label,
-        type: node.type,
-      },
-    })),
-    // Add edges
-    ...graph.edges.map((edge, index) => ({
-      data: {
-        id: `edge-${index}`,
-        source: edge.source,
-        target: edge.target,
-        topic: edge.topic,
-        weight: edge.weight,
-      },
-    })),
-  ];
+  const containerRef = useRef<HTMLDivElement>(null);
+  const cyRef = useRef<Core | null>(null);
 
-  // Cytoscape stylesheet
-  const stylesheet: Stylesheet[] = [
-    {
-      selector: 'node',
-      style: {
-        width: chartTheme.cytoscape.node.width,
-        height: chartTheme.cytoscape.node.height,
-        shape: chartTheme.cytoscape.node.shape,
-        'border-width': chartTheme.cytoscape.node.borderWidth,
-        'border-color': chartTheme.cytoscape.node.borderColor,
-        label: chartTheme.cytoscape.node.label,
-        'text-valign': chartTheme.cytoscape.node.textValign,
-        'text-halign': chartTheme.cytoscape.node.textHalign,
-        color: chartTheme.cytoscape.node.textColor,
-        'font-size': chartTheme.cytoscape.node.fontSize,
-        'font-weight': chartTheme.cytoscape.node.fontWeight,
-        'background-color': (node) => {
-          const nodeData = node.data() as { type: string; id: string };
-          if (nodeData.type === 'concept') {
-            return chartTheme.conceptColor;
-          }
-          return (
-            chartTheme.personColors[nodeData.id] ||
-            chartTheme.colors.primary[500]
-          );
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    // Convert graph data to Cytoscape format
+    const elements: ElementDefinition[] = [
+      // Add nodes
+      ...graph.nodes.map((node) => ({
+        data: {
+          id: node.id,
+          label: node.label,
+          type: node.type,
+        },
+      })),
+      // Add edges
+      ...graph.edges.map((edge, index) => ({
+        data: {
+          id: `edge-${index}`,
+          source: edge.source,
+          target: edge.target,
+          topic: edge.topic,
+          weight: edge.weight,
+        },
+      })),
+    ];
+
+    // Cytoscape stylesheet
+    const stylesheet: Stylesheet[] = [
+      {
+        selector: 'node',
+        style: {
+          width: chartTheme.cytoscape.node.width,
+          height: chartTheme.cytoscape.node.height,
+          shape: chartTheme.cytoscape.node.shape,
+          'border-width': chartTheme.cytoscape.node.borderWidth,
+          'border-color': chartTheme.cytoscape.node.borderColor,
+          label: chartTheme.cytoscape.node.label,
+          'text-valign': chartTheme.cytoscape.node.textValign,
+          'text-halign': chartTheme.cytoscape.node.textHalign,
+          color: chartTheme.cytoscape.node.textColor,
+          'font-size': chartTheme.cytoscape.node.fontSize,
+          'font-weight': chartTheme.cytoscape.node.fontWeight,
+          'background-color': (node) => {
+            const nodeData = node.data() as { type: string; id: string };
+            if (nodeData.type === 'concept') {
+              return chartTheme.conceptColor;
+            }
+            return (
+              chartTheme.personColors[nodeData.id] ||
+              chartTheme.colors.primary[500]
+            );
+          },
         },
       },
-    },
-    {
-      selector: 'edge',
-      style: {
-        width: (edge) => {
-          const edgeData = edge.data() as { weight: number };
-          const { min, max } = chartTheme.styles.edgeWidth;
-          // Normalize weight to edge width (assuming max weight is around 10)
-          const normalizedWeight = Math.min(edgeData.weight || 1, 10);
-          return min + (normalizedWeight / 10) * (max - min);
+      {
+        selector: 'edge',
+        style: {
+          width: (edge) => {
+            const edgeData = edge.data() as { weight: number };
+            const { min, max } = chartTheme.styles.edgeWidth;
+            // Normalize weight to edge width (assuming max weight is around 10)
+            const normalizedWeight = Math.min(edgeData.weight || 1, 10);
+            return min + (normalizedWeight / 10) * (max - min);
+          },
+          'line-color': chartTheme.cytoscape.edge.lineColor,
+          'target-arrow-color': chartTheme.cytoscape.edge.targetArrowColor,
+          'target-arrow-shape': chartTheme.cytoscape.edge.targetArrowShape,
+          'curve-style': chartTheme.cytoscape.edge.curveStyle,
+          label: chartTheme.cytoscape.edge.label,
+          'text-rotation': chartTheme.cytoscape.edge.textRotation,
+          'text-margin-y': chartTheme.cytoscape.edge.textMarginY,
+          'font-size': chartTheme.cytoscape.edge.fontSize,
+          color: chartTheme.cytoscape.edge.textColor,
         },
-        'line-color': chartTheme.cytoscape.edge.lineColor,
-        'target-arrow-color': chartTheme.cytoscape.edge.targetArrowColor,
-        'target-arrow-shape': chartTheme.cytoscape.edge.targetArrowShape,
-        'curve-style': chartTheme.cytoscape.edge.curveStyle,
-        label: chartTheme.cytoscape.edge.label,
-        'text-rotation': chartTheme.cytoscape.edge.textRotation,
-        'text-margin-y': chartTheme.cytoscape.edge.textMarginY,
-        'font-size': chartTheme.cytoscape.edge.fontSize,
-        color: chartTheme.cytoscape.edge.textColor,
       },
-    },
-  ];
+    ];
 
-  // Layout options
-  const layout = {
-    name: 'cose',
-    idealEdgeLength: 100,
-    nodeOverlap: 20,
-    refresh: 20,
-    fit: true,
-    padding: 30,
-    randomize: false,
-    componentSpacing: 100,
-    nodeRepulsion: 4500,
-    edgeElasticity: 0.45,
-    nestingFactor: 0.1,
-    gravity: 0.25,
-    numIter: 2500,
-    initialTemp: 200,
-    coolingFactor: 0.95,
-    minTemp: 1.0,
-  };
+    // Create Cytoscape instance
+    const cy = cytoscape({
+      container: containerRef.current,
+      elements,
+      style: stylesheet,
+      layout: {
+        name: 'cose',
+        idealEdgeLength: 100,
+        nodeOverlap: 20,
+        refresh: 20,
+        fit: true,
+        padding: 30,
+        randomize: false,
+        componentSpacing: 100,
+        nodeRepulsion: 4500,
+        edgeElasticity: 0.45,
+        nestingFactor: 0.1,
+        gravity: 0.25,
+        numIter: 2500,
+        initialTemp: 200,
+        coolingFactor: 0.95,
+        minTemp: 1.0,
+      },
+    });
+
+    // Enable zoom and pan
+    cy.on('tap', 'node', (evt) => {
+      const node = evt.target;
+      console.log('Node clicked:', node.data());
+    });
+
+    cyRef.current = cy;
+
+    // Cleanup
+    return () => {
+      if (cyRef.current) {
+        cyRef.current.destroy();
+        cyRef.current = null;
+      }
+    };
+  }, [graph]);
 
   return (
     <div className="w-full rounded-lg border border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-900">
-      <CytoscapeComponent
-        elements={elements}
-        style={{ width: '100%', height }}
-        stylesheet={stylesheet}
-        layout={layout}
-        cy={(cy) => {
-          // Enable zoom and pan
-          cy.on('tap', 'node', (evt) => {
-            const node = evt.target;
-            console.log('Node clicked:', node.data());
-          });
-        }}
-      />
+      <div ref={containerRef} style={{ width: '100%', height }} />
     </div>
   );
 }
