@@ -5,9 +5,14 @@ import cytoscape, {
   type ElementDefinition,
   type Stylesheet,
 } from 'cytoscape';
+// @ts-expect-error - cytoscape-fcose doesn't have TypeScript definitions
+import fcose from 'cytoscape-fcose';
 import { useEffect, useRef } from 'react';
 import { chartTheme } from '@/lib/chart-theme';
 import type { SpeakerGraph } from './DialogueGraph';
+
+// Register fcose layout
+cytoscape.use(fcose);
 
 interface MentionGraphProps {
   graph: SpeakerGraph;
@@ -116,28 +121,48 @@ export function MentionGraph({ graph, height = '600px' }: MentionGraphProps) {
       container: containerRef.current,
       elements,
       style: stylesheet,
-      layout: {
-        name: 'cose',
-        idealEdgeLength: 150,
-        nodeOverlap: 20,
-        refresh: 20,
-        fit: true,
-        padding: 50,
-        randomize: false,
-        componentSpacing: 100,
-        nodeRepulsion: 8000, // Increased to prevent node overlap
-        edgeElasticity: 0.45,
-        nestingFactor: 0.1,
-        gravity: 0.25,
-        numIter: 3000, // Increased iterations for better layout
-        initialTemp: 200,
-        coolingFactor: 0.95,
-        minTemp: 1.0,
-        // Prevent node overlap
-        avoidOverlap: true,
-        nodeDimensionsIncludeLabels: true,
-      },
     });
+
+    // Run layout with fcose (better overlap prevention)
+    const layout = cy.layout({
+      name: 'fcose',
+      quality: 'proof', // Use highest quality for best overlap prevention
+      randomize: true,
+      animate: false, // Disable animation for faster rendering
+      animationDuration: 0,
+      animationEasing: undefined,
+      fit: true,
+      padding: 100,
+      nodeDimensionsIncludeLabels: true,
+      uniformNodeDimensions: false,
+      packComponents: true, // Pack disconnected components separately
+      step: 'all', // Run all steps
+
+      // Node repulsion and spacing
+      nodeRepulsion: (node) => {
+        const nodeType = node.data('type');
+        // Concepts need more space
+        if (nodeType === 'concept') {
+          return 10000;
+        }
+        // Persons need even more space
+        return 15000;
+      },
+      idealEdgeLength: 300, // Longer edges for person-concept relationships
+      edgeElasticity: 0.1,
+      nestingFactor: 0.1,
+      gravity: 0.1,
+      gravityRangeCompound: 1.5,
+      gravityCompound: 1.0,
+      gravityRange: 3.8,
+      initialEnergyOnIncremental: 0.3,
+
+      // Tiling options for disconnected components
+      tilingPaddingVertical: 50,
+      tilingPaddingHorizontal: 50,
+    });
+
+    layout.run();
 
     // Enable zoom and pan
     cy.on('tap', 'node', (evt) => {

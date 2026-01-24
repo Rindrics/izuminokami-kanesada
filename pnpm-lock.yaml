@@ -16,6 +16,9 @@ importers:
       cytoscape:
         specifier: ^3.32.0
         version: 3.33.1
+      cytoscape-fcose:
+        specifier: ^2.2.0
+        version: 2.2.0(cytoscape@3.33.1)
       firebase-admin:
         specifier: ^13.6.0
         version: 13.6.0(encoding@0.1.13)
@@ -3507,6 +3510,12 @@ packages:
       }
     engines: { node: '>= 0.10' }
 
+  cose-base@2.2.0:
+    resolution:
+      {
+        integrity: sha512-AzlgcsCbUMymkADOJtQm3wO9S3ltPfYOFD5033keQn9NJzIbtnZj+UdBJe7DYml/8TdbtHJW3j58SOnKhWY/5g==,
+      }
+
   cosmiconfig-typescript-loader@6.2.0:
     resolution:
       {
@@ -3584,6 +3593,14 @@ packages:
       {
         integrity: sha512-l3nz3euub2QMg5ouu5U09Ew9Wf6/wQ8I++ch1loQ0ljmzhmfZYrH9fflS22i/PQEvsPvxCwxgz5q7UB8K1JO4Q==,
       }
+
+  cytoscape-fcose@2.2.0:
+    resolution:
+      {
+        integrity: sha512-ki1/VuRIHFCzxWNrsshHYPs6L7TvLu3DL+TyIGEsRcvVERmxokbf5Gdk7mFxZnTdiGtnA4cfSmjZJMviqSuZrQ==,
+      }
+    peerDependencies:
+      cytoscape: ^3.2.0
 
   cytoscape@3.33.1:
     resolution:
@@ -5732,6 +5749,12 @@ packages:
         integrity: sha512-MbjN408fEndfiQXbFQ1vnd+1NoLDsnQW41410oQBXiyXDMYH5z505juWa4KUE1LqxRC7DgOgZDbKLxHIwm27hA==,
       }
     engines: { node: '>=0.10' }
+
+  layout-base@2.0.1:
+    resolution:
+      {
+        integrity: sha512-dp3s92+uNI1hWIpPGH3jK2kxE2lMjdXdr+DH8ynZHpd6PUlH6x6cbuXnoMmiNumznqaNO31xu9e79F0uuZ0JFg==,
+      }
 
   lazystream@1.0.1:
     resolution:
@@ -10938,6 +10961,10 @@ snapshots:
       object-assign: 4.1.1
       vary: 1.1.2
 
+  cose-base@2.2.0:
+    dependencies:
+      layout-base: 2.0.1
+
   cosmiconfig-typescript-loader@6.2.0(@types/node@20.19.30)(cosmiconfig@9.0.0(typescript@5.9.3))(typescript@5.9.3):
     dependencies:
       '@types/node': 20.19.30
@@ -10978,6 +11005,11 @@ snapshots:
   csstype@3.2.3: {}
 
   csv-parse@5.6.0: {}
+
+  cytoscape-fcose@2.2.0(cytoscape@3.33.1):
+    dependencies:
+      cose-base: 2.2.0
+      cytoscape: 3.33.1
 
   cytoscape@3.33.1: {}
 
@@ -12608,6 +12640,8 @@ snapshots:
   language-tags@1.0.9:
     dependencies:
       language-subtag-registry: 0.3.23
+
+  layout-base@2.0.1: {}
 
   lazystream@1.0.1:
     dependencies:
