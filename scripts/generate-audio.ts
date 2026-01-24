@@ -18,8 +18,8 @@ import * as fs from 'node:fs';
 import * as path from 'node:path';
 import textToSpeech from '@google-cloud/text-to-speech';
 import yaml from 'js-yaml';
-import { convertToOnyomi, ONYOMI_PAUSE_PLACEHOLDER } from '../src/lib/ruby';
 import { hanziDictionary } from '../src/data/hanzi-dictionary';
+import { convertToOnyomi, ONYOMI_PAUSE_PLACEHOLDER } from '../src/lib/ruby';
 import type { HanziMeaning } from '../src/types/hanzi';
 
 // ============================================================================
@@ -182,15 +182,8 @@ function getPinyinWithTone(
 const VOICE_CONFIG = {
   chinese: {
     languageCode: 'cmn-CN',
-    // Default voice (used for single-voice generation)
-    name: 'cmn-CN-Wavenet-A',
-    ssmlGender: 'FEMALE' as const,
-    // Speaker-specific voices for multi-voice generation
-    speakers: {
-      narrator: 'cmn-CN-Wavenet-A', // Female - for narration (子曰, etc.)
-      kongzi: 'cmn-CN-Wavenet-C', // Male - Confucius
-      other: 'cmn-CN-Wavenet-B', // Male - other characters
-    },
+    name: 'cmn-CN-Wavenet-B',
+    ssmlGender: 'MALE' as const,
   },
   japanese: {
     languageCode: 'ja-JP',
@@ -222,12 +215,53 @@ interface InputContent {
   japanese: string;
 }
 
-// Pause durations for SSML
-const PAUSE_CONFIG = {
-  sentenceEnd: '1.5s', // After sentence-ending punctuation (。)
-  clauseEnd: '1s', // After clause-ending punctuation (，、)
-  finalPause: '1s', // At the very end of the audio
+// Base pause durations for SSML (in seconds)
+const BASE_PAUSE = {
+  sentenceEnd: 1.5, // After sentence-ending punctuation (。)
+  clauseEnd: 1.0, // After clause-ending punctuation (，、)
+  finalPause: 1.0, // At the very end of the audio
 };
+
+// Character-specific prosody parameters
+// pitch: semitones relative to default (negative = lower)
+// rate: speaking rate multiplier (lower = slower)
+// pauseMultiplier: multiplier for pause durations (higher = longer pauses)
+interface SpeakerProsody {
+  pitch: string; // e.g., "-6st" for 6 semitones lower
+  rate: number; // e.g., 0.8 for 80% speed
+  pauseMultiplier: number; // e.g., 1.5 for 50% longer pauses
+}
+
+const SPEAKER_PROSODY: Record<string, SpeakerProsody> = {
+  // Confucius: lowest voice, slowest, longest pauses
+  kongzi: {
+    pitch: '-10st',
+    rate: 0.8,
+    pauseMultiplier: 1.3,
+  },
+  // Narrator (null speaker): low voice, slightly slow, normal pauses
+  narrator: {
+    pitch: '-4st',
+    rate: 0.8,
+    pauseMultiplier: 1.1,
+  },
+  // Other characters: normal voice, slightly slow, slightly longer pauses
+  other: {
+    pitch: '3st',
+    rate: 0.9,
+    pauseMultiplier: 1.3,
+  },
+};
+
+/**
+ * Get prosody parameters for a speaker
+ */
+function getSpeakerProsody(speaker: string | null): SpeakerProsody {
+  if (speaker === null) {
+    return SPEAKER_PROSODY.narrator;
+  }
+  return SPEAKER_PROSODY[speaker] ?? SPEAKER_PROSODY.other;
+}
 
 // Placeholders for pauses (to avoid nested replacement issues)
 const PLACEHOLDER = {
@@ -236,9 +270,9 @@ const PLACEHOLDER = {
 };
 
 /**
- * Convert placeholders to SSML break tags and deduplicate consecutive breaks
+ * Convert placeholders to SSML break tags with specified pause multiplier
  */
-function placeholdersToSsml(text: string): string {
+function placeholdersToSsml(text: string, pauseMultiplier = 1.0): string {
   // First, deduplicate consecutive placeholders (keep the longer pause)
   let result = text;
 
@@ -254,44 +288,30 @@ function placeholdersToSsml(text: string): string {
     PLACEHOLDER.sentenceEnd,
   );
 
+  // Calculate adjusted pause durations
+  const sentencePause = (BASE_PAUSE.sentenceEnd * pauseMultiplier).toFixed(1);
+  const clausePause = (BASE_PAUSE.clauseEnd * pauseMultiplier).toFixed(1);
+
   // Now convert placeholders to actual SSML
   result = result.replace(
     new RegExp(PLACEHOLDER.sentenceEnd, 'g'),
-    `<break time="${PAUSE_CONFIG.sentenceEnd}"/>`,
+    `<break time="${sentencePause}s"/>`,
   );
   result = result.replace(
     new RegExp(PLACEHOLDER.clauseEnd, 'g'),
-    `<break time="${PAUSE_CONFIG.clauseEnd}"/>`,
+    `<break time="${clausePause}s"/>`,
   );
 
   return result;
 }
 
 /**
- * Get the voice name and pitch for a speaker
- */
-function getVoiceForSpeaker(speaker: string | null): {
-  name: string;
-  pitch?: string;
-} {
-  const speakers = VOICE_CONFIG.chinese.speakers;
-  if (speaker === null) {
-    return { name: speakers.narrator };
-  }
-  if (speaker === 'kongzi') {
-    return { name: speakers.kongzi, pitch: '-40%' }; // Lower pitch for Confucius
-  }
-  return { name: speakers.other, pitch: '+20%' }; // Higher pitch for other characters
-}
-
-/**
  * Convert a segment to SSML with phoneme tags for each character
- * e.g., "子曰" -> '<phoneme alphabet="x-pinyin" ph="zi3">子</phoneme><phoneme alphabet="x-pinyin" ph="yue1">曰</phoneme>'
+ * e.g., "子曰" -> '<phoneme alphabet="pinyin" ph="zi3">子</phoneme><phoneme alphabet="pinyin" ph="yue1">曰</phoneme>'
  */
 function segmentToSsmlWithPhonemes(
   hanziDict: Map<string, HanziMeaning[]>,
   segment: InputSegment,
-  options?: { wrapWithVoice?: boolean },
 ): string {
   const text = segment.text;
   const overrides = segment.hanzi_overrides ?? [];
@@ -366,48 +386,84 @@ function segmentToSsmlWithPhonemes(
     }
   }
 
-  // Wrap with voice tag if requested (for multi-voice Chinese)
-  if (options?.wrapWithVoice) {
-    const { name: voiceName, pitch } = getVoiceForSpeaker(segment.speaker);
-    if (pitch) {
-      // Add prosody tag for pitch adjustment
-      result = `<voice name="${voiceName}"><prosody pitch="${pitch}">${result}</prosody></voice>`;
-    } else {
-      result = `<voice name="${voiceName}">${result}</voice>`;
-    }
-  }
-
   return result;
 }
 
 /**
- * Convert Chinese text to SSML with phoneme tags and multi-voice support
- * - Uses <phoneme alphabet="x-pinyin" ph="...">漢字</phoneme> for each character
- * - Uses <voice name="..."> tags to switch voices by speaker
- * - Adds pauses between segments and after punctuation
+ * Wrap content with sentence tags, splitting on break tags
+ * e.g., "A<break.../>B<break.../>C" -> "<s>A</s><break.../><s>B</s><break.../><s>C</s>"
+ */
+function wrapWithSentenceTags(content: string): string {
+  // Split content by break tags while preserving the breaks
+  const breakPattern = /(<break[^>]*\/>)/g;
+  const parts = content.split(breakPattern);
+
+  return parts
+    .map((part) => {
+      // If it's a break tag, keep it as-is
+      if (part.match(breakPattern)) {
+        return part;
+      }
+      // If it's non-empty content, wrap with <s> tags
+      if (part.trim()) {
+        return `<s>${part}</s>`;
+      }
+      return part;
+    })
+    .join('');
+}
+
+/**
+ * Convert Chinese text to SSML with phoneme tags and character-specific prosody
+ * - Uses <phoneme alphabet="pinyin" ph="...">漢字</phoneme> for each character
+ * - Uses <prosody> tags for character-specific pitch and rate
+ * - Uses <p> tags to wrap each speaker's utterance (paragraph)
+ * - Uses <s> tags to wrap each sentence within the utterance
+ * - Adjusts pause durations based on character's pauseMultiplier
  */
 export function toChineseSsml(
   hanziDict: Map<string, HanziMeaning[]>,
   segments: InputSegment[],
 ): string {
-  // Convert each segment to SSML with phoneme tags and voice tags
-  const ssmlSegments = segments.map((s) =>
-    segmentToSsmlWithPhonemes(hanziDict, s, { wrapWithVoice: true }),
-  );
+  // Process each segment individually with its own prosody settings
+  const processedSegments: string[] = [];
 
-  // Join segments with clause pause placeholder
-  let text = ssmlSegments.join(PLACEHOLDER.clauseEnd);
+  for (const segment of segments) {
+    const prosody = getSpeakerProsody(segment.speaker);
 
-  // Add pause placeholders after punctuation (but not inside voice tags)
-  // We need to handle this carefully since punctuation is inside voice tags
-  text = text
-    .replace(/。/g, `。${PLACEHOLDER.sentenceEnd}`)
-    .replace(/，/g, `，${PLACEHOLDER.clauseEnd}`);
+    // Convert segment to SSML with phoneme tags (without prosody wrapper yet)
+    let segmentContent = segmentToSsmlWithPhonemes(hanziDict, segment);
 
-  // Convert placeholders to SSML (with deduplication)
-  const withPauses = placeholdersToSsml(text);
+    // Add pause placeholders after punctuation within this segment
+    segmentContent = segmentContent
+      .replace(/。/g, `。${PLACEHOLDER.sentenceEnd}`)
+      .replace(/，/g, `，${PLACEHOLDER.clauseEnd}`);
 
-  return `<speak>${withPauses}<break time="${PAUSE_CONFIG.finalPause}"/></speak>`;
+    // Convert placeholders to SSML with character-specific pause multiplier
+    segmentContent = placeholdersToSsml(
+      segmentContent,
+      prosody.pauseMultiplier,
+    );
+
+    // Wrap break-separated parts with <s> tags
+    const withSentenceTags = wrapWithSentenceTags(segmentContent);
+
+    // Wrap with prosody tag for pitch and rate
+    const withProsody = `<prosody pitch="${prosody.pitch}" rate="${prosody.rate}">${withSentenceTags}</prosody>`;
+
+    // Wrap with paragraph tag (one speaker's utterance = one paragraph)
+    const withParagraph = `<p>${withProsody}</p>`;
+
+    processedSegments.push(withParagraph);
+  }
+
+  // Join segments with clause pauses (use narrator's pause duration as default between segments)
+  const segmentPause = BASE_PAUSE.clauseEnd.toFixed(1);
+  const result = processedSegments.join(`<break time="${segmentPause}s"/>`);
+
+  // Add final pause
+  const finalPause = BASE_PAUSE.finalPause.toFixed(1);
+  return `<speak>${result}<break time="${finalPause}s"/></speak>`;
 }
 
 /**
@@ -434,10 +490,12 @@ export function toJapaneseOnyomiSsml(segments: InputSegment[]): string {
     .replace(/，/g, `，${PLACEHOLDER.clauseEnd}`)
     .replace(/、/g, `、${PLACEHOLDER.clauseEnd}`);
 
-  // Convert placeholders to SSML (with deduplication)
+  // Convert placeholders to SSML (with deduplication, using default pause multiplier)
   const withPauses = placeholdersToSsml(text);
 
-  return `<speak>${withPauses}<break time="${PAUSE_CONFIG.finalPause}"/></speak>`;
+  // Add final pause
+  const finalPause = BASE_PAUSE.finalPause.toFixed(1);
+  return `<speak>${withPauses}<break time="${finalPause}s"/></speak>`;
 }
 
 async function generateAudio(
@@ -534,12 +592,8 @@ async function main(): Promise<void> {
 
   console.log('\nGenerating audio...');
 
-  // Chinese audio (multi-voice)
-  const { speakers } = VOICE_CONFIG.chinese;
-  console.log('  - Chinese (multi-voice)...');
-  console.log(`      Narrator: ${speakers.narrator}`);
-  console.log(`      Kongzi: ${speakers.kongzi}`);
-  console.log(`      Others: ${speakers.other}`);
+  // Chinese audio
+  console.log(`  - Chinese (${VOICE_CONFIG.chinese.name})...`);
   const chineseAudio = await generateAudio(client, chineseSsml, 'chinese');
   const chineseOutputPath = path.join(outputDir, `${chapterId}-zh.mp3`);
   fs.writeFileSync(chineseOutputPath, chineseAudio);

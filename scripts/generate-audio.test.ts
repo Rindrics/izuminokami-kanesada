@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { toChineseSsml } from './generate-audio';
 import { hanziDictionary } from '../src/data/hanzi-dictionary';
 import type { HanziMeaning } from '../src/types/hanzi';
+import { toChineseSsml } from './generate-audio';
 
 // Load actual hanzi dictionary for integration testing
 function loadActualHanziDictionary(): Map<string, HanziMeaning[]> {
@@ -50,10 +50,10 @@ describe('toChineseSsml', () => {
     const result = toChineseSsml(mockHanziDict, segments);
 
     // Should have a break between segments
-    expect(result).toContain('<break time="1s"/>');
+    expect(result).toContain('<break time="1.0s"/>');
     // Should NOT have nested breaks
     expect(result).not.toContain('<break<break');
-    expect(result).not.toContain('time="1s"/>time=');
+    expect(result).not.toContain('time="1.0s"/>time=');
   });
 
   it('should convert spaces to pauses', () => {
@@ -61,7 +61,7 @@ describe('toChineseSsml', () => {
     const result = toChineseSsml(mockHanziDict, segments);
 
     // Should have pause where space was
-    expect(result).toContain('<break time="1s"/>');
+    expect(result).toContain('<break time="1.3s"/>');
   });
 
   it('should generate phoneme tags with numeric tone pinyin', () => {
@@ -128,7 +128,7 @@ describe('toChineseSsml', () => {
     const result = toChineseSsml(mockHanziDict, segments);
 
     // Should have single pause, not consecutive
-    expect(result).not.toContain('<break time="1s"/><break time="1s"/>');
+    expect(result).not.toContain('<break time="1.0s"/><break time="1.0s"/>');
   });
 
   it('should remove connection markers (-)', () => {
@@ -148,7 +148,7 @@ describe('toChineseSsml', () => {
     const result = toChineseSsml(mockHanziDict, segments);
 
     // Semicolon should become comma with pause
-    expect(result).toContain('，<break time="1s"/>');
+    expect(result).toContain('，</s><break time="1.3s"/>');
     expect(result).not.toContain(';');
   });
 });

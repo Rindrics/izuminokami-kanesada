@@ -386,9 +386,8 @@ export function registerContentTools(server: McpServer): void {
       // Filter to only show polyphonic characters for review
       const polyphonicChars = pinyinAnalysis.filter((a) => a.isPolyphonic);
 
-      // Set pinyin_reviewed based on whether there are polyphonic characters
-      const pinyinReviewed = polyphonicChars.length === 0;
-      yamlLines[pinyinReviewedLineIndex] = `pinyin_reviewed: ${pinyinReviewed}`;
+      // Always set pinyin_reviewed to false - human review is required
+      yamlLines[pinyinReviewedLineIndex] = `pinyin_reviewed: false`;
 
       // Write the YAML file with the correct pinyin_reviewed value
       const yamlContent = `${yamlLines.join('\n')}\n`;
@@ -438,7 +437,10 @@ ${polyphonicChars
 After reviewing, call write_content_yaml again with hanzi_overrides if needed.
 Then call set_pinyin_reviewed to mark the content as reviewed before generating audio.`;
       } else {
-        responseText += `\n✓ pinyin_reviewed: true (多音字なし、音声生成可能)`;
+        responseText += `\n⚠️ pinyin_reviewed: false (人間によるレビューが必要)
+
+多音字は検出されませんでしたが、ピンインの確認が必要です。
+確認後、set_pinyin_reviewed を呼び出してから generate_audio を実行してください。`;
       }
 
       // Check for missing onyomi (TODO)
