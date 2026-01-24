@@ -1,0 +1,5 @@
+# Compound words to count as single units in frequency ranking
+# These words will be counted as compound words, and their constituent characters
+# will not be counted individually when they appear as part of these compounds
+
+- 君子 # gentleman, virtuous person

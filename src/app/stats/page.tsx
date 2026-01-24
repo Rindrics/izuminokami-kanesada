@@ -18,7 +18,7 @@ const keyConcepts = [
   { char: '忠', label: '忠（ちゅう）', desc: '忠義' },
   { char: '學', label: '學（がく）', desc: '学問' },
   { char: '道', label: '道（どう）', desc: '道理' },
-  { char: '君', label: '君（くん）', desc: '君主' },
+  { char: '君子', label: '君子（くんし）', desc: '徳のある人' },
   { char: '民', label: '民（みん）', desc: '民衆' },
 ];
 
