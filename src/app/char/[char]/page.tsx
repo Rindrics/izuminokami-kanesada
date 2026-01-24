@@ -11,7 +11,7 @@ interface PageProps {
 
 export function generateStaticParams() {
   return stats.charIndex.map((entry) => ({
-    char: encodeURIComponent(entry.char),
+    char: entry.char,
   }));
 }
 
