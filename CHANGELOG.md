@@ -1,5 +1,19 @@
 # Changelog
 
+## [v0.2.0](https://github.com/Rindrics/izuminokami-kanesada/compare/v0.1.2...v0.2.0) - 2026-01-24
+- feat: define service accounts to use Text-to-Speech by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/45
+- feat: add storage bucket for audio files by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/47
+- feat: generate & upload audio files by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/48
+- feat: improve stat page by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/52
+- feat: provide relation diagram on stat page by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/49
+- fix(build): 404 on /char/[char] page by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/53
+- fix: remove manual URL encoding from char routes to fix Firebase Hosting 404 by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/54
+- fix: use encoded params to fix dev server errors and Firebase compatibility by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/55
+- feat: publish audio bucket by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/56
+- feat: add audio player component and URL generation utility by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/57
+- docs: update README.md by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/58
+- fix: update audio of lunyu 2-1 by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/59
+
 ## [v0.1.2](https://github.com/Rindrics/izuminokami-kanesada/compare/v0.1.1...v0.1.2) - 2026-01-22
 - feat: add 論語 17-8 by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/41
 - fix: preserve URL from user request by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/42
