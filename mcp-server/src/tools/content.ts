@@ -282,7 +282,7 @@ export function registerContentTools(server: McpServer): void {
       // Dynamically import the dictionary to get the latest data without regex parsing
       const hanziDictPath = path.join(
         PROJECT_ROOT,
-        'src/data/hanzi-dictionary.js',
+        'src/data/hanzi-dictionary.ts',
       );
       const hanziDictModule = await import(pathToFileURL(hanziDictPath).href);
       const { hanziDictionary } = hanziDictModule;

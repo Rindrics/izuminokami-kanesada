@@ -175,7 +175,7 @@ export function registerDictionaryTools(server: McpServer): void {
       try {
         const hanziDictPath = path.join(
           PROJECT_ROOT,
-          'src/data/hanzi-dictionary.js',
+          'src/data/hanzi-dictionary.ts',
         );
         const hanziDictModule = await import(pathToFileURL(hanziDictPath).href);
         const { hanziDictionary } = hanziDictModule;
