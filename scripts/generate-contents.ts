@@ -659,7 +659,7 @@ function generateSpeakerGraphs(contents: OutputContent[]): {
 
       if (segment.speaker === null) {
         const questionMatch = parseQuestionPattern(segment.text);
-        if (questionMatch && questionMatch.topic && questionMatch.questioner) {
+        if (questionMatch && questionMatch.questioner) {
           // Find questioner by matching name from persons.yaml
           let questionerId: string | null = null;
           for (const person of persons) {
@@ -677,17 +677,33 @@ function generateSpeakerGraphs(contents: OutputContent[]): {
 
           // Find the next segment with a speaker (skip narration segments)
           let addresseeId: string | null = null;
+          let nextSegment: (typeof content.segments)[number] | null = null;
           for (let j = i + 1; j < content.segments.length; j++) {
-            const nextSegment = content.segments[j];
-            if (nextSegment.speaker !== null) {
-              addresseeId = nextSegment.speaker;
+            const seg = content.segments[j];
+            if (seg.speaker !== null) {
+              addresseeId = seg.speaker;
+              nextSegment = seg;
               break;
             }
           }
 
-          // Create dialogue edge only if questioner is in mentioned list and we have addressee
-          if (questionerId && addresseeId) {
-            const edgeKey = `${questionerId}-${addresseeId}-${questionMatch.topic}`;
+          // Derive topic from questionMatch or extract from nextSegment
+          let topic: string | null = questionMatch.topic;
+          if (!topic && nextSegment) {
+            // Try to extract topic from nextSegment.text
+            const concepts = extractConcepts(nextSegment.text);
+            if (concepts.length > 0) {
+              topic = concepts[0];
+            } else {
+              // Fallback: try parseQuestionPattern on nextSegment.text
+              const nextMatch = parseQuestionPattern(nextSegment.text);
+              topic = nextMatch?.topic ?? null;
+            }
+          }
+
+          // Create dialogue edge only if questioner is in mentioned list, we have addressee, and topic
+          if (questionerId && addresseeId && topic && topic.trim()) {
+            const edgeKey = `${questionerId}-${addresseeId}-${topic.trim()}`;
             const existingEdge = dialogueEdges.get(edgeKey);
             if (existingEdge) {
               existingEdge.weight += 1;
@@ -698,7 +714,7 @@ function generateSpeakerGraphs(contents: OutputContent[]): {
               dialogueEdges.set(edgeKey, {
                 source: questionerId,
                 target: addresseeId,
-                topic: questionMatch.topic,
+                topic: topic.trim(),
                 weight: 1,
                 contentIds: [content.content_id],
               });
