@@ -4,11 +4,11 @@ segments:
   - text: 王曰
     speaker: null
   - text: 叟不遠千里而來 亦將有以利吾國乎
-    speaker: 梁惠王
+    speaker: liang-huiwang
   - text: 孟子對曰
     speaker: null
   - text: 王何必曰利 亦有仁義而已矣
-    speaker: 孟子
-mentioned: [孟子, 梁惠王]
+    speaker: mengzi
+mentioned: [mengzi, liang-huiwang]
 japanese: 孟子、梁の惠王に見ゆ。王曰く、「叟、千里を遠しとせずして來たる、亦た將に以て吾（わ）が國を利するあらんとするか。」と。孟子對へて曰く、「王何ぞ必ずしも利と曰はん。亦た仁義あるのみ。」
 pinyin_reviewed: true
