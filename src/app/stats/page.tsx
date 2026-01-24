@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { ClickableChar } from '@/components/ClickableChar';
 import { DialogueGraph } from '@/components/DialogueGraph';
-import { MentionGraph } from '@/components/MentionGraph';
 import { books, getBookById } from '@/generated/books';
 import { getPersonName } from '@/generated/persons';
 import type { CharIndex } from '@/generated/stats';
@@ -444,24 +443,9 @@ export default function StatsPage() {
                 対話相関図
               </h2>
               <p className="mb-3 text-sm text-zinc-500">
-                人物間の対話関係を可視化（エッジの太さは話題への言及回数に比例）
+                人物間の対話関係と人物から概念への言及関係を可視化（エッジの太さは言及回数に比例）
               </p>
               <DialogueGraph graph={stats.dialogueGraph as any} />
-            </section>
-          )}
-
-        {/* Mention Graph */}
-        {'mentionGraph' in stats &&
-          stats.mentionGraph &&
-          stats.mentionGraph.nodes.length > 0 && (
-            <section className="mb-8">
-              <h2 className="mb-4 text-xl font-bold text-black dark:text-white">
-                言及相関図
-              </h2>
-              <p className="mb-3 text-sm text-zinc-500">
-                人物から概念への言及関係を可視化（エッジの太さは言及回数に比例）
-              </p>
-              <MentionGraph graph={stats.mentionGraph as any} />
             </section>
           )}
       </main>
