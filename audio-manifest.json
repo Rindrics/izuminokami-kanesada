@@ -118,5 +118,15 @@
       "generatedAt": "2026-01-23T20:42:47.732Z",
       "hash": "ab1bcd72175d2e355b3f092ccaf0fb2d541f6c0938eec294445a96f3c1b0193f"
     }
+  },
+  "lunyu/2/1": {
+    "zh": {
+      "generatedAt": "2026-01-24T00:53:44.314Z",
+      "hash": "9b6ed1cd14f303613983865d18300cd111e2760d11dbcb80995e43091fa2a376"
+    },
+    "ja": {
+      "generatedAt": "2026-01-24T00:53:44.314Z",
+      "hash": "85d578c5c9f9086c3b500a47bfa7d55979b2f11eca6683f702e4b42b262a1d55"
+    }
   }
 }
