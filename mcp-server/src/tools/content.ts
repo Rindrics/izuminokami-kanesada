@@ -1320,7 +1320,7 @@ Please follow this workflow:
       // Run upload script (files exist, only upload needed)
       try {
         const output = execSync(
-          `pnpm upload:audio ${bookId} ${sectionId} ${chapterId}`,
+          `pnpm tsx scripts/upload-audio.ts ${bookId} ${sectionId} ${chapterId}`,
           {
             cwd: PROJECT_ROOT,
             encoding: 'utf-8',
