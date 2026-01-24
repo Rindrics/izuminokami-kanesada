@@ -329,6 +329,22 @@ function segmentToSsmlWithPhonemes(
   // Build override map by position
   const overrideMap = new Map<number, string>();
   for (const override of overrides) {
+    // Validate override position and character match
+    if (override.position < 0 || override.position >= text.length) {
+      console.warn(
+        `⚠️  Skipping invalid override: position ${override.position} is out of bounds for text of length ${text.length}`,
+      );
+      continue;
+    }
+
+    const actualChar = text[override.position];
+    if (actualChar !== override.char) {
+      console.warn(
+        `⚠️  Skipping invalid override: expected character "${override.char}" at position ${override.position}, but found "${actualChar}"`,
+      );
+      continue;
+    }
+
     overrideMap.set(override.position, override.meaning_id);
   }
 
