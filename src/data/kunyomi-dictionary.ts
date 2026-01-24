@@ -1031,6 +1031,96 @@ export const kunyomiDictionary: KunyomiEntry[] = [
     text: '近',
     readings: [{ id: '近-ちか', ruby: 'ちか', is_default: true }],
   },
+  {
+    id: '命',
+    text: '命',
+    readings: [{ id: '命-めい', ruby: 'めい', is_default: true }],
+  },
+  {
+    id: '性',
+    text: '性',
+    readings: [{ id: '性-せい', ruby: 'せい', is_default: true }],
+  },
+  {
+    id: '率',
+    text: '率',
+    readings: [{ id: '率-したが', ruby: 'したが', is_default: true }],
+  },
+  {
+    id: '修',
+    text: '修',
+    readings: [{ id: '修-おさ', ruby: 'おさ', is_default: true }],
+  },
+  {
+    id: '教',
+    text: '教',
+    readings: [{ id: '教-きょう', ruby: 'きょう', is_default: true }],
+  },
+  {
+    id: '須臾',
+    text: '須臾',
+    readings: [{ id: '須臾-しゅゆ', ruby: 'しゅゆ', is_default: true }],
+  },
+  {
+    id: '離',
+    text: '離',
+    readings: [{ id: '離-はな', ruby: 'はな', is_default: true }],
+  },
+  {
+    id: '故',
+    text: '故',
+    readings: [{ id: '故-ゆえ', ruby: 'ゆえ', is_default: true }],
+  },
+  {
+    id: '睹',
+    text: '睹',
+    readings: [{ id: '睹-み', ruby: 'み', is_default: true }],
+  },
+  {
+    id: '戒慎',
+    text: '戒慎',
+    readings: [{ id: '戒慎-かいしん', ruby: 'かいしん', is_default: true }],
+  },
+  {
+    id: '恐',
+    text: '恐',
+    readings: [{ id: '恐-きょう', ruby: 'きょう', is_default: true }],
+  },
+  {
+    id: '懼',
+    text: '懼',
+    readings: [{ id: '懼-く', ruby: 'く', is_default: true }],
+  },
+  {
+    id: '隠',
+    text: '隠',
+    readings: [{ id: '隠-かく', ruby: 'かく', is_default: true }],
+  },
+  {
+    id: '見',
+    text: '見',
+    readings: [{ id: '見-み', ruby: 'み', is_default: true }],
+  },
+  {
+    id: '莫',
+    text: '莫',
+    readings: [{ id: '莫-な', ruby: 'な', is_default: true }],
+  },
+  {
+    id: '微',
+    text: '微',
+    readings: [{ id: '微-び', ruby: 'び', is_default: true }],
+  },
+  {
+    id: '顕',
+    text: '顕',
+    readings: [{ id: '顕-あら', ruby: 'あら', is_default: true }],
+  },
+  {
+    id: '独',
+    text: '独',
+    readings: [{ id: '独-ひと', ruby: 'ひと', is_default: true }],
+  },
 ];
 
 export function getKunyomiEntry(text: string): KunyomiEntry | undefined {

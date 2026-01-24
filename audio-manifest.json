@@ -148,5 +148,15 @@
       "hash": "a1cfd788200c2ca074e1ee3828a8e15354e26b0316236f9dd4723e3fcd95405d",
       "uploadedAt": "2026-01-24T20:27:32.620Z"
     }
+  },
+  "zhongyong/1/1": {
+    "zh": {
+      "hash": "3de2bf67e0a4f4ab21a897ab51b457dcc265bf2e2acf4d0a3a17075034eb3ebf",
+      "uploadedAt": "2026-01-24T21:00:06.321Z"
+    },
+    "ja": {
+      "hash": "7c63c4b99d58c1dd51c002878b40fea71c8294f6b1c797cea71b4b2afae0f937",
+      "uploadedAt": "2026-01-24T21:00:06.482Z"
+    }
   }
 }
