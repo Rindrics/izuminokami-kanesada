@@ -25,6 +25,7 @@
       "src/**/*.jsx",
       "scripts/**/*.ts",
       "mcp-server/src/**/*.ts",
+      "next.config.ts",
       "!src/generated"
     ]
   }
