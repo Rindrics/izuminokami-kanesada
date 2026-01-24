@@ -11,23 +11,22 @@ interface PageProps {
 
 export function generateStaticParams() {
   return stats.charIndex.map((entry) => ({
-    char: encodeURIComponent(entry.char),
+    char: entry.char,
   }));
 }
 
 export default async function CharPage({ params }: PageProps) {
   const { char } = await params;
-  const decodedChar = decodeURIComponent(char);
 
   // Find the character in the index
-  const charEntry = stats.charIndex.find((e) => e.char === decodedChar);
+  const charEntry = stats.charIndex.find((e) => e.char === char);
   const contentIds = charEntry?.contentIds ?? [];
 
   // Get character info from dictionary
-  const meaning = getDefaultMeaning(decodedChar);
+  const meaning = getDefaultMeaning(char);
 
   // Get frequency info
-  const freqEntry = stats.charFrequencies.find((f) => f.char === decodedChar);
+  const freqEntry = stats.charFrequencies.find((f) => f.char === char);
 
   return (
     <div className="bg-zinc-50 dark:bg-black">
@@ -35,7 +34,7 @@ export default async function CharPage({ params }: PageProps) {
         <BackButton />
         <header className="mb-8">
           <h1 className="mb-2 text-5xl font-bold text-black dark:text-white">
-            {decodedChar}
+            {char}
           </h1>
           {meaning && (
             <div className="text-lg text-zinc-600 dark:text-zinc-400">
@@ -53,7 +52,7 @@ export default async function CharPage({ params }: PageProps) {
 
         <section>
           <h2 className="mb-4 text-xl font-bold text-black dark:text-white">
-            「{decodedChar}」が登場する章（{contentIds.length} 件）
+            「{char}」が登場する章（{contentIds.length} 件）
           </h2>
 
           {contentIds.length === 0 ? (
