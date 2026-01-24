@@ -1121,6 +1121,151 @@ export const kunyomiDictionary: KunyomiEntry[] = [
     text: '独',
     readings: [{ id: '独-ひと', ruby: 'ひと', is_default: true }],
   },
+  {
+    id: '孟',
+    text: '孟',
+    readings: [{ id: '孟-もう', ruby: 'もう', is_default: true }],
+  },
+  {
+    id: '梁',
+    text: '梁',
+    readings: [{ id: '梁-りょう', ruby: 'りょう', is_default: true }],
+  },
+  {
+    id: '惠王',
+    text: '惠王',
+    readings: [{ id: '惠王-けいおう', ruby: 'けいおう', is_default: true }],
+  },
+  {
+    id: '叟',
+    text: '叟',
+    readings: [{ id: '叟-そう', ruby: 'そう', is_default: true }],
+  },
+  {
+    id: '里',
+    text: '里',
+    readings: [{ id: '里-り', ruby: 'り', is_default: true }],
+  },
+  {
+    id: '來',
+    text: '來',
+    readings: [{ id: '來-き', ruby: 'き', is_default: true }],
+  },
+  {
+    id: '將',
+    text: '將',
+    readings: [{ id: '將-まさ', ruby: 'まさ', is_default: true }],
+  },
+  {
+    id: '國',
+    text: '國',
+    readings: [{ id: '國-くに', ruby: 'くに', is_default: true }],
+  },
+  {
+    id: '利',
+    text: '利',
+    readings: [{ id: '利-り', ruby: 'り', is_default: true }],
+  },
+  {
+    id: '何',
+    text: '何',
+    readings: [{ id: '何-なん', ruby: 'なん', is_default: true }],
+  },
+  {
+    id: '義',
+    text: '義',
+    readings: [{ id: '義-ぎ', ruby: 'ぎ', is_default: true }],
+  },
+  {
+    id: '家',
+    text: '家',
+    readings: [{ id: '家-いえ', ruby: 'いえ', is_default: true }],
+  },
+  {
+    id: '士',
+    text: '士',
+    readings: [{ id: '士-し', ruby: 'し', is_default: true }],
+  },
+  {
+    id: '庶人',
+    text: '庶人',
+    readings: [{ id: '庶人-しょじん', ruby: 'しょじん', is_default: true }],
+  },
+  {
+    id: '征',
+    text: '征',
+    readings: [{ id: '征-と', ruby: 'と', is_default: true }],
+  },
+  {
+    id: '危',
+    text: '危',
+    readings: [{ id: '危-あやう', ruby: 'あやう', is_default: true }],
+  },
+  {
+    id: '萬',
+    text: '萬',
+    readings: [{ id: '萬-まん', ruby: 'まん', is_default: true }],
+  },
+  {
+    id: '乘',
+    text: '乘',
+    readings: [{ id: '乘-じょう', ruby: 'じょう', is_default: true }],
+  },
+  {
+    id: '弒',
+    text: '弒',
+    readings: [{ id: '弒-あや', ruby: 'あや', is_default: true }],
+  },
+  {
+    id: '百',
+    text: '百',
+    readings: [{ id: '百-ひゃく', ruby: 'ひゃく', is_default: true }],
+  },
+  {
+    id: '取',
+    text: '取',
+    readings: [{ id: '取-と', ruby: 'と', is_default: true }],
+  },
+  {
+    id: '多',
+    text: '多',
+    readings: [{ id: '多-おお', ruby: 'おお', is_default: true }],
+  },
+  {
+    id: '苟',
+    text: '苟',
+    readings: [{ id: '苟-かりそ', ruby: 'かりそ', is_default: true }],
+  },
+  {
+    id: '奪',
+    text: '奪',
+    readings: [{ id: '奪-うば', ruby: 'うば', is_default: true }],
+  },
+  {
+    id: '饜',
+    text: '饜',
+    readings: [{ id: '饜-あ', ruby: 'あ', is_default: true }],
+  },
+  {
+    id: '遺',
+    text: '遺',
+    readings: [{ id: '遺-わす', ruby: 'わす', is_default: true }],
+  },
+  {
+    id: '王',
+    text: '王',
+    readings: [{ id: '王-おう', ruby: 'おう', is_default: true }],
+  },
+  {
+    id: '大夫',
+    text: '大夫',
+    readings: [{ id: '大夫-たいふ', ruby: 'たいふ', is_default: true }],
+  },
+  {
+    id: '上下',
+    text: '上下',
+    readings: [{ id: '上下-じょうげ', ruby: 'じょうげ', is_default: true }],
+  },
 ];
 
 export function getKunyomiEntry(text: string): KunyomiEntry | undefined {

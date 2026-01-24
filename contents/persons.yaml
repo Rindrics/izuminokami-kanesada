@@ -49,3 +49,14 @@
   family: 顏
   courtesy: 子淵
   given: 回
+
+- id: mengzi
+  name: 孟子
+  family: 孟
+  courtesy: 子輿
+  given: 軻
+
+- id: liang-huiwang
+  name: 梁惠王
+  family: 魏
+  given: 罃
