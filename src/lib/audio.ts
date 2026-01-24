@@ -33,11 +33,14 @@ type AudioManifest = Record<string, AudioManifestEntry>;
 /**
  * Generate audio file URL for a content
  *
+ * Uses hash from audio-manifest.json as cache busting parameter
+ * to ensure browsers fetch the latest version after regeneration.
+ *
  * @param bookId - Book ID (e.g., "lunyu")
  * @param sectionId - Section ID (e.g., "1")
  * @param chapterId - Chapter ID (e.g., "1")
  * @param lang - Language code ("zh" for Chinese, "ja" for Japanese)
- * @returns Public URL to the audio file
+ * @returns Public URL to the audio file with cache busting parameter
  */
 export function getAudioUrl(
   bookId: string,
@@ -45,7 +48,19 @@ export function getAudioUrl(
   chapterId: string,
   lang: AudioLanguage,
 ): string {
-  return `${AUDIO_BASE_URL}/audio/${bookId}/${sectionId}/${chapterId}-${lang}.mp3`;
+  const baseUrl = `${AUDIO_BASE_URL}/audio/${bookId}/${sectionId}/${chapterId}-${lang}.mp3`;
+
+  // Add hash as cache busting parameter
+  const manifest = audioManifest as AudioManifest;
+  const contentId = `${bookId}/${sectionId}/${chapterId}`;
+  const entry = manifest[contentId];
+  const hash = entry?.[lang]?.hash;
+
+  if (hash) {
+    return `${baseUrl}?v=${hash}`;
+  }
+
+  return baseUrl;
 }
 
 /**
