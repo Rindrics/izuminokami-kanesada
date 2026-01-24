@@ -30,8 +30,13 @@ resource "google_storage_bucket" "audio" {
   }
 }
 
-# Note: No public access - use signed URLs instead
-# This prevents unauthorized bulk downloads and reduces cost risk
+# Grant public read access for audio playback
+# This allows direct access to audio files without signed URLs
+resource "google_storage_bucket_iam_member" "public_read" {
+  bucket = google_storage_bucket.audio.name
+  role   = "roles/storage.objectViewer"
+  member = "allUsers"
+}
 
 # Grant service account upload-only access (least privilege)
 resource "google_storage_bucket_iam_member" "service_account_write" {
