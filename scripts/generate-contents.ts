@@ -336,15 +336,68 @@ function loadFrequencyBlacklist(): string[] {
   return data ?? [];
 }
 
+function loadCompoundWords(): string[] {
+  const compoundWordsPath = path.join(
+    process.cwd(),
+    'contents/input/compound-words.yaml',
+  );
+  if (!fs.existsSync(compoundWordsPath)) {
+    return [];
+  }
+  const content = fs.readFileSync(compoundWordsPath, 'utf-8');
+  const data = yaml.load(content) as string[];
+  return data ?? [];
+}
+
 function generateStatsTypeScript(contents: OutputContent[]): string {
-  // Count character frequencies (Chinese characters only)
+  // Load compound words and sort by length (longest first) to prioritize longer matches
+  const compoundWords = loadCompoundWords().sort((a, b) => b.length - a.length);
+
+  // Count character and compound word frequencies
   const charCounts = new Map<string, number>();
   let totalChars = 0;
 
   for (const content of contents) {
     // Remove punctuation, spaces, hyphens, semicolons
     const cleanText = content.text.replace(/[，。？、；\s\-;]/g, '');
-    for (const char of cleanText) {
+    // Track which positions are already counted as part of compound words
+    const usedPositions = new Set<number>();
+
+    // First, count compound words
+    for (const compound of compoundWords) {
+      let searchIndex = 0;
+      while (true) {
+        const index = cleanText.indexOf(compound, searchIndex);
+        if (index === -1) break;
+
+        // Check if all positions in this compound are unused
+        let allUnused = true;
+        for (let i = 0; i < compound.length; i++) {
+          if (usedPositions.has(index + i)) {
+            allUnused = false;
+            break;
+          }
+        }
+
+        if (allUnused) {
+          // Count this compound word
+          charCounts.set(compound, (charCounts.get(compound) ?? 0) + 1);
+          totalChars += compound.length;
+          // Mark positions as used
+          for (let i = 0; i < compound.length; i++) {
+            usedPositions.add(index + i);
+          }
+        }
+
+        searchIndex = index + 1;
+      }
+    }
+
+    // Then, count individual characters (only unused positions)
+    for (let i = 0; i < cleanText.length; i++) {
+      if (usedPositions.has(i)) continue;
+
+      const char = cleanText[i];
       // Only count CJK characters
       if (/[\u4e00-\u9fff]/.test(char)) {
         charCounts.set(char, (charCounts.get(char) ?? 0) + 1);
@@ -397,11 +450,48 @@ function generateStatsTypeScript(contents: OutputContent[]): string {
     segmentCount: content.segments.length,
   }));
 
-  // Build character index (which chapters contain each character)
+  // Build character index (which chapters contain each character/compound)
   const charToContentIds = new Map<string, Set<string>>();
   for (const content of contents) {
     const cleanText = content.text.replace(/[，。？、；\s\-;]/g, '');
-    for (const char of cleanText) {
+    const usedPositions = new Set<number>();
+
+    // First, index compound words
+    for (const compound of compoundWords) {
+      let searchIndex = 0;
+      while (true) {
+        const index = cleanText.indexOf(compound, searchIndex);
+        if (index === -1) break;
+
+        // Check if all positions in this compound are unused
+        let allUnused = true;
+        for (let i = 0; i < compound.length; i++) {
+          if (usedPositions.has(index + i)) {
+            allUnused = false;
+            break;
+          }
+        }
+
+        if (allUnused) {
+          if (!charToContentIds.has(compound)) {
+            charToContentIds.set(compound, new Set());
+          }
+          charToContentIds.get(compound)?.add(content.content_id);
+          // Mark positions as used
+          for (let i = 0; i < compound.length; i++) {
+            usedPositions.add(index + i);
+          }
+        }
+
+        searchIndex = index + 1;
+      }
+    }
+
+    // Then, index individual characters (only unused positions)
+    for (let i = 0; i < cleanText.length; i++) {
+      if (usedPositions.has(i)) continue;
+
+      const char = cleanText[i];
       if (/[\u4e00-\u9fff]/.test(char)) {
         if (!charToContentIds.has(char)) {
           charToContentIds.set(char, new Set());
