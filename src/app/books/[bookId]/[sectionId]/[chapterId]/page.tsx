@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
+import { AudioPlayer } from '@/components/AudioPlayer';
 import { HakubunWithTabs } from '@/components/HakubunWithTabs';
 import { JapaneseTextWithRuby } from '@/components/JapaneseTextWithRuby';
 import { KeyboardNavigation } from '@/components/KeyboardNavigation';
@@ -65,6 +66,13 @@ export default async function ContentPage({ params }: Props) {
         </header>
 
         <article className="space-y-6">
+          <AudioPlayer
+            bookId={bookId}
+            sectionId={sectionId}
+            chapterId={chapterId}
+            contentId={contentId}
+          />
+
           <Suspense
             fallback={<div className="text-zinc-500">読み込み中...</div>}
           >
