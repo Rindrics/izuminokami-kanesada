@@ -1138,7 +1138,7 @@ export const hanziDictionary: HanziEntry[] = [
     meanings: [
       {
         id: '衆-zhòng',
-        onyomi: 'チュウ',
+        onyomi: 'シュウ',
         pinyin: 'zhòng',
         tone: 4,
         meaning_ja: '衆、多くの人',
@@ -2472,6 +2472,104 @@ export const hanziDictionary: HanziEntry[] = [
         pinyin: 'guī',
         tone: 1,
         meaning_ja: 'かえる',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '譬',
+    meanings: [
+      {
+        id: '譬-pì',
+        onyomi: 'ヒ',
+        pinyin: 'pì',
+        tone: 4,
+        meaning_ja: 'たとえる',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '北',
+    meanings: [
+      {
+        id: '北-běi',
+        onyomi: 'ホク',
+        pinyin: 'běi',
+        tone: 3,
+        meaning_ja: 'きた',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '辰',
+    meanings: [
+      {
+        id: '辰-chén',
+        onyomi: 'シン',
+        pinyin: 'chén',
+        tone: 2,
+        meaning_ja: 'しん',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '所',
+    meanings: [
+      {
+        id: '所-suǒ',
+        onyomi: 'ショ',
+        pinyin: 'suǒ',
+        tone: 3,
+        meaning_ja: 'ところ',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '星',
+    meanings: [
+      {
+        id: '星-xīng',
+        onyomi: 'セイ',
+        pinyin: 'xīng',
+        tone: 1,
+        meaning_ja: 'ほし',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '共',
+    meanings: [
+      {
+        id: '共-gòng',
+        onyomi: 'キョウ',
+        pinyin: 'gòng',
+        tone: 4,
+        meaning_ja: 'ともにする',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '德',
+    meanings: [
+      {
+        id: '德-dé',
+        onyomi: 'トク',
+        pinyin: 'dé',
+        tone: 2,
+        meaning_ja: 'とく',
         is_default: true,
       },
     ],

@@ -921,6 +921,46 @@ export const kunyomiDictionary: KunyomiEntry[] = [
     text: '天下',
     readings: [{ id: '天下-てんか', ruby: 'てんか', is_default: true }],
   },
+  {
+    id: '德',
+    text: '德',
+    readings: [{ id: '德-とく', ruby: 'とく', is_default: true }],
+  },
+  {
+    id: '譬',
+    text: '譬',
+    readings: [{ id: '譬-たとう', ruby: 'たとう', is_default: true }],
+  },
+  {
+    id: '北',
+    text: '北',
+    readings: [{ id: '北-ほく', ruby: 'ほく', is_default: true }],
+  },
+  {
+    id: '辰',
+    text: '辰',
+    readings: [{ id: '辰-しん', ruby: 'しん', is_default: true }],
+  },
+  {
+    id: '所',
+    text: '所',
+    readings: [{ id: '所-ところ', ruby: 'ところ', is_default: true }],
+  },
+  {
+    id: '眾',
+    text: '眾',
+    readings: [{ id: '眾-しゅう', ruby: 'しゅう', is_default: true }],
+  },
+  {
+    id: '星',
+    text: '星',
+    readings: [{ id: '星-せい', ruby: 'せい', is_default: true }],
+  },
+  {
+    id: '共',
+    text: '共',
+    readings: [{ id: '共-とも', ruby: 'とも', is_default: true }],
+  },
 ];
 
 export function getKunyomiEntry(text: string): KunyomiEntry | undefined {
