@@ -2464,20 +2464,6 @@ export const hanziDictionary: HanziEntry[] = [
     is_common: true,
   },
   {
-    id: '歸',
-    meanings: [
-      {
-        id: '歸-guī',
-        onyomi: 'キ',
-        pinyin: 'guī',
-        tone: 1,
-        meaning_ja: 'かえる',
-        is_default: true,
-      },
-    ],
-    is_common: true,
-  },
-  {
     id: '譬',
     meanings: [
       {
@@ -2556,20 +2542,6 @@ export const hanziDictionary: HanziEntry[] = [
         pinyin: 'gòng',
         tone: 4,
         meaning_ja: 'ともにする',
-        is_default: true,
-      },
-    ],
-    is_common: true,
-  },
-  {
-    id: '德',
-    meanings: [
-      {
-        id: '德-dé',
-        onyomi: 'トク',
-        pinyin: 'dé',
-        tone: 2,
-        meaning_ja: 'とく',
         is_default: true,
       },
     ],

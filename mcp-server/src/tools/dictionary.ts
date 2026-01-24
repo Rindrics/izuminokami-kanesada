@@ -1,6 +1,6 @@
 import * as fs from 'node:fs';
 import * as path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
 
@@ -170,6 +170,41 @@ export function registerDictionaryTools(server: McpServer): void {
     },
     async ({ character, pinyin, tone, meaning }) => {
       const filePath = path.join(PROJECT_ROOT, 'src/data/hanzi-dictionary.ts');
+
+      // Check for duplicate entry before adding
+      try {
+        const hanziDictPath = path.join(
+          PROJECT_ROOT,
+          'src/data/hanzi-dictionary.js',
+        );
+        const hanziDictModule = await import(pathToFileURL(hanziDictPath).href);
+        const { hanziDictionary } = hanziDictModule;
+
+        // Check if an entry with the same id already exists
+        // Type assertion: hanziDictionary is exported as HanziEntry[]
+        const existingEntry = (
+          hanziDictionary as Array<{ id: string; meanings: unknown[] }>
+        ).find((e) => e.id === character);
+        if (existingEntry) {
+          return {
+            content: [
+              {
+                type: 'text',
+                text: `❌ Duplicate entry: Character "${character}" already exists in hanzi-dictionary.\n\nExisting entry has ${existingEntry.meanings.length} meaning(s).\nIf you want to add a new meaning, please update the existing entry manually or use a different approach.`,
+              },
+            ],
+            isError: true,
+          };
+        }
+      } catch (importError) {
+        // If import fails, log warning but continue (might be first entry or build issue)
+        console.warn(
+          'Could not check for duplicates (dictionary import failed):',
+          importError instanceof Error
+            ? importError.message
+            : String(importError),
+        );
+      }
 
       // Convert pinyin to pinyin with tone mark
       const pinyinWithTone = addToneMark(pinyin, tone);

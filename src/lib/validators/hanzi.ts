@@ -69,10 +69,31 @@ export function validateHanziDictionary(
 ): Map<string, ValidationError[]> {
   const errorMap = new Map<string, ValidationError[]>();
 
+  // Check for duplicate entries by id
+  const seenIds = new Map<string, number>();
+  for (let i = 0; i < entries.length; i++) {
+    const entry = entries[i];
+    if (seenIds.has(entry.id)) {
+      const firstIndex = seenIds.get(entry.id)!;
+      const errors = errorMap.get(entry.id) || [];
+      errors.push({
+        field: 'id',
+        message: `Duplicate entry: Character "${entry.id}" appears multiple times in dictionary (first at index ${firstIndex}, again at index ${i})`,
+        expected: 'unique',
+        actual: `duplicate at index ${i}`,
+      });
+      errorMap.set(entry.id, errors);
+    } else {
+      seenIds.set(entry.id, i);
+    }
+  }
+
+  // Validate each entry
   for (const entry of entries) {
     const errors = validateHanziEntry(entry);
     if (errors.length > 0) {
-      errorMap.set(entry.id, errors);
+      const existingErrors = errorMap.get(entry.id) || [];
+      errorMap.set(entry.id, [...existingErrors, ...errors]);
     }
   }
 

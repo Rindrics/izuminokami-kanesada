@@ -9,8 +9,10 @@
  */
 
 import { execSync } from 'node:child_process';
+import { hanziDictionary } from '../src/data/hanzi-dictionary';
 import { contents } from '../src/generated/contents';
 import { validateContent } from '../src/lib/validators/content';
+import { validateHanziDictionary } from '../src/lib/validators/hanzi';
 
 /**
  * Derive content_id from input YAML file path
@@ -134,6 +136,22 @@ const isAllMode = process.argv.includes('--all');
  * Main function
  */
 function main(): void {
+  // First, validate hanzi-dictionary for duplicates
+  console.log('=== Hanzi Dictionary Validation ===\n');
+  const hanziErrors = validateHanziDictionary(hanziDictionary);
+  if (hanziErrors.size > 0) {
+    console.error('❌ Hanzi dictionary validation failed:');
+    for (const [entryId, errors] of hanziErrors) {
+      console.error(`  Entry "${entryId}":`);
+      for (const error of errors) {
+        console.error(`    - [${error.field}] ${error.message}`);
+      }
+    }
+    console.error('\nPlease fix duplicate entries in hanzi-dictionary.ts');
+    process.exit(1);
+  }
+  console.log('✓ Hanzi dictionary validation passed (no duplicates)\n');
+
   let contentIdsToValidate: string[];
 
   if (isAllMode) {
