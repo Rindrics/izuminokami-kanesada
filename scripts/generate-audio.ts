@@ -18,8 +18,8 @@ import * as fs from 'node:fs';
 import * as path from 'node:path';
 import textToSpeech from '@google-cloud/text-to-speech';
 import yaml from 'js-yaml';
-import { convertToOnyomi, ONYOMI_PAUSE_PLACEHOLDER } from '../src/lib/ruby';
 import { hanziDictionary } from '../src/data/hanzi-dictionary';
+import { convertToOnyomi, ONYOMI_PAUSE_PLACEHOLDER } from '../src/lib/ruby';
 import type { HanziMeaning } from '../src/types/hanzi';
 
 // ============================================================================
@@ -182,15 +182,8 @@ function getPinyinWithTone(
 const VOICE_CONFIG = {
   chinese: {
     languageCode: 'cmn-CN',
-    // Default voice (used for single-voice generation)
-    name: 'cmn-CN-Wavenet-A',
-    ssmlGender: 'FEMALE' as const,
-    // Speaker-specific voices for multi-voice generation
-    speakers: {
-      narrator: 'cmn-CN-Wavenet-A', // Female - for narration (子曰, etc.)
-      kongzi: 'cmn-CN-Wavenet-C', // Male - Confucius
-      other: 'cmn-CN-Wavenet-B', // Male - other characters
-    },
+    name: 'cmn-CN-Wavenet-B',
+    ssmlGender: 'MALE' as const,
   },
   japanese: {
     languageCode: 'ja-JP',
@@ -268,30 +261,12 @@ function placeholdersToSsml(text: string): string {
 }
 
 /**
- * Get the voice name and pitch for a speaker
- */
-function getVoiceForSpeaker(speaker: string | null): {
-  name: string;
-  pitch?: string;
-} {
-  const speakers = VOICE_CONFIG.chinese.speakers;
-  if (speaker === null) {
-    return { name: speakers.narrator };
-  }
-  if (speaker === 'kongzi') {
-    return { name: speakers.kongzi, pitch: '-40%' }; // Lower pitch for Confucius
-  }
-  return { name: speakers.other, pitch: '+20%' }; // Higher pitch for other characters
-}
-
-/**
  * Convert a segment to SSML with phoneme tags for each character
  * e.g., "子曰" -> '<phoneme alphabet="x-pinyin" ph="zi3">子</phoneme><phoneme alphabet="x-pinyin" ph="yue1">曰</phoneme>'
  */
 function segmentToSsmlWithPhonemes(
   hanziDict: Map<string, HanziMeaning[]>,
   segment: InputSegment,
-  options?: { wrapWithVoice?: boolean },
 ): string {
   const text = segment.text;
   const overrides = segment.hanzi_overrides ?? [];
@@ -366,17 +341,6 @@ function segmentToSsmlWithPhonemes(
     }
   }
 
-  // Wrap with voice tag if requested (for multi-voice Chinese)
-  if (options?.wrapWithVoice) {
-    const { name: voiceName, pitch } = getVoiceForSpeaker(segment.speaker);
-    if (pitch) {
-      // Add prosody tag for pitch adjustment
-      result = `<voice name="${voiceName}"><prosody pitch="${pitch}">${result}</prosody></voice>`;
-    } else {
-      result = `<voice name="${voiceName}">${result}</voice>`;
-    }
-  }
-
   return result;
 }
 
@@ -390,9 +354,9 @@ export function toChineseSsml(
   hanziDict: Map<string, HanziMeaning[]>,
   segments: InputSegment[],
 ): string {
-  // Convert each segment to SSML with phoneme tags and voice tags
+  // Convert each segment to SSML with phoneme tags
   const ssmlSegments = segments.map((s) =>
-    segmentToSsmlWithPhonemes(hanziDict, s, { wrapWithVoice: true }),
+    segmentToSsmlWithPhonemes(hanziDict, s),
   );
 
   // Join segments with clause pause placeholder
@@ -534,12 +498,8 @@ async function main(): Promise<void> {
 
   console.log('\nGenerating audio...');
 
-  // Chinese audio (multi-voice)
-  const { speakers } = VOICE_CONFIG.chinese;
-  console.log('  - Chinese (multi-voice)...');
-  console.log(`      Narrator: ${speakers.narrator}`);
-  console.log(`      Kongzi: ${speakers.kongzi}`);
-  console.log(`      Others: ${speakers.other}`);
+  // Chinese audio
+  console.log(`  - Chinese (${VOICE_CONFIG.chinese.name})...`);
   const chineseAudio = await generateAudio(client, chineseSsml, 'chinese');
   const chineseOutputPath = path.join(outputDir, `${chapterId}-zh.mp3`);
   fs.writeFileSync(chineseOutputPath, chineseAudio);
