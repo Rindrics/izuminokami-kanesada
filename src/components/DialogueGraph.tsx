@@ -120,7 +120,11 @@ export function DialogueGraph({ graph, height = '600px' }: DialogueGraphProps) {
           'target-arrow-color': chartTheme.cytoscape.edge.targetArrowColor,
           'target-arrow-shape': chartTheme.cytoscape.edge.targetArrowShape,
           'curve-style': chartTheme.cytoscape.edge.curveStyle,
-          label: chartTheme.cytoscape.edge.label,
+          label: (edge) => {
+            const edgeData = edge.data() as { topic: string };
+            // Only show label if topic is not empty (person->person edges)
+            return edgeData.topic || '';
+          },
           'text-rotation': chartTheme.cytoscape.edge.textRotation,
           'text-margin-y': chartTheme.cytoscape.edge.textMarginY,
           'font-size': chartTheme.cytoscape.edge.fontSize,

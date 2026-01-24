@@ -513,6 +513,17 @@ function generateSpeakerGraphs(contents: OutputContent[]): {
           });
         }
 
+        // Add concept nodes to dialogue graph
+        for (const concept of concepts) {
+          if (!dialogueNodes.has(concept)) {
+            dialogueNodes.set(concept, {
+              id: concept,
+              type: 'concept',
+              label: concept,
+            });
+          }
+        }
+
         for (const concept of concepts) {
           const edgeKey = `${segment.speaker}-${concept}`;
           const existingEdge = mentionEdges.get(edgeKey);
@@ -547,7 +558,7 @@ function generateSpeakerGraphs(contents: OutputContent[]): {
           }
         }
 
-        // If we have a previous speaker, create dialogue edge
+        // If we have a previous speaker, create dialogue edge between persons
         if (prevSpeaker && prevSpeaker !== segment.speaker) {
           // Extract topic from current or previous segment
           const currentConcepts = extractConcepts(segment.text);
@@ -593,6 +604,33 @@ function generateSpeakerGraphs(contents: OutputContent[]): {
               type: 'person',
               label: person?.name ?? segment.speaker,
             });
+          }
+        }
+
+        // Check if this is a standalone speech (no dialogue partner)
+        // If next segment doesn't have a different speaker, create person->concept edges
+        const nextSegment =
+          i + 1 < content.segments.length ? content.segments[i + 1] : null;
+        const hasNextSpeaker =
+          nextSegment &&
+          nextSegment.speaker !== null &&
+          nextSegment.speaker !== segment.speaker;
+
+        // If no next speaker or same speaker, create person->concept edges for standalone speech
+        if (!hasNextSpeaker && concepts.length > 0) {
+          for (const concept of concepts) {
+            const edgeKey = `${segment.speaker}-${concept}-standalone`;
+            const existingEdge = dialogueEdges.get(edgeKey);
+            if (existingEdge) {
+              existingEdge.weight += 1;
+            } else {
+              dialogueEdges.set(edgeKey, {
+                source: segment.speaker,
+                target: concept,
+                topic: '', // Empty topic for person->concept edges
+                weight: 1,
+              });
+            }
           }
         }
 
