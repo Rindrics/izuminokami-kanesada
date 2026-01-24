@@ -2,3 +2,4 @@ pnpm run check
 pnpm test
 pnpm run build
 pnpm run validate:contents
+pnpm run validate:audio-manifest

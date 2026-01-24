@@ -7,12 +7,16 @@ const INPUT_YAML_SCHEMA = `# Input YAML Schema for Content Generation
 # contents/input/lunyu/1/1.yaml
 
 segments:
-  - text: string        # Segment text (Chinese characters with spaces and markers)
+  - text: string          # Segment text (Chinese characters with spaces and markers)
     speaker: string|null  # Speaker ID (e.g., "kongzi", "youzi") or null for narration
+    hanzi_overrides:      # Optional: override readings for polyphonic characters
+      - char: string      # The character to override (e.g., "說")
+        position: number  # Position within segment text (0-indexed, including markers)
+        meaning_id: string # Meaning ID from hanzi-dictionary (e.g., "說-yuè")
 
-mentioned: string[]     # Character IDs mentioned but not speaking
+mentioned: string[]       # Character IDs mentioned but not speaking
 
-japanese: string        # Japanese reading (書き下し文)
+japanese: string          # Japanese reading (書き下し文)
 
 # Notes:
 # - Use spaces to separate semantic units (e.g., "子曰 學而時習之")
@@ -20,6 +24,18 @@ japanese: string        # Japanese reading (書き下し文)
 # - Use ";" to mark forced line breaks (e.g., "鮮矣; 不-好犯上")
 # - First segment is typically narration (speaker: null)
 # - Second segment is typically speech (speaker: character_id)
+#
+# Hanzi Overrides:
+# - Used for polyphonic characters where context determines the reading
+# - Example: 說 can be yuè (喜ぶ), shuō (言う), or shuì (説得する)
+# - In "不亦說乎", 說 means "喜ぶ" so use meaning_id: "說-yuè"
+# - Position is counted in the segment text including spaces and markers
+#
+# Common polyphonic characters:
+# - 說: 說-yuè (喜ぶ), 說-shuō (言う), 說-shuì (説得する)
+# - 樂: 樂-lè (楽しい), 樂-yuè (音楽)
+# - 為: 為-wéi (する), 為-wèi (ために)
+# - 好: 好-hǎo (良い), 好-hào (好む)
 
 # The following fields are auto-derived by generate-contents.ts:
 # - content_id: from file path (lunyu/1/1.yaml -> lunyu/1/1)

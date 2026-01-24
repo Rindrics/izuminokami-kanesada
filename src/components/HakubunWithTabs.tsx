@@ -466,32 +466,31 @@ export function HakubunWithTabs({ segments }: Props) {
             const isNarration = segment.speaker === null;
             const prevSegment = segments[index - 1];
             const prevIsNarration = prevSegment && prevSegment.speaker === null;
+            const isFirstSegment = index === 0;
 
-            // Speech after narration: wrap in block with indent
-            if (!isNarration && prevIsNarration) {
-              return (
-                <div
-                  key={`${segment.start_pos}-${segment.end_pos}`}
-                  style={{ paddingLeft: '1em' }}
-                >
-                  <TextWithRuby
-                    text={segment.text}
-                    mode={mode}
-                    isNarration={false}
-                  />
-                </div>
-              );
+            // Determine wrapper element and properties
+            let Wrapper: 'div' | 'span' = 'span';
+            const wrapperProps: { className?: string } = {};
+
+            if (!isFirstSegment) {
+              Wrapper = 'div';
+              // Speech after narration: add indent
+              if (!isNarration && prevIsNarration) {
+                wrapperProps.className = 'block pl-4';
+              }
             }
 
-            // Narration or other segments: inline
             return (
-              <span key={`${segment.start_pos}-${segment.end_pos}`}>
+              <Wrapper
+                key={`${segment.start_pos}-${segment.end_pos}`}
+                {...wrapperProps}
+              >
                 <TextWithRuby
                   text={segment.text}
                   mode={mode}
                   isNarration={isNarration}
                 />
-              </span>
+              </Wrapper>
             );
           })}
         </div>
