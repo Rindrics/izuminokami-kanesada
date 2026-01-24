@@ -33,6 +33,7 @@ const CONTENT_INPUT_DIR = 'contents/input';
 
 /**
  * Get list of changed YAML files in contents/input/ compared to origin/main
+ * @throws Error if git diff fails or origin/main is unavailable
  */
 function getChangedYamlFiles(): string[] {
   try {
@@ -46,12 +47,20 @@ function getChangedYamlFiles(): string[] {
       .trim()
       .split('\n')
       .filter((line) => line.length > 0);
-  } catch {
-    // If origin/main doesn't exist or git fails, return empty
-    console.warn(
-      'Warning: Could not compare with origin/main. Skipping audio manifest validation.',
+  } catch (error) {
+    // Log the full error details
+    console.error(
+      '❌ Failed to get changed YAML files from git diff:',
+      error instanceof Error ? error.message : String(error),
     );
-    return [];
+    if (error instanceof Error && error.stack) {
+      console.error('Stack trace:', error.stack);
+    }
+    throw new Error(
+      'Cannot validate audio manifest: git diff failed. ' +
+        'This usually means origin/main is not available or git is not accessible. ' +
+        'Please ensure you have a valid git repository with origin/main configured.',
+    );
   }
 }
 
@@ -133,5 +142,13 @@ function validateAudioManifest(): boolean {
 }
 
 // Run validation
-const isValid = validateAudioManifest();
-process.exit(isValid ? 0 : 1);
+try {
+  const isValid = validateAudioManifest();
+  process.exit(isValid ? 0 : 1);
+} catch (error) {
+  console.error(
+    '\n❌ Audio manifest validation failed with error:',
+    error instanceof Error ? error.message : String(error),
+  );
+  process.exit(1);
+}
