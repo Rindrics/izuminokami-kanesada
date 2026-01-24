@@ -24,7 +24,7 @@ function deriveContentId(filePath: string): string | null {
   const contentId = match[1];
 
   // Exclude non-content files
-  if (contentId === 'frequency-blacklist') {
+  if (contentId === 'frequency-blacklist' || contentId === 'compound-words') {
     return null;
   }
 
