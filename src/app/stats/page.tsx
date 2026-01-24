@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { ClickableChar } from '@/components/ClickableChar';
+import { DialogueGraph } from '@/components/DialogueGraph';
 import { books, getBookById } from '@/generated/books';
 import { getPersonName } from '@/generated/persons';
 import type { CharIndex } from '@/generated/stats';
@@ -432,6 +433,21 @@ export default function StatsPage() {
             charFrequencies={stats.charFrequencies}
           />
         </section>
+
+        {/* Dialogue Graph */}
+        {'dialogueGraph' in stats &&
+          stats.dialogueGraph &&
+          stats.dialogueGraph.nodes.length > 0 && (
+            <section className="mb-8">
+              <h2 className="mb-4 text-xl font-bold text-black dark:text-white">
+                対話相関図
+              </h2>
+              <p className="mb-3 text-sm text-zinc-500">
+                人物間の対話関係と人物から概念への言及関係を可視化（エッジの太さは言及回数に比例）
+              </p>
+              <DialogueGraph graph={stats.dialogueGraph} />
+            </section>
+          )}
       </main>
     </div>
   );

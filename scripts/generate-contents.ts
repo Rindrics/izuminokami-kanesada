@@ -313,6 +313,26 @@ interface CharIndex {
   contentIds: string[];
 }
 
+// Graph data structures for speaker relationship visualization
+interface GraphNode {
+  id: string;
+  type: 'person' | 'concept';
+  label: string;
+}
+
+interface GraphEdge {
+  source: string; // node id
+  target: string; // node id
+  topic: string; // topic/concept (e.g., "仁", "禮")
+  weight: number; // number of mentions (for edge thickness)
+  contentIds: string[]; // content IDs where this edge appears
+}
+
+interface SpeakerGraph {
+  nodes: GraphNode[];
+  edges: GraphEdge[];
+}
+
 interface Stats {
   charFrequencies: CharFrequency[];
   personFrequencies: PersonFrequency[];
@@ -321,6 +341,8 @@ interface Stats {
   frequencyBlacklist: string[];
   totalChars: number;
   totalChapters: number;
+  dialogueGraph: SpeakerGraph; // Person -> Person dialogue graph
+  mentionGraph: SpeakerGraph; // Person -> Concept mention graph
 }
 
 function loadFrequencyBlacklist(): string[] {
@@ -347,6 +369,390 @@ function loadCompoundWords(): string[] {
   const content = fs.readFileSync(compoundWordsPath, 'utf-8');
   const data = yaml.load(content) as string[];
   return data ?? [];
+}
+
+// Key concepts to track (same as in src/app/stats/page.tsx)
+const KEY_CONCEPTS = [
+  '仁',
+  '義',
+  '礼',
+  '禮', // variant
+  '智',
+  '信',
+  '孝',
+  '悌',
+  '忠',
+  '學',
+  '道',
+  '君',
+  '民',
+];
+
+// Parse "X 問 Y" pattern to extract questioner and topic
+// Returns { questioner: string | null, topic: string | null } or null if no match
+function parseQuestionPattern(text: string): {
+  questioner: string | null;
+  topic: string | null;
+} | null {
+  // Pattern: "X問Y" or "X問於Y曰" or "X問Y曰"
+  // Examples: "顏淵問仁", "子禽問於子貢曰"
+  if (!text.includes('問')) {
+    return null;
+  }
+
+  // Try to match "X問Y" pattern (simple case)
+  const simpleMatch = text.match(/^(.+?)問(.+?)$/);
+  if (simpleMatch) {
+    const questionerText = simpleMatch[1];
+    const rest = simpleMatch[2];
+
+    // Check if rest contains a key concept
+    let topic: string | null = null;
+    for (const concept of KEY_CONCEPTS) {
+      if (rest.includes(concept)) {
+        topic = concept;
+        break;
+      }
+    }
+
+    return {
+      questioner: questionerText || null,
+      topic,
+    };
+  }
+
+  // Try to match "X問於Y曰" pattern
+  const complexMatch = text.match(/^(.+?)問(?:於(.+?))?曰/);
+  if (complexMatch) {
+    const questionerText = complexMatch[1];
+    // For "X問於Y曰", the topic might be in the following segment
+    // So we return null for topic here and let the caller handle it
+    return {
+      questioner: questionerText || null,
+      topic: null,
+    };
+  }
+
+  // Try to find key concept in the text
+  let topic: string | null = null;
+  for (const concept of KEY_CONCEPTS) {
+    if (text.includes(concept)) {
+      topic = concept;
+      break;
+    }
+  }
+
+  if (topic) {
+    // Extract questioner from text (text before "問")
+    const questionerMatch = text.match(/^(.+?)問/);
+    return {
+      questioner: questionerMatch ? questionerMatch[1] : null,
+      topic,
+    };
+  }
+
+  return null;
+}
+
+// Extract concepts from text
+function extractConcepts(text: string): string[] {
+  const concepts: string[] = [];
+  for (const concept of KEY_CONCEPTS) {
+    if (text.includes(concept)) {
+      concepts.push(concept);
+    }
+  }
+  return concepts;
+}
+
+// Generate speaker graphs (dialogue and mention graphs)
+function generateSpeakerGraphs(contents: OutputContent[]): {
+  dialogueGraph: SpeakerGraph;
+  mentionGraph: SpeakerGraph;
+} {
+  // Dialogue graph: Person -> Person (with topic)
+  const dialogueEdges = new Map<string, GraphEdge>(); // key: "source-target-topic"
+  const dialogueNodes = new Map<string, GraphNode>(); // key: person ID
+
+  // Mention graph: Person -> Concept
+  const mentionEdges = new Map<string, GraphEdge>(); // key: "source-target"
+  const mentionNodes = new Map<string, GraphNode>(); // key: person ID or concept char
+
+  // Load persons for name mapping
+  const persons = loadPersonsYaml();
+  const personNameToId = new Map<string, string>();
+  for (const person of persons) {
+    personNameToId.set(person.name, person.id);
+    // Also map common aliases
+    if (person.name.includes('子')) {
+      personNameToId.set(person.name.replace('子', ''), person.id);
+    }
+  }
+
+  for (const content of contents) {
+    // First, extract dialogue relationships from actual speakers (ADR-0021)
+    // Process consecutive segments with different speakers as dialogue
+    let prevSpeaker: string | null = null;
+    let prevSegmentIndex = -1;
+
+    for (let i = 0; i < content.segments.length; i++) {
+      const segment = content.segments[i];
+
+      // Process actual speaker segments (not narration)
+      if (segment.speaker !== null) {
+        // Extract concepts from this speaker's segment
+        const concepts = extractConcepts(segment.text);
+
+        // Add person node to dialogue graph if they mention concepts
+        // (even if they don't have a dialogue partner)
+        if (concepts.length > 0 && !dialogueNodes.has(segment.speaker)) {
+          const person = persons.find((p) => p.id === segment.speaker);
+          dialogueNodes.set(segment.speaker, {
+            id: segment.speaker,
+            type: 'person',
+            label: person?.name ?? segment.speaker,
+          });
+        }
+
+        // Add concept nodes to dialogue graph
+        for (const concept of concepts) {
+          if (!dialogueNodes.has(concept)) {
+            dialogueNodes.set(concept, {
+              id: concept,
+              type: 'concept',
+              label: concept,
+            });
+          }
+        }
+
+        for (const concept of concepts) {
+          const edgeKey = `${segment.speaker}-${concept}`;
+          const existingEdge = mentionEdges.get(edgeKey);
+          if (existingEdge) {
+            existingEdge.weight += 1;
+            if (!existingEdge.contentIds.includes(content.content_id)) {
+              existingEdge.contentIds.push(content.content_id);
+            }
+          } else {
+            mentionEdges.set(edgeKey, {
+              source: segment.speaker,
+              target: concept,
+              topic: concept,
+              weight: 1,
+              contentIds: [content.content_id],
+            });
+          }
+
+          // Add person node
+          if (!mentionNodes.has(segment.speaker)) {
+            const person = persons.find((p) => p.id === segment.speaker);
+            mentionNodes.set(segment.speaker, {
+              id: segment.speaker,
+              type: 'person',
+              label: person?.name ?? segment.speaker,
+            });
+          }
+
+          // Add concept node
+          if (!mentionNodes.has(concept)) {
+            mentionNodes.set(concept, {
+              id: concept,
+              type: 'concept',
+              label: concept,
+            });
+          }
+        }
+
+        // If we have a previous speaker, create dialogue edge between persons
+        if (prevSpeaker && prevSpeaker !== segment.speaker) {
+          // Extract topic from current or previous segment
+          const currentConcepts = extractConcepts(segment.text);
+          const prevConcepts =
+            prevSegmentIndex >= 0
+              ? extractConcepts(content.segments[prevSegmentIndex].text)
+              : [];
+          // Only create edge if we found a concept, skip generic dialogue edges
+          const topic = currentConcepts[0] || prevConcepts[0];
+          if (!topic) {
+            // Skip if no concept found - we only want concept-based dialogues
+            prevSpeaker = segment.speaker;
+            prevSegmentIndex = i;
+            continue;
+          }
+
+          const edgeKey = `${prevSpeaker}-${segment.speaker}-${topic}`;
+          const existingEdge = dialogueEdges.get(edgeKey);
+          if (existingEdge) {
+            existingEdge.weight += 1;
+            if (!existingEdge.contentIds.includes(content.content_id)) {
+              existingEdge.contentIds.push(content.content_id);
+            }
+          } else {
+            dialogueEdges.set(edgeKey, {
+              source: prevSpeaker,
+              target: segment.speaker,
+              topic,
+              weight: 1,
+              contentIds: [content.content_id],
+            });
+          }
+
+          // Add nodes
+          if (!dialogueNodes.has(prevSpeaker)) {
+            const person = persons.find((p) => p.id === prevSpeaker);
+            dialogueNodes.set(prevSpeaker, {
+              id: prevSpeaker,
+              type: 'person',
+              label: person?.name ?? prevSpeaker,
+            });
+          }
+          if (!dialogueNodes.has(segment.speaker)) {
+            const person = persons.find((p) => p.id === segment.speaker);
+            dialogueNodes.set(segment.speaker, {
+              id: segment.speaker,
+              type: 'person',
+              label: person?.name ?? segment.speaker,
+            });
+          }
+        }
+
+        // Check if this is a standalone speech (no dialogue partner)
+        // If next segment doesn't have a different speaker, create person->concept edges
+        const nextSegment =
+          i + 1 < content.segments.length ? content.segments[i + 1] : null;
+        const hasNextSpeaker =
+          nextSegment &&
+          nextSegment.speaker !== null &&
+          nextSegment.speaker !== segment.speaker;
+
+        // If no next speaker or same speaker, create person->concept edges for standalone speech
+        if (!hasNextSpeaker && concepts.length > 0) {
+          for (const concept of concepts) {
+            const edgeKey = `${segment.speaker}-${concept}-standalone`;
+            const existingEdge = dialogueEdges.get(edgeKey);
+            if (existingEdge) {
+              existingEdge.weight += 1;
+              if (!existingEdge.contentIds.includes(content.content_id)) {
+                existingEdge.contentIds.push(content.content_id);
+              }
+            } else {
+              dialogueEdges.set(edgeKey, {
+                source: segment.speaker,
+                target: concept,
+                topic: '', // Empty topic for person->concept edges
+                weight: 1,
+                contentIds: [content.content_id],
+              });
+            }
+          }
+        }
+
+        prevSpeaker = segment.speaker;
+        prevSegmentIndex = i;
+      }
+    }
+
+    // Second, extract dialogue relationships from narration segments (ADR-0021)
+    // Only consider narration if mentioned field contains the person
+    for (let i = 0; i < content.segments.length; i++) {
+      const segment = content.segments[i];
+
+      if (segment.speaker === null) {
+        const questionMatch = parseQuestionPattern(segment.text);
+        if (questionMatch && questionMatch.questioner) {
+          // Find questioner by matching name from persons.yaml
+          let questionerId: string | null = null;
+          for (const person of persons) {
+            if (
+              questionMatch.questioner.includes(person.name) ||
+              person.name.includes(questionMatch.questioner)
+            ) {
+              // Only include if this person is in mentioned list (ADR-0021)
+              if (content.persons.mentioned.includes(person.id)) {
+                questionerId = person.id;
+                break;
+              }
+            }
+          }
+
+          // Find the next segment with a speaker (skip narration segments)
+          let addresseeId: string | null = null;
+          let nextSegment: (typeof content.segments)[number] | null = null;
+          for (let j = i + 1; j < content.segments.length; j++) {
+            const seg = content.segments[j];
+            if (seg.speaker !== null) {
+              addresseeId = seg.speaker;
+              nextSegment = seg;
+              break;
+            }
+          }
+
+          // Derive topic from questionMatch or extract from nextSegment
+          let topic: string | null = questionMatch.topic;
+          if (!topic && nextSegment) {
+            // Try to extract topic from nextSegment.text
+            const concepts = extractConcepts(nextSegment.text);
+            if (concepts.length > 0) {
+              topic = concepts[0];
+            } else {
+              // Fallback: try parseQuestionPattern on nextSegment.text
+              const nextMatch = parseQuestionPattern(nextSegment.text);
+              topic = nextMatch?.topic ?? null;
+            }
+          }
+
+          // Create dialogue edge only if questioner is in mentioned list, we have addressee, and topic
+          if (questionerId && addresseeId && topic && topic.trim()) {
+            const edgeKey = `${questionerId}-${addresseeId}-${topic.trim()}`;
+            const existingEdge = dialogueEdges.get(edgeKey);
+            if (existingEdge) {
+              existingEdge.weight += 1;
+              if (!existingEdge.contentIds.includes(content.content_id)) {
+                existingEdge.contentIds.push(content.content_id);
+              }
+            } else {
+              dialogueEdges.set(edgeKey, {
+                source: questionerId,
+                target: addresseeId,
+                topic: topic.trim(),
+                weight: 1,
+                contentIds: [content.content_id],
+              });
+            }
+
+            // Add nodes
+            if (!dialogueNodes.has(questionerId)) {
+              const person = persons.find((p) => p.id === questionerId);
+              dialogueNodes.set(questionerId, {
+                id: questionerId,
+                type: 'person',
+                label: person?.name ?? questionerId,
+              });
+            }
+            if (!dialogueNodes.has(addresseeId)) {
+              const person = persons.find((p) => p.id === addresseeId);
+              dialogueNodes.set(addresseeId, {
+                id: addresseeId,
+                type: 'person',
+                label: person?.name ?? addresseeId,
+              });
+            }
+          }
+        }
+      }
+    }
+  }
+
+  return {
+    dialogueGraph: {
+      nodes: Array.from(dialogueNodes.values()),
+      edges: Array.from(dialogueEdges.values()),
+    },
+    mentionGraph: {
+      nodes: Array.from(mentionNodes.values()),
+      edges: Array.from(mentionEdges.values()),
+    },
+  };
 }
 
 function generateStatsTypeScript(contents: OutputContent[]): string {
@@ -511,6 +917,9 @@ function generateStatsTypeScript(contents: OutputContent[]): string {
 
   const frequencyBlacklist = loadFrequencyBlacklist();
 
+  // Generate graph data for speaker relationships
+  const { dialogueGraph, mentionGraph } = generateSpeakerGraphs(contents);
+
   const stats: Stats = {
     charFrequencies,
     personFrequencies,
@@ -519,6 +928,8 @@ function generateStatsTypeScript(contents: OutputContent[]): string {
     frequencyBlacklist,
     totalChars,
     totalChapters: contents.length,
+    dialogueGraph,
+    mentionGraph,
   };
 
   const statsObjectStr = inspect(stats, {
@@ -556,6 +967,25 @@ export interface CharIndex {
   contentIds: string[];
 }
 
+export interface GraphNode {
+  id: string;
+  type: 'person' | 'concept';
+  label: string;
+}
+
+export interface GraphEdge {
+  source: string;
+  target: string;
+  topic: string;
+  weight: number;
+  contentIds: string[];
+}
+
+export interface SpeakerGraph {
+  nodes: GraphNode[];
+  edges: GraphEdge[];
+}
+
 export interface Stats {
   charFrequencies: CharFrequency[];
   personFrequencies: PersonFrequency[];
@@ -564,6 +994,8 @@ export interface Stats {
   frequencyBlacklist: string[];
   totalChars: number;
   totalChapters: number;
+  dialogueGraph: SpeakerGraph;
+  mentionGraph: SpeakerGraph;
 }
 
 export const stats: Stats = ${statsObjectStr};
