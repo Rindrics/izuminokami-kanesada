@@ -1227,6 +1227,51 @@ Please follow this workflow:
         if (zhMissing) missingFiles.push('zh');
         if (jaMissing) missingFiles.push('ja');
 
+        // Check pinyin_reviewed flag before regenerating audio
+        const yamlPath = path.join(
+          PROJECT_ROOT,
+          'contents',
+          'input',
+          bookId,
+          sectionId,
+          `${chapterId}.yaml`,
+        );
+
+        if (!fs.existsSync(yamlPath)) {
+          return {
+            content: [
+              {
+                type: 'text',
+                text: `YAML file not found: ${yamlPath}\nCannot check pinyin_reviewed flag.`,
+              },
+            ],
+            isError: true,
+          };
+        }
+
+        const yamlContent = fs.readFileSync(yamlPath, 'utf-8');
+        const parsed = yaml.parse(yamlContent);
+
+        if (parsed.pinyin_reviewed !== true) {
+          return {
+            content: [
+              {
+                type: 'text',
+                text: `❌ Cannot regenerate audio: pinyin_reviewed is not true.
+
+Missing local files: ${missingFiles.join(', ')}
+
+Please follow this workflow:
+1. Review polyphonic characters using get_polyphonic_info
+2. Update hanzi_overrides if needed using write_content_yaml
+3. Call set_pinyin_reviewed to mark as reviewed
+4. Then call upload_audio again (or generate_audio first)`,
+              },
+            ],
+            isError: true,
+          };
+        }
+
         // Regenerate and upload audio files using orchestrator
         try {
           const output = execSync(
