@@ -1,5 +1,8 @@
 # Changelog
 
+## [v0.2.1](https://github.com/Rindrics/izuminokami-kanesada/compare/v0.2.0...v0.2.1) - 2026-01-24
+- feat: add contents by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/60
+
 ## [v0.2.0](https://github.com/Rindrics/izuminokami-kanesada/compare/v0.1.2...v0.2.0) - 2026-01-24
 - feat: define service accounts to use Text-to-Speech by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/45
 - feat: add storage bucket for audio files by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/47
