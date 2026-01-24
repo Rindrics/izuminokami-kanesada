@@ -16,7 +16,9 @@ export function generateStaticParams() {
 }
 
 export default async function CharPage({ params }: PageProps) {
-  const { char } = await params;
+  const { char: rawChar } = await params;
+  // Next.js encodes the param internally, so we need to decode it
+  const char = decodeURIComponent(rawChar);
 
   // Find the character in the index
   const charEntry = stats.charIndex.find((e) => e.char === char);

@@ -21,7 +21,7 @@ export function ClickableChar({ char, className = '' }: ClickableCharProps) {
 
   return (
     <Link
-      href={`/char/${encodeURIComponent(char)}`}
+      href={`/char/${char}`}
       className={`cursor-pointer hover:bg-yellow-200 dark:hover:bg-yellow-800 ${className}`}
     >
       {char}
