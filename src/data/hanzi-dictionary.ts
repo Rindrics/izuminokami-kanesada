@@ -1530,7 +1530,7 @@ export const hanziDictionary: HanziEntry[] = [
     meanings: [
       {
         id: '終-zhōng',
-        onyomi: 'チュウ',
+        onyomi: 'シュウ',
         pinyin: 'zhōng',
         tone: 1,
         meaning_ja: '終わり',
@@ -2542,6 +2542,216 @@ export const hanziDictionary: HanziEntry[] = [
         pinyin: 'gòng',
         tone: 4,
         meaning_ja: 'ともにする',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '大',
+    meanings: [
+      {
+        id: '大-dà',
+        onyomi: 'ダイ',
+        pinyin: 'dà',
+        tone: 4,
+        meaning_ja: '大きい',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '后',
+    meanings: [
+      {
+        id: '后-hòu',
+        onyomi: 'コウ',
+        pinyin: 'hòu',
+        tone: 4,
+        meaning_ja: '後',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '明',
+    meanings: [
+      {
+        id: '明-míng',
+        onyomi: 'メイ',
+        pinyin: 'míng',
+        tone: 2,
+        meaning_ja: '明らか',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '止',
+    meanings: [
+      {
+        id: '止-zhǐ',
+        onyomi: 'シ',
+        pinyin: 'zhǐ',
+        tone: 3,
+        meaning_ja: '止まる',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '善',
+    meanings: [
+      {
+        id: '善-shàn',
+        onyomi: 'ゼン',
+        pinyin: 'shàn',
+        tone: 4,
+        meaning_ja: '善い',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '定',
+    meanings: [
+      {
+        id: '定-dìng',
+        onyomi: 'テイ',
+        pinyin: 'dìng',
+        tone: 4,
+        meaning_ja: '定まる',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '靜',
+    meanings: [
+      {
+        id: '靜-jìng',
+        onyomi: 'セイ',
+        pinyin: 'jìng',
+        tone: 4,
+        meaning_ja: '静か',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '安',
+    meanings: [
+      {
+        id: '安-ān',
+        onyomi: 'アン',
+        pinyin: 'ān',
+        tone: 1,
+        meaning_ja: '安らか',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '慮',
+    meanings: [
+      {
+        id: '慮-lǜ',
+        onyomi: 'リョ',
+        pinyin: 'lǜ',
+        tone: 4,
+        meaning_ja: '慮る',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '物',
+    meanings: [
+      {
+        id: '物-wù',
+        onyomi: 'ブツ',
+        pinyin: 'wù',
+        tone: 4,
+        meaning_ja: '物',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '末',
+    meanings: [
+      {
+        id: '末-mò',
+        onyomi: 'マツ',
+        pinyin: 'mò',
+        tone: 4,
+        meaning_ja: '末',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '始',
+    meanings: [
+      {
+        id: '始-shǐ',
+        onyomi: 'シ',
+        pinyin: 'shǐ',
+        tone: 3,
+        meaning_ja: '始め',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '先',
+    meanings: [
+      {
+        id: '先-xiān',
+        onyomi: 'セン',
+        pinyin: 'xiān',
+        tone: 1,
+        meaning_ja: '先',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '後',
+    meanings: [
+      {
+        id: '後-hòu',
+        onyomi: 'コ゚',
+        pinyin: 'hòu',
+        tone: 4,
+        meaning_ja: '後',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '近',
+    meanings: [
+      {
+        id: '近-jìn',
+        onyomi: 'キン',
+        pinyin: 'jìn',
+        tone: 4,
+        meaning_ja: '近い',
         is_default: true,
       },
     ],

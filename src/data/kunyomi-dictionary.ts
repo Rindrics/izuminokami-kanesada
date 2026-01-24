@@ -961,6 +961,76 @@ export const kunyomiDictionary: KunyomiEntry[] = [
     text: '共',
     readings: [{ id: '共-とも', ruby: 'とも', is_default: true }],
   },
+  {
+    id: '大学',
+    text: '大学',
+    readings: [{ id: '大学-だいがく', ruby: 'だいがく', is_default: true }],
+  },
+  {
+    id: '后',
+    text: '后',
+    readings: [{ id: '后-のち', ruby: 'のち', is_default: true }],
+  },
+  {
+    id: '明',
+    text: '明',
+    readings: [{ id: '明-あき', ruby: 'あき', is_default: true }],
+  },
+  {
+    id: '至善',
+    text: '至善',
+    readings: [{ id: '至善-しぜん', ruby: 'しぜん', is_default: true }],
+  },
+  {
+    id: '止',
+    text: '止',
+    readings: [{ id: '止-とど', ruby: 'とど', is_default: true }],
+  },
+  {
+    id: '定',
+    text: '定',
+    readings: [{ id: '定-さだ', ruby: 'さだ', is_default: true }],
+  },
+  {
+    id: '静',
+    text: '静',
+    readings: [{ id: '静-しず', ruby: 'しず', is_default: true }],
+  },
+  {
+    id: '安',
+    text: '安',
+    readings: [{ id: '安-やす', ruby: 'やす', is_default: true }],
+  },
+  {
+    id: '慮',
+    text: '慮',
+    readings: [{ id: '慮-おもんぱか', ruby: 'おもんぱか', is_default: true }],
+  },
+  {
+    id: '物',
+    text: '物',
+    readings: [{ id: '物-ぶつ', ruby: 'ぶつ', is_default: true }],
+  },
+  {
+    id: '末',
+    text: '末',
+    readings: [{ id: '末-まつ', ruby: 'まつ', is_default: true }],
+  },
+  {
+    id: '終始',
+    text: '終始',
+    readings: [{ id: '終始-しゅうし', ruby: 'しゅうし', is_default: true }],
+  },
+  {
+    id: '先後',
+    text: '先後',
+    readings: [{ id: '先後-せんご', ruby: 'せんご', is_default: true }],
+  },
+  {
+    id: '近',
+    text: '近',
+    readings: [{ id: '近-ちか', ruby: 'ちか', is_default: true }],
+  },
 ];
 
 export function getKunyomiEntry(text: string): KunyomiEntry | undefined {
