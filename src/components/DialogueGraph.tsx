@@ -2,8 +2,10 @@
 
 import cytoscape, {
   type Core,
+  type EdgeSingular,
   type ElementDefinition,
-  type Stylesheet,
+  type NodeSingular,
+  type StylesheetStyle,
 } from 'cytoscape';
 // @ts-expect-error - cytoscape-fcose doesn't have TypeScript definitions
 import fcose from 'cytoscape-fcose';
@@ -77,7 +79,7 @@ export function DialogueGraph({ graph, height = '600px' }: DialogueGraphProps) {
     ];
 
     // Cytoscape stylesheet
-    const stylesheet: Stylesheet[] = [
+    const stylesheet: StylesheetStyle[] = [
       {
         selector: 'node[type = "person"]',
         style: {
@@ -97,11 +99,11 @@ export function DialogueGraph({ graph, height = '600px' }: DialogueGraphProps) {
           'text-valign': 'center',
           'text-halign': 'center',
           'text-wrap': 'wrap',
-          'text-max-width': 100,
+          'text-max-width': '100px',
           color: '#FFFFFF', // White text for dark backgrounds
           'font-size': chartTheme.cytoscape.node.fontSize,
           'font-weight': chartTheme.cytoscape.node.fontWeight,
-          padding: 8,
+          padding: '8px',
         },
       },
       {
@@ -124,7 +126,7 @@ export function DialogueGraph({ graph, height = '600px' }: DialogueGraphProps) {
       {
         selector: 'edge',
         style: {
-          width: (edge) => {
+          width: (edge: EdgeSingular) => {
             const edgeData = edge.data() as { weight: number };
             const { min, max } = chartTheme.styles.edgeWidth;
             // Normalize weight to edge width (assuming max weight is around 10)
@@ -135,7 +137,7 @@ export function DialogueGraph({ graph, height = '600px' }: DialogueGraphProps) {
           'target-arrow-color': chartTheme.cytoscape.edge.targetArrowColor,
           'target-arrow-shape': chartTheme.cytoscape.edge.targetArrowShape,
           'curve-style': chartTheme.cytoscape.edge.curveStyle,
-          label: (edge) => {
+          label: (edge: EdgeSingular) => {
             const edgeData = edge.data() as { topic: string };
             // Only show label if topic is not empty (person->person edges)
             return edgeData.topic || '';
@@ -158,6 +160,7 @@ export function DialogueGraph({ graph, height = '600px' }: DialogueGraphProps) {
     // Run layout with fcose (better overlap prevention)
     const layout = cy.layout({
       name: 'fcose',
+      // @ts-expect-error - fcose layout options are not fully typed
       quality: 'proof', // Use highest quality for best overlap prevention
       randomize: true,
       animate: false, // Disable animation for faster rendering
@@ -171,7 +174,7 @@ export function DialogueGraph({ graph, height = '600px' }: DialogueGraphProps) {
       step: 'all', // Run all steps
 
       // Node repulsion and spacing
-      nodeRepulsion: (node) => {
+      nodeRepulsion: (node: NodeSingular) => {
         const nodeType = node.data('type');
         // Concepts need more space
         if (nodeType === 'concept') {
@@ -180,7 +183,7 @@ export function DialogueGraph({ graph, height = '600px' }: DialogueGraphProps) {
         // Persons need even more space
         return 15000;
       },
-      idealEdgeLength: (edge) => {
+      idealEdgeLength: (edge: EdgeSingular) => {
         const sourceType = edge.source().data('type');
         const targetType = edge.target().data('type');
         // Person-to-concept edges should be longer
@@ -190,7 +193,7 @@ export function DialogueGraph({ graph, height = '600px' }: DialogueGraphProps) {
         // Person-to-person edges
         return 250;
       },
-      edgeElasticity: (edge) => {
+      edgeElasticity: (edge: EdgeSingular) => {
         const sourceType = edge.source().data('type');
         const targetType = edge.target().data('type');
         // Person-to-concept edges

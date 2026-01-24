@@ -2,8 +2,10 @@
 
 import cytoscape, {
   type Core,
+  type EdgeSingular,
   type ElementDefinition,
-  type Stylesheet,
+  type NodeSingular,
+  type StylesheetStyle,
 } from 'cytoscape';
 // @ts-expect-error - cytoscape-fcose doesn't have TypeScript definitions
 import fcose from 'cytoscape-fcose';
@@ -61,7 +63,7 @@ export function MentionGraph({ graph, height = '600px' }: MentionGraphProps) {
     ];
 
     // Cytoscape stylesheet (similar to DialogueGraph but optimized for person-concept relationships)
-    const stylesheet: Stylesheet[] = [
+    const stylesheet: StylesheetStyle[] = [
       {
         selector: 'node[type = "person"]',
         style: {
@@ -81,11 +83,11 @@ export function MentionGraph({ graph, height = '600px' }: MentionGraphProps) {
           'text-valign': 'center',
           'text-halign': 'center',
           'text-wrap': 'wrap',
-          'text-max-width': 100,
+          'text-max-width': '100px',
           color: chartTheme.cytoscape.node.textColor,
           'font-size': chartTheme.cytoscape.node.fontSize,
           'font-weight': chartTheme.cytoscape.node.fontWeight,
-          padding: 8,
+          padding: '8px',
         },
       },
       {
@@ -108,7 +110,7 @@ export function MentionGraph({ graph, height = '600px' }: MentionGraphProps) {
       {
         selector: 'edge',
         style: {
-          width: (edge) => {
+          width: (edge: EdgeSingular) => {
             const edgeData = edge.data() as { weight: number };
             const { min, max } = chartTheme.styles.edgeWidth;
             // Normalize weight to edge width
@@ -138,6 +140,7 @@ export function MentionGraph({ graph, height = '600px' }: MentionGraphProps) {
     // Run layout with fcose (better overlap prevention)
     const layout = cy.layout({
       name: 'fcose',
+      // @ts-expect-error - fcose layout options are not fully typed
       quality: 'proof', // Use highest quality for best overlap prevention
       randomize: true,
       animate: false, // Disable animation for faster rendering
@@ -151,7 +154,7 @@ export function MentionGraph({ graph, height = '600px' }: MentionGraphProps) {
       step: 'all', // Run all steps
 
       // Node repulsion and spacing
-      nodeRepulsion: (node) => {
+      nodeRepulsion: (node: NodeSingular) => {
         const nodeType = node.data('type');
         // Concepts need more space
         if (nodeType === 'concept') {
