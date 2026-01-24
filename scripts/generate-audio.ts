@@ -235,8 +235,8 @@ interface SpeakerProsody {
 const SPEAKER_PROSODY: Record<string, SpeakerProsody> = {
   // Confucius: lowest voice, slowest, longest pauses
   kongzi: {
-    pitch: '-9st',
-    rate: 0.7,
+    pitch: '-10st',
+    rate: 0.8,
     pauseMultiplier: 1.3,
   },
   // Narrator (null speaker): low voice, slightly slow, normal pauses
@@ -247,7 +247,7 @@ const SPEAKER_PROSODY: Record<string, SpeakerProsody> = {
   },
   // Other characters: normal voice, slightly slow, slightly longer pauses
   other: {
-    pitch: '2st',
+    pitch: '3st',
     rate: 0.9,
     pauseMultiplier: 1.3,
   },
@@ -307,15 +307,11 @@ function placeholdersToSsml(text: string, pauseMultiplier = 1.0): string {
 
 /**
  * Convert a segment to SSML with phoneme tags for each character
- * e.g., "子曰" -> '<phoneme alphabet="x-pinyin" ph="zi3">子</phoneme><phoneme alphabet="x-pinyin" ph="yue1">曰</phoneme>'
- *
- * When wrapWithProsody is true, wraps the segment with <prosody> tags
- * using character-specific pitch and rate settings.
+ * e.g., "子曰" -> '<phoneme alphabet="pinyin" ph="zi3">子</phoneme><phoneme alphabet="pinyin" ph="yue1">曰</phoneme>'
  */
 function segmentToSsmlWithPhonemes(
   hanziDict: Map<string, HanziMeaning[]>,
   segment: InputSegment,
-  options?: { wrapWithProsody?: boolean },
 ): string {
   const text = segment.text;
   const overrides = segment.hanzi_overrides ?? [];
@@ -390,19 +386,39 @@ function segmentToSsmlWithPhonemes(
     }
   }
 
-  // Wrap with prosody tag if requested (for character-specific voice adjustments)
-  if (options?.wrapWithProsody) {
-    const prosody = getSpeakerProsody(segment.speaker);
-    result = `<prosody pitch="${prosody.pitch}" rate="${prosody.rate}">${result}</prosody>`;
-  }
-
   return result;
+}
+
+/**
+ * Wrap content with sentence tags, splitting on break tags
+ * e.g., "A<break.../>B<break.../>C" -> "<s>A</s><break.../><s>B</s><break.../><s>C</s>"
+ */
+function wrapWithSentenceTags(content: string): string {
+  // Split content by break tags while preserving the breaks
+  const breakPattern = /(<break[^>]*\/>)/g;
+  const parts = content.split(breakPattern);
+
+  return parts
+    .map((part) => {
+      // If it's a break tag, keep it as-is
+      if (part.match(breakPattern)) {
+        return part;
+      }
+      // If it's non-empty content, wrap with <s> tags
+      if (part.trim()) {
+        return `<s>${part}</s>`;
+      }
+      return part;
+    })
+    .join('');
 }
 
 /**
  * Convert Chinese text to SSML with phoneme tags and character-specific prosody
  * - Uses <phoneme alphabet="pinyin" ph="...">漢字</phoneme> for each character
  * - Uses <prosody> tags for character-specific pitch and rate
+ * - Uses <p> tags to wrap each speaker's utterance (paragraph)
+ * - Uses <s> tags to wrap each sentence within the utterance
  * - Adjusts pause durations based on character's pauseMultiplier
  */
 export function toChineseSsml(
@@ -415,20 +431,30 @@ export function toChineseSsml(
   for (const segment of segments) {
     const prosody = getSpeakerProsody(segment.speaker);
 
-    // Convert segment to SSML with phoneme tags and prosody wrapper
-    let segmentSsml = segmentToSsmlWithPhonemes(hanziDict, segment, {
-      wrapWithProsody: true,
-    });
+    // Convert segment to SSML with phoneme tags (without prosody wrapper yet)
+    let segmentContent = segmentToSsmlWithPhonemes(hanziDict, segment);
 
     // Add pause placeholders after punctuation within this segment
-    segmentSsml = segmentSsml
+    segmentContent = segmentContent
       .replace(/。/g, `。${PLACEHOLDER.sentenceEnd}`)
       .replace(/，/g, `，${PLACEHOLDER.clauseEnd}`);
 
     // Convert placeholders to SSML with character-specific pause multiplier
-    segmentSsml = placeholdersToSsml(segmentSsml, prosody.pauseMultiplier);
+    segmentContent = placeholdersToSsml(
+      segmentContent,
+      prosody.pauseMultiplier,
+    );
 
-    processedSegments.push(segmentSsml);
+    // Wrap break-separated parts with <s> tags
+    const withSentenceTags = wrapWithSentenceTags(segmentContent);
+
+    // Wrap with prosody tag for pitch and rate
+    const withProsody = `<prosody pitch="${prosody.pitch}" rate="${prosody.rate}">${withSentenceTags}</prosody>`;
+
+    // Wrap with paragraph tag (one speaker's utterance = one paragraph)
+    const withParagraph = `<p>${withProsody}</p>`;
+
+    processedSegments.push(withParagraph);
   }
 
   // Join segments with clause pauses (use narrator's pause duration as default between segments)
