@@ -195,6 +195,9 @@ export function DialogueGraph({ graph, height = '600px' }: DialogueGraphProps) {
       tilingPaddingHorizontal: 50,
     });
 
+    // Run the layout to compute and apply node positions
+    layout.run();
+
     cyRef.current = cy;
 
     // Cleanup
