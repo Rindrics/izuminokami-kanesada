@@ -19,6 +19,8 @@ import * as path from 'node:path';
 import textToSpeech from '@google-cloud/text-to-speech';
 import yaml from 'js-yaml';
 import { convertToOnyomi, ONYOMI_PAUSE_PLACEHOLDER } from '../src/lib/ruby';
+import { hanziDictionary } from '../src/data/hanzi-dictionary';
+import type { HanziMeaning } from '../src/types/hanzi';
 
 // ============================================================================
 // Audio Manifest Types and Functions
@@ -96,44 +98,12 @@ function updateManifestEntry(
 // Hanzi Dictionary
 // ============================================================================
 
-// Hanzi dictionary types
-interface HanziMeaning {
-  id: string;
-  pinyin: string;
-  tone: number;
-  is_default: boolean;
-}
-
-// Load hanzi dictionary dynamically
+// Load hanzi dictionary from module exports
 function loadHanziDictionary(): Map<string, HanziMeaning[]> {
-  const dictPath = path.join(process.cwd(), 'src/data/hanzi-dictionary.ts');
-  const content = fs.readFileSync(dictPath, 'utf-8');
-
   const charMeanings = new Map<string, HanziMeaning[]>();
 
-  // Parse entries using regex with named capture groups
-  const entryRegex =
-    /\{\s*id:\s*'(?<charId>[^']+)',\s*meanings:\s*\[(?<meaningsStr>[\s\S]*?)\],\s*is_common/g;
-  const meaningRegex =
-    /\{\s*id:\s*'(?<id>[^']+)',[\s\S]*?pinyin:\s*'(?<pinyin>[^']+)',\s*tone:\s*(?<tone>\d+),[\s\S]*?is_default:\s*(?<isDefault>true|false)/g;
-
-  for (const entryMatch of content.matchAll(entryRegex)) {
-    const { charId, meaningsStr } = entryMatch.groups!;
-    const meanings: HanziMeaning[] = [];
-
-    for (const meaningMatch of meaningsStr.matchAll(meaningRegex)) {
-      const { id, pinyin, tone, isDefault } = meaningMatch.groups!;
-      meanings.push({
-        id,
-        pinyin,
-        tone: parseInt(tone, 10),
-        is_default: isDefault === 'true',
-      });
-    }
-
-    if (meanings.length > 0) {
-      charMeanings.set(charId, meanings);
-    }
+  for (const entry of hanziDictionary) {
+    charMeanings.set(entry.id, entry.meanings);
   }
 
   return charMeanings;

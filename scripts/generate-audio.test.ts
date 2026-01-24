@@ -1,48 +1,14 @@
-import * as fs from 'node:fs';
-import * as path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { toChineseSsml } from './generate-audio';
+import { hanziDictionary } from '../src/data/hanzi-dictionary';
+import type { HanziMeaning } from '../src/types/hanzi';
 
 // Load actual hanzi dictionary for integration testing
-function loadActualHanziDictionary(): Map<
-  string,
-  Array<{ id: string; pinyin: string; tone: number; is_default: boolean }>
-> {
-  const dictPath = path.join(process.cwd(), 'src/data/hanzi-dictionary.ts');
-  const content = fs.readFileSync(dictPath, 'utf-8');
+function loadActualHanziDictionary(): Map<string, HanziMeaning[]> {
+  const charMeanings = new Map<string, HanziMeaning[]>();
 
-  const charMeanings = new Map<
-    string,
-    Array<{ id: string; pinyin: string; tone: number; is_default: boolean }>
-  >();
-
-  const entryRegex =
-    /\{\s*id:\s*'(?<charId>[^']+)',\s*meanings:\s*\[(?<meaningsStr>[\s\S]*?)\],\s*is_common/g;
-  const meaningRegex =
-    /\{\s*id:\s*'(?<id>[^']+)',[\s\S]*?pinyin:\s*'(?<pinyin>[^']+)',\s*tone:\s*(?<tone>\d+),[\s\S]*?is_default:\s*(?<isDefault>true|false)/g;
-
-  for (const entryMatch of content.matchAll(entryRegex)) {
-    const { charId, meaningsStr } = entryMatch.groups!;
-    const meanings: Array<{
-      id: string;
-      pinyin: string;
-      tone: number;
-      is_default: boolean;
-    }> = [];
-
-    for (const meaningMatch of meaningsStr.matchAll(meaningRegex)) {
-      const { id, pinyin, tone, isDefault } = meaningMatch.groups!;
-      meanings.push({
-        id,
-        pinyin,
-        tone: parseInt(tone, 10),
-        is_default: isDefault === 'true',
-      });
-    }
-
-    if (meanings.length > 0) {
-      charMeanings.set(charId, meanings);
-    }
+  for (const entry of hanziDictionary) {
+    charMeanings.set(entry.id, entry.meanings);
   }
 
   return charMeanings;
