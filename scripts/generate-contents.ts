@@ -180,7 +180,12 @@ function getBookName(bookId: string): string {
 
 function parseInputFile(filePath: string): InputContent {
   const content = fs.readFileSync(filePath, 'utf-8');
-  return yaml.load(content) as InputContent;
+  const parsed = yaml.load(content) as InputContent;
+
+  // Defensively normalize mentioned to an empty array if missing or not an array
+  parsed.mentioned = Array.isArray(parsed.mentioned) ? parsed.mentioned : [];
+
+  return parsed;
 }
 
 function deriveContent(
