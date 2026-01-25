@@ -275,7 +275,7 @@ export function TimelineFineo({
 
   // Get link opacity
   const getLinkOpacity = (link: Link): number => {
-    const linkId = `${link.personId}-${link.bookId}`;
+    const linkId = `${link.personId}::${link.bookId}`;
     if (hoveredLink === linkId) return 0.8;
     if (hoveredNode) {
       if (link.personId === hoveredNode || link.bookId === hoveredNode) {
@@ -324,7 +324,9 @@ export function TimelineFineo({
   // Get hover info
   const getHoverInfo = (): string | null => {
     if (hoveredLink) {
-      const [personId, bookId] = hoveredLink.split('-');
+      const delimiterIndex = hoveredLink.indexOf('::');
+      const personId = hoveredLink.slice(0, delimiterIndex);
+      const bookId = hoveredLink.slice(delimiterIndex + 2);
       const person = personNodes.find((p) => p.id === personId);
       const book = bookNodes.find((b) => b.id === bookId);
       const link = links.find(
@@ -418,11 +420,11 @@ export function TimelineFineo({
             const book = bookNodes.find((b) => b.id === link.bookId);
             if (!person || !book) return null;
 
-            const linkId = `${link.personId}-${link.bookId}`;
+            const linkId = `${link.personId}::${link.bookId}`;
             const pathData = generatePath(person, book);
 
-            // Gradient from person to book
-            const gradientId = `tl-grad-${linkId}`;
+            // Gradient from person to book (use hyphen for CSS ID compatibility)
+            const gradientId = `tl-grad-${link.personId}-${link.bookId}`;
 
             return (
               <g key={linkId}>
