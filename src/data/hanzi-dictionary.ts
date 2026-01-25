@@ -760,7 +760,7 @@ export const hanziDictionary: HanziEntry[] = [
     meanings: [
       {
         id: '吾-wú',
-        onyomi: 'ム',
+        onyomi: 'ゴ',
         pinyin: 'wú',
         tone: 2,
         meaning_ja: '我、私',
@@ -928,7 +928,7 @@ export const hanziDictionary: HanziEntry[] = [
     meanings: [
       {
         id: '乘-shèng',
-        onyomi: 'セイ',
+        onyomi: 'ジョウ',
         pinyin: 'shèng',
         tone: 4,
         meaning_ja: '乗り物、車',
@@ -1026,7 +1026,7 @@ export const hanziDictionary: HanziEntry[] = [
     meanings: [
       {
         id: '使-shǐ',
-        onyomi: 'ジ',
+        onyomi: 'シ',
         pinyin: 'shǐ',
         tone: 3,
         meaning_ja: '使う、使わせる',
@@ -1166,7 +1166,7 @@ export const hanziDictionary: HanziEntry[] = [
     meanings: [
       {
         id: '行-xíng',
-        onyomi: 'セイ',
+        onyomi: 'コウ',
         pinyin: 'xíng',
         tone: 2,
         meaning_ja: '行う',
@@ -1194,7 +1194,7 @@ export const hanziDictionary: HanziEntry[] = [
     meanings: [
       {
         id: '力-lì',
-        onyomi: 'リツ',
+        onyomi: 'リョク',
         pinyin: 'lì',
         tone: 4,
         meaning_ja: '力',
@@ -1222,7 +1222,7 @@ export const hanziDictionary: HanziEntry[] = [
     meanings: [
       {
         id: '賢-xián',
-        onyomi: 'セン',
+        onyomi: 'ケン',
         pinyin: 'xián',
         tone: 2,
         meaning_ja: '賢い',
@@ -1292,7 +1292,7 @@ export const hanziDictionary: HanziEntry[] = [
     meanings: [
       {
         id: '竭-jié',
-        onyomi: 'セツ',
+        onyomi: 'ケツ',
         pinyin: 'jié',
         tone: 2,
         meaning_ja: '尽くす',
@@ -1362,7 +1362,7 @@ export const hanziDictionary: HanziEntry[] = [
     meanings: [
       {
         id: '重-zhòng',
-        onyomi: 'チュウ',
+        onyomi: 'ジュウ',
         pinyin: 'zhòng',
         tone: 4,
         meaning_ja: '重い、重んずる',
@@ -1460,7 +1460,7 @@ export const hanziDictionary: HanziEntry[] = [
     meanings: [
       {
         id: '過-guò',
-        onyomi: 'コク',
+        onyomi: 'カ',
         pinyin: 'guò',
         tone: 4,
         meaning_ja: '過つ、過ぎる',
@@ -1474,7 +1474,7 @@ export const hanziDictionary: HanziEntry[] = [
     meanings: [
       {
         id: '勿-wù',
-        onyomi: 'ム',
+        onyomi: 'ブツ',
         pinyin: 'wù',
         tone: 4,
         meaning_ja: '勿れ、なかれ',
@@ -2160,7 +2160,7 @@ export const hanziDictionary: HanziEntry[] = [
     meanings: [
       {
         id: '勇-yǒng',
-        onyomi: 'ヨウ',
+        onyomi: 'ユウ',
         pinyin: 'yǒng',
         tone: 3,
         meaning_ja: 'いさむ、勇気',
@@ -2258,7 +2258,7 @@ export const hanziDictionary: HanziEntry[] = [
     meanings: [
       {
         id: '禮-lǐ',
-        onyomi: 'リツ',
+        onyomi: 'レイ',
         pinyin: 'lǐ',
         tone: 3,
         meaning_ja: 'れい',
@@ -2314,7 +2314,7 @@ export const hanziDictionary: HanziEntry[] = [
     meanings: [
       {
         id: '焉-yān',
-        onyomi: 'ゲン',
+        onyomi: 'エン',
         pinyin: 'yān',
         tone: 1,
         meaning_ja: 'これ',
@@ -2818,7 +2818,7 @@ export const hanziDictionary: HanziEntry[] = [
     meanings: [
       {
         id: '教-jiào',
-        onyomi: 'コウ',
+        onyomi: 'キョウ',
         pinyin: 'jiào',
         tone: 4,
         meaning_ja: '教え',
@@ -2860,7 +2860,7 @@ export const hanziDictionary: HanziEntry[] = [
     meanings: [
       {
         id: '離-lí',
-        onyomi: 'リツ',
+        onyomi: 'リ',
         pinyin: 'lí',
         tone: 2,
         meaning_ja: '離れる',
@@ -2888,7 +2888,7 @@ export const hanziDictionary: HanziEntry[] = [
     meanings: [
       {
         id: '戒-jiè',
-        onyomi: 'セツ',
+        onyomi: 'カイ',
         pinyin: 'jiè',
         tone: 4,
         meaning_ja: '戒める',
@@ -2972,10 +2972,10 @@ export const hanziDictionary: HanziEntry[] = [
     meanings: [
       {
         id: '見-xiàn',
-        onyomi: 'セン',
+        onyomi: 'ケン',
         pinyin: 'xiàn',
         tone: 4,
-        meaning_ja: '現れる',
+        meaning_ja: '会う',
         is_default: true,
       },
     ],
@@ -3000,7 +3000,7 @@ export const hanziDictionary: HanziEntry[] = [
     meanings: [
       {
         id: '顯-xiǎn',
-        onyomi: 'セン',
+        onyomi: 'ケン',
         pinyin: 'xiǎn',
         tone: 3,
         meaning_ja: '顕らか',
@@ -3014,7 +3014,7 @@ export const hanziDictionary: HanziEntry[] = [
     meanings: [
       {
         id: '微-wēi',
-        onyomi: 'イ',
+        onyomi: 'ビ',
         pinyin: 'wēi',
         tone: 1,
         meaning_ja: '微か',
@@ -3112,7 +3112,7 @@ export const hanziDictionary: HanziEntry[] = [
     meanings: [
       {
         id: '里-lǐ',
-        onyomi: 'リツ',
+        onyomi: 'リ',
         pinyin: 'lǐ',
         tone: 3,
         meaning_ja: '里',
@@ -3140,7 +3140,7 @@ export const hanziDictionary: HanziEntry[] = [
     meanings: [
       {
         id: '利-lì',
-        onyomi: 'リツ',
+        onyomi: 'リ',
         pinyin: 'lì',
         tone: 4,
         meaning_ja: '利する',
@@ -3252,7 +3252,7 @@ export const hanziDictionary: HanziEntry[] = [
     meanings: [
       {
         id: '危-wēi',
-        onyomi: 'イ',
+        onyomi: 'キ',
         pinyin: 'wēi',
         tone: 1,
         meaning_ja: 'あやうい',
@@ -3280,7 +3280,7 @@ export const hanziDictionary: HanziEntry[] = [
     meanings: [
       {
         id: '弒-shì',
-        onyomi: 'ジ',
+        onyomi: 'シ',
         pinyin: 'shì',
         tone: 4,
         meaning_ja: '弑す（君・父を殺す）',
@@ -3364,7 +3364,7 @@ export const hanziDictionary: HanziEntry[] = [
     meanings: [
       {
         id: '饜-yàn',
-        onyomi: 'ゲン',
+        onyomi: 'エン',
         pinyin: 'yàn',
         tone: 4,
         meaning_ja: 'あく、満足する',
