@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { ClickableChar } from '@/components/ClickableChar';
+import { CircularLayout } from '@/components/graphs/CircularLayout';
 import { DialogueGraphSection } from '@/components/graphs/DialogueGraphSection';
 import { WordCloud } from '@/components/graphs/WordCloud';
 import { books, getBookById } from '@/generated/books';
@@ -430,6 +431,17 @@ export default function StatsPage() {
             漢字の出現頻度を文字サイズで表現（書籍別・人物別にフィルタ可能）
           </p>
           <WordCloud width={700} height={400} />
+        </section>
+
+        {/* Circular Layout */}
+        <section className="mb-8">
+          <h2 className="mb-4 text-xl font-bold text-black dark:text-white">
+            隣接漢字ペア
+          </h2>
+          <p className="mb-3 text-sm text-zinc-500">
+            同一セグメント内で隣り合う漢字の関係（線の不透明度が高いほど頻出）
+          </p>
+          <CircularLayout width={600} height={600} maxChars={80} />
         </section>
 
         {/* Key Concepts Heatmap */}
