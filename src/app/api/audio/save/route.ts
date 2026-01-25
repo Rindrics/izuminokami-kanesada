@@ -48,27 +48,33 @@ function isValidPathSegment(segment: string | null): segment is string {
 /**
  * Check if the request is from an allowed local origin.
  * Prevents CSRF-style remote writes.
+ *
+ * Security: Origin header takes precedence over Host header.
+ * If Origin exists, we validate it exclusively to prevent bypass attacks.
  */
 function isAllowedHost(request: NextRequest): boolean {
-  // Check Host header
-  const host = request.headers.get('host');
-  if (host) {
-    const hostname = host.split(':')[0];
-    if (ALLOWED_HOSTS.includes(hostname)) {
-      return true;
-    }
-  }
-
-  // Check Origin header for CORS requests
   const origin = request.headers.get('origin');
+
+  // If Origin header exists, validate it exclusively
   if (origin) {
     try {
       const url = new URL(origin);
-      if (ALLOWED_HOSTS.includes(url.hostname)) {
-        return true;
-      }
+      return ALLOWED_HOSTS.includes(url.hostname);
     } catch {
-      // Invalid origin URL
+      // Invalid origin URL - fail closed
+      return false;
+    }
+  }
+
+  // No Origin header - validate Host header
+  const host = request.headers.get('host');
+  if (host) {
+    try {
+      // Use URL parser to handle IPv6 brackets correctly
+      const url = new URL(`http://${host}`);
+      return ALLOWED_HOSTS.includes(url.hostname);
+    } catch {
+      // Invalid host - fail closed
       return false;
     }
   }

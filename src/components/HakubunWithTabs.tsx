@@ -3,6 +3,7 @@
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ClickableChar } from '@/components/ClickableChar';
 import { getDefaultMeaning } from '@/data/hanzi-dictionary';
+import { getPersonName } from '@/generated/persons';
 import type { Segment } from '@/types/content';
 
 type DisplayMode = 'plain' | 'onyomi' | 'pinyin';
@@ -24,7 +25,6 @@ function parseTextWithToneSandhi(text: string): {
   const originalTones: (number | undefined)[] = [];
 
   // First pass: extract characters and their base tones (skip hyphens only)
-  // Semicolons are kept as preferred line break markers
   for (const char of text) {
     if (char !== '-') {
       chars.push(char);
@@ -261,51 +261,33 @@ function TextWithRuby({
   const bgClass = '';
 
   // For plain mode, show text without hyphens, with nowrap per semantic unit
-  // - Semicolons: mandatory line break (must)
-  // - Spaces: optional line break to prevent overflow (may)
+  // Spaces mark optional line break positions to prevent overflow
   // On mobile: free line breaks, On desktop (sm+): controlled breaks
   if (mode === 'plain') {
     const displayText = text.replace(/-/g, '');
-    // Split by semicolons first (mandatory breaks), then by spaces (semantic units)
-    const clauses = displayText.split(';').filter((c) => c.trim().length > 0);
+    const groups = displayText.split(' ').filter((g) => g.length > 0);
     const elements: React.ReactNode[] = [];
     const seenGroups = new Map<string, number>();
 
-    for (let clauseIdx = 0; clauseIdx < clauses.length; clauseIdx++) {
-      const clause = clauses[clauseIdx].trim();
-      const groups = clause.split(' ').filter((g) => g.length > 0);
-      const isLastClause = clauseIdx === clauses.length - 1;
-
-      for (let i = 0; i < groups.length; i++) {
-        const group = groups[i];
-        const count = seenGroups.get(group) ?? 0;
-        seenGroups.set(group, count + 1);
-        const isLastInClause = i === groups.length - 1;
-        // Tailwind responsive classes for margin
-        // Mobile: no margin, Desktop: priority-based margin
-        const marginClass =
-          isLastInClause && isLastClause
-            ? ''
-            : isLastInClause
-              ? 'sm:mr-6'
-              : 'sm:mr-3';
-        elements.push(
-          <span
-            key={`plain-${group}-${count}`}
-            className={`sm:whitespace-nowrap ${marginClass}`}
-          >
-            {[...group].map((char, charIdx) => (
-              // biome-ignore lint/suspicious/noArrayIndexKey: characters in a group are stable and index is part of unique key
-              <ClickableChar key={`${group}-${count}-${charIdx}`} char={char} />
-            ))}
-          </span>,
-        );
-      }
-
-      // Force line break after each clause (except the last)
-      if (!isLastClause) {
-        elements.push(<br key={`br-${clauseIdx}`} />);
-      }
+    for (let i = 0; i < groups.length; i++) {
+      const group = groups[i];
+      const count = seenGroups.get(group) ?? 0;
+      seenGroups.set(group, count + 1);
+      const isLast = i === groups.length - 1;
+      // Tailwind responsive classes for margin
+      // Mobile: no margin, Desktop: margin between groups
+      const marginClass = isLast ? '' : 'sm:mr-3';
+      elements.push(
+        <span
+          key={`plain-${group}-${count}`}
+          className={`sm:whitespace-nowrap ${marginClass}`}
+        >
+          {[...group].map((char, charIdx) => (
+            // biome-ignore lint/suspicious/noArrayIndexKey: characters in a group are stable and index is part of unique key
+            <ClickableChar key={`${group}-${count}-${charIdx}`} char={char} />
+          ))}
+        </span>,
+      );
     }
     return <span className={`inline ${baseClass} ${bgClass}`}>{elements}</span>;
   }
@@ -316,9 +298,8 @@ function TextWithRuby({
 
   // Group characters by semantic units (split by spaces)
   // Each group will be wrapped in nowrap span to prevent mid-word line breaks
-  // - Semicolons: mandatory line break (must)
-  // - Spaces: optional line break to prevent overflow (may)
-  const groups: (React.ReactNode[] | 'wbr')[] = [[]];
+  // Spaces mark optional line break positions to prevent overflow
+  const groups: React.ReactNode[][] = [[]];
   let currentGroupIndex = 0;
 
   for (let i = 0; i < chars.length; i++) {
@@ -334,17 +315,7 @@ function TextWithRuby({
       continue;
     }
 
-    // Semicolon marks mandatory line break position
-    if (char === ';') {
-      currentGroupIndex++;
-      groups[currentGroupIndex] = 'wbr';
-      currentGroupIndex++;
-      groups[currentGroupIndex] = [];
-      continue;
-    }
-
     const currentGroup = groups[currentGroupIndex];
-    if (currentGroup === 'wbr') continue;
 
     // Onyomi or Pinyin mode with ruby
     const ruby = meaning
@@ -369,23 +340,15 @@ function TextWithRuby({
 
   // Build final elements with nowrap groups
   // Use margin-right instead of separator elements to avoid leading space on new lines
-  // 'wbr' markers become <br> elements for mandatory line breaks
   // On mobile: free line breaks, On desktop (sm+): nowrap with margin control
   const elements: React.ReactNode[] = [];
-  const nonEmptyGroups = groups.filter(
-    (g) => g === 'wbr' || (Array.isArray(g) && g.length > 0),
-  );
+  const nonEmptyGroups = groups.filter((g) => g.length > 0);
   for (let g = 0; g < nonEmptyGroups.length; g++) {
     const group = nonEmptyGroups[g];
-    if (group === 'wbr') {
-      elements.push(<br key={`br-${g}`} />);
-      continue;
-    }
     const isLastGroup = g === nonEmptyGroups.length - 1;
-    const nextIsWbr = nonEmptyGroups[g + 1] === 'wbr';
     // Tailwind responsive classes for margin
-    // Mobile: no margin, Desktop: priority-based margin
-    const marginClass = isLastGroup ? '' : nextIsWbr ? 'sm:mr-6' : 'sm:mr-3';
+    // Mobile: no margin, Desktop: margin between groups
+    const marginClass = isLastGroup ? '' : 'sm:mr-3';
     elements.push(
       <span
         key={`group-${g}`}
@@ -462,37 +425,82 @@ export function HakubunWithTabs({ segments }: Props) {
         className="rounded-lg rounded-tl-none bg-white p-6 shadow-sm dark:bg-zinc-900"
       >
         <div className="text-2xl leading-loose tracking-wider">
-          {segments.map((segment, index) => {
-            const isNarration = segment.speaker === null;
-            const prevSegment = segments[index - 1];
-            const prevIsNarration = prevSegment && prevSegment.speaker === null;
-            const isFirstSegment = index === 0;
+          {(() => {
+            // Check if all segments are narration (no speakers)
+            const allNarration = segments.every((s) => s.speaker === null);
 
-            // Determine wrapper element and properties
-            let Wrapper: 'div' | 'span' = 'span';
-            const wrapperProps: { className?: string } = {};
-
-            if (!isFirstSegment) {
-              Wrapper = 'div';
-              // Speech after narration: add indent
-              if (!isNarration && prevIsNarration) {
-                wrapperProps.className = 'block pl-4';
+            // Group consecutive segments by speaker
+            const groups: {
+              speaker: string | null;
+              segments: typeof segments;
+            }[] = [];
+            for (const segment of segments) {
+              const lastGroup = groups[groups.length - 1];
+              if (lastGroup && lastGroup.speaker === segment.speaker) {
+                lastGroup.segments.push(segment);
+              } else {
+                groups.push({ speaker: segment.speaker, segments: [segment] });
               }
             }
 
-            return (
-              <Wrapper
-                key={`${segment.start_pos}-${segment.end_pos}`}
-                {...wrapperProps}
-              >
-                <TextWithRuby
-                  text={segment.text}
-                  mode={mode}
-                  isNarration={isNarration}
-                />
-              </Wrapper>
-            );
-          })}
+            return groups.map((group, groupIndex) => {
+              // If all segments are narration, don't dim the text
+              const isNarration = allNarration ? false : group.speaker === null;
+              const prevGroup = groups[groupIndex - 1];
+              const prevIsNarration = prevGroup && prevGroup.speaker === null;
+              const isFirstGroup = groupIndex === 0;
+
+              // Detect implicit speaker change (speaker changed without narrator)
+              const isImplicitSpeakerChange =
+                !isFirstGroup &&
+                group.speaker !== null &&
+                prevGroup &&
+                prevGroup.speaker !== null &&
+                prevGroup.speaker !== group.speaker;
+
+              // Determine wrapper element and properties
+              let Wrapper: 'div' | 'span' = 'span';
+              const wrapperProps: { className?: string } = {};
+
+              if (!isFirstGroup) {
+                Wrapper = 'div';
+                // Speech after narration or implicit speaker change: add indent
+                if (
+                  !isNarration &&
+                  (prevIsNarration || isImplicitSpeakerChange)
+                ) {
+                  wrapperProps.className = 'block pl-4';
+                }
+              }
+
+              const firstSegment = group.segments[0];
+              const lastSegment = group.segments[group.segments.length - 1];
+
+              return (
+                <Wrapper
+                  key={`${firstSegment.start_pos}-${lastSegment.end_pos}`}
+                  {...wrapperProps}
+                >
+                  {/* Show implicit speaker name (no indent) */}
+                  {isImplicitSpeakerChange && (
+                    <span className="block -ml-4 text-zinc-300 dark:text-zinc-600">
+                      ― {getPersonName(group.speaker!)} ―
+                    </span>
+                  )}
+                  {group.segments.map((segment, segIndex) => (
+                    <span key={`${segment.start_pos}-${segment.end_pos}`}>
+                      {segIndex > 0 && <br />}
+                      <TextWithRuby
+                        text={segment.text}
+                        mode={mode}
+                        isNarration={isNarration}
+                      />
+                    </span>
+                  ))}
+                </Wrapper>
+              );
+            });
+          })()}
         </div>
       </div>
     </section>
