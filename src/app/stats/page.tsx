@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { ClickableChar } from '@/components/ClickableChar';
 import { DialogueGraphSection } from '@/components/graphs/DialogueGraphSection';
+import { WordCloud } from '@/components/graphs/WordCloud';
 import { books, getBookById } from '@/generated/books';
 import { getPersonName } from '@/generated/persons';
 import type { CharIndex } from '@/generated/stats';
@@ -418,6 +419,17 @@ export default function StatsPage() {
               </tbody>
             </table>
           </div>
+        </section>
+
+        {/* Word Cloud */}
+        <section className="mb-8">
+          <h2 className="mb-4 text-xl font-bold text-black dark:text-white">
+            ワードクラウド
+          </h2>
+          <p className="mb-3 text-sm text-zinc-500">
+            漢字の出現頻度を文字サイズで表現（書籍別・人物別にフィルタ可能）
+          </p>
+          <WordCloud width={700} height={400} />
         </section>
 
         {/* Key Concepts Heatmap */}
