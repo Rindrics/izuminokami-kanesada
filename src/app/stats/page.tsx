@@ -1,10 +1,12 @@
 import Link from 'next/link';
 import { ClickableChar } from '@/components/ClickableChar';
 import { DialogueGraph } from '@/components/DialogueGraph';
+import { AlluvialDiagram } from '@/components/graphs/AlluvialDiagram';
 import { BioFabricGraph } from '@/components/graphs/BioFabricGraph';
 import { CharChordDiagram } from '@/components/graphs/CharChordDiagram';
 import { ChordDiagram } from '@/components/graphs/ChordDiagram';
 import { CircularLayout } from '@/components/graphs/CircularLayout';
+import { VoronoiTreemap } from '@/components/graphs/VoronoiTreemap';
 import { WordCloud } from '@/components/graphs/WordCloud';
 import { Tabs } from '@/components/ui/Tabs';
 import { books, getBookById } from '@/generated/books';
@@ -301,6 +303,21 @@ export default function StatsPage() {
             </div>
             <div className="text-sm text-zinc-500">平均文字数/章</div>
           </div>
+        </section>
+
+        {/* Book Volume Treemap */}
+        <section className="mb-8">
+          <h2 className="mb-4 text-xl font-bold text-black dark:text-white">
+            書籍別文字数
+          </h2>
+          <p className="mb-3 text-sm text-zinc-500">
+            各書籍の文字数を面積で表現
+          </p>
+          <VoronoiTreemap
+            chapterLengths={stats.chapterLengths}
+            width={700}
+            height={400}
+          />
         </section>
 
         {/* Character Frequency */}
