@@ -4,6 +4,7 @@ import { type HierarchyNode, hierarchy } from 'd3-hierarchy';
 import { voronoiTreemap } from 'd3-voronoi-treemap';
 import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
+import seedrandom from 'seedrandom';
 import { getBookById } from '@/generated/books';
 import type { ChapterLength } from '@/generated/stats';
 
@@ -248,8 +249,10 @@ export function VoronoiTreemap({
       .sum((d) => d.value || 0)
       .sort((a, b) => (b.value || 0) - (a.value || 0));
 
-    // Create Voronoi Treemap layout
+    // Create Voronoi Treemap layout with seeded PRNG for deterministic results
+    const seed = selectedBook || 'voronoi-treemap';
     const layout = voronoiTreemap<TreeNode>()
+      .prng(seedrandom(seed))
       .clip([
         [0, 0],
         [0, height],
