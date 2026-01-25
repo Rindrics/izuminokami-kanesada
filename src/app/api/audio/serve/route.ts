@@ -5,11 +5,59 @@ import { type NextRequest, NextResponse } from 'next/server';
 // Only allow in development
 const isDev = process.env.NODE_ENV === 'development';
 
+// Allowed hosts for local-only access
+const ALLOWED_HOSTS = ['localhost', '127.0.0.1', '::1'];
+
+/**
+ * Check if the request is from an allowed local origin.
+ * Prevents CSRF-style remote access.
+ *
+ * Security: Origin header takes precedence over Host header.
+ * If Origin exists, we validate it exclusively to prevent bypass attacks.
+ */
+function isAllowedHost(request: NextRequest): boolean {
+  const origin = request.headers.get('origin');
+
+  // If Origin header exists, validate it exclusively
+  if (origin) {
+    try {
+      const url = new URL(origin);
+      return ALLOWED_HOSTS.includes(url.hostname);
+    } catch {
+      // Invalid origin URL - fail closed
+      return false;
+    }
+  }
+
+  // No Origin header - validate Host header
+  const host = request.headers.get('host');
+  if (host) {
+    try {
+      // Use URL parser to handle IPv6 brackets correctly
+      const url = new URL(`http://${host}`);
+      return ALLOWED_HOSTS.includes(url.hostname);
+    } catch {
+      // Invalid host - fail closed
+      return false;
+    }
+  }
+
+  return false;
+}
+
 export async function GET(request: NextRequest) {
   // Block in production
   if (!isDev) {
     return NextResponse.json(
       { error: 'This endpoint is only available in development' },
+      { status: 403 },
+    );
+  }
+
+  // Verify request is from allowed local host
+  if (!isAllowedHost(request)) {
+    return NextResponse.json(
+      { error: 'Forbidden: requests must originate from localhost' },
       { status: 403 },
     );
   }
