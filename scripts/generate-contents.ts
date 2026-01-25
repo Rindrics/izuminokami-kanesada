@@ -1031,6 +1031,11 @@ function generateStatsTypeScript(contents: OutputContent[]): string {
  * Auto-generated from contents
  */
 
+import type { GraphNode, GraphEdge, SpeakerGraph } from '@/lib/graph/types';
+
+// Re-export graph types for convenience
+export type { GraphNode, GraphEdge, SpeakerGraph };
+
 export interface CharFrequency {
   char: string;
   count: number;
@@ -1054,9 +1059,6 @@ export interface CharIndex {
   char: string;
   contentIds: string[];
 }
-
-// Re-export graph types from canonical source
-export type { GraphNode, GraphEdge, SpeakerGraph } from '@/lib/graph/types';
 
 export interface Stats {
   charFrequencies: CharFrequency[];
