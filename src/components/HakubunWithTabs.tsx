@@ -482,9 +482,9 @@ export function HakubunWithTabs({ segments }: Props) {
                   {...wrapperProps}
                 >
                   {/* Show implicit speaker name (no indent) */}
-                  {isImplicitSpeakerChange && group.speaker && (
+                  {isImplicitSpeakerChange && (
                     <span className="block -ml-4 text-zinc-300 dark:text-zinc-600">
-                      ― {getPersonName(group.speaker)} ―
+                      ― {getPersonName(group.speaker!)} ―
                     </span>
                   )}
                   {group.segments.map((segment, segIndex) => (
