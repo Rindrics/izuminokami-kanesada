@@ -139,7 +139,7 @@ export function WordCloud({ width = 600, height = 400 }: WordCloudProps) {
       .size([width, height])
       .words(wordData)
       .padding(3)
-      .rotate(() => (Math.random() > 0.5 ? 0 : 90))
+      .rotate(() => 0)
       .font('sans-serif')
       .fontSize((d) => d.size)
       .on('end', (output) => {
