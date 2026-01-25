@@ -171,7 +171,7 @@ export function BioFabricGraph({ graph, height = 500 }: BioFabricGraphProps) {
                   fontWeight={isHighlighted || isPersonNode ? 'bold' : 'normal'}
                   fill={
                     isHighlighted
-                      ? chartTheme.conceptColor
+                      ? chartTheme.colors.primary[600]
                       : chartTheme.conceptColor
                   }
                 >
