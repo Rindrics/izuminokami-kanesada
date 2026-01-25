@@ -13,6 +13,11 @@ import * as path from 'node:path';
 import { inspect } from 'node:util';
 import { watch } from 'chokidar';
 import yaml from 'js-yaml';
+import type {
+  GraphEdge,
+  GraphNode,
+  SpeakerGraph,
+} from '../src/lib/graph/types';
 
 interface InputSegmentText {
   original: string;
@@ -391,25 +396,7 @@ interface CharIndex {
   contentIds: string[];
 }
 
-// Graph data structures for speaker relationship visualization
-interface GraphNode {
-  id: string;
-  type: 'person' | 'concept';
-  label: string;
-}
-
-interface GraphEdge {
-  source: string; // node id
-  target: string; // node id
-  topic: string; // topic/concept (e.g., "仁", "禮")
-  weight: number; // number of mentions (for edge thickness)
-  contentIds: string[]; // content IDs where this edge appears
-}
-
-interface SpeakerGraph {
-  nodes: GraphNode[];
-  edges: GraphEdge[];
-}
+// Graph types imported from src/lib/graph/types.ts
 
 interface Stats {
   charFrequencies: CharFrequency[];
@@ -1069,24 +1056,8 @@ export interface CharIndex {
   contentIds: string[];
 }
 
-export interface GraphNode {
-  id: string;
-  type: 'person' | 'concept';
-  label: string;
-}
-
-export interface GraphEdge {
-  source: string;
-  target: string;
-  topic: string;
-  weight: number;
-  contentIds: string[];
-}
-
-export interface SpeakerGraph {
-  nodes: GraphNode[];
-  edges: GraphEdge[];
-}
+// Re-export graph types from canonical source
+export type { GraphNode, GraphEdge, SpeakerGraph } from '@/lib/graph/types';
 
 export interface Stats {
   charFrequencies: CharFrequency[];
