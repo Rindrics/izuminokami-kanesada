@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { type AudioLanguage, getAudioUrl, isAudioAvailable } from '@/lib/audio';
 
 interface Props {
@@ -19,16 +19,27 @@ export function AudioPlayer({
   const zhAvailable = isAudioAvailable(contentId, 'zh');
   const jaAvailable = isAudioAvailable(contentId, 'ja');
 
-  const getInitialLang = (): AudioLanguage => {
+  const getValidLang = (): AudioLanguage => {
     if (zhAvailable) return 'zh';
     if (jaAvailable) return 'ja';
     return 'zh'; // Default fallback
   };
 
-  const [lang, setLang] = useState<AudioLanguage>(getInitialLang);
+  const [lang, setLang] = useState<AudioLanguage>(getValidLang);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLooping, setIsLooping] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
+
+  // Reset language when content changes or availability changes
+  useEffect(() => {
+    const currentLangAvailable =
+      (lang === 'zh' && zhAvailable) || (lang === 'ja' && jaAvailable);
+    if (!currentLangAvailable) {
+      // Compute valid language inline to avoid dependency issues
+      const validLang = zhAvailable ? 'zh' : jaAvailable ? 'ja' : 'zh';
+      setLang(validLang);
+    }
+  }, [lang, zhAvailable, jaAvailable]);
 
   const currentLangAvailable =
     (lang === 'zh' && zhAvailable) || (lang === 'ja' && jaAvailable);
