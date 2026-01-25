@@ -160,9 +160,9 @@ export function WordCloud({ width = 600, height = 400 }: WordCloudProps) {
 
   // Get color for word
   const getWordColor = (text: string, isHovered: boolean) => {
-    if (isHovered) return chartTheme.conceptColor;
-    if (KEY_CONCEPTS.has(text)) return '#be123c'; // rose-700
-    return '#3f3f46'; // zinc-700
+    if (isHovered) return chartTheme.colors.primary[600];
+    if (KEY_CONCEPTS.has(text)) return chartTheme.colors.primary[500];
+    return chartTheme.colors.neutral[700];
   };
 
   // Get available speakers (persons who have spoken)
@@ -277,7 +277,7 @@ export function WordCloud({ width = 600, height = 400 }: WordCloudProps) {
         <div className="flex items-center gap-1">
           <span
             className="inline-block h-3 w-3 rounded"
-            style={{ backgroundColor: '#be123c' }}
+            style={{ backgroundColor: chartTheme.colors.primary[500] }}
           />
           <span>重要概念</span>
         </div>
