@@ -1,8 +1,11 @@
 segments:
-  - text: 子曰
+  - text:
+      original: 子曰
+      japanese: 子曰く、
     speaker: null
-  - text: 巧言令色 鮮矣仁
+  - text:
+      original: 巧言令色 鮮矣仁
+      japanese: 巧（こう）言（げん）令色、鮮なし仁。
     speaker: kongzi
 mentioned: []
-japanese: 子曰く、巧（こう）言（げん）令色、鮮なし仁。
 pinyin_reviewed: true

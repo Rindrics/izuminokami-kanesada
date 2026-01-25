@@ -1,8 +1,11 @@
 segments:
-  - text: 曾子曰
+  - text:
+      original: 曾子曰
+      japanese: 曾子曰く、
     speaker: null
-  - text: 慎終追遠 民德歸厚矣
+  - text:
+      original: 慎終追遠 民德歸厚矣
+      japanese: 終わりを慎み遠きを追えば、民の徳 厚きに帰す。
     speaker: zengzi
 mentioned: []
-japanese: 曾子曰く、終わりを慎み遠きを追えば、民の徳 厚きに帰す。
 pinyin_reviewed: true

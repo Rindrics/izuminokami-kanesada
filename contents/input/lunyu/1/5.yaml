@@ -1,10 +1,15 @@
 segments:
-  - text: 子曰
+  - text:
+      original: 子曰
+      japanese: 子曰く、
     speaker: null
-  - text: 道千乘之國
+  - text:
+      original: 道千乘之國
+      japanese: 千乗の国を導くには、
     speaker: kongzi
-  - text: 敬事而信 節用而愛人 使民以時
+  - text:
+      original: 敬事而信 節用而愛人 使民以時
+      japanese: 事を敬して信、用を節して人を愛し、民を使うに時を以てす。
     speaker: kongzi
 mentioned: []
-japanese: 子曰く、千乗の国を導くには、事を敬して信、用を節して人を愛し、民を使うに時を以てす。
 pinyin_reviewed: true

@@ -1,14 +1,25 @@
 segments:
-  - text: 孟子見梁惠王
+  - text:
+      original: 孟子見梁惠王
+      japanese: 孟子、梁の惠王に見（まみ）ゆ。
     speaker: null
-  - text: 王曰
+  - text:
+      original: 王曰
+      japanese: 王曰く、
     speaker: null
-  - text: 叟不遠千里而來 亦將有以利吾國乎
+  - text:
+      original: 叟不遠千里而來 亦將有以利吾國乎
+      japanese: 「叟、千里を遠しとせずして來たる、亦た將に以て吾（わ）が國を利するあらんとするか。」と。
     speaker: liang-huiwang
-  - text: 孟子對曰
+  - text:
+      original: 孟子對曰
+      japanese: 孟子對へて曰く、
     speaker: null
-  - text: 王何必曰利 亦有仁義而已矣
+  - text:
+      original: 王何必曰利 亦有仁義而已矣
+      japanese: 「王何ぞ必ずしも利と曰はん。亦た仁義あるのみ。」
     speaker: mengzi
-mentioned: [mengzi, liang-huiwang]
-japanese: 孟子、梁の惠王に見（まみ）ゆ。王曰く、「叟、千里を遠しとせずして來たる、亦た將に以て吾（わ）が國を利するあらんとするか。」と。孟子對へて曰く、「王何ぞ必ずしも利と曰はん。亦た仁義あるのみ。」
+mentioned:
+  - mengzi
+  - liang-huiwang
 pinyin_reviewed: true

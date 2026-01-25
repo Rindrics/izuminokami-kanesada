@@ -90,21 +90,20 @@ export default async function ContentPage({ params }: Props) {
             <HakubunWithTabs segments={content.segments} />
           </Suspense>
 
-          {content.japanese && (
-            <section>
-              <h2 className="mb-3 text-sm font-medium text-zinc-500 dark:text-zinc-400">
-                読み下し文
-              </h2>
-              <div className="rounded-lg bg-white p-6 shadow-sm dark:bg-zinc-900">
-                <p className="text-lg leading-loose text-zinc-700 dark:text-zinc-300">
-                  <JapaneseTextWithRuby
-                    text={content.japanese}
-                    rubyData={content.japanese_ruby}
-                  />
-                </p>
+          <section>
+            <h2 className="mb-3 text-sm font-medium text-zinc-500 dark:text-zinc-400">
+              読み下し文
+            </h2>
+            <div className="rounded-lg bg-white p-6 shadow-sm dark:bg-zinc-900">
+              <div className="space-y-2 text-lg leading-loose text-zinc-700 dark:text-zinc-300">
+                {content.segments.map((segment) => (
+                  <p key={`${segment.start_pos}-${segment.end_pos}`}>
+                    <JapaneseTextWithRuby text={segment.text.japanese} />
+                  </p>
+                ))}
               </div>
-            </section>
-          )}
+            </div>
+          </section>
         </article>
 
         <div className="mt-6 text-sm text-zinc-500">

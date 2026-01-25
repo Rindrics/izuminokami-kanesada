@@ -1,12 +1,19 @@
 segments:
-  - text: 子曰
+  - text:
+      original: 子曰
+      japanese: 子曰く、
     speaker: null
-  - text: 弟子入則孝 出則悌
+  - text:
+      original: 弟子入則孝 出則悌
+      japanese: 弟子 入りては則ち孝、出でては則ち悌たれ、
     speaker: kongzi
-  - text: 謹而信 汎愛衆 而親仁
+  - text:
+      original: 謹而信 汎愛衆 而親仁
+      japanese: 謹みて信、汎く衆を愛して仁に親づけ。
     speaker: kongzi
-  - text: 行有餘力 則以學文
+  - text:
+      original: 行有餘力 則以學文
+      japanese: 行いて余力有らば、則ち以て文を学べ。
     speaker: kongzi
 mentioned: []
-japanese: 子曰く、弟子 入りては則ち孝、出でては則ち悌たれ、謹みて信、汎く衆を愛して仁に親づけ。行いて余力有らば、則ち以て文を学べ。
 pinyin_reviewed: true

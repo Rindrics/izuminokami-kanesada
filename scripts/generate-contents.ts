@@ -14,19 +14,28 @@ import { inspect } from 'node:util';
 import { watch } from 'chokidar';
 import yaml from 'js-yaml';
 
+interface InputSegmentText {
+  original: string;
+  japanese: string;
+}
+
 interface InputSegment {
-  text: string;
+  text: InputSegmentText;
   speaker: string | null;
 }
 
 interface InputContent {
   segments: InputSegment[];
   mentioned: string[];
+}
+
+interface OutputSegmentText {
+  original: string;
   japanese: string;
 }
 
 interface OutputSegment {
-  text: string;
+  text: OutputSegmentText;
   start_pos: number;
   end_pos: number;
   speaker: string | null;
@@ -37,13 +46,12 @@ interface OutputContent {
   book_id: string;
   section: string;
   chapter: string;
-  text: string;
+  text: string; // Full original text (derived from segments)
   segments: OutputSegment[];
   persons: {
     speakers: string[];
     mentioned: string[];
   };
-  japanese: string;
 }
 
 interface InputSection {
@@ -172,7 +180,27 @@ function getBookName(bookId: string): string {
 
 function parseInputFile(filePath: string): InputContent {
   const content = fs.readFileSync(filePath, 'utf-8');
-  return yaml.load(content) as InputContent;
+  const parsed = yaml.load(content) as InputContent;
+
+  // Defensively normalize mentioned to an empty array if missing or not an array
+  parsed.mentioned = Array.isArray(parsed.mentioned) ? parsed.mentioned : [];
+
+  // Defensively normalize segments to an empty array if missing or not an array
+  parsed.segments = Array.isArray(parsed.segments) ? parsed.segments : [];
+
+  // Normalize each segment's text fields
+  for (const segment of parsed.segments) {
+    if (!segment.text || typeof segment.text !== 'object') {
+      segment.text = { original: '', japanese: '' };
+    } else {
+      segment.text.original =
+        typeof segment.text.original === 'string' ? segment.text.original : '';
+      segment.text.japanese =
+        typeof segment.text.japanese === 'string' ? segment.text.japanese : '';
+    }
+  }
+
+  return parsed;
 }
 
 function deriveContent(
@@ -190,7 +218,7 @@ function deriveContent(
 
   for (const segment of input.segments) {
     const startPos = currentPos;
-    const endPos = currentPos + segment.text.length;
+    const endPos = currentPos + segment.text.original.length;
 
     outputSegments.push({
       text: segment.text,
@@ -203,8 +231,8 @@ function deriveContent(
     currentPos = endPos + 1;
   }
 
-  // Derive text from segments
-  const text = input.segments.map((s) => s.text).join(' ');
+  // Derive text from segments (original text only)
+  const text = input.segments.map((s) => s.text.original).join(' ');
 
   // Derive speakers from segments
   const speakers = [
@@ -226,7 +254,6 @@ function deriveContent(
       speakers,
       mentioned: input.mentioned,
     },
-    japanese: input.japanese,
   };
 }
 
@@ -501,7 +528,7 @@ function generateSpeakerGraphs(contents: OutputContent[]): {
       // Process actual speaker segments (not narration)
       if (segment.speaker !== null) {
         // Extract concepts from this speaker's segment
-        const concepts = extractConcepts(segment.text);
+        const concepts = extractConcepts(segment.text.original);
 
         // Add person node to dialogue graph if they mention concepts
         // (even if they don't have a dialogue partner)
@@ -566,10 +593,12 @@ function generateSpeakerGraphs(contents: OutputContent[]): {
         // If we have a previous speaker, create dialogue edge between persons
         if (prevSpeaker && prevSpeaker !== segment.speaker) {
           // Extract topic from current or previous segment
-          const currentConcepts = extractConcepts(segment.text);
+          const currentConcepts = extractConcepts(segment.text.original);
           const prevConcepts =
             prevSegmentIndex >= 0
-              ? extractConcepts(content.segments[prevSegmentIndex].text)
+              ? extractConcepts(
+                  content.segments[prevSegmentIndex].text.original,
+                )
               : [];
           // Only create edge if we found a concept, skip generic dialogue edges
           const topic = currentConcepts[0] || prevConcepts[0];
@@ -658,7 +687,7 @@ function generateSpeakerGraphs(contents: OutputContent[]): {
       const segment = content.segments[i];
 
       if (segment.speaker === null) {
-        const questionMatch = parseQuestionPattern(segment.text);
+        const questionMatch = parseQuestionPattern(segment.text.original);
         if (questionMatch && questionMatch.questioner) {
           // Find questioner by matching name from persons.yaml
           let questionerId: string | null = null;
@@ -690,13 +719,13 @@ function generateSpeakerGraphs(contents: OutputContent[]): {
           // Derive topic from questionMatch or extract from nextSegment
           let topic: string | null = questionMatch.topic;
           if (!topic && nextSegment) {
-            // Try to extract topic from nextSegment.text
-            const concepts = extractConcepts(nextSegment.text);
+            // Try to extract topic from nextSegment.text.original
+            const concepts = extractConcepts(nextSegment.text.original);
             if (concepts.length > 0) {
               topic = concepts[0];
             } else {
-              // Fallback: try parseQuestionPattern on nextSegment.text
-              const nextMatch = parseQuestionPattern(nextSegment.text);
+              // Fallback: try parseQuestionPattern on nextSegment.text.original
+              const nextMatch = parseQuestionPattern(nextSegment.text.original);
               topic = nextMatch?.topic ?? null;
             }
           }

@@ -207,6 +207,11 @@ export const kunyomiDictionary: KunyomiEntry[] = [
     readings: [{ id: '本-もと', ruby: 'もと', is_default: true }],
   },
   {
+    id: '本末',
+    text: '本末',
+    readings: [{ id: '本末-ほんまつ', ruby: 'ほんまつ', is_default: true }],
+  },
+  {
     id: '務',
     text: '務',
     readings: [
@@ -972,6 +977,11 @@ export const kunyomiDictionary: KunyomiEntry[] = [
     readings: [{ id: '后-のち', ruby: 'のち', is_default: true }],
   },
   {
+    id: '明徳',
+    text: '明徳',
+    readings: [{ id: '明徳-めいとく', ruby: 'めいとく', is_default: true }],
+  },
+  {
     id: '明',
     text: '明',
     readings: [{ id: '明-あき', ruby: 'あき', is_default: true }],
@@ -1009,7 +1019,7 @@ export const kunyomiDictionary: KunyomiEntry[] = [
   {
     id: '物',
     text: '物',
-    readings: [{ id: '物-ぶつ', ruby: 'ぶつ', is_default: true }],
+    readings: [{ id: '物-もの', ruby: 'もの', is_default: true }],
   },
   {
     id: '末',

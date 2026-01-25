@@ -1,14 +1,23 @@
 segments:
-  - text: 有子曰
+  - text:
+      original: 有子曰
+      japanese: 有子曰く、
     speaker: null
-  - text: 其為人也孝弟 而好犯上者 鮮矣
+  - text:
+      original: 其為人也孝弟 而好犯上者 鮮矣
+      japanese: 其の人と為りや孝弟にして、上を犯すを好む者は鮮し。
     speaker: youzi
-  - text: 不-好犯上 而好作亂者 未之有也
+  - text:
+      original: 不-好犯上 而好作亂者 未之有也
+      japanese: 上を犯すを好まずして、乱を作すを好む者は、未だ之れ有らざるなり。
     speaker: youzi
-  - text: 君子務本 本立而道生
+  - text:
+      original: 君子務本 本立而道生
+      japanese: 君子は本を務む、本立ちて道生ず。
     speaker: youzi
-  - text: 孝弟也者 其為仁之本與
+  - text:
+      original: 孝弟也者 其為仁之本與
+      japanese: 孝弟なる者は、其れ仁の本為（た）るか。
     speaker: youzi
 mentioned: []
-japanese: 有子曰く、其の人と為りや孝弟にして、上を犯すを好む者は鮮し。上を犯すを好まずして、乱を作すを好む者は、未だ之れ有らざるなり。君子は本を務む、本立ちて道生ず。孝弟なる者は、其れ仁の本為（た）るか。
 pinyin_reviewed: true

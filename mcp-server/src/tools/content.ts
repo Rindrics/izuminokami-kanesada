@@ -64,9 +64,14 @@ const HanziOverrideSchema = z.object({
     ),
 });
 
+const SegmentTextSchema = z.object({
+  original: z.string().describe('Chinese text (白文)'),
+  japanese: z.string().describe('Japanese reading (書き下し文)'),
+});
+
 const SegmentSchema = z
   .object({
-    text: z.string(),
+    text: SegmentTextSchema,
     speaker: z.string().nullable(),
     hanzi_overrides: z
       .array(HanziOverrideSchema)
@@ -76,9 +81,10 @@ const SegmentSchema = z
       ),
   })
   .refine(
-    (segment) => containsForbiddenPunctuation(segment.text).length === 0,
+    (segment) =>
+      containsForbiddenPunctuation(segment.text.original).length === 0,
     (segment) => ({
-      message: `Segment text contains forbidden punctuation: ${containsForbiddenPunctuation(segment.text).join(' ')}. Do not include punctuation marks in segment text.`,
+      message: `Segment text contains forbidden punctuation: ${containsForbiddenPunctuation(segment.text.original).join(' ')}. Do not include punctuation marks in segment text.`,
     }),
   );
 
@@ -122,7 +128,6 @@ const ContentYamlSchema = z.object({
       'Content segments. IMPORTANT: Do NOT include punctuation (。、；，！？ etc.) in segment text.',
     ),
   mentioned: z.array(z.string()).describe('Mentioned character IDs'),
-  japanese: z.string().describe('Japanese reading (書き下し文)'),
 });
 
 export function registerContentTools(server: McpServer): void {
@@ -133,7 +138,7 @@ export function registerContentTools(server: McpServer): void {
       description: 'Write a content YAML file to contents/input/',
       inputSchema: ContentYamlSchema.shape,
     },
-    async ({ bookId, sectionId, chapterId, segments, mentioned, japanese }) => {
+    async ({ bookId, sectionId, chapterId, segments, mentioned }) => {
       const baseDir = path.join(PROJECT_ROOT, 'contents/input');
       const dirPath = path.join(baseDir, bookId, sectionId);
       const filePath = path.join(dirPath, `${chapterId}.yaml`);
@@ -170,7 +175,7 @@ export function registerContentTools(server: McpServer): void {
 
       for (let i = 0; i < segments.length; i++) {
         const segment = segments[i];
-        const text = segment.text;
+        const text = segment.text.original;
 
         // Skip if speaker is already null (narrator)
         if (segment.speaker === null) {
@@ -256,7 +261,9 @@ export function registerContentTools(server: McpServer): void {
       // Build YAML content
       const yamlLines: string[] = ['segments:'];
       for (const segment of segments) {
-        yamlLines.push(`  - text: ${segment.text}`);
+        yamlLines.push('  - text:');
+        yamlLines.push(`      original: ${segment.text.original}`);
+        yamlLines.push(`      japanese: ${segment.text.japanese}`);
         yamlLines.push(
           `    speaker: ${segment.speaker === null ? 'null' : segment.speaker}`,
         );
@@ -271,7 +278,6 @@ export function registerContentTools(server: McpServer): void {
         }
       }
       yamlLines.push(`mentioned: [${mentioned.join(', ')}]`);
-      yamlLines.push(`japanese: ${japanese}`);
 
       // Will be set after polyphonic character analysis
       // Placeholder - actual value determined below
@@ -329,7 +335,7 @@ export function registerContentTools(server: McpServer): void {
 
       for (let segIdx = 0; segIdx < segments.length; segIdx++) {
         const segment = segments[segIdx];
-        const text = segment.text;
+        const text = segment.text.original;
 
         for (let pos = 0; pos < text.length; pos++) {
           const char = text[pos];
@@ -1066,7 +1072,11 @@ Please follow this workflow:
       // Check each segment for tone sandhi patterns
       for (let segIdx = 0; segIdx < parsed.segments.length; segIdx++) {
         const segment = parsed.segments[segIdx];
-        const text = segment.text as string;
+        const segmentText = segment.text as {
+          original: string;
+          japanese: string;
+        };
+        const text = segmentText.original;
 
         // Find consecutive hanzi without markers
         for (let i = 0; i < text.length - 1; i++) {

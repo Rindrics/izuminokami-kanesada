@@ -1,5 +1,11 @@
 import { findLongestMatch } from '@/data/kunyomi-dictionary';
-import type { JapaneseRuby } from '@/types/content';
+
+// Local type for inline ruby overrides
+interface RubyOverride {
+  position: number;
+  text: string;
+  ruby: string;
+}
 
 /**
  * Parse inline override notation: 漢字（読み）
@@ -7,9 +13,9 @@ import type { JapaneseRuby } from '@/types/content';
  */
 function parseInlineOverrides(text: string): {
   cleanText: string;
-  overrides: JapaneseRuby[];
+  overrides: RubyOverride[];
 } {
-  const overrides: JapaneseRuby[] = [];
+  const overrides: RubyOverride[] = [];
   // Match: CJK character followed by full-width parentheses with hiragana inside
   const pattern = /([一-龥])（([ぁ-ん]+)）/g;
 
@@ -44,11 +50,11 @@ function parseInlineOverrides(text: string): {
 
 function buildRubyMap(
   text: string,
-  overrides?: JapaneseRuby[],
+  overrides?: RubyOverride[],
 ): Map<number, { ruby: string; length: number }> {
   const rubyMap = new Map<number, { ruby: string; length: number }>();
 
-  const overrideMap = new Map<number, JapaneseRuby>();
+  const overrideMap = new Map<number, RubyOverride>();
   if (overrides) {
     for (const override of overrides) {
       overrideMap.set(override.position, override);
@@ -82,7 +88,6 @@ function buildRubyMap(
 
 interface Props {
   text: string;
-  rubyData?: JapaneseRuby[];
 }
 
 /**
@@ -196,14 +201,11 @@ function SegmentWithRuby({
   return <>{elements}</>;
 }
 
-export function JapaneseTextWithRuby({ text, rubyData }: Props) {
+export function JapaneseTextWithRuby({ text }: Props) {
   // Parse inline overrides from text (e.g., 為（た）る)
   const { cleanText, overrides: inlineOverrides } = parseInlineOverrides(text);
 
-  // Merge inline overrides with rubyData (inline takes precedence)
-  const mergedOverrides = [...(rubyData ?? []), ...inlineOverrides];
-
-  const rubyMap = buildRubyMap(cleanText, mergedOverrides);
+  const rubyMap = buildRubyMap(cleanText, inlineOverrides);
 
   // Split text into segments by punctuation and spaces
   const segments = splitIntoSegments(cleanText);

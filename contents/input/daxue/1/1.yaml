@@ -1,22 +1,39 @@
 segments:
-  - text: 大學之道
+  - text:
+      original: 大學之道
+      japanese: 大学の道は、
     speaker: null
-  - text: 在明明德 在親民 在止於至善
+  - text:
+      original: 在明明德 在親民 在止於至善
+      japanese: 明徳を明らかにするに在り、民を親（した）しましむるに在り、至善に止まるに在り。
     speaker: null
-  - text: 知止而后有定
+  - text:
+      original: 知止而后有定
+      japanese: 止まることを知りて后に定まること有り、
     speaker: null
-  - text: 定而后能靜
+  - text:
+      original: 定而后能靜
+      japanese: 定まりて后に能く静かなり、
     speaker: null
-  - text: 靜而后能安
+  - text:
+      original: 靜而后能安
+      japanese: 静かにして后に能く安く、
     speaker: null
-  - text: 安而后能慮
+  - text:
+      original: 安而后能慮
+      japanese: 安くして后に能く慮る、
     speaker: null
-  - text: 慮而后能得
+  - text:
+      original: 慮而后能得
+      japanese: 慮りて后能く得（う）。
     speaker: null
-  - text: 物有本末 事有終始
+  - text:
+      original: 物有本末 事有終始
+      japanese: 物に本末有り、事に終始有り、
     speaker: null
-  - text: 知所先後 則近道矣
+  - text:
+      original: 知所先後 則近道矣
+      japanese: 先後する所を知れば、則ち道に近し。
     speaker: null
 mentioned: []
-japanese: 大学の道は、明徳を明らかにするに在り、民を親しましむるに在り、至善に止まるに在り。止まることを知りて后に定まること有り、定まりて后に能く静かなり、静かにして后に能く安く、安くして后に能く慮る、慮りて后能く得（う）。物に本末有り、事に終始有り、先後する所を知れば、則ち道に近し。
 pinyin_reviewed: true

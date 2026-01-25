@@ -44,8 +44,11 @@ const mockHanziDict = new Map([
 describe('toChineseSsml', () => {
   it('should add pause between segments', () => {
     const segments = [
-      { text: '子曰', speaker: null },
-      { text: '學而時習之', speaker: 'kongzi' },
+      { text: { original: '子曰', japanese: '子曰く、' }, speaker: null },
+      {
+        text: { original: '學而時習之', japanese: '学びて之を時習す。' },
+        speaker: 'kongzi',
+      },
     ];
     const result = toChineseSsml(mockHanziDict, segments);
 
@@ -57,7 +60,15 @@ describe('toChineseSsml', () => {
   });
 
   it('should convert spaces to pauses', () => {
-    const segments = [{ text: '學而時習之 不亦說乎', speaker: 'kongzi' }];
+    const segments = [
+      {
+        text: {
+          original: '學而時習之 不亦說乎',
+          japanese: '学びて之を時習す、亦た説ばしからずや。',
+        },
+        speaker: 'kongzi',
+      },
+    ];
     const result = toChineseSsml(mockHanziDict, segments);
 
     // Should have pause where space was
@@ -65,7 +76,9 @@ describe('toChineseSsml', () => {
   });
 
   it('should generate phoneme tags with numeric tone pinyin', () => {
-    const segments = [{ text: '子曰', speaker: null }];
+    const segments = [
+      { text: { original: '子曰', japanese: '子曰く、' }, speaker: null },
+    ];
     const result = toChineseSsml(mockHanziDict, segments);
 
     // Should have phoneme tags with numeric tones (e.g., zi3, yue1)
@@ -79,7 +92,9 @@ describe('toChineseSsml', () => {
   });
 
   it('should use default pinyin for polyphonic characters', () => {
-    const segments = [{ text: '說', speaker: 'kongzi' }];
+    const segments = [
+      { text: { original: '說', japanese: '説' }, speaker: 'kongzi' },
+    ];
     const result = toChineseSsml(mockHanziDict, segments);
 
     // Should use default pinyin (yue4 for 說, meaning "喜ぶ")
@@ -91,7 +106,7 @@ describe('toChineseSsml', () => {
   it('should use overridden pinyin when specified', () => {
     const segments = [
       {
-        text: '說',
+        text: { original: '說', japanese: '説' },
         speaker: 'kongzi',
         hanzi_overrides: [{ char: '說', position: 0, meaning_id: '說-shuō' }],
       },
@@ -106,8 +121,14 @@ describe('toChineseSsml', () => {
 
   it('should not create nested or broken break tags', () => {
     const segments = [
-      { text: '子曰', speaker: null },
-      { text: '學而時習之 不亦說乎', speaker: 'kongzi' },
+      { text: { original: '子曰', japanese: '子曰く、' }, speaker: null },
+      {
+        text: {
+          original: '學而時習之 不亦說乎',
+          japanese: '学びて之を時習す、亦た説ばしからずや。',
+        },
+        speaker: 'kongzi',
+      },
     ];
     const result = toChineseSsml(mockHanziDict, segments);
 
@@ -122,8 +143,11 @@ describe('toChineseSsml', () => {
 
   it('should deduplicate consecutive pauses', () => {
     const segments = [
-      { text: '子曰', speaker: null },
-      { text: ' 學而時習之', speaker: 'kongzi' },
+      { text: { original: '子曰', japanese: '子曰く、' }, speaker: null },
+      {
+        text: { original: ' 學而時習之', japanese: '学びて之を時習す。' },
+        speaker: 'kongzi',
+      },
     ];
     const result = toChineseSsml(mockHanziDict, segments);
 
@@ -132,7 +156,12 @@ describe('toChineseSsml', () => {
   });
 
   it('should remove connection markers (-)', () => {
-    const segments = [{ text: '不-亦說乎', speaker: 'kongzi' }];
+    const segments = [
+      {
+        text: { original: '不-亦說乎', japanese: '亦た説ばしからずや。' },
+        speaker: 'kongzi',
+      },
+    ];
     const result = toChineseSsml(mockHanziDict, segments);
 
     // Connection marker should be removed (不-亦 becomes 不亦)
@@ -144,7 +173,15 @@ describe('toChineseSsml', () => {
   });
 
   it('should convert semicolons to Chinese commas', () => {
-    const segments = [{ text: '不亦說乎; 有朋自遠方來', speaker: 'kongzi' }];
+    const segments = [
+      {
+        text: {
+          original: '不亦說乎; 有朋自遠方來',
+          japanese: '亦た説ばしからずや。朋遠方より来る有り。',
+        },
+        speaker: 'kongzi',
+      },
+    ];
     const result = toChineseSsml(mockHanziDict, segments);
 
     // Semicolon should become comma with pause
@@ -182,7 +219,9 @@ describe('loadActualHanziDictionary', () => {
 describe('toChineseSsml with actual dictionary', () => {
   it('should use yue4 for 說 in actual dictionary', () => {
     const actualDict = loadActualHanziDictionary();
-    const segments = [{ text: '說', speaker: null }];
+    const segments = [
+      { text: { original: '說', japanese: '説' }, speaker: null },
+    ];
     const result = toChineseSsml(actualDict, segments);
 
     // Should use yue4 (default, meaning "喜ぶ") not shuo1 (meaning "言う")
