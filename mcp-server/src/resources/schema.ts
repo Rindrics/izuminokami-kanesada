@@ -68,7 +68,6 @@ export interface Content {
     mentioned: string[]; // Character IDs mentioned
   };
   japanese?: string;     // Japanese reading
-  japanese_ruby?: JapaneseRubyData;
 }
 
 // Text conventions:

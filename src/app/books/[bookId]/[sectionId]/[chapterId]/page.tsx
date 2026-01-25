@@ -97,10 +97,7 @@ export default async function ContentPage({ params }: Props) {
               </h2>
               <div className="rounded-lg bg-white p-6 shadow-sm dark:bg-zinc-900">
                 <p className="text-lg leading-loose text-zinc-700 dark:text-zinc-300">
-                  <JapaneseTextWithRuby
-                    text={content.japanese}
-                    rubyData={content.japanese_ruby}
-                  />
+                  <JapaneseTextWithRuby text={content.japanese} />
                 </p>
               </div>
             </section>

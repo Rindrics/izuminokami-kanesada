@@ -22,16 +22,6 @@ export interface KunyomiEntry {
   readings: KunyomiReading[];
 }
 
-// ADR-0005: Japanese ruby structure
-// Ruby is auto-fetched from dictionary for all kanji
-// JapaneseRuby is only for overriding specific positions
-export interface JapaneseRuby {
-  position: number; // Character position in japanese text (0-indexed)
-  text: string; // Target text "学" or "時習"
-  ruby: string; // Override ruby text
-  reading_id?: string; // Reference to KunyomiReading.id
-}
-
 // ADR-0003: Tone change information
 export interface ToneChange {
   original_tone: number;
@@ -60,6 +50,5 @@ export interface Content {
     mentioned: string[];
   };
   japanese?: string;
-  japanese_ruby?: JapaneseRuby[];
   content_hanzi?: ContentHanzi[]; // Override hanzi readings in white text
 }
