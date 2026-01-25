@@ -425,6 +425,9 @@ export function HakubunWithTabs({ segments }: Props) {
       >
         <div className="text-2xl leading-loose tracking-wider">
           {(() => {
+            // Check if all segments are narration (no speakers)
+            const allNarration = segments.every((s) => s.speaker === null);
+
             // Group consecutive segments by speaker
             const groups: {
               speaker: string | null;
@@ -440,7 +443,8 @@ export function HakubunWithTabs({ segments }: Props) {
             }
 
             return groups.map((group, groupIndex) => {
-              const isNarration = group.speaker === null;
+              // If all segments are narration, don't dim the text
+              const isNarration = allNarration ? false : group.speaker === null;
               const prevGroup = groups[groupIndex - 1];
               const prevIsNarration = prevGroup && prevGroup.speaker === null;
               const isFirstGroup = groupIndex === 0;
