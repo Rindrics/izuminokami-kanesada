@@ -1,5 +1,8 @@
 # Changelog
 
+## [v0.2.3](https://github.com/Rindrics/izuminokami-kanesada/compare/v0.2.2...v0.2.3) - 2026-01-25
+- feat(stats): add visualizations by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/78
+
 ## [v0.2.2](https://github.com/Rindrics/izuminokami-kanesada/compare/v0.2.1...v0.2.2) - 2026-01-25
 - fix: correct onyomi by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/63
 - fix(ui): disable Japanese onyomi UI when audio file not found by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/66
