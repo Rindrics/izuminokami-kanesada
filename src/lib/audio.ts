@@ -5,6 +5,8 @@
  * - Chinese (zh): audio/{bookId}/{sectionId}/{chapterId}-zh.mp3 (TTS generated)
  * - Japanese (ja): audio/{bookId}/{sectionId}/{chapterId}-ja.webm (manually recorded)
  *
+ * In development, locally saved files are served from /audio/ directory.
+ *
  * Public URL format:
  * https://storage.googleapis.com/{bucketName}/audio/{bookId}/{sectionId}/{chapterId}-{lang}.{ext}
  */
@@ -15,6 +17,8 @@ const AUDIO_BUCKET_NAME =
   process.env.NEXT_PUBLIC_AUDIO_BUCKET_NAME || 'pj-7sdv-audio-prd';
 
 const AUDIO_BASE_URL = `https://storage.googleapis.com/${AUDIO_BUCKET_NAME}`;
+
+const isDev = process.env.NODE_ENV === 'development';
 
 export type AudioLanguage = 'zh' | 'ja';
 
@@ -51,13 +55,21 @@ export function getAudioUrl(
 ): string {
   // Chinese uses mp3 (TTS), Japanese uses webm (manually recorded)
   const ext = lang === 'zh' ? 'mp3' : 'webm';
-  const baseUrl = `${AUDIO_BASE_URL}/audio/${bookId}/${sectionId}/${chapterId}-${lang}.${ext}`;
-
-  // Add hash as cache busting parameter
   const manifest = audioManifest as AudioManifest;
   const contentId = `${bookId}/${sectionId}/${chapterId}`;
   const entry = manifest[contentId];
-  const hash = entry?.[lang]?.hash;
+  const langEntry = entry?.[lang];
+
+  // In development, use local file if only generatedAt exists (not yet uploaded)
+  if (isDev && langEntry?.generatedAt && !langEntry?.uploadedAt) {
+    const audioPath = `audio/${bookId}/${sectionId}/${chapterId}-${lang}.${ext}`;
+    const localUrl = `/api/audio/serve?path=${encodeURIComponent(audioPath)}`;
+    return langEntry.hash ? `${localUrl}&v=${langEntry.hash}` : localUrl;
+  }
+
+  // Use Cloud Storage URL for uploaded files
+  const baseUrl = `${AUDIO_BASE_URL}/audio/${bookId}/${sectionId}/${chapterId}-${lang}.${ext}`;
+  const hash = langEntry?.hash;
 
   if (hash) {
     return `${baseUrl}?v=${hash}`;
@@ -71,7 +83,9 @@ export function getAudioUrl(
  *
  * @param contentId - Content ID (e.g., "lunyu/1/1")
  * @param lang - Language code ("zh" for Chinese, "ja" for Japanese)
- * @returns true if audio file is uploaded (has uploadedAt), false otherwise
+ * @returns true if audio file is available:
+ *   - Production: has uploadedAt (uploaded to Cloud Storage)
+ *   - Development: has uploadedAt OR generatedAt (local file exists)
  */
 export function isAudioAvailable(
   contentId: string,
@@ -83,5 +97,14 @@ export function isAudioAvailable(
     return false;
   }
   const langEntry = entry[lang];
-  return langEntry?.uploadedAt !== undefined;
+  if (!langEntry) {
+    return false;
+  }
+
+  // In development, local files (generatedAt) are also available
+  if (isDev && langEntry.generatedAt) {
+    return true;
+  }
+
+  return langEntry.uploadedAt !== undefined;
 }
