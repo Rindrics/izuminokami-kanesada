@@ -424,37 +424,61 @@ export function HakubunWithTabs({ segments }: Props) {
         className="rounded-lg rounded-tl-none bg-white p-6 shadow-sm dark:bg-zinc-900"
       >
         <div className="text-2xl leading-loose tracking-wider">
-          {segments.map((segment, index) => {
-            const isNarration = segment.speaker === null;
-            const prevSegment = segments[index - 1];
-            const prevIsNarration = prevSegment && prevSegment.speaker === null;
-            const isFirstSegment = index === 0;
-
-            // Determine wrapper element and properties
-            let Wrapper: 'div' | 'span' = 'span';
-            const wrapperProps: { className?: string } = {};
-
-            if (!isFirstSegment) {
-              Wrapper = 'div';
-              // Speech after narration: add indent
-              if (!isNarration && prevIsNarration) {
-                wrapperProps.className = 'block pl-4';
+          {(() => {
+            // Group consecutive segments by speaker
+            const groups: {
+              speaker: string | null;
+              segments: typeof segments;
+            }[] = [];
+            for (const segment of segments) {
+              const lastGroup = groups[groups.length - 1];
+              if (lastGroup && lastGroup.speaker === segment.speaker) {
+                lastGroup.segments.push(segment);
+              } else {
+                groups.push({ speaker: segment.speaker, segments: [segment] });
               }
             }
 
-            return (
-              <Wrapper
-                key={`${segment.start_pos}-${segment.end_pos}`}
-                {...wrapperProps}
-              >
-                <TextWithRuby
-                  text={segment.text}
-                  mode={mode}
-                  isNarration={isNarration}
-                />
-              </Wrapper>
-            );
-          })}
+            return groups.map((group, groupIndex) => {
+              const isNarration = group.speaker === null;
+              const prevGroup = groups[groupIndex - 1];
+              const prevIsNarration = prevGroup && prevGroup.speaker === null;
+              const isFirstGroup = groupIndex === 0;
+
+              // Determine wrapper element and properties
+              let Wrapper: 'div' | 'span' = 'span';
+              const wrapperProps: { className?: string } = {};
+
+              if (!isFirstGroup) {
+                Wrapper = 'div';
+                // Speech after narration: add indent
+                if (!isNarration && prevIsNarration) {
+                  wrapperProps.className = 'block pl-4';
+                }
+              }
+
+              const firstSegment = group.segments[0];
+              const lastSegment = group.segments[group.segments.length - 1];
+
+              return (
+                <Wrapper
+                  key={`${firstSegment.start_pos}-${lastSegment.end_pos}`}
+                  {...wrapperProps}
+                >
+                  {group.segments.map((segment, segIndex) => (
+                    <span key={`${segment.start_pos}-${segment.end_pos}`}>
+                      {segIndex > 0 && <br />}
+                      <TextWithRuby
+                        text={segment.text}
+                        mode={mode}
+                        isNarration={isNarration}
+                      />
+                    </span>
+                  ))}
+                </Wrapper>
+              );
+            });
+          })()}
         </div>
       </div>
     </section>
