@@ -185,7 +185,7 @@ export function ChordDiagram({
         <g transform={`translate(${width / 2}, ${height / 2})`}>
           {/* Chords (ribbons) */}
           {chordLayout.map((c) => {
-            const pathData = ribbonGenerator(c);
+            const pathData = ribbonGenerator(c) as unknown as string | null;
             if (!pathData) return null;
 
             const isHighlighted = isChordHighlighted(

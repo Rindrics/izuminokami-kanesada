@@ -19,6 +19,9 @@ interface WordData {
   text: string;
   size: number;
   count: number;
+  x?: number;
+  y?: number;
+  rotate?: number;
 }
 
 // Key concepts for special coloring
@@ -144,14 +147,21 @@ export function WordCloud({ width = 600, height = 400 }: WordCloudProps) {
       .fontSize((d) => d.size)
       .on('end', (output) => {
         setWords(
-          output.map((w) => ({
-            text: w.text || '',
-            size: w.size || 12,
-            count: (w as WordData).count || 0,
-            x: w.x || 0,
-            y: w.y || 0,
-            rotate: w.rotate || 0,
-          })),
+          output.map((w) => {
+            const word = w as WordData & {
+              x?: number;
+              y?: number;
+              rotate?: number;
+            };
+            return {
+              text: word.text || '',
+              size: word.size || 12,
+              count: word.count || 0,
+              x: word.x || 0,
+              y: word.y || 0,
+              rotate: word.rotate || 0,
+            };
+          }),
         );
       });
 
