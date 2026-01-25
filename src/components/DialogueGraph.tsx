@@ -3,7 +3,6 @@
 import cytoscape, {
   type Core,
   type EdgeSingular,
-  type ElementDefinition,
   type NodeSingular,
   type StylesheetStyle,
 } from 'cytoscape';
@@ -14,6 +13,7 @@ import { useEffect, useRef, useState } from 'react';
 import { getBookById, getSectionById } from '@/generated/books';
 import { getContentById } from '@/generated/contents';
 import { chartTheme } from '@/lib/chart-theme';
+import { toCytoscapeElements } from '@/lib/graph/transforms';
 import type { GraphEdge, SpeakerGraph } from '@/lib/graph/types';
 
 // Register fcose layout
@@ -38,28 +38,7 @@ export function DialogueGraph({ graph, height = '600px' }: DialogueGraphProps) {
     if (!containerRef.current) return;
 
     // Convert graph data to Cytoscape format
-    const elements: ElementDefinition[] = [
-      // Add nodes
-      ...graph.nodes.map((node) => ({
-        data: {
-          id: node.id,
-          label: node.label,
-          type: node.type,
-        },
-      })),
-      // Add edges
-      ...graph.edges.map((edge, index) => ({
-        data: {
-          id: `edge-${index}`,
-          source: edge.source,
-          target: edge.target,
-          topic: edge.topic,
-          weight: edge.weight,
-          contentIds: edge.contentIds,
-          originalEdge: edge, // Store original edge for popup
-        },
-      })),
-    ];
+    const elements = toCytoscapeElements(graph);
 
     // Cytoscape stylesheet
     const stylesheet: StylesheetStyle[] = [
