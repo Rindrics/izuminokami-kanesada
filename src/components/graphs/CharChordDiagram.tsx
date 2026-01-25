@@ -198,7 +198,7 @@ export function CharChordDiagram({
   const getCharColor = (char: string, isHighlighted: boolean): string => {
     if (isHighlighted) return chartTheme.colors.primary[600];
     if (KEY_CONCEPTS.has(char)) return chartTheme.colors.primary[500];
-    return chartTheme.colors.neutral[700];
+    return chartTheme.colors.neutral[500];
   };
 
   // Get hover text
@@ -320,7 +320,7 @@ export function CharChordDiagram({
               textAnchor="middle"
               dominantBaseline="middle"
               fontSize={16}
-              fill={chartTheme.colors.neutral[600]}
+              fill={chartTheme.colors.neutral[500]}
             >
               {getHoverText()}
             </text>
@@ -340,7 +340,7 @@ export function CharChordDiagram({
         <div className="flex items-center gap-2">
           <div
             className="h-3 w-3 rounded"
-            style={{ backgroundColor: chartTheme.colors.neutral[700] }}
+            style={{ backgroundColor: chartTheme.colors.neutral[500] }}
           />
           <span>その他の漢字</span>
         </div>

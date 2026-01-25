@@ -173,7 +173,7 @@ export function CircularLayout({
   const getColor = (char: string, isHovered: boolean): string => {
     if (isHovered) return chartTheme.colors.primary[600];
     if (KEY_CONCEPTS.has(char)) return chartTheme.colors.primary[500];
-    return chartTheme.colors.neutral[700];
+    return chartTheme.colors.neutral[500];
   };
 
   // Check if character is connected to hovered char

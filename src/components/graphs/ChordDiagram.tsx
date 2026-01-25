@@ -233,7 +233,7 @@ export function ChordDiagram({
                   fill={
                     isHighlighted
                       ? chartTheme.colors.primary[600]
-                      : chartTheme.colors.neutral[700]
+                      : chartTheme.colors.neutral[500]
                   }
                   className="cursor-pointer transition-all"
                   onMouseEnter={() =>
@@ -251,7 +251,7 @@ export function ChordDiagram({
                   fill={
                     isHighlighted
                       ? chartTheme.colors.primary[600]
-                      : chartTheme.colors.neutral[600]
+                      : chartTheme.colors.neutral[500]
                   }
                   fontWeight={isHighlighted ? 'bold' : 'normal'}
                   className="pointer-events-none"
@@ -270,7 +270,7 @@ export function ChordDiagram({
               textAnchor="middle"
               dominantBaseline="middle"
               fontSize={14}
-              fill={chartTheme.colors.neutral[600]}
+              fill={chartTheme.colors.neutral[500]}
             >
               {getHoverText()}
             </text>
@@ -283,7 +283,7 @@ export function ChordDiagram({
         <div className="flex items-center gap-2">
           <div
             className="h-3 w-6 rounded"
-            style={{ backgroundColor: chartTheme.colors.neutral[700] }}
+            style={{ backgroundColor: chartTheme.colors.neutral[500] }}
           />
           <span>人物</span>
         </div>

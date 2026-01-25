@@ -162,7 +162,7 @@ export function WordCloud({ width = 600, height = 400 }: WordCloudProps) {
   const getWordColor = (text: string, isHovered: boolean) => {
     if (isHovered) return chartTheme.colors.primary[600];
     if (KEY_CONCEPTS.has(text)) return chartTheme.colors.primary[500];
-    return chartTheme.colors.neutral[700];
+    return chartTheme.colors.neutral[500];
   };
 
   // Get available speakers (persons who have spoken)
@@ -284,7 +284,7 @@ export function WordCloud({ width = 600, height = 400 }: WordCloudProps) {
         <div className="flex items-center gap-1">
           <span
             className="inline-block h-3 w-3 rounded"
-            style={{ backgroundColor: '#3f3f46' }}
+            style={{ backgroundColor: chartTheme.colors.neutral[500] }}
           />
           <span>その他</span>
         </div>
