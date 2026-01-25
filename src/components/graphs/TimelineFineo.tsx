@@ -440,6 +440,7 @@ export function TimelineFineo({
                     <stop offset="100%" stopColor={book.color} />
                   </linearGradient>
                 </defs>
+                {/* biome-ignore lint/a11y/noStaticElementInteractions: SVG path hover interaction */}
                 <path
                   d={pathData}
                   fill="none"
@@ -461,6 +462,7 @@ export function TimelineFineo({
             const isHovered = hoveredNode === person.id;
             return (
               <g key={person.id}>
+                {/* biome-ignore lint/a11y/noStaticElementInteractions: SVG circle hover interaction */}
                 <circle
                   cx={person.x}
                   cy={person.y}
@@ -494,6 +496,7 @@ export function TimelineFineo({
             const isHovered = hoveredNode === book.id;
             return (
               <g key={book.id}>
+                {/* biome-ignore lint/a11y/noStaticElementInteractions: SVG rect hover interaction */}
                 <rect
                   x={book.x - 20}
                   y={book.y - 10}
