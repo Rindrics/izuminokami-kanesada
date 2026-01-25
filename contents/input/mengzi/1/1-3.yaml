@@ -1,5 +1,9 @@
 segments:
-  - text: 萬乘之國 弒其君者 必千乘之家;千乘之國 弒其君者 必百乘之家;萬取千焉 千取百焉 不為不多矣
+  - text: 萬乘之國 弒其君者 必千乘之家
+    speaker: mengzi
+  - text: 千乘之國 弒其君者 必百乘之家
+    speaker: mengzi
+  - text: 萬取千焉 千取百焉 不為不多矣
     speaker: mengzi
 mentioned:
   - mengzi

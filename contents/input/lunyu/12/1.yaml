@@ -3,7 +3,11 @@ segments:
     speaker: null
   - text: 子曰
     speaker: null
-  - text: 克己復禮為仁; 一日克己復禮 天下歸仁焉; 為仁由己 而由人乎哉
+  - text: 克己復禮為仁
+    speaker: kongzi
+  - text: 一日克己復禮 天下歸仁焉
+    speaker: kongzi
+  - text: 為仁由己 而由人乎哉
     speaker: kongzi
   - text: 顏淵曰
     speaker: null

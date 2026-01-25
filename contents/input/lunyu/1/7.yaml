@@ -1,7 +1,15 @@
 segments:
   - text: 子夏曰
     speaker: null
-  - text: 賢賢易色;事父母能竭其力;事君能致其身;與朋友交 言而有信;雖曰未學 吾必謂之學矣
+  - text: 賢賢易色
+    speaker: zixia
+  - text: 事父母能竭其力
+    speaker: zixia
+  - text: 事君能致其身
+    speaker: zixia
+  - text: 與朋友交 言而有信
+    speaker: zixia
+  - text: 雖曰未學 吾必謂之學矣
     speaker: zixia
 mentioned: []
 japanese: 子夏曰く、賢を賢として色を易んじ、父母に事（つか）えて能く其の力を竭くし、君に事（つか）えて能く其の身を致し、朋友と交わりて言いて信有らば、未だ学ばずと曰（い）うと雖も、吾は必ず之を学びたりと謂わん。
