@@ -2,10 +2,11 @@
  * Audio file URL generation utility
  *
  * Audio files are stored in Cloud Storage at:
- * audio/{bookId}/{sectionId}/{chapterId}-{lang}.mp3
+ * - Chinese (zh): audio/{bookId}/{sectionId}/{chapterId}-zh.mp3 (TTS generated)
+ * - Japanese (ja): audio/{bookId}/{sectionId}/{chapterId}-ja.webm (manually recorded)
  *
  * Public URL format:
- * https://storage.googleapis.com/{bucketName}/audio/{bookId}/{sectionId}/{chapterId}-{lang}.mp3
+ * https://storage.googleapis.com/{bucketName}/audio/{bookId}/{sectionId}/{chapterId}-{lang}.{ext}
  */
 
 import audioManifest from '../../audio-manifest.json';
@@ -48,7 +49,9 @@ export function getAudioUrl(
   chapterId: string,
   lang: AudioLanguage,
 ): string {
-  const baseUrl = `${AUDIO_BASE_URL}/audio/${bookId}/${sectionId}/${chapterId}-${lang}.mp3`;
+  // Chinese uses mp3 (TTS), Japanese uses webm (manually recorded)
+  const ext = lang === 'zh' ? 'mp3' : 'webm';
+  const baseUrl = `${AUDIO_BASE_URL}/audio/${bookId}/${sectionId}/${chapterId}-${lang}.${ext}`;
 
   // Add hash as cache busting parameter
   const manifest = audioManifest as AudioManifest;
