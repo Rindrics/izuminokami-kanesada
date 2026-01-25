@@ -4,6 +4,7 @@ import { DialogueGraph } from '@/components/DialogueGraph';
 import { AlluvialDiagram } from '@/components/graphs/AlluvialDiagram';
 import { BioFabricGraph } from '@/components/graphs/BioFabricGraph';
 import { CharChordDiagram } from '@/components/graphs/CharChordDiagram';
+import { ChernoffFaces } from '@/components/graphs/ChernoffFaces';
 import { ChordDiagram } from '@/components/graphs/ChordDiagram';
 import { CircularLayout } from '@/components/graphs/CircularLayout';
 import { VoronoiTreemap } from '@/components/graphs/VoronoiTreemap';
@@ -546,6 +547,17 @@ export default function StatsPage() {
                     id: 'network',
                     label: 'ネットワーク図',
                     content: <DialogueGraph graph={stats.dialogueGraph} />,
+                  },
+                  {
+                    id: 'chernoff',
+                    label: '顔型チャート',
+                    content: (
+                      <ChernoffFaces
+                        personFrequencies={stats.personFrequencies}
+                        width={700}
+                        height={400}
+                      />
+                    ),
                   },
                 ]}
               />
