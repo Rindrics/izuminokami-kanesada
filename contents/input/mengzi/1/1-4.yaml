@@ -1,12 +1,17 @@
 segments:
-  - text: 苟為後義而先利 不奪不-饜
+  - text:
+      original: 苟為後義而先利 不奪不-饜
+      japanese: 苟めにも義を後（かろ）んじて利を先（たっと）ぶことをなさば、奪わざれば饜かず。
     speaker: mengzi
-  - text: 未有仁而遺其親者也 未有義而後其君者也
+  - text:
+      original: 未有仁而遺其親者也 未有義而後其君者也
+      japanese: 未だ仁にして其の親（おや）を遺（わす）るる者あらず、未だ義にして其の君を後（かろ）んずる者あらず。
     speaker: mengzi
-  - text: 王亦曰仁義而已矣 何必曰利
+  - text:
+      original: 王亦曰仁義而已矣 何必曰利
+      japanese: 王、亦（た）だ仁義を曰（い）わんのみ、何ぞ必ずしも利を曰（い）はん。」と。
     speaker: mengzi
 mentioned:
   - mengzi
   - liang-huiwang
-japanese: 苟めにも義を後（かろ）んじて利を先（たっと）ぶことをなさば、奪わざれば饜かず。未だ仁にして其の親（おや）を遺（わす）るる者あらず、未だ義にして其の君を後（かろ）んずる者あらず。王、亦（た）だ仁義を曰（い）わんのみ、何ぞ必ずしも利を曰（い）はん。」と。
 pinyin_reviewed: true

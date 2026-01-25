@@ -1,17 +1,28 @@
 segments:
-  - text: 子禽問於子貢曰
+  - text:
+      original: 子禽問於子貢曰
+      japanese: 子禽 子貢に問いて曰く、
     speaker: null
-  - text: 夫子至於是邦也 必聞其政
+  - text:
+      original: 夫子至於是邦也 必聞其政
+      japanese: 夫子の是の邦に至るや、必ず其の政を聞く。
     speaker: ziqin
-  - text: 求之與 抑與之與
+  - text:
+      original: 求之與 抑與之與
+      japanese: 之を求めしや、抑之に与えしや、と。
     speaker: ziqin
-  - text: 子貢曰
+  - text:
+      original: 子貢曰
+      japanese: 子貢曰く、
     speaker: null
-  - text: 夫子溫良恭儉讓以得之
+  - text:
+      original: 夫子溫良恭儉讓以得之
+      japanese: 夫子は温・良・恭・倹・譲、以て之を得たり。
     speaker: zigong
-  - text: 夫子之求之也 其諸異乎人之求之與
+  - text:
+      original: 夫子之求之也 其諸異乎人之求之與
+      japanese: 夫子の之を求むるや、其れ諸れ人の之を求むるに異なるか、と。
     speaker: zigong
 mentioned:
   - kongzi
-japanese: 子禽 子貢に問いて曰く、夫子の是の邦に至るや、必ず其の政を聞く。之を求めしや、抑之に与えしや、と。子貢曰く、夫子は温・良・恭・倹・譲、以て之を得たり。夫子の之を求むるや、其れ諸れ人の之を求むるに異なるか、と。
 pinyin_reviewed: true

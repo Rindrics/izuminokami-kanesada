@@ -1,12 +1,19 @@
 segments:
-  - text: 子曰
+  - text:
+      original: 子曰
+      japanese: 子曰く、
     speaker: null
-  - text: 君子不-重則不威 學則不-固
+  - text:
+      original: 君子不-重則不威 學則不-固
+      japanese: 君子 重からざれば則ち威あらず、学びても則ち固ならず。
     speaker: kongzi
-  - text: 主忠信 無友不如己-者
+  - text:
+      original: 主忠信 無友不如己-者
+      japanese: 忠信を主とし、己に如かざる者を友とすること無かれ。
     speaker: kongzi
-  - text: 過則勿-憚改
+  - text:
+      original: 過則勿-憚改
+      japanese: 過ちては則ち改むるに憚ること勿かれ。
     speaker: kongzi
 mentioned: []
-japanese: 子曰く、君子 重からざれば則ち威あらず、学びても則ち固ならず。忠信を主とし、己に如かざる者を友とすること無かれ。過ちては則ち改むるに憚ること勿かれ。
 pinyin_reviewed: true

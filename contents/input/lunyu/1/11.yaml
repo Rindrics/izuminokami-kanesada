@@ -1,12 +1,19 @@
 segments:
-  - text: 子曰
+  - text:
+      original: 子曰
+      japanese: 子曰く、
     speaker: null
-  - text: 父在觀其志
+  - text:
+      original: 父在觀其志
+      japanese: 父在（いま）せば其の志を観よ。
     speaker: kongzi
-  - text: 父沒觀其行
+  - text:
+      original: 父沒觀其行
+      japanese: 父没せば其の行いを観よ。
     speaker: kongzi
-  - text: 三年無改於父之道 可-謂孝矣
+  - text:
+      original: 三年無改於父之道 可-謂孝矣
+      japanese: 三年 父の道を改むる無くんば、孝と謂う可し。
     speaker: kongzi
 mentioned: []
-japanese: 子曰く、父在（いま）せば其の志を観よ。父没せば其の行いを観よ。三年 父の道を改むる無くんば、孝と謂う可し。
 pinyin_reviewed: true

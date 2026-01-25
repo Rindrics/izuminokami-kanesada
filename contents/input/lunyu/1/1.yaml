@@ -1,12 +1,19 @@
 segments:
-  - text: 子曰
+  - text:
+      original: 子曰
+      japanese: 子曰く、
     speaker: null
-  - text: 學而時習之 不-亦說乎
+  - text:
+      original: 學而時習之 不-亦說乎
+      japanese: 学びて之を時習す、亦た説ばしからずや。
     speaker: kongzi
-  - text: 有朋自遠方來 不-亦樂乎
+  - text:
+      original: 有朋自遠方來 不-亦樂乎
+      japanese: 朋遠方より来る有り、亦た楽しからずや。
     speaker: kongzi
-  - text: 人不知而不慍 不-亦君子乎
+  - text:
+      original: 人不知而不慍 不-亦君子乎
+      japanese: 人知らずして慍らず、亦た君子ならずや。
     speaker: kongzi
 mentioned: []
-japanese: 子曰く、学びて之を時習す、亦た説ばしからずや。朋遠方より来る有り、亦た楽しからずや。人知らずして慍らず、亦た君子ならずや。
 pinyin_reviewed: true

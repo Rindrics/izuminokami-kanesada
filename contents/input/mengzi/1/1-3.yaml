@@ -1,11 +1,16 @@
 segments:
-  - text: 萬乘之國 弒其君者 必千乘之家
+  - text:
+      original: 萬乘之國 弒其君者 必千乘之家
+      japanese: 萬乘の國、其の君を弒むる者は、必ず千乘の家がらなり。
     speaker: mengzi
-  - text: 千乘之國 弒其君者 必百乘之家
+  - text:
+      original: 千乘之國 弒其君者 必百乘之家
+      japanese: 千乘の國、其の君を弒むる者は、必ず百乘の家がらなり。
     speaker: mengzi
-  - text: 萬取千焉 千取百焉 不為不多矣
+  - text:
+      original: 萬取千焉 千取百焉 不為不多矣
+      japanese: 萬にて千を取り、千にて百を取るすら、多からずと為さざるなり。
     speaker: mengzi
 mentioned:
   - mengzi
-japanese: 萬乘の國、其の君を弒むる者は、必ず千乘の家がらなり。千乘の國、其の君を弒むる者は、必ず百乘の家がらなり。萬にて千を取り、千にて百を取るすら、多からずと為さざるなり。
 pinyin_reviewed: true

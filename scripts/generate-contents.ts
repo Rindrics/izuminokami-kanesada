@@ -699,13 +699,13 @@ function generateSpeakerGraphs(contents: OutputContent[]): {
           // Derive topic from questionMatch or extract from nextSegment
           let topic: string | null = questionMatch.topic;
           if (!topic && nextSegment) {
-            // Try to extract topic from nextSegment.text
-            const concepts = extractConcepts(nextSegment.text);
+            // Try to extract topic from nextSegment.text.original
+            const concepts = extractConcepts(nextSegment.text.original);
             if (concepts.length > 0) {
               topic = concepts[0];
             } else {
-              // Fallback: try parseQuestionPattern on nextSegment.text
-              const nextMatch = parseQuestionPattern(nextSegment.text);
+              // Fallback: try parseQuestionPattern on nextSegment.text.original
+              const nextMatch = parseQuestionPattern(nextSegment.text.original);
               topic = nextMatch?.topic ?? null;
             }
           }

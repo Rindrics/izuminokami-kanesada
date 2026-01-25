@@ -1,12 +1,20 @@
 segments:
-  - text: 王曰 何以利吾國
+  - text:
+      original: 王曰 何以利吾國
+      japanese: 王は何（なに）を以て吾（わ）が國を利せんかと曰（い）い、
     speaker: mengzi
-  - text: 大夫曰 何以利吾家
+  - text:
+      original: 大夫曰 何以利吾家
+      japanese: 大夫は何（なに）を以て吾（わ）が家を利せんかと曰（い）い、
     speaker: mengzi
-  - text: 庶人曰 何以利吾身
+  - text:
+      original: 庶人曰 何以利吾身
+      japanese: 士と庶人とは何（なに）を以て吾（わ）が身を利せんかと曰（い）わば、
     speaker: mengzi
-  - text: 上下交征利而國危矣
+  - text:
+      original: 上下交征利而國危矣
+      japanese: 上下のひと交（こもごも）に利を征（あさ）りて國は危うからん。
     speaker: mengzi
-mentioned: [mengzi]
-japanese: 王は何（なに）を以て吾（わ）が國を利せんかと曰（い）い、大夫は何（なに）を以て吾（わ）が家を利せんかと曰（い）い、士と庶人とは何（なに）を以て吾（わ）が身を利せんかと曰（い）わば、上下のひと交（こもごも）に利を征（あさ）りて國は危うからん。
+mentioned:
+  - mengzi
 pinyin_reviewed: true

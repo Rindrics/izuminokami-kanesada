@@ -1,14 +1,23 @@
 segments:
-  - text: 曾子曰
+  - text:
+      original: 曾子曰
+      japanese: 曾子曰く、
     speaker: null
-  - text: 吾日三省吾身
+  - text:
+      original: 吾日三省吾身
+      japanese: 吾 日に吾（わ）が身を三省す。
     speaker: zengzi
-  - text: 為人謀而不-忠乎
+  - text:
+      original: 為人謀而不-忠乎
+      japanese: 人の為（ため）に謀りて忠ならざるか、
     speaker: zengzi
-  - text: 與朋友交而不-信乎
+  - text:
+      original: 與朋友交而不-信乎
+      japanese: 朋友と交わりて信ならざるか、
     speaker: zengzi
-  - text: 傳不-習乎
+  - text:
+      original: 傳不-習乎
+      japanese: 習わざるを伝えしか、と。
     speaker: zengzi
 mentioned: []
-japanese: 曾子曰く、吾 日に吾（わ）が身を三省す。人の為（ため）に謀りて忠ならざるか、朋友と交わりて信ならざるか、習わざるを伝えしか、と。
 pinyin_reviewed: true

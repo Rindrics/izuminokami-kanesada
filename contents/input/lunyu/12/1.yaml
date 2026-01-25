@@ -1,27 +1,48 @@
 segments:
-  - text: 顏淵問仁
+  - text:
+      original: 顏淵問仁
+      japanese: 顏淵仁を問う。
     speaker: null
-  - text: 子曰
+  - text:
+      original: 子曰
+      japanese: 子曰く、
     speaker: null
-  - text: 克己復禮為仁
+  - text:
+      original: 克己復禮為仁
+      japanese: 己に克ち禮に復するを仁と為す。
     speaker: kongzi
-  - text: 一日克己復禮 天下歸仁焉
+  - text:
+      original: 一日克己復禮 天下歸仁焉
+      japanese: 一日己に克ち禮に復すれば、天下仁に歸す。
     speaker: kongzi
-  - text: 為仁由己 而由人乎哉
+  - text:
+      original: 為仁由己 而由人乎哉
+      japanese: 仁を為すは己に由（よ）る、人に由（よ）らんや。
     speaker: kongzi
-  - text: 顏淵曰
+  - text:
+      original: 顏淵曰
+      japanese: 顏淵曰く、
     speaker: null
-  - text: 請問其目
+  - text:
+      original: 請問其目
+      japanese: 其の目を請い問う。
     speaker: yanyuan
-  - text: 子曰
+  - text:
+      original: 子曰
+      japanese: 子曰く、
     speaker: null
-  - text: 非禮勿視 非禮勿聽 非禮勿言 非禮勿動
+  - text:
+      original: 非禮勿視 非禮勿聽 非禮勿言 非禮勿動
+      japanese: 禮に非ざれば視ること勿かれ、禮に非ざれば聽くこと勿かれ、禮に非ざれば言うこと勿かれ、禮に非ざれば動くこと勿かれ。
     speaker: kongzi
-  - text: 顏淵曰
+  - text:
+      original: 顏淵曰
+      japanese: 顏淵曰く、
     speaker: null
-  - text: 回雖不敏 請事斯語矣
+  - text:
+      original: 回雖不敏 請事斯語矣
+      japanese: 回不敏なりと雖も、請う斯の語（ご）を事とせん。
     speaker: yanyuan
 mentioned:
   - yanyuan
-japanese: 顏淵仁を問う。子曰く、己に克ち禮に復するを仁と為す。一日己に克ち禮に復すれば、天下仁に歸す。仁を為すは己に由（よ）る、人に由（よ）らんや。顏淵曰く、其の目を請い問う。子曰く、禮に非ざれば視ること勿かれ、禮に非ざれば聽くこと勿かれ、禮に非ざれば言うこと勿かれ、禮に非ざれば動くこと勿かれ。顏淵曰く、回不敏なりと雖も、請う斯の語（ご）を事とせん。
 pinyin_reviewed: true
