@@ -3,6 +3,7 @@
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ClickableChar } from '@/components/ClickableChar';
 import { getDefaultMeaning } from '@/data/hanzi-dictionary';
+import { getPersonName } from '@/generated/persons';
 import type { Segment } from '@/types/content';
 
 type DisplayMode = 'plain' | 'onyomi' | 'pinyin';
@@ -449,14 +450,25 @@ export function HakubunWithTabs({ segments }: Props) {
               const prevIsNarration = prevGroup && prevGroup.speaker === null;
               const isFirstGroup = groupIndex === 0;
 
+              // Detect implicit speaker change (speaker changed without narrator)
+              const isImplicitSpeakerChange =
+                !isFirstGroup &&
+                group.speaker !== null &&
+                prevGroup &&
+                prevGroup.speaker !== null &&
+                prevGroup.speaker !== group.speaker;
+
               // Determine wrapper element and properties
               let Wrapper: 'div' | 'span' = 'span';
               const wrapperProps: { className?: string } = {};
 
               if (!isFirstGroup) {
                 Wrapper = 'div';
-                // Speech after narration: add indent
-                if (!isNarration && prevIsNarration) {
+                // Speech after narration or implicit speaker change: add indent
+                if (
+                  !isNarration &&
+                  (prevIsNarration || isImplicitSpeakerChange)
+                ) {
                   wrapperProps.className = 'block pl-4';
                 }
               }
@@ -469,6 +481,12 @@ export function HakubunWithTabs({ segments }: Props) {
                   key={`${firstSegment.start_pos}-${lastSegment.end_pos}`}
                   {...wrapperProps}
                 >
+                  {/* Show implicit speaker name (no indent) */}
+                  {isImplicitSpeakerChange && (
+                    <span className="block -ml-4 text-zinc-300 dark:text-zinc-600">
+                      ― {getPersonName(group.speaker!)} ―
+                    </span>
+                  )}
                   {group.segments.map((segment, segIndex) => (
                     <span key={`${segment.start_pos}-${segment.end_pos}`}>
                       {segIndex > 0 && <br />}
