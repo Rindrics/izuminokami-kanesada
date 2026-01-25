@@ -16,6 +16,22 @@ import { chartTheme } from '@/lib/chart-theme';
 import { toCytoscapeElements } from '@/lib/graph/transforms';
 import type { GraphEdge, SpeakerGraph } from '@/lib/graph/types';
 
+// Hook to detect dark mode
+function useIsDarkMode() {
+  const [isDark, setIsDark] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    setIsDark(mediaQuery.matches);
+
+    const handler = (e: MediaQueryListEvent) => setIsDark(e.matches);
+    mediaQuery.addEventListener('change', handler);
+    return () => mediaQuery.removeEventListener('change', handler);
+  }, []);
+
+  return isDark;
+}
+
 // Register fcose layout
 cytoscape.use(fcose);
 
@@ -33,6 +49,10 @@ export function DialogueGraph({ graph, height = '600px' }: DialogueGraphProps) {
     y: number;
   } | null>(null);
   const [isPinned, setIsPinned] = useState(false);
+  const isDarkMode = useIsDarkMode();
+
+  // Edge colors based on theme
+  const edgeColor = isDarkMode ? '#9CA3AF' : '#71717A'; // gray-400 for dark, zinc-500 for light
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -60,26 +80,27 @@ export function DialogueGraph({ graph, height = '600px' }: DialogueGraphProps) {
           'text-wrap': 'wrap',
           'text-max-width': '100px',
           color: '#FFFFFF', // White text for dark backgrounds
-          'font-size': chartTheme.cytoscape.node.fontSize,
-          'font-weight': chartTheme.cytoscape.node.fontWeight,
-          padding: '8px',
+          'font-size': 20,
+          'font-weight': 'bold',
+          'text-margin-y': 2, // Adjust for visual centering of CJK characters
+          padding: '4px',
         },
       },
       {
         selector: 'node[type = "concept"]',
         style: {
-          width: 50,
-          height: 50,
+          width: 38,
+          height: 38,
           shape: 'ellipse', // Circle shape
           'border-width': 2,
           'border-color': chartTheme.colors.neutral[200],
           label: chartTheme.cytoscape.node.label,
-          'text-valign': chartTheme.cytoscape.node.textValign,
-          'text-halign': chartTheme.cytoscape.node.textHalign,
+          'text-valign': 'center',
+          'text-halign': 'center',
           color: '#FFFFFF', // White text for concept nodes
-          'font-size': 18,
+          'font-size': 20,
           'font-weight': 'bold',
-          'background-color': chartTheme.conceptColor,
+          'background-color': chartTheme.colors.neutral[700], // Dark gray for better contrast
         },
       },
       {
@@ -92,8 +113,8 @@ export function DialogueGraph({ graph, height = '600px' }: DialogueGraphProps) {
             const normalizedWeight = Math.min(edgeData.weight || 1, 10);
             return min + (normalizedWeight / 10) * (max - min);
           },
-          'line-color': chartTheme.cytoscape.edge.lineColor,
-          'target-arrow-color': chartTheme.cytoscape.edge.targetArrowColor,
+          'line-color': edgeColor,
+          'target-arrow-color': edgeColor,
           'target-arrow-shape': chartTheme.cytoscape.edge.targetArrowShape,
           'curve-style': chartTheme.cytoscape.edge.curveStyle,
           label: (edge: EdgeSingular) => {
@@ -103,8 +124,8 @@ export function DialogueGraph({ graph, height = '600px' }: DialogueGraphProps) {
           },
           'text-rotation': chartTheme.cytoscape.edge.textRotation,
           'text-margin-y': chartTheme.cytoscape.edge.textMarginY,
-          'font-size': chartTheme.cytoscape.edge.fontSize,
-          color: chartTheme.cytoscape.edge.textColor,
+          'font-size': 16,
+          color: edgeColor,
         },
       },
     ];
@@ -186,7 +207,7 @@ export function DialogueGraph({ graph, height = '600px' }: DialogueGraphProps) {
         cyRef.current = null;
       }
     };
-  }, [graph]);
+  }, [graph, edgeColor]);
 
   // Separate effect for event handlers (doesn't trigger layout)
   useEffect(() => {
