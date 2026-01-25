@@ -9,7 +9,7 @@ import type { GraphEdge, SpeakerGraph } from '@/lib/graph/types';
 
 interface BioFabricGraphProps {
   graph: SpeakerGraph;
-  height?: string;
+  height?: number;
 }
 
 /**
@@ -20,10 +20,7 @@ interface BioFabricGraphProps {
  * - Edges are vertical lines crossing the node strands they connect
  * - Creates a "fabric" pattern that reveals network structure
  */
-export function BioFabricGraph({
-  graph,
-  height = '500px',
-}: BioFabricGraphProps) {
+export function BioFabricGraph({ graph, height = 500 }: BioFabricGraphProps) {
   const [selectedEdge, setSelectedEdge] = useState<GraphEdge | null>(null);
   const [hoveredEdgeIndex, setHoveredEdgeIndex] = useState<number | null>(null);
 
@@ -132,7 +129,7 @@ export function BioFabricGraph({
     <div className="relative w-full overflow-auto rounded-lg border border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-900">
       <svg
         width={svgWidth}
-        height={Math.max(svgHeight, parseInt(height, 10))}
+        height={Math.max(svgHeight, height)}
         style={{ minWidth: svgWidth }}
         role="img"
         aria-label="BioFabric グラフ - 人物と概念の関係を織物パターンで可視化"
@@ -144,7 +141,7 @@ export function BioFabricGraph({
           x={0}
           y={0}
           width={svgWidth}
-          height={Math.max(svgHeight, parseInt(height, 10))}
+          height={Math.max(svgHeight, height)}
           fill="white"
           className="dark:fill-zinc-900"
         />
