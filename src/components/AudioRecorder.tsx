@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface Props {
   bookId: string;
@@ -22,13 +22,36 @@ export function AudioRecorder({
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const streamRef = useRef<MediaStream | null>(null);
   const chunksRef = useRef<Blob[]>([]);
   const audioRef = useRef<HTMLAudioElement>(null);
+
+  // Cleanup on unmount: stop recording and release microphone
+  useEffect(() => {
+    return () => {
+      // Stop MediaRecorder if recording
+      if (
+        mediaRecorderRef.current &&
+        mediaRecorderRef.current.state === 'recording'
+      ) {
+        mediaRecorderRef.current.stop();
+      }
+
+      // Stop all tracks to release microphone
+      if (streamRef.current) {
+        for (const track of streamRef.current.getTracks()) {
+          track.stop();
+        }
+        streamRef.current = null;
+      }
+    };
+  }, []);
 
   const startRecording = async () => {
     try {
       setError(null);
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      streamRef.current = stream;
 
       const mediaRecorder = new MediaRecorder(stream, {
         mimeType: 'audio/webm;codecs=opus',
@@ -50,8 +73,11 @@ export function AudioRecorder({
         setState('recorded');
 
         // Stop all tracks to release microphone
-        for (const track of stream.getTracks()) {
-          track.stop();
+        if (streamRef.current) {
+          for (const track of streamRef.current.getTracks()) {
+            track.stop();
+          }
+          streamRef.current = null;
         }
       };
 
