@@ -303,7 +303,7 @@ export function CircularLayout({
           textAnchor="middle"
           dominantBaseline="middle"
           fontSize={14}
-          fill="#a1a1aa"
+          className="fill-zinc-400 dark:fill-zinc-500"
         >
           {hoveredEdge
             ? `${hoveredEdge.char1}${hoveredEdge.char2}: ${hoveredEdge.count}回`
