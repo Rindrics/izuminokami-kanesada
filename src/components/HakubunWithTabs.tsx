@@ -482,16 +482,16 @@ export function HakubunWithTabs({ segments }: Props) {
                   {...wrapperProps}
                 >
                   {/* Show implicit speaker name (no indent) */}
-                  {isImplicitSpeakerChange && (
+                  {isImplicitSpeakerChange && group.speaker && (
                     <span className="block -ml-4 text-zinc-300 dark:text-zinc-600">
-                      ― {getPersonName(group.speaker!)} ―
+                      ― {getPersonName(group.speaker)} ―
                     </span>
                   )}
                   {group.segments.map((segment, segIndex) => (
                     <span key={`${segment.start_pos}-${segment.end_pos}`}>
                       {segIndex > 0 && <br />}
                       <TextWithRuby
-                        text={segment.text}
+                        text={segment.text.original}
                         mode={mode}
                         isNarration={isNarration}
                       />

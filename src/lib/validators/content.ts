@@ -120,10 +120,15 @@ function validateSegments(
       hasTypeError = true;
     }
 
-    if (typeof segment.text !== 'string') {
+    if (
+      typeof segment.text !== 'object' ||
+      segment.text === null ||
+      typeof segment.text.original !== 'string' ||
+      typeof segment.text.japanese !== 'string'
+    ) {
       errors.push({
         path: `segments[${segmentIndex}].text`,
-        message: 'text must be a string',
+        message: 'text must be an object with original and japanese strings',
         severity: 'error',
       });
       hasTypeError = true;
@@ -172,9 +177,9 @@ function validateSegments(
 
     // Check segment text matches the text slice
     const expectedText = text.slice(segment.start_pos, segment.end_pos);
-    if (segment.text !== expectedText) {
+    if (segment.text.original !== expectedText) {
       errors.push({
-        path: `segments[${segmentIndex}].text`,
+        path: `segments[${segmentIndex}].text.original`,
         message: `segment text does not match text slice`,
         severity: 'error',
       });
@@ -280,7 +285,7 @@ function validateNoPunctuation(segments: Segment[]): ValidationError[] {
     const segment = segments[i];
     const foundPunctuation: string[] = [];
 
-    for (const char of segment.text) {
+    for (const char of segment.text.original) {
       if (FORBIDDEN_PUNCTUATION.includes(char)) {
         foundPunctuation.push(char);
       }
@@ -289,7 +294,7 @@ function validateNoPunctuation(segments: Segment[]): ValidationError[] {
     if (foundPunctuation.length > 0) {
       const uniquePunctuation = [...new Set(foundPunctuation)];
       errors.push({
-        path: `segments[${i}].text`,
+        path: `segments[${i}].text.original`,
         message: `segment text contains forbidden punctuation: ${uniquePunctuation.join(' ')}`,
         severity: 'error',
       });
@@ -617,7 +622,9 @@ export function validateContent(content: Content): ValidationResult {
   errors.push(...validateHanziInDictionary(content.text));
 
   // 9. Validate kanji in japanese are in kunyomi-dictionary (reading)
-  errors.push(...validateKunyomiInDictionary(content.japanese));
+  // Combine all segment japanese texts for validation
+  const allJapanese = content.segments.map((s) => s.text.japanese).join('');
+  errors.push(...validateKunyomiInDictionary(allJapanese));
 
   const hasErrors = errors.some((e) => e.severity === 'error');
   return { valid: !hasErrors, errors };

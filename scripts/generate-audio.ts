@@ -198,8 +198,13 @@ interface HanziOverride {
   meaning_id: string;
 }
 
+interface InputSegmentText {
+  original: string;
+  japanese: string;
+}
+
 interface InputSegment {
-  text: string;
+  text: InputSegmentText;
   speaker: string | null;
   hanzi_overrides?: HanziOverride[];
 }
@@ -207,7 +212,6 @@ interface InputSegment {
 interface InputContent {
   segments: InputSegment[];
   mentioned: string[];
-  japanese: string;
 }
 
 // Base pause durations for SSML (in seconds)
@@ -308,7 +312,7 @@ function segmentToSsmlWithPhonemes(
   hanziDict: Map<string, HanziMeaning[]>,
   segment: InputSegment,
 ): string {
-  const text = segment.text;
+  const text = segment.text.original;
   const overrides = segment.hanzi_overrides ?? [];
 
   // Build override map by position
