@@ -274,8 +274,7 @@ export function CircularLayout({
                   cx={pos.x}
                   cy={pos.y}
                   r={fontSize * 0.7}
-                  fill="white"
-                  className="dark:fill-zinc-900"
+                  className="fill-white dark:fill-zinc-900"
                 />
               )}
               {/* Character text */}
