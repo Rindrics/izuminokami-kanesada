@@ -24,7 +24,6 @@ function parseTextWithToneSandhi(text: string): {
   const originalTones: (number | undefined)[] = [];
 
   // First pass: extract characters and their base tones (skip hyphens only)
-  // Semicolons are kept as preferred line break markers
   for (const char of text) {
     if (char !== '-') {
       chars.push(char);
@@ -261,51 +260,33 @@ function TextWithRuby({
   const bgClass = '';
 
   // For plain mode, show text without hyphens, with nowrap per semantic unit
-  // - Semicolons: mandatory line break (must)
-  // - Spaces: optional line break to prevent overflow (may)
+  // Spaces mark optional line break positions to prevent overflow
   // On mobile: free line breaks, On desktop (sm+): controlled breaks
   if (mode === 'plain') {
     const displayText = text.replace(/-/g, '');
-    // Split by semicolons first (mandatory breaks), then by spaces (semantic units)
-    const clauses = displayText.split(';').filter((c) => c.trim().length > 0);
+    const groups = displayText.split(' ').filter((g) => g.length > 0);
     const elements: React.ReactNode[] = [];
     const seenGroups = new Map<string, number>();
 
-    for (let clauseIdx = 0; clauseIdx < clauses.length; clauseIdx++) {
-      const clause = clauses[clauseIdx].trim();
-      const groups = clause.split(' ').filter((g) => g.length > 0);
-      const isLastClause = clauseIdx === clauses.length - 1;
-
-      for (let i = 0; i < groups.length; i++) {
-        const group = groups[i];
-        const count = seenGroups.get(group) ?? 0;
-        seenGroups.set(group, count + 1);
-        const isLastInClause = i === groups.length - 1;
-        // Tailwind responsive classes for margin
-        // Mobile: no margin, Desktop: priority-based margin
-        const marginClass =
-          isLastInClause && isLastClause
-            ? ''
-            : isLastInClause
-              ? 'sm:mr-6'
-              : 'sm:mr-3';
-        elements.push(
-          <span
-            key={`plain-${group}-${count}`}
-            className={`sm:whitespace-nowrap ${marginClass}`}
-          >
-            {[...group].map((char, charIdx) => (
-              // biome-ignore lint/suspicious/noArrayIndexKey: characters in a group are stable and index is part of unique key
-              <ClickableChar key={`${group}-${count}-${charIdx}`} char={char} />
-            ))}
-          </span>,
-        );
-      }
-
-      // Force line break after each clause (except the last)
-      if (!isLastClause) {
-        elements.push(<br key={`br-${clauseIdx}`} />);
-      }
+    for (let i = 0; i < groups.length; i++) {
+      const group = groups[i];
+      const count = seenGroups.get(group) ?? 0;
+      seenGroups.set(group, count + 1);
+      const isLast = i === groups.length - 1;
+      // Tailwind responsive classes for margin
+      // Mobile: no margin, Desktop: margin between groups
+      const marginClass = isLast ? '' : 'sm:mr-3';
+      elements.push(
+        <span
+          key={`plain-${group}-${count}`}
+          className={`sm:whitespace-nowrap ${marginClass}`}
+        >
+          {[...group].map((char, charIdx) => (
+            // biome-ignore lint/suspicious/noArrayIndexKey: characters in a group are stable and index is part of unique key
+            <ClickableChar key={`${group}-${count}-${charIdx}`} char={char} />
+          ))}
+        </span>,
+      );
     }
     return <span className={`inline ${baseClass} ${bgClass}`}>{elements}</span>;
   }
@@ -316,9 +297,8 @@ function TextWithRuby({
 
   // Group characters by semantic units (split by spaces)
   // Each group will be wrapped in nowrap span to prevent mid-word line breaks
-  // - Semicolons: mandatory line break (must)
-  // - Spaces: optional line break to prevent overflow (may)
-  const groups: (React.ReactNode[] | 'wbr')[] = [[]];
+  // Spaces mark optional line break positions to prevent overflow
+  const groups: React.ReactNode[][] = [[]];
   let currentGroupIndex = 0;
 
   for (let i = 0; i < chars.length; i++) {
@@ -334,17 +314,7 @@ function TextWithRuby({
       continue;
     }
 
-    // Semicolon marks mandatory line break position
-    if (char === ';') {
-      currentGroupIndex++;
-      groups[currentGroupIndex] = 'wbr';
-      currentGroupIndex++;
-      groups[currentGroupIndex] = [];
-      continue;
-    }
-
     const currentGroup = groups[currentGroupIndex];
-    if (currentGroup === 'wbr') continue;
 
     // Onyomi or Pinyin mode with ruby
     const ruby = meaning
@@ -369,23 +339,15 @@ function TextWithRuby({
 
   // Build final elements with nowrap groups
   // Use margin-right instead of separator elements to avoid leading space on new lines
-  // 'wbr' markers become <br> elements for mandatory line breaks
   // On mobile: free line breaks, On desktop (sm+): nowrap with margin control
   const elements: React.ReactNode[] = [];
-  const nonEmptyGroups = groups.filter(
-    (g) => g === 'wbr' || (Array.isArray(g) && g.length > 0),
-  );
+  const nonEmptyGroups = groups.filter((g) => g.length > 0);
   for (let g = 0; g < nonEmptyGroups.length; g++) {
     const group = nonEmptyGroups[g];
-    if (group === 'wbr') {
-      elements.push(<br key={`br-${g}`} />);
-      continue;
-    }
     const isLastGroup = g === nonEmptyGroups.length - 1;
-    const nextIsWbr = nonEmptyGroups[g + 1] === 'wbr';
     // Tailwind responsive classes for margin
-    // Mobile: no margin, Desktop: priority-based margin
-    const marginClass = isLastGroup ? '' : nextIsWbr ? 'sm:mr-6' : 'sm:mr-3';
+    // Mobile: no margin, Desktop: margin between groups
+    const marginClass = isLastGroup ? '' : 'sm:mr-3';
     elements.push(
       <span
         key={`group-${g}`}

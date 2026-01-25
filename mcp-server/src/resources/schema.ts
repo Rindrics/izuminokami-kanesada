@@ -21,9 +21,9 @@ japanese: string          # Japanese reading (書き下し文)
 # Notes:
 # - Use spaces to separate semantic units (e.g., "子曰 學而時習之")
 # - Use "-" to mark tone sandhi connections (e.g., "不-亦")
-# - Use ";" to mark forced line breaks (e.g., "鮮矣; 不-好犯上")
+# - Split into multiple segments for line breaks (same speaker allowed)
 # - First segment is typically narration (speaker: null)
-# - Second segment is typically speech (speaker: character_id)
+# - Subsequent segments contain speech (speaker: character_id)
 #
 # Hanzi Overrides:
 # - Used for polyphonic characters where context determines the reading
@@ -74,7 +74,7 @@ export interface Content {
 // Text conventions:
 // - Spaces: semantic unit separators (not displayed, adds spacing)
 // - Hyphen (-): tone sandhi connection marker (不-亦 = bù-yì -> bú-yì)
-// - Semicolon (;): forced line break marker (not displayed)
+// - Line breaks: use multiple segments (same speaker allowed)
 `;
 
 export function registerSchemaResources(server: McpServer): void {
