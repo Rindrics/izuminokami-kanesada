@@ -16,7 +16,7 @@ export function AudioPlayer({
   chapterId,
   contentId,
 }: Props) {
-  const [lang, setLang] = useState<AudioLanguage>('ja');
+  const [lang, setLang] = useState<AudioLanguage>('zh');
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLooping, setIsLooping] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -127,30 +127,32 @@ export function AudioPlayer({
 
         <div className="flex flex-1 flex-col gap-2">
           <div className="flex gap-2">
-            <button
-              type="button"
-              onClick={() => handleLanguageChange('ja')}
-              disabled={!jaAvailable}
-              className={`rounded px-3 py-1 text-sm transition-colors ${
-                lang === 'ja'
-                  ? 'bg-zinc-200 text-zinc-900 dark:bg-zinc-700 dark:text-zinc-100'
-                  : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700'
-              } disabled:cursor-not-allowed disabled:opacity-50`}
-            >
-              音読み
-            </button>
-            <button
-              type="button"
-              onClick={() => handleLanguageChange('zh')}
-              disabled={!zhAvailable}
-              className={`rounded px-3 py-1 text-sm transition-colors ${
-                lang === 'zh'
-                  ? 'bg-zinc-200 text-zinc-900 dark:bg-zinc-700 dark:text-zinc-100'
-                  : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700'
-              } disabled:cursor-not-allowed disabled:opacity-50`}
-            >
-              ピンイン
-            </button>
+            {jaAvailable && (
+              <button
+                type="button"
+                onClick={() => handleLanguageChange('ja')}
+                className={`rounded px-3 py-1 text-sm transition-colors ${
+                  lang === 'ja'
+                    ? 'bg-zinc-200 text-zinc-900 dark:bg-zinc-700 dark:text-zinc-100'
+                    : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700'
+                }`}
+              >
+                音読み
+              </button>
+            )}
+            {zhAvailable && (
+              <button
+                type="button"
+                onClick={() => handleLanguageChange('zh')}
+                className={`rounded px-3 py-1 text-sm transition-colors ${
+                  lang === 'zh'
+                    ? 'bg-zinc-200 text-zinc-900 dark:bg-zinc-700 dark:text-zinc-100'
+                    : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700'
+                }`}
+              >
+                ピンイン
+              </button>
+            )}
           </div>
 
           <label className="flex items-center gap-2 text-sm text-zinc-600 dark:text-zinc-400">
