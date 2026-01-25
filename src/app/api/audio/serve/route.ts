@@ -25,7 +25,8 @@ export async function GET(request: NextRequest) {
   }
 
   // Validate path to prevent directory traversal
-  const normalizedPath = path.normalize(filePath);
+  // Normalize to POSIX-style separators for consistent validation across platforms
+  const normalizedPath = path.normalize(filePath).replace(/\\/g, '/');
   if (normalizedPath.includes('..') || !normalizedPath.startsWith('audio/')) {
     return NextResponse.json({ error: 'Invalid path' }, { status: 400 });
   }

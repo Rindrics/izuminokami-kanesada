@@ -6,6 +6,96 @@ import { type NextRequest, NextResponse } from 'next/server';
 // Only allow in development
 const isDev = process.env.NODE_ENV === 'development';
 
+// Allowed hosts for local-only access
+const ALLOWED_HOSTS = ['localhost', '127.0.0.1', '::1'];
+
+// Path segment validation: alphanumeric, hyphens, underscores only
+// Max length 64 characters to prevent abuse
+const PATH_SEGMENT_REGEX = /^[a-zA-Z0-9_-]{1,64}$/;
+
+/**
+ * Validate and sanitize a path segment to prevent path traversal attacks.
+ * Rejects segments containing:
+ * - Path separators (/, \)
+ * - Parent directory references (..)
+ * - Null bytes
+ * - Disallowed characters
+ * - Excessive length
+ */
+function isValidPathSegment(segment: string | null): segment is string {
+  if (!segment || typeof segment !== 'string') {
+    return false;
+  }
+
+  // Check for null bytes
+  if (segment.includes('\0')) {
+    return false;
+  }
+
+  // Check for path traversal attempts
+  if (
+    segment.includes('..') ||
+    segment.includes('/') ||
+    segment.includes('\\')
+  ) {
+    return false;
+  }
+
+  // Validate against allowed pattern
+  return PATH_SEGMENT_REGEX.test(segment);
+}
+
+/**
+ * Check if the request is from an allowed local origin.
+ * Prevents CSRF-style remote writes.
+ */
+function isAllowedHost(request: NextRequest): boolean {
+  // Check Host header
+  const host = request.headers.get('host');
+  if (host) {
+    const hostname = host.split(':')[0];
+    if (ALLOWED_HOSTS.includes(hostname)) {
+      return true;
+    }
+  }
+
+  // Check Origin header for CORS requests
+  const origin = request.headers.get('origin');
+  if (origin) {
+    try {
+      const url = new URL(origin);
+      if (ALLOWED_HOSTS.includes(url.hostname)) {
+        return true;
+      }
+    } catch {
+      // Invalid origin URL
+      return false;
+    }
+  }
+
+  return false;
+}
+
+/**
+ * Safely join path segments and verify the result is within the allowed root.
+ * Returns null if the resolved path escapes the root directory.
+ */
+function safeJoinPath(root: string, ...segments: string[]): string | null {
+  const joined = path.join(root, ...segments);
+  const resolved = path.resolve(joined);
+  const resolvedRoot = path.resolve(root);
+
+  // Ensure the resolved path starts with the root path
+  if (
+    !resolved.startsWith(resolvedRoot + path.sep) &&
+    resolved !== resolvedRoot
+  ) {
+    return null;
+  }
+
+  return resolved;
+}
+
 interface AudioFileMetadata {
   generatedAt?: string;
   uploadedAt?: string;
@@ -49,6 +139,14 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  // Verify request is from allowed local host
+  if (!isAllowedHost(request)) {
+    return NextResponse.json(
+      { error: 'Forbidden: requests must originate from localhost' },
+      { status: 403 },
+    );
+  }
+
   try {
     const formData = await request.formData();
     const audioFile = formData.get('audio') as File | null;
@@ -60,6 +158,35 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           error: 'Missing required fields: audio, bookId, sectionId, chapterId',
+        },
+        { status: 400 },
+      );
+    }
+
+    // Validate path segments to prevent path traversal attacks
+    if (!isValidPathSegment(bookId)) {
+      return NextResponse.json(
+        {
+          error:
+            'Invalid bookId: must be alphanumeric with hyphens/underscores, max 64 chars',
+        },
+        { status: 400 },
+      );
+    }
+    if (!isValidPathSegment(sectionId)) {
+      return NextResponse.json(
+        {
+          error:
+            'Invalid sectionId: must be alphanumeric with hyphens/underscores, max 64 chars',
+        },
+        { status: 400 },
+      );
+    }
+    if (!isValidPathSegment(chapterId)) {
+      return NextResponse.json(
+        {
+          error:
+            'Invalid chapterId: must be alphanumeric with hyphens/underscores, max 64 chars',
         },
         { status: 400 },
       );
@@ -77,13 +204,28 @@ export async function POST(request: NextRequest) {
     const arrayBuffer = await audioFile.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
 
-    // Create output directory
-    const audioDir = path.join(process.cwd(), 'audio', bookId, sectionId);
+    // Safely construct output directory path
+    const audioRoot = path.join(process.cwd(), 'audio');
+    const audioDir = safeJoinPath(audioRoot, bookId, sectionId);
+    if (!audioDir) {
+      return NextResponse.json(
+        { error: 'Invalid path: resolved path is outside audio directory' },
+        { status: 400 },
+      );
+    }
     fs.mkdirSync(audioDir, { recursive: true });
 
-    // Save audio file
+    // Safely construct file path
     const filename = `${chapterId}-ja.webm`;
-    const filePath = path.join(audioDir, filename);
+    const filePath = safeJoinPath(audioRoot, bookId, sectionId, filename);
+    if (!filePath) {
+      return NextResponse.json(
+        {
+          error: 'Invalid path: resolved file path is outside audio directory',
+        },
+        { status: 400 },
+      );
+    }
     fs.writeFileSync(filePath, buffer);
 
     // Update manifest
