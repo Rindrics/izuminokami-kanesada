@@ -1,6 +1,6 @@
 {
   "name": "izuminokami-kanesada",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "四書五経およびその他の中国古典を学習するためのWebアプリケーション",
   "license": "MIT",
   "private": true,
