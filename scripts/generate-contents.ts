@@ -185,6 +185,21 @@ function parseInputFile(filePath: string): InputContent {
   // Defensively normalize mentioned to an empty array if missing or not an array
   parsed.mentioned = Array.isArray(parsed.mentioned) ? parsed.mentioned : [];
 
+  // Defensively normalize segments to an empty array if missing or not an array
+  parsed.segments = Array.isArray(parsed.segments) ? parsed.segments : [];
+
+  // Normalize each segment's text fields
+  for (const segment of parsed.segments) {
+    if (!segment.text || typeof segment.text !== 'object') {
+      segment.text = { original: '', japanese: '' };
+    } else {
+      segment.text.original =
+        typeof segment.text.original === 'string' ? segment.text.original : '';
+      segment.text.japanese =
+        typeof segment.text.japanese === 'string' ? segment.text.japanese : '';
+    }
+  }
+
   return parsed;
 }
 
