@@ -3,6 +3,15 @@
 ## [v0.2.2](https://github.com/Rindrics/izuminokami-kanesada/compare/v0.2.1...v0.2.2) - 2026-01-25
 - fix: correct onyomi by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/63
 - fix(ui): disable Japanese onyomi UI when audio file not found by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/66
+- docs(adr): deprecate ADR-0011: semicolon marker no longer needed by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/71
+- feat: show implicit speaker change with dashes (e.g., ― 孔子 ―) by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/73
+- feat(audio): provide record feature for local env by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/68
+- refactor: schema of Japanese segments by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/75
+- fix: correct Japanese pronounciation by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/74
+
+## [v0.2.2](https://github.com/Rindrics/izuminokami-kanesada/compare/v0.2.1...v0.2.2) - 2026-01-25
+- fix: correct onyomi by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/63
+- fix(ui): disable Japanese onyomi UI when audio file not found by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/66
 
 ## [v0.2.1](https://github.com/Rindrics/izuminokami-kanesada/compare/v0.2.0...v0.2.1) - 2026-01-24
 - feat: add contents by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/60
