@@ -188,62 +188,106 @@ export function WordCloud({ width = 600, height = 400 }: WordCloudProps) {
     return persons.filter((p) => speakerIds.has(p.id));
   }, []);
 
+  // Get available books (books that have content)
+  const availableBooks = useMemo(() => {
+    const bookIds = new Set<string>();
+    for (const content of contents) {
+      bookIds.add(content.book_id);
+    }
+    return books.filter((b) => bookIds.has(b.id));
+  }, []);
+
   return (
     <div className="rounded-lg border border-zinc-200 bg-white p-4 dark:border-zinc-700 dark:bg-zinc-900">
-      {/* Filter controls */}
-      <div className="mb-4 flex flex-wrap items-center gap-4">
-        <div className="flex items-center gap-2">
-          <label
-            htmlFor="filter-type"
-            className="text-sm font-medium text-zinc-700 dark:text-zinc-300"
-          >
-            フィルタ:
-          </label>
-          <select
-            id="filter-type"
-            value={filterType}
-            onChange={(e) => {
-              setFilterType(e.target.value as FilterType);
+      {/* Filter tabs */}
+      <div className="mb-4 space-y-2">
+        {/* Main filter type tabs */}
+        <div className="flex gap-1 border-b border-zinc-200 dark:border-zinc-700">
+          <button
+            type="button"
+            onClick={() => {
+              setFilterType('all');
               setFilterValue('');
             }}
-            className="rounded border border-zinc-300 bg-white px-2 py-1 text-sm dark:border-zinc-600 dark:bg-zinc-800"
+            className={`px-4 py-2 text-sm font-medium transition-colors ${
+              filterType === 'all'
+                ? 'border-b-2 border-blue-500 text-blue-600 dark:text-blue-400'
+                : 'text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200'
+            }`}
           >
-            <option value="all">全体</option>
-            <option value="book">書籍別</option>
-            <option value="person">人物別</option>
-          </select>
+            全体
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setFilterType('book');
+              setFilterValue(availableBooks[0]?.id || '');
+            }}
+            className={`px-4 py-2 text-sm font-medium transition-colors ${
+              filterType === 'book'
+                ? 'border-b-2 border-blue-500 text-blue-600 dark:text-blue-400'
+                : 'text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200'
+            }`}
+          >
+            書籍別
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setFilterType('person');
+              setFilterValue(availableSpeakers[0]?.id || '');
+            }}
+            className={`px-4 py-2 text-sm font-medium transition-colors ${
+              filterType === 'person'
+                ? 'border-b-2 border-blue-500 text-blue-600 dark:text-blue-400'
+                : 'text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200'
+            }`}
+          >
+            人物別
+          </button>
         </div>
 
+        {/* Sub-filter tabs for book */}
         {filterType === 'book' && (
-          <select
-            value={filterValue}
-            onChange={(e) => setFilterValue(e.target.value)}
-            className="rounded border border-zinc-300 bg-white px-2 py-1 text-sm dark:border-zinc-600 dark:bg-zinc-800"
-          >
-            <option value="">書籍を選択...</option>
-            {books.map((book) => (
-              <option key={book.id} value={book.id}>
+          <div className="flex flex-wrap gap-1">
+            {availableBooks.map((book) => (
+              <button
+                key={book.id}
+                type="button"
+                onClick={() => setFilterValue(book.id)}
+                className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
+                  filterValue === book.id
+                    ? 'bg-blue-500 text-white'
+                    : 'bg-zinc-100 text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700'
+                }`}
+              >
                 {book.name}
-              </option>
+              </button>
             ))}
-          </select>
+          </div>
         )}
 
+        {/* Sub-filter tabs for person */}
         {filterType === 'person' && (
-          <select
-            value={filterValue}
-            onChange={(e) => setFilterValue(e.target.value)}
-            className="rounded border border-zinc-300 bg-white px-2 py-1 text-sm dark:border-zinc-600 dark:bg-zinc-800"
-          >
-            <option value="">人物を選択...</option>
+          <div className="flex flex-wrap gap-1">
             {availableSpeakers.map((person) => (
-              <option key={person.id} value={person.id}>
+              <button
+                key={person.id}
+                type="button"
+                onClick={() => setFilterValue(person.id)}
+                className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
+                  filterValue === person.id
+                    ? 'bg-blue-500 text-white'
+                    : 'bg-zinc-100 text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700'
+                }`}
+              >
                 {person.name}
-              </option>
+              </button>
             ))}
-          </select>
+          </div>
         )}
 
+        {/* Hover info */}
         {hoveredWord && (
           <div className="text-sm text-zinc-600 dark:text-zinc-400">
             「{hoveredWord}」:{' '}
