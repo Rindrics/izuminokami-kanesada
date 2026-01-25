@@ -154,11 +154,11 @@ export function CircularLayout({
     return Math.max(...Array.from(charSet.values()), 1);
   }, [charSet]);
 
-  // Calculate opacity based on frequency
+  // Calculate opacity based on frequency (higher count = more opaque)
   const getEdgeOpacity = (count: number, isHovered: boolean): number => {
-    if (isHovered) return 0.9;
-    const minOpacity = 0.05;
-    const maxOpacity = 0.6;
+    if (isHovered) return 1.0;
+    const minOpacity = 0.1;
+    const maxOpacity = 0.8;
     return minOpacity + (count / maxBigramCount) * (maxOpacity - minOpacity);
   };
 
@@ -210,8 +210,6 @@ export function CircularLayout({
         role="img"
         aria-label="サーキュラーレイアウト - 隣接漢字ペアの出現頻度"
       >
-        <title>サーキュラーレイアウト</title>
-
         {/* Reference circle */}
         <circle
           cx={centerX}
