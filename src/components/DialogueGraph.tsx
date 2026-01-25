@@ -13,8 +13,8 @@ import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { getBookById, getSectionById } from '@/generated/books';
 import { getContentById } from '@/generated/contents';
-import type { GraphEdge, GraphNode, SpeakerGraph } from '@/generated/stats';
 import { chartTheme } from '@/lib/chart-theme';
+import type { GraphEdge, SpeakerGraph } from '@/lib/graph/types';
 
 // Register fcose layout
 cytoscape.use(fcose);
