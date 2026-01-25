@@ -216,9 +216,10 @@ export function CircularLayout({
           cy={centerY}
           r={radius}
           fill="none"
-          stroke="#e4e4e7"
+          stroke={chartTheme.colors.neutral[200]}
           strokeWidth={1}
           strokeDasharray="4 4"
+          className="dark:stroke-zinc-700"
         />
 
         {/* Edges between adjacent pairs */}
@@ -238,7 +239,9 @@ export function CircularLayout({
               x2={pos2.x}
               y2={pos2.y}
               stroke={
-                isHighlighted ? chartTheme.colors.primary[600] : '#9ca3af'
+                isHighlighted
+                  ? chartTheme.colors.primary[600]
+                  : chartTheme.colors.neutral[500]
               }
               strokeWidth={isHighlighted ? 2 : 1}
               strokeOpacity={getEdgeOpacity(bigram.count, isHighlighted)}
