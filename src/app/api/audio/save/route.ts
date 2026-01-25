@@ -198,10 +198,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Validate content type
-    if (!audioFile.type.startsWith('audio/')) {
+    // Validate content type - only allow WebM audio
+    if (!audioFile.type.startsWith('audio/webm')) {
       return NextResponse.json(
-        { error: 'Invalid file type. Expected audio file.' },
+        { error: 'Invalid file type. Expected audio/webm.' },
         { status: 400 },
       );
     }
