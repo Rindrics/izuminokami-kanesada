@@ -759,7 +759,7 @@ function generateSpeakerGraphs(contents: OutputContent[]): {
 
       if (segment.speaker === null) {
         const questionMatch = parseQuestionPattern(segment.text.original);
-        if (questionMatch && questionMatch.questioner) {
+        if (questionMatch?.questioner) {
           // Find questioner by matching name from persons.yaml
           let questionerId: string | null = null;
           for (const person of persons) {

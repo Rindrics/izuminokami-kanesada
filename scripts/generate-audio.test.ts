@@ -196,12 +196,12 @@ describe('loadActualHanziDictionary', () => {
     const meanings = dict.get('說');
 
     expect(meanings).toBeDefined();
-    expect(meanings!.length).toBeGreaterThanOrEqual(2);
+    expect(meanings?.length).toBeGreaterThanOrEqual(2);
 
     // Find the default meaning
-    const defaultMeaning = meanings!.find((m) => m.is_default);
+    const defaultMeaning = meanings?.find((m) => m.is_default);
     expect(defaultMeaning).toBeDefined();
-    expect(defaultMeaning!.pinyin).toBe('yuè');
+    expect(defaultMeaning?.pinyin).toBe('yuè');
   });
 
   it('should parse 樂 with lè as default', () => {
@@ -210,9 +210,9 @@ describe('loadActualHanziDictionary', () => {
 
     expect(meanings).toBeDefined();
 
-    const defaultMeaning = meanings!.find((m) => m.is_default);
+    const defaultMeaning = meanings?.find((m) => m.is_default);
     expect(defaultMeaning).toBeDefined();
-    expect(defaultMeaning!.pinyin).toBe('lè');
+    expect(defaultMeaning?.pinyin).toBe('lè');
   });
 });
 

@@ -149,7 +149,7 @@ export async function uploadContentAudio(
   const { storage, bucketName } = initializeStorage();
 
   // Upload files
-  let successCount = 0;
+  let _successCount = 0;
   let errorCount = 0;
 
   for (const upload of pendingUploads) {
@@ -180,7 +180,7 @@ export async function uploadContentAudio(
       delete langEntry.generatedAt;
       langEntry.uploadedAt = now;
 
-      successCount++;
+      _successCount++;
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : String(error);

@@ -66,7 +66,7 @@ async function main(): Promise<void> {
         stdio: 'inherit',
       },
     );
-  } catch (error) {
+  } catch {
     console.error('\n❌ Audio generation failed.');
     process.exit(1);
   }
@@ -81,7 +81,7 @@ async function main(): Promise<void> {
         stdio: 'inherit',
       },
     );
-  } catch (error) {
+  } catch {
     console.error('\n⚠️  Audio generation completed, but upload failed.');
     console.error('  You can upload manually later using: pnpm upload:audio');
     process.exit(1);

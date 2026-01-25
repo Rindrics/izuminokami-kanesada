@@ -81,7 +81,7 @@ function getNodeColor(
 }
 
 // Get text color based on background brightness (white for dark bg, black for light bg)
-function getTextColor(bookId: string, depth: number): string {
+function getTextColor(_bookId: string, depth: number): string {
   // Book level (depth 1) is always dark, so use white
   if (depth === 1) return '#FFFFFF';
   // Section level (depth 2) is medium, use white
@@ -119,15 +119,16 @@ export function VoronoiTreemap({
     for (const chapter of chapterLengths) {
       const [bookId, sectionId, chapterId] = chapter.contentId.split('/');
 
-      if (!bookMap.has(bookId)) {
-        bookMap.set(bookId, new Map());
+      let sectionMap = bookMap.get(bookId);
+      if (!sectionMap) {
+        sectionMap = new Map();
+        bookMap.set(bookId, sectionMap);
       }
-      const sectionMap = bookMap.get(bookId)!;
 
       if (!sectionMap.has(sectionId)) {
         sectionMap.set(sectionId, []);
       }
-      sectionMap.get(sectionId)!.push({
+      sectionMap.get(sectionId)?.push({
         chapterId,
         charCount: chapter.charCount,
       });
@@ -160,11 +161,11 @@ export function VoronoiTreemap({
             value: ch.charCount,
           })),
         };
-        bookNode.children!.push(sectionNode);
+        bookNode.children?.push(sectionNode);
       }
 
       // Sort sections by sectionId
-      bookNode.children!.sort((a, b) => {
+      bookNode.children?.sort((a, b) => {
         const numA = Number.parseInt(a.sectionId || '0', 10);
         const numB = Number.parseInt(b.sectionId || '0', 10);
         return numA - numB;
