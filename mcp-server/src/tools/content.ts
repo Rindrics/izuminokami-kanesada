@@ -904,12 +904,13 @@ Note: Onyomi is required for Japanese audio generation (onyomi reading).`;
     },
   );
 
-  // Generate audio for content
+  // Generate audio for content (Chinese only; Japanese onyomi is manually recorded)
   server.registerTool(
     'generate_audio',
     {
       description:
-        'Generate audio files (Chinese and Japanese) for a content using Google Cloud TTS and automatically upload to Cloud Storage. ' +
+        'Generate Chinese audio file for a content using Google Cloud TTS and automatically upload to Cloud Storage. ' +
+        'Japanese onyomi audio is manually recorded and uploaded separately. ' +
         'Requires pinyin_reviewed: true in the YAML file, GOOGLE_APPLICATION_CREDENTIALS and GCS_BUCKET environment variables.',
       inputSchema: ReadContentYamlSchema.shape,
     },
@@ -1218,27 +1219,19 @@ Please follow this workflow:
         };
       }
 
-      // Check if local files exist, regenerate if missing
+      // Check if Chinese audio file exists, regenerate if missing
+      // (Japanese onyomi is manually recorded, not auto-generated)
       const zhPath = path.join(
         audioDir,
         bookId,
         sectionId,
         `${chapterId}-zh.mp3`,
       );
-      const jaPath = path.join(
-        audioDir,
-        bookId,
-        sectionId,
-        `${chapterId}-ja.mp3`,
-      );
 
       const zhMissing = !fs.existsSync(zhPath);
-      const jaMissing = !fs.existsSync(jaPath);
 
-      if (zhMissing || jaMissing) {
-        const missingFiles = [];
-        if (zhMissing) missingFiles.push('zh');
-        if (jaMissing) missingFiles.push('ja');
+      if (zhMissing) {
+        const missingFiles = ['zh'];
 
         // Check pinyin_reviewed flag before regenerating audio
         const yamlPath = path.join(
