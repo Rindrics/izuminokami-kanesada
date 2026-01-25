@@ -26,7 +26,7 @@ interface InputSegment {
 
 interface InputContent {
   segments: InputSegment[];
-  mentioned: string[];
+  // mentioned is now auto-derived from text, no longer in YAML
 }
 
 interface OutputSegmentText {
@@ -122,7 +122,7 @@ function loadBooksYaml(): void {
   validateBooksYaml(booksData);
 }
 
-function loadPersonsYaml(): Person[] {
+export function loadPersonsYaml(): Person[] {
   const personsYamlPath = path.join(process.cwd(), 'contents/persons.yaml');
   if (!fs.existsSync(personsYamlPath)) {
     return [];
@@ -167,6 +167,54 @@ export function getPersonName(id: string): string {
 `;
 }
 
+// Global persons data (loaded from YAML)
+let personsData: Person[] = [];
+
+// Build person name patterns for text matching
+export function buildPersonPatterns(
+  persons: Person[],
+): { pattern: string; id: string }[] {
+  const patterns: { pattern: string; id: string }[] = [];
+  for (const person of persons) {
+    // Add name (e.g., 顏淵, 孔子)
+    if (person.name) {
+      patterns.push({ pattern: person.name, id: person.id });
+    }
+    // Add courtesy name (e.g., 子淵, 仲尼)
+    if (person.courtesy) {
+      patterns.push({ pattern: person.courtesy, id: person.id });
+    }
+    // Add given name (e.g., 回, 丘)
+    if (person.given) {
+      patterns.push({ pattern: person.given, id: person.id });
+    }
+    // Note: family name alone is too ambiguous (e.g., 孔, 顏)
+  }
+  // Sort by pattern length descending (match longer names first)
+  return patterns.sort((a, b) => b.pattern.length - a.pattern.length);
+}
+
+// Derive mentioned persons from text
+export function deriveMentionedFromText(
+  text: string,
+  patterns: { pattern: string; id: string }[],
+): string[] {
+  const mentionedIds = new Set<string>();
+
+  // Special case: "子曰" at segment start refers to Kongzi
+  // (子 alone is ambiguous: 子夏, 子貢, 子路, etc.)
+  if (/(?:^| )子曰/.test(text)) {
+    mentionedIds.add('kongzi');
+  }
+
+  for (const { pattern, id } of patterns) {
+    if (text.includes(pattern)) {
+      mentionedIds.add(id);
+    }
+  }
+  return [...mentionedIds];
+}
+
 function getSectionName(bookId: string, sectionId: string): string {
   const book = booksData.find((b) => b.id === bookId);
   const section = book?.sections.find((s) => s.id === sectionId);
@@ -181,9 +229,6 @@ function getBookName(bookId: string): string {
 function parseInputFile(filePath: string): InputContent {
   const content = fs.readFileSync(filePath, 'utf-8');
   const parsed = yaml.load(content) as InputContent;
-
-  // Defensively normalize mentioned to an empty array if missing or not an array
-  parsed.mentioned = Array.isArray(parsed.mentioned) ? parsed.mentioned : [];
 
   // Defensively normalize segments to an empty array if missing or not an array
   parsed.segments = Array.isArray(parsed.segments) ? parsed.segments : [];
@@ -243,6 +288,10 @@ function deriveContent(
     ),
   ];
 
+  // Derive mentioned persons from text (ADR-0001: auto-derive from text)
+  const personPatterns = buildPersonPatterns(personsData);
+  const mentioned = deriveMentionedFromText(text, personPatterns);
+
   return {
     content_id: contentId,
     book_id: bookId,
@@ -252,7 +301,7 @@ function deriveContent(
     segments: outputSegments,
     persons: {
       speakers,
-      mentioned: input.mentioned,
+      mentioned,
     },
   };
 }
@@ -1065,6 +1114,9 @@ function main(): void {
 
   // Load books metadata from YAML
   loadBooksYaml();
+
+  // Load persons data for mentioned auto-derivation
+  personsData = loadPersonsYaml();
 
   // Track chapters per book/section for books.ts generation
   const chaptersBySection = new Map<string, string[]>();
