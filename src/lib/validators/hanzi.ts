@@ -73,8 +73,9 @@ export function validateHanziDictionary(
   const seenIds = new Map<string, number>();
   for (let i = 0; i < entries.length; i++) {
     const entry = entries[i];
-    if (seenIds.has(entry.id)) {
-      const firstIndex = seenIds.get(entry.id)!;
+    const existingIndex = seenIds.get(entry.id);
+    if (existingIndex !== undefined) {
+      const firstIndex = existingIndex;
       const errors = errorMap.get(entry.id) || [];
       errors.push({
         field: 'id',

@@ -1,5 +1,6 @@
 - id: lunyu
   name: 論語
+  compositionYear: -479 # 孔子没後、弟子たちが編纂
   totalSections: 20
   sections:
     - id: '1'
@@ -65,6 +66,7 @@
 
 - id: mengzi
   name: 孟子
+  compositionYear: -300 # 孟子の弟子たちが編纂
   totalSections: 14
   sections:
     - id: '1'
@@ -112,6 +114,7 @@
 
 - id: daxue
   name: 大学
+  compositionYear: -450 # 曾子の作とされる
   totalSections: 1
   sections:
     - id: '1'
@@ -120,6 +123,7 @@
 
 - id: zhongyong
   name: 中庸
+  compositionYear: -430 # 子思の作とされる
   totalSections: 1
   sections:
     - id: '1'

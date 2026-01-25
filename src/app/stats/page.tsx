@@ -1,6 +1,16 @@
 import Link from 'next/link';
 import { ClickableChar } from '@/components/ClickableChar';
 import { DialogueGraph } from '@/components/DialogueGraph';
+import { AlluvialDiagram } from '@/components/graphs/AlluvialDiagram';
+import { BioFabricGraph } from '@/components/graphs/BioFabricGraph';
+import { CharChordDiagram } from '@/components/graphs/CharChordDiagram';
+import { ChernoffFaces } from '@/components/graphs/ChernoffFaces';
+import { ChordDiagram } from '@/components/graphs/ChordDiagram';
+import { CircularLayout } from '@/components/graphs/CircularLayout';
+import { TimelineFineo } from '@/components/graphs/TimelineFineo';
+import { VoronoiTreemap } from '@/components/graphs/VoronoiTreemap';
+import { WordCloud } from '@/components/graphs/WordCloud';
+import { Tabs } from '@/components/ui/Tabs';
 import { books, getBookById } from '@/generated/books';
 import { getPersonName } from '@/generated/persons';
 import type { CharIndex } from '@/generated/stats';
@@ -297,6 +307,48 @@ export default function StatsPage() {
           </div>
         </section>
 
+        {/* Book Volume Treemap */}
+        <section className="mb-8">
+          <h2 className="mb-4 text-xl font-bold text-black dark:text-white">
+            書籍別文字数
+          </h2>
+          <p className="mb-3 text-sm text-zinc-500">
+            各書籍の文字数を面積で表現
+          </p>
+          <VoronoiTreemap
+            chapterLengths={stats.chapterLengths}
+            width={700}
+            height={400}
+          />
+        </section>
+
+        {/* Alluvial Diagram */}
+        <section className="mb-8">
+          <h2 className="mb-4 text-xl font-bold text-black dark:text-white">
+            書籍と概念の関係
+          </h2>
+          <p className="mb-3 text-sm text-zinc-500">
+            各書籍における主要概念の登場頻度（沖積図）
+          </p>
+          <AlluvialDiagram
+            charIndex={stats.charIndex}
+            dialogueGraph={stats.dialogueGraph}
+            width={700}
+            height={500}
+          />
+        </section>
+
+        {/* Timeline Fineo - Books and Persons */}
+        <section className="mb-8">
+          <h2 className="mb-4 text-xl font-bold text-black dark:text-white">
+            書籍と人物の時系列
+          </h2>
+          <p className="mb-3 text-sm text-zinc-500">
+            人物の誕生年と書籍の成立年を時系列で表示
+          </p>
+          <TimelineFineo width={850} height={500} />
+        </section>
+
         {/* Character Frequency */}
         <section className="mb-8">
           <h2 className="mb-4 text-xl font-bold text-black dark:text-white">
@@ -420,6 +472,45 @@ export default function StatsPage() {
           </div>
         </section>
 
+        {/* Word Cloud */}
+        <section className="mb-8">
+          <h2 className="mb-4 text-xl font-bold text-black dark:text-white">
+            ワードクラウド
+          </h2>
+          <p className="mb-3 text-sm text-zinc-500">
+            漢字の出現頻度を文字サイズで表現（書籍別・人物別にフィルタ可能）
+          </p>
+          <WordCloud width={700} height={400} />
+        </section>
+
+        {/* Adjacent Character Pairs */}
+        <section className="mb-8">
+          <h2 className="mb-4 text-xl font-bold text-black dark:text-white">
+            隣接漢字ペア
+          </h2>
+          <p className="mb-3 text-sm text-zinc-500">
+            同一セグメント内で隣り合う漢字の関係（線の不透明度が高いほど頻出）
+          </p>
+          <Tabs
+            tabs={[
+              {
+                id: 'circular',
+                label: 'サーキュラーレイアウト',
+                content: (
+                  <CircularLayout width={600} height={600} maxChars={80} />
+                ),
+              },
+              {
+                id: 'chord',
+                label: 'コード図',
+                content: (
+                  <CharChordDiagram width={600} height={600} maxChars={30} />
+                ),
+              },
+            ]}
+          />
+        </section>
+
         {/* Key Concepts Heatmap */}
         <section className="mb-8">
           <h2 className="mb-4 text-xl font-bold text-black dark:text-white">
@@ -434,18 +525,54 @@ export default function StatsPage() {
           />
         </section>
 
-        {/* Dialogue Graph */}
+        {/* Person Dialogue Relations */}
         {'dialogueGraph' in stats &&
           stats.dialogueGraph &&
           stats.dialogueGraph.nodes.length > 0 && (
             <section className="mb-8">
               <h2 className="mb-4 text-xl font-bold text-black dark:text-white">
-                対話相関図
+                人物間対話関係
               </h2>
               <p className="mb-3 text-sm text-zinc-500">
-                人物間の対話関係と人物から概念への言及関係を可視化（エッジの太さは言及回数に比例）
+                人物間の対話頻度を可視化
               </p>
-              <DialogueGraph graph={stats.dialogueGraph} />
+              <Tabs
+                defaultTab="biofabric"
+                tabs={[
+                  {
+                    id: 'biofabric',
+                    label: 'BioFabric',
+                    content: <BioFabricGraph graph={stats.dialogueGraph} />,
+                  },
+                  {
+                    id: 'chord',
+                    label: 'コード図',
+                    content: (
+                      <ChordDiagram
+                        graph={stats.dialogueGraph}
+                        width={600}
+                        height={600}
+                      />
+                    ),
+                  },
+                  {
+                    id: 'network',
+                    label: 'ネットワーク図',
+                    content: <DialogueGraph graph={stats.dialogueGraph} />,
+                  },
+                  {
+                    id: 'chernoff',
+                    label: '顔型チャート',
+                    content: (
+                      <ChernoffFaces
+                        personFrequencies={stats.personFrequencies}
+                        width={700}
+                        height={400}
+                      />
+                    ),
+                  },
+                ]}
+              />
             </section>
           )}
       </main>

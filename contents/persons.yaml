@@ -4,59 +4,70 @@
 # family: 姓
 # courtesy: 字（あざな）
 # given: 名（諱）
+# birthYear: 誕生年（紀元前はマイナス値）
 
 - id: kongzi
   name: 孔子
   family: 孔
   courtesy: 仲尼
   given: 丘
+  birthYear: -551
 
 - id: zengzi
   name: 曾子
   family: 曾
   courtesy: 子輿
   given: 參
+  birthYear: -505
 
 - id: youzi
   name: 有子
   family: 有
   courtesy: 子有
   given: 若
+  birthYear: -518
 
 - id: zixia
   name: 子夏
   family: 卜
   given: 商
+  birthYear: -507
 
 - id: zigong
   name: 子貢
   family: 端木
   given: 賜
+  birthYear: -520
 
 - id: ziqin
   name: 子禽
   family: 陳
   given: 禽
+  birthYear: -510
 
 - id: zilu
   name: 子路
   family: 仲
   courtesy: 子路
   given: 由
+  birthYear: -542
 
 - id: yanyuan
   name: 顏淵
   family: 顏
   courtesy: 子淵
   given: 回
+  birthYear: -521
 
 - id: mengzi
   name: 孟子
   family: 孟
   courtesy: 子輿
   given: 軻
+  birthYear: -372
 
 - id: liang-huiwang
   name: 梁惠王
   family: 魏
   given: 罃
+  birthYear: -400
