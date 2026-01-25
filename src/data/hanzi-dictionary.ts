@@ -668,7 +668,7 @@ export const hanziDictionary: HanziEntry[] = [
     meanings: [
       {
         id: '與-yǔ',
-        onyomi: 'ヨ',
+        onyomi: 'コウ',
         pinyin: 'yǔ',
         tone: 3,
         meaning_ja: '与える、〜と',
