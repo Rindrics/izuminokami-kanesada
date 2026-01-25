@@ -11,8 +11,18 @@ function createValidContent(overrides: Partial<Content> = {}): Content {
     chapter: '1',
     text: '子曰 學而時習之',
     segments: [
-      { text: '子曰', start_pos: 0, end_pos: 2, speaker: null },
-      { text: '學而時習之', start_pos: 3, end_pos: 8, speaker: 'kongzi' },
+      {
+        text: { original: '子曰', japanese: '子曰く、' },
+        start_pos: 0,
+        end_pos: 2,
+        speaker: null,
+      },
+      {
+        text: { original: '學而時習之', japanese: '学びて之を時習す。' },
+        start_pos: 3,
+        end_pos: 8,
+        speaker: 'kongzi',
+      },
     ],
     persons: {
       speakers: ['kongzi'],
@@ -73,7 +83,14 @@ describe('validateContent', () => {
 
     it('should fail when start_pos is negative', () => {
       const content = createValidContent({
-        segments: [{ text: '子曰', start_pos: -1, end_pos: 2, speaker: null }],
+        segments: [
+          {
+            text: { original: '子曰', japanese: '子曰く、' },
+            start_pos: -1,
+            end_pos: 2,
+            speaker: null,
+          },
+        ],
       });
       const result = validateContent(content);
       expect(result.valid).toBe(false);
@@ -88,7 +105,14 @@ describe('validateContent', () => {
     it('should fail when end_pos exceeds text length', () => {
       const content = createValidContent({
         text: '子曰',
-        segments: [{ text: '子曰', start_pos: 0, end_pos: 100, speaker: null }],
+        segments: [
+          {
+            text: { original: '子曰', japanese: '子曰く、' },
+            start_pos: 0,
+            end_pos: 100,
+            speaker: null,
+          },
+        ],
       });
       const result = validateContent(content);
       expect(result.valid).toBe(false);
@@ -101,7 +125,14 @@ describe('validateContent', () => {
 
     it('should fail when start_pos >= end_pos', () => {
       const content = createValidContent({
-        segments: [{ text: '', start_pos: 5, end_pos: 5, speaker: null }],
+        segments: [
+          {
+            text: { original: '', japanese: '' },
+            start_pos: 5,
+            end_pos: 5,
+            speaker: null,
+          },
+        ],
       });
       const result = validateContent(content);
       expect(result.valid).toBe(false);
@@ -115,13 +146,20 @@ describe('validateContent', () => {
     it('should fail when segment text does not match text slice', () => {
       const content = createValidContent({
         text: '子曰 學而',
-        segments: [{ text: '孔子', start_pos: 0, end_pos: 2, speaker: null }],
+        segments: [
+          {
+            text: { original: '孔子', japanese: '孔子、' },
+            start_pos: 0,
+            end_pos: 2,
+            speaker: null,
+          },
+        ],
       });
       const result = validateContent(content);
       expect(result.valid).toBe(false);
       expect(result.errors).toContainEqual(
         expect.objectContaining({
-          path: 'segments[0].text',
+          path: 'segments[0].text.original',
           message: 'segment text does not match text slice',
         }),
       );
@@ -131,8 +169,18 @@ describe('validateContent', () => {
       const content = createValidContent({
         text: '子曰學而',
         segments: [
-          { text: '子曰', start_pos: 0, end_pos: 2, speaker: null },
-          { text: '曰學', start_pos: 1, end_pos: 3, speaker: 'kongzi' },
+          {
+            text: { original: '子曰', japanese: '子曰く、' },
+            start_pos: 0,
+            end_pos: 2,
+            speaker: null,
+          },
+          {
+            text: { original: '曰學', japanese: '曰く学ぶ。' },
+            start_pos: 1,
+            end_pos: 3,
+            speaker: 'kongzi',
+          },
         ],
       });
       const result = validateContent(content);
@@ -148,8 +196,18 @@ describe('validateContent', () => {
       const content = createValidContent({
         text: '子曰 學而',
         segments: [
-          { text: '子曰', start_pos: 0, end_pos: 2, speaker: null },
-          { text: '學而', start_pos: 3, end_pos: 5, speaker: 'kongzi' },
+          {
+            text: { original: '子曰', japanese: '子曰く、' },
+            start_pos: 0,
+            end_pos: 2,
+            speaker: null,
+          },
+          {
+            text: { original: '學而', japanese: '学びて。' },
+            start_pos: 3,
+            end_pos: 5,
+            speaker: 'kongzi',
+          },
         ],
       });
       const result = validateContent(content);
@@ -160,8 +218,18 @@ describe('validateContent', () => {
       const content = createValidContent({
         text: '子曰X學而',
         segments: [
-          { text: '子曰', start_pos: 0, end_pos: 2, speaker: null },
-          { text: '學而', start_pos: 3, end_pos: 5, speaker: 'kongzi' },
+          {
+            text: { original: '子曰', japanese: '子曰く、' },
+            start_pos: 0,
+            end_pos: 2,
+            speaker: null,
+          },
+          {
+            text: { original: '學而', japanese: '学びて。' },
+            start_pos: 3,
+            end_pos: 5,
+            speaker: 'kongzi',
+          },
         ],
       });
       const result = validateContent(content);
@@ -179,7 +247,12 @@ describe('validateContent', () => {
       const content = createValidContent({
         text: '不-亦說乎',
         segments: [
-          { text: '不-亦說乎', start_pos: 0, end_pos: 5, speaker: null },
+          {
+            text: { original: '不-亦說乎', japanese: '亦た説ばしからずや。' },
+            start_pos: 0,
+            end_pos: 5,
+            speaker: null,
+          },
         ],
         persons: {
           speakers: [],
@@ -194,7 +267,12 @@ describe('validateContent', () => {
       const content = createValidContent({
         text: '不--亦說乎',
         segments: [
-          { text: '不--亦說乎', start_pos: 0, end_pos: 6, speaker: null },
+          {
+            text: { original: '不--亦說乎', japanese: '亦た説ばしからずや。' },
+            start_pos: 0,
+            end_pos: 6,
+            speaker: null,
+          },
         ],
         persons: {
           speakers: [],
@@ -215,7 +293,12 @@ describe('validateContent', () => {
       const content = createValidContent({
         text: '-亦說乎',
         segments: [
-          { text: '-亦說乎', start_pos: 0, end_pos: 4, speaker: null },
+          {
+            text: { original: '-亦說乎', japanese: '亦た説ばしからずや。' },
+            start_pos: 0,
+            end_pos: 4,
+            speaker: null,
+          },
         ],
         persons: {
           speakers: [],
@@ -236,7 +319,12 @@ describe('validateContent', () => {
       const content = createValidContent({
         text: '不亦說-',
         segments: [
-          { text: '不亦說-', start_pos: 0, end_pos: 4, speaker: null },
+          {
+            text: { original: '不亦說-', japanese: '亦た説ばしからずや。' },
+            start_pos: 0,
+            end_pos: 4,
+            speaker: null,
+          },
         ],
         persons: {
           speakers: [],
@@ -257,7 +345,12 @@ describe('validateContent', () => {
       const content = createValidContent({
         text: '不 -亦說乎',
         segments: [
-          { text: '不 -亦說乎', start_pos: 0, end_pos: 6, speaker: null },
+          {
+            text: { original: '不 -亦說乎', japanese: '亦た説ばしからずや。' },
+            start_pos: 0,
+            end_pos: 6,
+            speaker: null,
+          },
         ],
         persons: {
           speakers: [],
@@ -278,7 +371,12 @@ describe('validateContent', () => {
       const content = createValidContent({
         text: '不- 亦說乎',
         segments: [
-          { text: '不- 亦說乎', start_pos: 0, end_pos: 6, speaker: null },
+          {
+            text: { original: '不- 亦說乎', japanese: '亦た説ばしからずや。' },
+            start_pos: 0,
+            end_pos: 6,
+            speaker: null,
+          },
         ],
         persons: {
           speakers: [],
@@ -336,7 +434,14 @@ describe('validateContent', () => {
     it('should pass with null speaker (narration)', () => {
       const content = createValidContent({
         text: '子曰',
-        segments: [{ text: '子曰', start_pos: 0, end_pos: 2, speaker: null }],
+        segments: [
+          {
+            text: { original: '子曰', japanese: '子曰く、' },
+            start_pos: 0,
+            end_pos: 2,
+            speaker: null,
+          },
+        ],
         persons: {
           speakers: [],
           mentioned: [],
@@ -351,7 +456,14 @@ describe('validateContent', () => {
     it('should fail when hanzi in text is not in hanzi-dictionary (missing pinyin)', () => {
       const content = createValidContent({
         text: '龍虎',
-        segments: [{ text: '龍虎', start_pos: 0, end_pos: 2, speaker: null }],
+        segments: [
+          {
+            text: { original: '龍虎', japanese: '龍虎' },
+            start_pos: 0,
+            end_pos: 2,
+            speaker: null,
+          },
+        ],
         persons: {
           speakers: [],
           mentioned: [],
@@ -371,7 +483,19 @@ describe('validateContent', () => {
 
     it('should fail when kanji in japanese is not in kunyomi-dictionary (missing reading)', () => {
       const content = createValidContent({
-        japanese: '龍虎が現れた',
+        text: '龍虎',
+        segments: [
+          {
+            text: { original: '龍虎', japanese: '龍虎が現れた' },
+            start_pos: 0,
+            end_pos: 2,
+            speaker: null,
+          },
+        ],
+        persons: {
+          speakers: [],
+          mentioned: [],
+        },
       });
       const result = validateContent(content);
       expect(result.valid).toBe(false);
@@ -385,17 +509,8 @@ describe('validateContent', () => {
       );
     });
 
-    it('should pass when japanese is not provided', () => {
-      const content = createValidContent();
-      delete content.japanese;
-      const result = validateContent(content);
-      expect(result.valid).toBe(true);
-    });
-
     it('should pass when all hanzi and kanji are registered in dictionaries', () => {
-      const content = createValidContent({
-        japanese: '子曰く',
-      });
+      const content = createValidContent();
       const result = validateContent(content);
       expect(result.valid).toBe(true);
     });
