@@ -14,19 +14,28 @@ import { inspect } from 'node:util';
 import { watch } from 'chokidar';
 import yaml from 'js-yaml';
 
+interface InputSegmentText {
+  original: string;
+  japanese: string;
+}
+
 interface InputSegment {
-  text: string;
+  text: InputSegmentText;
   speaker: string | null;
 }
 
 interface InputContent {
   segments: InputSegment[];
   mentioned: string[];
+}
+
+interface OutputSegmentText {
+  original: string;
   japanese: string;
 }
 
 interface OutputSegment {
-  text: string;
+  text: OutputSegmentText;
   start_pos: number;
   end_pos: number;
   speaker: string | null;
@@ -37,13 +46,12 @@ interface OutputContent {
   book_id: string;
   section: string;
   chapter: string;
-  text: string;
+  text: string; // Full original text (derived from segments)
   segments: OutputSegment[];
   persons: {
     speakers: string[];
     mentioned: string[];
   };
-  japanese: string;
 }
 
 interface InputSection {
@@ -190,7 +198,7 @@ function deriveContent(
 
   for (const segment of input.segments) {
     const startPos = currentPos;
-    const endPos = currentPos + segment.text.length;
+    const endPos = currentPos + segment.text.original.length;
 
     outputSegments.push({
       text: segment.text,
@@ -203,8 +211,8 @@ function deriveContent(
     currentPos = endPos + 1;
   }
 
-  // Derive text from segments
-  const text = input.segments.map((s) => s.text).join(' ');
+  // Derive text from segments (original text only)
+  const text = input.segments.map((s) => s.text.original).join(' ');
 
   // Derive speakers from segments
   const speakers = [
@@ -226,7 +234,6 @@ function deriveContent(
       speakers,
       mentioned: input.mentioned,
     },
-    japanese: input.japanese,
   };
 }
 
@@ -501,7 +508,7 @@ function generateSpeakerGraphs(contents: OutputContent[]): {
       // Process actual speaker segments (not narration)
       if (segment.speaker !== null) {
         // Extract concepts from this speaker's segment
-        const concepts = extractConcepts(segment.text);
+        const concepts = extractConcepts(segment.text.original);
 
         // Add person node to dialogue graph if they mention concepts
         // (even if they don't have a dialogue partner)
@@ -566,10 +573,12 @@ function generateSpeakerGraphs(contents: OutputContent[]): {
         // If we have a previous speaker, create dialogue edge between persons
         if (prevSpeaker && prevSpeaker !== segment.speaker) {
           // Extract topic from current or previous segment
-          const currentConcepts = extractConcepts(segment.text);
+          const currentConcepts = extractConcepts(segment.text.original);
           const prevConcepts =
             prevSegmentIndex >= 0
-              ? extractConcepts(content.segments[prevSegmentIndex].text)
+              ? extractConcepts(
+                  content.segments[prevSegmentIndex].text.original,
+                )
               : [];
           // Only create edge if we found a concept, skip generic dialogue edges
           const topic = currentConcepts[0] || prevConcepts[0];
@@ -658,7 +667,7 @@ function generateSpeakerGraphs(contents: OutputContent[]): {
       const segment = content.segments[i];
 
       if (segment.speaker === null) {
-        const questionMatch = parseQuestionPattern(segment.text);
+        const questionMatch = parseQuestionPattern(segment.text.original);
         if (questionMatch && questionMatch.questioner) {
           // Find questioner by matching name from persons.yaml
           let questionerId: string | null = null;
