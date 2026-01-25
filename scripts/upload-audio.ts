@@ -95,10 +95,15 @@ async function uploadFile(
 ): Promise<string> {
   const bucket = storage.bucket(bucketName);
 
+  // Determine content type based on file extension
+  const contentType = remotePath.endsWith('.webm')
+    ? 'audio/webm'
+    : 'audio/mpeg';
+
   await bucket.upload(localPath, {
     destination: remotePath,
     metadata: {
-      contentType: 'audio/mpeg',
+      contentType,
       cacheControl: 'public, max-age=31536000', // 1 year cache
     },
   });
@@ -229,8 +234,8 @@ function findPendingUploads(
       });
     }
 
-    // Check Japanese audio
-    if (entry.ja.generatedAt && !entry.ja.uploadedAt) {
+    // Check Japanese audio (webm format for manually recorded)
+    if (entry.ja?.generatedAt && !entry.ja.uploadedAt) {
       pending.push({
         contentId,
         lang: 'ja',
@@ -238,9 +243,9 @@ function findPendingUploads(
           AUDIO_DIR,
           bookId,
           sectionId,
-          `${chapterId}-ja.mp3`,
+          `${chapterId}-ja.webm`,
         ),
-        remotePath: `audio/${bookId}/${sectionId}/${chapterId}-ja.mp3`,
+        remotePath: `audio/${bookId}/${sectionId}/${chapterId}-ja.webm`,
       });
     }
   }

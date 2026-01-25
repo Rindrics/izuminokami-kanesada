@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 import { AudioPlayer } from '@/components/AudioPlayer';
+import { AudioRecorder } from '@/components/AudioRecorder';
 import { HakubunWithTabs } from '@/components/HakubunWithTabs';
 import { JapaneseTextWithRuby } from '@/components/JapaneseTextWithRuby';
 import { KeyboardNavigation } from '@/components/KeyboardNavigation';
@@ -11,6 +12,8 @@ import {
   getAllContentIds,
   getContentById,
 } from '@/generated/contents';
+
+const isDev = process.env.NODE_ENV === 'development';
 
 interface Props {
   params: Promise<{ bookId: string; sectionId: string; chapterId: string }>;
@@ -72,6 +75,14 @@ export default async function ContentPage({ params }: Props) {
             chapterId={chapterId}
             contentId={contentId}
           />
+
+          {isDev && (
+            <AudioRecorder
+              bookId={bookId}
+              sectionId={sectionId}
+              chapterId={chapterId}
+            />
+          )}
 
           <Suspense
             fallback={<div className="text-zinc-500">読み込み中...</div>}
