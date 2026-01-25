@@ -1,8 +1,12 @@
 import Link from 'next/link';
 import { ClickableChar } from '@/components/ClickableChar';
+import { DialogueGraph } from '@/components/DialogueGraph';
+import { BioFabricGraph } from '@/components/graphs/BioFabricGraph';
+import { CharChordDiagram } from '@/components/graphs/CharChordDiagram';
+import { ChordDiagram } from '@/components/graphs/ChordDiagram';
 import { CircularLayout } from '@/components/graphs/CircularLayout';
-import { DialogueGraphSection } from '@/components/graphs/DialogueGraphSection';
 import { WordCloud } from '@/components/graphs/WordCloud';
+import { Tabs } from '@/components/ui/Tabs';
 import { books, getBookById } from '@/generated/books';
 import { getPersonName } from '@/generated/persons';
 import type { CharIndex } from '@/generated/stats';
@@ -433,7 +437,7 @@ export default function StatsPage() {
           <WordCloud width={700} height={400} />
         </section>
 
-        {/* Circular Layout */}
+        {/* Adjacent Character Pairs */}
         <section className="mb-8">
           <h2 className="mb-4 text-xl font-bold text-black dark:text-white">
             隣接漢字ペア
@@ -441,7 +445,24 @@ export default function StatsPage() {
           <p className="mb-3 text-sm text-zinc-500">
             同一セグメント内で隣り合う漢字の関係（線の不透明度が高いほど頻出）
           </p>
-          <CircularLayout width={600} height={600} maxChars={80} />
+          <Tabs
+            tabs={[
+              {
+                id: 'circular',
+                label: 'サーキュラーレイアウト',
+                content: (
+                  <CircularLayout width={600} height={600} maxChars={80} />
+                ),
+              },
+              {
+                id: 'chord',
+                label: 'コード図',
+                content: (
+                  <CharChordDiagram width={600} height={600} maxChars={30} />
+                ),
+              },
+            ]}
+          />
         </section>
 
         {/* Key Concepts Heatmap */}
@@ -458,11 +479,44 @@ export default function StatsPage() {
           />
         </section>
 
-        {/* Dialogue Graph */}
+        {/* Person Dialogue Relations */}
         {'dialogueGraph' in stats &&
           stats.dialogueGraph &&
           stats.dialogueGraph.nodes.length > 0 && (
-            <DialogueGraphSection graph={stats.dialogueGraph} />
+            <section className="mb-8">
+              <h2 className="mb-4 text-xl font-bold text-black dark:text-white">
+                人物間対話関係
+              </h2>
+              <p className="mb-3 text-sm text-zinc-500">
+                人物間の対話頻度を可視化
+              </p>
+              <Tabs
+                defaultTab="biofabric"
+                tabs={[
+                  {
+                    id: 'biofabric',
+                    label: 'BioFabric',
+                    content: <BioFabricGraph graph={stats.dialogueGraph} />,
+                  },
+                  {
+                    id: 'chord',
+                    label: 'コード図',
+                    content: (
+                      <ChordDiagram
+                        graph={stats.dialogueGraph}
+                        width={600}
+                        height={600}
+                      />
+                    ),
+                  },
+                  {
+                    id: 'network',
+                    label: 'ネットワーク図',
+                    content: <DialogueGraph graph={stats.dialogueGraph} />,
+                  },
+                ]}
+              />
+            </section>
           )}
       </main>
     </div>
