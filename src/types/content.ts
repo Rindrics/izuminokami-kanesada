@@ -1,7 +1,12 @@
 // ADR-0001 based content types
 
+export interface SegmentText {
+  original: string; // Chinese text (白文)
+  japanese: string; // Japanese reading (書き下し文)
+}
+
 export interface Segment {
-  text: string;
+  text: SegmentText;
   start_pos: number;
   end_pos: number;
   speaker: string | null; // null = narration
@@ -43,12 +48,11 @@ export interface Content {
   book_id: string;
   section: string;
   chapter: string;
-  text: string;
+  text: string; // Full original text (derived from segments)
   segments: Segment[];
   persons: {
     speakers: string[];
     mentioned: string[];
   };
-  japanese?: string;
   content_hanzi?: ContentHanzi[]; // Override hanzi readings in white text
 }
