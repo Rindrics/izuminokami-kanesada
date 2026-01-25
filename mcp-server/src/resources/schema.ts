@@ -7,7 +7,9 @@ const INPUT_YAML_SCHEMA = `# Input YAML Schema for Content Generation
 # contents/input/lunyu/1/1.yaml
 
 segments:
-  - text: string          # Segment text (Chinese characters with spaces and markers)
+  - text:
+      original: string    # Chinese text (白文)
+      japanese: string    # Japanese reading (書き下し文)
     speaker: string|null  # Speaker ID (e.g., "kongzi", "youzi") or null for narration
     hanzi_overrides:      # Optional: override readings for polyphonic characters
       - char: string      # The character to override (e.g., "說")
@@ -16,20 +18,19 @@ segments:
 
 mentioned: string[]       # Character IDs mentioned but not speaking
 
-japanese: string          # Japanese reading (書き下し文)
-
 # Notes:
-# - Use spaces to separate semantic units (e.g., "子曰 學而時習之")
+# - Use spaces to separate semantic units in original (e.g., "子曰 學而時習之")
 # - Use "-" to mark tone sandhi connections (e.g., "不-亦")
 # - Split into multiple segments for line breaks (same speaker allowed)
 # - First segment is typically narration (speaker: null)
 # - Subsequent segments contain speech (speaker: character_id)
+# - Each segment has its own japanese reading for better correspondence
 #
 # Hanzi Overrides:
 # - Used for polyphonic characters where context determines the reading
 # - Example: 說 can be yuè (喜ぶ), shuō (言う), or shuì (説得する)
 # - In "不亦說乎", 說 means "喜ぶ" so use meaning_id: "說-yuè"
-# - Position is counted in the segment text including spaces and markers
+# - Position is counted in the segment text.original including spaces and markers
 #
 # Common polyphonic characters:
 # - 說: 說-yuè (喜ぶ), 說-shuō (言う), 說-shuì (説得する)
@@ -42,15 +43,20 @@ japanese: string          # Japanese reading (書き下し文)
 # - book_id: content_id.split('/')[0]
 # - section: from books.ts lookup
 # - chapter: content_id.split('/')[2]
-# - text: segments.map(s => s.text).join(' ')
+# - text: segments.map(s => s.text.original).join(' ')
 # - segments[].start_pos, end_pos: calculated from text positions
 # - characters.speakers: derived from segments with non-null speaker
 `;
 
 const CONTENT_TYPE_SCHEMA = `// Content Type Definition (src/types/content.ts)
 
+export interface SegmentText {
+  original: string;  // Chinese text (白文)
+  japanese: string;  // Japanese reading (書き下し文)
+}
+
 export interface Segment {
-  text: string;
+  text: SegmentText;
   start_pos: number;
   end_pos: number;
   speaker: string | null;
@@ -61,19 +67,19 @@ export interface Content {
   book_id: string;       // e.g., "lunyu"
   section: string;       // e.g., "学而第一"
   chapter: string;       // e.g., "1"
-  text: string;          // Full text with spaces and markers
+  text: string;          // Full original text with spaces and markers
   segments: Segment[];
   characters: {
     speakers: string[];  // Character IDs who speak
     mentioned: string[]; // Character IDs mentioned
   };
-  japanese?: string;     // Japanese reading
 }
 
 // Text conventions:
 // - Spaces: semantic unit separators (not displayed, adds spacing)
 // - Hyphen (-): tone sandhi connection marker (不-亦 = bù-yì -> bú-yì)
 // - Line breaks: use multiple segments (same speaker allowed)
+// - Each segment has its own japanese reading
 `;
 
 export function registerSchemaResources(server: McpServer): void {
