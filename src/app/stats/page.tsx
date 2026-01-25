@@ -320,6 +320,22 @@ export default function StatsPage() {
           />
         </section>
 
+        {/* Alluvial Diagram */}
+        <section className="mb-8">
+          <h2 className="mb-4 text-xl font-bold text-black dark:text-white">
+            書籍と概念の関係
+          </h2>
+          <p className="mb-3 text-sm text-zinc-500">
+            各書籍における主要概念の登場頻度（沖積図）
+          </p>
+          <AlluvialDiagram
+            charIndex={stats.charIndex}
+            dialogueGraph={stats.dialogueGraph}
+            width={700}
+            height={500}
+          />
+        </section>
+
         {/* Character Frequency */}
         <section className="mb-8">
           <h2 className="mb-4 text-xl font-bold text-black dark:text-white">

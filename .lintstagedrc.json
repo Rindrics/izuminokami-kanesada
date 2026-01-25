@@ -1,4 +1,4 @@
 {
   "*.{ts,tsx}": ["biome check --write"],
-  "*.yaml": ["prettier --write"]
+  "contents/**/*.yaml": ["prettier --write"]
 }
