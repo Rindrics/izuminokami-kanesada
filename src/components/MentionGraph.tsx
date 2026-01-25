@@ -72,7 +72,7 @@ export function MentionGraph({ graph, height = '600px' }: MentionGraphProps) {
           'border-width': 2,
           'border-color': chartTheme.colors.neutral[200],
           'background-color': (node) => {
-            const nodeData = node.data() as { id: string };
+            const _nodeData = node.data() as { id: string };
             return chartTheme.personColor;
           },
           label: chartTheme.cytoscape.node.label,
