@@ -73,6 +73,7 @@ interface Person {
   family?: string;
   courtesy?: string;
   given?: string;
+  birthYear?: number;
 }
 
 interface OutputSection {
@@ -149,6 +150,7 @@ export interface Person {
   family?: string;
   courtesy?: string;
   given?: string;
+  birthYear?: number;
 }
 
 export const persons: Person[] = ${personsStr};

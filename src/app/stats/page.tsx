@@ -7,6 +7,7 @@ import { CharChordDiagram } from '@/components/graphs/CharChordDiagram';
 import { ChernoffFaces } from '@/components/graphs/ChernoffFaces';
 import { ChordDiagram } from '@/components/graphs/ChordDiagram';
 import { CircularLayout } from '@/components/graphs/CircularLayout';
+import { TimelineFineo } from '@/components/graphs/TimelineFineo';
 import { VoronoiTreemap } from '@/components/graphs/VoronoiTreemap';
 import { WordCloud } from '@/components/graphs/WordCloud';
 import { Tabs } from '@/components/ui/Tabs';
@@ -335,6 +336,17 @@ export default function StatsPage() {
             width={700}
             height={500}
           />
+        </section>
+
+        {/* Timeline Fineo - Books and Persons */}
+        <section className="mb-8">
+          <h2 className="mb-4 text-xl font-bold text-black dark:text-white">
+            書籍と人物の時系列
+          </h2>
+          <p className="mb-3 text-sm text-zinc-500">
+            人物の誕生年と書籍の成立年を時系列で表示
+          </p>
+          <TimelineFineo width={850} height={500} />
         </section>
 
         {/* Character Frequency */}
