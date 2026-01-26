@@ -68,6 +68,7 @@ interface InputSection {
 interface InputBook {
   id: string;
   name: string;
+  compositionYear?: number;
   totalSections: number;
   sections: InputSection[];
 }
@@ -91,6 +92,7 @@ interface OutputSection {
 interface OutputBook {
   id: string;
   name: string;
+  compositionYear?: number;
   totalSections: number;
   sections: OutputSection[];
 }
@@ -1225,6 +1227,7 @@ export function getAdjacentContentIds(
   const outputBooks: OutputBook[] = booksData.map((book) => ({
     id: book.id,
     name: book.name,
+    compositionYear: book.compositionYear,
     totalSections: book.totalSections,
     sections: book.sections.map((section) => ({
       id: section.id,

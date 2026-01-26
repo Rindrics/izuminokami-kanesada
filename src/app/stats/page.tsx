@@ -350,10 +350,10 @@ export default function StatsPage() {
         {/* Timeline Fineo - Books and Persons */}
         <section className="mb-8">
           <h2 className="mb-4 text-xl font-bold text-black dark:text-white">
-            書籍と人物の時系列
+            経書と人物の時系列
           </h2>
           <p className="mb-3 text-sm text-zinc-500">
-            人物の誕生年と書籍の成立年を時系列で表示
+            人物の誕生年と経書の成立年を時系列で表示
           </p>
           <TimelineFineo width={850} height={500} />
         </section>
