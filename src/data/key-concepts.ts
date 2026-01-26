@@ -20,8 +20,7 @@ export const KEY_CONCEPTS: readonly string[] = [
   '忠',
   '學',
   '道',
-  '君',
-  '君子', // Added to match backend extraction
+  '君子',
   '民',
   '利',
   '怨',
