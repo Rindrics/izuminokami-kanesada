@@ -62,9 +62,6 @@ importers:
       seedrandom:
         specifier: ^3.0.5
         version: 3.0.5
-      strnum:
-        specifier: ^2.1.2
-        version: 2.1.2
     devDependencies:
       '@biomejs/biome':
         specifier: ^2.3.11
@@ -123,6 +120,9 @@ importers:
       prettier:
         specifier: ^3.8.1
         version: 3.8.1
+      strnum:
+        specifier: ^2.1.2
+        version: 2.1.2
       tailwindcss:
         specifier: ^4
         version: 4.1.18
