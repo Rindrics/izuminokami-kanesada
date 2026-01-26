@@ -7,6 +7,7 @@ import { useEffect, useMemo, useState } from 'react';
 import seedrandom from 'seedrandom';
 import { getBookById } from '@/generated/books';
 import type { ChapterLength } from '@/generated/stats';
+import { chartTheme } from '@/lib/chart-theme';
 
 interface VoronoiTreemapProps {
   chapterLengths: ChapterLength[];
@@ -29,47 +30,13 @@ interface HoverInfo {
   label: string;
 }
 
-// Book colors with distinct hues for better differentiation
-const bookColors: Record<
-  string,
-  { base: string; light: string; lighter: string }
-> = {
-  lunyu: {
-    base: '#1e40af', // Blue 800
-    light: '#3b82f6', // Blue 500
-    lighter: '#93c5fd', // Blue 300
-  },
-  daxue: {
-    base: '#166534', // Green 800
-    light: '#22c55e', // Green 500
-    lighter: '#86efac', // Green 300
-  },
-  zhongyong: {
-    base: '#9a3412', // Orange 800
-    light: '#f97316', // Orange 500
-    lighter: '#fdba74', // Orange 300
-  },
-  mengzi: {
-    base: '#7c2d12', // Brown/Orange 900
-    light: '#ea580c', // Orange 600
-    lighter: '#fb923c', // Orange 400
-  },
-};
-
-// Default colors for unknown books
-const defaultColors = {
-  base: '#3f3f46',
-  light: '#71717a',
-  lighter: '#a1a1aa',
-};
-
 // Get color for a node based on its depth and book
 function getNodeColor(
   bookId: string,
   depth: number,
   isHovered: boolean,
 ): string {
-  const colors = bookColors[bookId] || defaultColors;
+  const colors = chartTheme.getBookColorPalette(bookId);
 
   if (depth === 1) {
     return isHovered ? colors.light : colors.base;
@@ -371,7 +338,7 @@ export function VoronoiTreemap({
           全体
         </button>
         {bookSummary.map((book) => {
-          const colors = bookColors[book.bookId] || defaultColors;
+          const colors = chartTheme.getBookColorPalette(book.bookId);
           return (
             <button
               key={book.bookId}
@@ -384,7 +351,7 @@ export function VoronoiTreemap({
               className="rounded px-3 py-1 text-xs transition-colors"
               style={{
                 backgroundColor:
-                  selectedBook === book.bookId ? colors.base : colors.lighter,
+                  selectedBook === book.bookId ? colors.light : colors.lighter,
                 color: selectedBook === book.bookId ? '#FFFFFF' : '#1f2937',
               }}
             >
@@ -565,12 +532,13 @@ export function VoronoiTreemap({
         <div className="flex flex-wrap items-center justify-center gap-4">
           {bookSummary.map((book) => {
             const percentage = ((book.charCount / totalChars) * 100).toFixed(1);
-            const colors = bookColors[book.bookId] || defaultColors;
+            const colors = chartTheme.getBookColorPalette(book.bookId);
+            // Use light color for legend to match non-hovered display (depth 2 and 3 use light)
             return (
               <div key={book.bookId} className="flex items-center gap-2">
                 <div
                   className="h-3 w-3 rounded"
-                  style={{ backgroundColor: colors.base }}
+                  style={{ backgroundColor: colors.light }}
                 />
                 <span className="text-zinc-700 dark:text-zinc-300">
                   {book.name}: {book.sectionCount}篇 {book.chapterCount}章 (

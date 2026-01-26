@@ -13,6 +13,7 @@ import { getBookById } from '@/generated/books';
 import { contents } from '@/generated/contents';
 import { getPersonName } from '@/generated/persons';
 import type { CharIndex, SpeakerGraph } from '@/generated/stats';
+import { chartTheme } from '@/lib/chart-theme';
 
 interface AlluvialDiagramProps {
   charIndex: CharIndex[];
@@ -44,41 +45,6 @@ const KEY_CONCEPTS = KEY_CONCEPTS_INFO.filter((c) =>
 
 // Book order by approximate composition date
 const BOOK_ORDER = ['lunyu', 'daxue', 'zhongyong', 'mengzi'];
-
-// Book colors
-const bookColors: Record<string, string> = {
-  lunyu: '#1e40af', // Blue
-  daxue: '#166534', // Green
-  zhongyong: '#9a3412', // Orange
-  mengzi: '#7c2d12', // Brown
-};
-
-// Person colors
-const personColors: Record<string, string> = {
-  kongzi: '#7c3aed', // Violet
-  zengzi: '#2563eb', // Blue
-  youzi: '#0891b2', // Cyan
-  zigong: '#059669', // Emerald
-  zixia: '#16a34a', // Green
-  mengzi: '#ca8a04', // Yellow
-  lianghui: '#ea580c', // Orange
-};
-
-// Concept colors
-const conceptColors: Record<string, string> = {
-  仁: '#dc2626', // Red
-  義: '#ea580c', // Orange
-  禮: '#ca8a04', // Yellow
-  智: '#16a34a', // Green
-  信: '#0891b2', // Cyan
-  孝: '#2563eb', // Blue
-  忠: '#7c3aed', // Violet
-  學: '#c026d3', // Fuchsia
-  道: '#db2777', // Pink
-  德: '#64748b', // Slate
-  民: '#059669', // Emerald
-  君: '#4f46e5', // Indigo
-};
 
 type NodeType = 'book' | 'person' | 'concept';
 
@@ -218,7 +184,7 @@ export function AlluvialDiagram({
         id: `book-${bookId}`,
         name: book?.name || bookId,
         type: 'book',
-        color: bookColors[bookId] || '#71717a',
+        color: chartTheme.getBookColor(bookId),
         column: 0,
       });
     }
@@ -229,7 +195,7 @@ export function AlluvialDiagram({
         id: `concept-${concept.char}`,
         name: concept.char,
         type: 'concept',
-        color: conceptColors[concept.char] || '#71717a',
+        color: chartTheme.getConceptTopicColor(concept.char),
         column: 1,
       });
     }
@@ -250,7 +216,7 @@ export function AlluvialDiagram({
         id: `person-${personId}`,
         name: getPersonName(personId),
         type: 'person',
-        color: personColors[personId] || '#71717a',
+        color: chartTheme.getPersonColor(personId),
         column: 2,
       });
     }
@@ -683,7 +649,7 @@ export function AlluvialDiagram({
             <div key={bookId} className="flex items-center gap-1">
               <div
                 className="h-3 w-3 rounded"
-                style={{ backgroundColor: bookColors[bookId] }}
+                style={{ backgroundColor: chartTheme.getBookColor(bookId) }}
               />
               <span>{book?.name}</span>
             </div>

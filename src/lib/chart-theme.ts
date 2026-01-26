@@ -76,6 +76,77 @@ function generateConceptColor(concept: string, index: number): string {
 }
 
 /**
+ * Get color for a book
+ * Uses the base color from the palette
+ */
+function getBookColor(bookId: string): string {
+  const palette = getBookColorPalette(bookId);
+  return palette.base;
+}
+
+/**
+ * Get color palette for a book (base, light, lighter variants)
+ * Used for hierarchical visualizations like VoronoiTreemap
+ */
+function getBookColorPalette(bookId: string): {
+  base: string;
+  light: string;
+  lighter: string;
+} {
+  const palettes: Record<
+    string,
+    { base: string; light: string; lighter: string }
+  > = {
+    lunyu: {
+      base: '#1e40af', // blue-800
+      light: '#4b6fa8', // blue-500 with slightly lower saturation
+      lighter: '#6b8fc4', // blue-400 with slightly lower saturation
+    },
+    daxue: {
+      base: '#166534', // green-700
+      light: '#3d8b5f', // green-500 with slightly lower saturation
+      lighter: '#5ba87a', // green-400 with slightly lower saturation
+    },
+    zhongyong: {
+      base: '#0891b2', // cyan-600 (cyan/blue, consistent with light)
+      light: '#0891b2', // cyan-600 (cyan, distinct from mengzi's orange/amber)
+      lighter: '#06b6d4', // cyan-500 (cyan)
+    },
+    mengzi: {
+      base: '#7c2d12', // brown-800 (keep base dark)
+      light: '#ca8a04', // yellow-600 (matches person mengzi color)
+      lighter: '#eab308', // yellow-500 (yellow)
+    },
+  };
+
+  return (
+    palettes[bookId] || {
+      base: colors.neutral[700],
+      light: colors.neutral[500],
+      lighter: colors.neutral[200],
+    }
+  );
+}
+
+/**
+ * Get color for a person
+ */
+function getPersonColor(personId: string): string {
+  const personColors: Record<string, string> = {
+    kongzi: '#7c3aed', // violet-600
+    zengzi: '#2563eb', // blue-600
+    youzi: '#0891b2', // cyan-600
+    zigong: '#059669', // emerald-600
+    zixia: '#16a34a', // green-600
+    mengzi: '#ca8a04', // yellow-600
+    lianghui: '#ea580c', // orange-600
+    'liang-huiwang': '#ea580c', // alias
+  };
+
+  return personColors[personId] || colors.neutral[500];
+}
+
+/**
  * Get color for a concept topic
  * Uses predefined colors for important concepts, falls back to generated colors
  */
@@ -99,6 +170,7 @@ function getConceptTopicColor(topic: string | undefined): string {
     君子: '#dc2626', // red-600 - gentleman
     民: '#166534', // green-700 - people
     利: '#a16207', // yellow-700 - profit
+    德: '#64748b', // slate-500 - virtue
   };
 
   if (predefinedColors[topic]) {
@@ -119,6 +191,9 @@ export const chartTheme = {
   colors,
   personColor,
   conceptColor,
+  getBookColor,
+  getBookColorPalette,
+  getPersonColor,
   getConceptTopicColor,
   fonts: {
     family: 'Noto Sans JP, sans-serif',

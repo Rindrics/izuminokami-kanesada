@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { books } from '@/generated/books';
 import { contents } from '@/generated/contents';
 import { persons } from '@/generated/persons';
+import { chartTheme } from '@/lib/chart-theme';
 
 interface TimelineFineoProps {
   width?: number;
@@ -17,28 +18,6 @@ function formatYear(year: number): string {
   }
   return `${year}年`;
 }
-
-// Person colors
-const PERSON_COLORS: Record<string, string> = {
-  kongzi: '#7c3aed',
-  zengzi: '#2563eb',
-  youzi: '#0891b2',
-  zigong: '#059669',
-  zixia: '#16a34a',
-  ziqin: '#84cc16',
-  zilu: '#f59e0b',
-  yanyuan: '#ef4444',
-  mengzi: '#ec4899',
-  'liang-huiwang': '#6b7280',
-};
-
-// Book colors
-const BOOK_COLORS: Record<string, string> = {
-  lunyu: '#ef4444',
-  mengzi: '#f59e0b',
-  daxue: '#22c55e',
-  zhongyong: '#3b82f6',
-};
 
 interface PersonNode {
   id: string;
@@ -199,7 +178,7 @@ export function TimelineFineo({
         id: p.id,
         name: p.name,
         birthYear: p.birthYear,
-        color: PERSON_COLORS[p.id] || '#6b7280',
+        color: chartTheme.getPersonColor(p.id),
         x,
         y: personLaneY + yOffset,
         labelAbove: yOffset <= 0, // Label above if jittered up or at center
@@ -261,7 +240,7 @@ export function TimelineFineo({
         id: b.id,
         name: b.name,
         compositionYear: b.compositionYear,
-        color: BOOK_COLORS[b.id] || '#6b7280',
+        color: chartTheme.getBookColor(b.id),
         x,
         y: bookLaneY + yOffset,
       });
