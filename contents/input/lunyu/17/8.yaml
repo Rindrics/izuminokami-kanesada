@@ -1,15 +1,15 @@
 segments:
   - text:
       original: 子曰
-      japanese: 子曰く、
+      japanese: 子曰く
     speaker: null
   - text:
       original: 由也 女聞六言六蔽矣乎
-      japanese: 由や、女六言・六蔽を聞けるか。
+      japanese: 由や 女 六言・六蔽を聞けるか。
     speaker: kongzi
   - text:
       original: 對曰
-      japanese: 對えて曰く、
+      japanese: 對えて曰く
     speaker: null
   - text:
       original: 未也
@@ -17,7 +17,7 @@ segments:
     speaker: zilu
   - text:
       original: 居 吾語女
-      japanese: 居れ、吾女に語らん。
+      japanese: 居れ。吾女に語らん。
     speaker: kongzi
   - text:
       original: 好仁不-好學 其蔽也愚
@@ -25,7 +25,7 @@ segments:
     speaker: kongzi
   - text:
       original: 好知不-好學 其蔽也蕩
-      japanese: 知を好みて学（がく）を好まざれば、其の蔽や蕩。
+      japanese: 知（ち）を好みて学（がく）を好まざれば、其の蔽や蕩。
     speaker: kongzi
   - text:
       original: 好信不-好學 其蔽也賊

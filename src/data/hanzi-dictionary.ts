@@ -2132,7 +2132,7 @@ export const hanziDictionary: HanziEntry[] = [
     meanings: [
       {
         id: '直-zhí',
-        onyomi: 'シ',
+        onyomi: 'チョク',
         pinyin: 'zhí',
         tone: 2,
         meaning_ja: 'なおい、正直',
