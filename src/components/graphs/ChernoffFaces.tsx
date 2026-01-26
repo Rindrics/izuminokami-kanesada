@@ -26,7 +26,6 @@ const DISPLAYED_CONCEPTS = KEY_CONCEPTS.filter((c) =>
     '道',
     '德',
     '民',
-    '君',
     '君子',
   ].includes(c),
 );
