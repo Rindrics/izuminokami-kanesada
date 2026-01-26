@@ -135,7 +135,12 @@ export function DialogueGraph({ graph, height = '600px' }: DialogueGraphProps) {
           'curve-style': chartTheme.cytoscape.edge.curveStyle,
           label: (edge: EdgeSingular) => {
             const edgeData = edge.data() as { topic: string };
-            // Only show label if topic is not empty (person->person edges)
+            const targetType = edge.target().data('type');
+            // Only show label for person-to-person edges (not for person-to-concept edges)
+            if (targetType === 'concept') {
+              return '';
+            }
+            // Show topic label for person-to-person edges
             return edgeData.topic || '';
           },
           'text-rotation': chartTheme.cytoscape.edge.textRotation,
