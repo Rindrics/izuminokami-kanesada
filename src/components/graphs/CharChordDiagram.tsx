@@ -3,6 +3,7 @@
 import { chord, ribbon } from 'd3-chord';
 import { arc } from 'd3-shape';
 import { useMemo, useState } from 'react';
+import { KEY_CONCEPTS_SET } from '@/data/key-concepts';
 import { contents } from '@/generated/contents';
 import { stats } from '@/generated/stats';
 import { chartTheme } from '@/lib/chart-theme';
@@ -19,24 +20,6 @@ interface HoverInfo {
   sourceIndex?: number;
   targetIndex?: number;
 }
-
-// Key concepts for special coloring
-const KEY_CONCEPTS = new Set([
-  '仁',
-  '義',
-  '礼',
-  '禮',
-  '智',
-  '信',
-  '孝',
-  '悌',
-  '忠',
-  '學',
-  '道',
-  '君',
-  '民',
-  '利',
-]);
 
 /**
  * Extract adjacent character pairs (bigrams) from segments
@@ -197,7 +180,7 @@ export function CharChordDiagram({
   // Get color for character
   const getCharColor = (char: string, isHighlighted: boolean): string => {
     if (isHighlighted) return chartTheme.colors.primary[600];
-    if (KEY_CONCEPTS.has(char)) return chartTheme.colors.primary[500];
+    if (KEY_CONCEPTS_SET.has(char)) return chartTheme.colors.primary[500];
     return chartTheme.colors.neutral[500];
   };
 
@@ -302,7 +285,9 @@ export function CharChordDiagram({
                   fontSize={12}
                   fill={getCharColor(char, isHighlighted)}
                   fontWeight={
-                    KEY_CONCEPTS.has(char) || isHighlighted ? 'bold' : 'normal'
+                    KEY_CONCEPTS_SET.has(char) || isHighlighted
+                      ? 'bold'
+                      : 'normal'
                   }
                   className="pointer-events-none"
                 >

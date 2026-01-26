@@ -46,7 +46,7 @@ interface OutputSegment {
   speaker: string | null;
 }
 
-interface OutputContent {
+export interface OutputContent {
   content_id: string;
   book_id: string;
   section: string;
@@ -450,6 +450,7 @@ const KEY_CONCEPTS = [
   '學',
   '道',
   '君',
+  '君子', // Added to match frontend
   '民',
   '利',
   '怨',
@@ -552,7 +553,7 @@ function extractConcepts(text: string): string[] {
 }
 
 // Generate speaker graphs (dialogue and mention graphs)
-function generateSpeakerGraphs(contents: OutputContent[]): {
+export function generateSpeakerGraphs(contents: OutputContent[]): {
   dialogueGraph: SpeakerGraph;
   mentionGraph: SpeakerGraph;
 } {
@@ -611,47 +612,10 @@ function generateSpeakerGraphs(contents: OutputContent[]): {
           }
         }
 
-        for (const concept of concepts) {
-          const edgeKey = `${segment.speaker}-${concept}`;
-          const existingEdge = mentionEdges.get(edgeKey);
-          if (existingEdge) {
-            existingEdge.weight += 1;
-            if (!existingEdge.contentIds.includes(content.content_id)) {
-              existingEdge.contentIds.push(content.content_id);
-            }
-          } else {
-            mentionEdges.set(edgeKey, {
-              source: segment.speaker,
-              target: concept,
-              topic: concept,
-              weight: 1,
-              contentIds: [content.content_id],
-            });
-          }
-
-          // Add person node
-          if (!mentionNodes.has(segment.speaker)) {
-            const person = persons.find((p) => p.id === segment.speaker);
-            mentionNodes.set(segment.speaker, {
-              id: segment.speaker,
-              type: 'person',
-              label: person?.name ?? segment.speaker,
-            });
-          }
-
-          // Add concept node
-          if (!mentionNodes.has(concept)) {
-            mentionNodes.set(concept, {
-              id: concept,
-              type: 'concept',
-              label: concept,
-            });
-          }
-        }
-
-        // If we have a previous speaker, create dialogue edge between persons
+        // If we have a previous speaker, create dialogue edges between persons
+        // Create bidirectional edges: one for each concept mentioned by each speaker
         if (prevSpeaker && prevSpeaker !== segment.speaker) {
-          // Extract topic from current or previous segment
+          // Extract concepts from both segments
           const currentConcepts = extractConcepts(segment.text.original);
           const prevConcepts =
             prevSegmentIndex >= 0
@@ -659,30 +623,52 @@ function generateSpeakerGraphs(contents: OutputContent[]): {
                   content.segments[prevSegmentIndex].text.original,
                 )
               : [];
-          // Only create edge if we found a concept, skip generic dialogue edges
-          const topic = currentConcepts[0] || prevConcepts[0];
-          if (!topic) {
-            // Skip if no concept found - we only want concept-based dialogues
+
+          // Create edges from previous speaker to current speaker (for each concept in previous segment)
+          for (const topic of prevConcepts) {
+            const edgeKey = `${prevSpeaker}-${segment.speaker}-${topic}`;
+            const existingEdge = dialogueEdges.get(edgeKey);
+            if (existingEdge) {
+              existingEdge.weight += 1;
+              if (!existingEdge.contentIds.includes(content.content_id)) {
+                existingEdge.contentIds.push(content.content_id);
+              }
+            } else {
+              dialogueEdges.set(edgeKey, {
+                source: prevSpeaker,
+                target: segment.speaker,
+                topic,
+                weight: 1,
+                contentIds: [content.content_id],
+              });
+            }
+          }
+
+          // Create edges from current speaker to previous speaker (for each concept in current segment)
+          for (const topic of currentConcepts) {
+            const edgeKey = `${segment.speaker}-${prevSpeaker}-${topic}`;
+            const existingEdge = dialogueEdges.get(edgeKey);
+            if (existingEdge) {
+              existingEdge.weight += 1;
+              if (!existingEdge.contentIds.includes(content.content_id)) {
+                existingEdge.contentIds.push(content.content_id);
+              }
+            } else {
+              dialogueEdges.set(edgeKey, {
+                source: segment.speaker,
+                target: prevSpeaker,
+                topic,
+                weight: 1,
+                contentIds: [content.content_id],
+              });
+            }
+          }
+
+          // Skip if no concepts found in either segment - we only want concept-based dialogues
+          if (prevConcepts.length === 0 && currentConcepts.length === 0) {
             prevSpeaker = segment.speaker;
             prevSegmentIndex = i;
             continue;
-          }
-
-          const edgeKey = `${prevSpeaker}-${segment.speaker}-${topic}`;
-          const existingEdge = dialogueEdges.get(edgeKey);
-          if (existingEdge) {
-            existingEdge.weight += 1;
-            if (!existingEdge.contentIds.includes(content.content_id)) {
-              existingEdge.contentIds.push(content.content_id);
-            }
-          } else {
-            dialogueEdges.set(edgeKey, {
-              source: prevSpeaker,
-              target: segment.speaker,
-              topic,
-              weight: 1,
-              contentIds: [content.content_id],
-            });
           }
 
           // Add nodes
@@ -705,31 +691,63 @@ function generateSpeakerGraphs(contents: OutputContent[]): {
         }
 
         // Check if this is a standalone speech (no dialogue partner)
-        // If next segment doesn't have a different speaker, create person->concept edges
-        const nextSegment =
-          i + 1 < content.segments.length ? content.segments[i + 1] : null;
-        const hasNextSpeaker =
-          nextSegment &&
-          nextSegment.speaker !== null &&
-          nextSegment.speaker !== segment.speaker;
+        // Only add to mention graph if this is NOT part of a dialogue
+        // Find next speaker segment (skip narration segments)
+        let nextSpeakerSegment: (typeof content.segments)[number] | null = null;
+        for (let j = i + 1; j < content.segments.length; j++) {
+          const seg = content.segments[j];
+          if (seg.speaker !== null) {
+            nextSpeakerSegment = seg;
+            break;
+          }
+        }
+        const hasNextDifferentSpeaker =
+          nextSpeakerSegment && nextSpeakerSegment.speaker !== segment.speaker;
+        // This is part of a dialogue if:
+        // 1. Previous segment had a different speaker (dialogue started)
+        // Note: prevSpeaker is only set for non-null speaker segments, so if it's null,
+        // it means the previous segment was narration or this is the first speaker segment
+        const isPartOfDialogue =
+          (prevSpeaker !== null && prevSpeaker !== segment.speaker) ||
+          hasNextDifferentSpeaker;
 
-        // If no next speaker or same speaker, create person->concept edges for standalone speech
-        if (!hasNextSpeaker && concepts.length > 0) {
+        // Only add to mention graph if this is standalone speech (not part of dialogue)
+        // Use higher weight (3) to make standalone speeches more prominent
+        if (!isPartOfDialogue && concepts.length > 0) {
           for (const concept of concepts) {
-            const edgeKey = `${segment.speaker}-${concept}-standalone`;
-            const existingEdge = dialogueEdges.get(edgeKey);
+            const edgeKey = `${segment.speaker}-${concept}`;
+            const existingEdge = mentionEdges.get(edgeKey);
             if (existingEdge) {
-              existingEdge.weight += 1;
+              existingEdge.weight += 3;
               if (!existingEdge.contentIds.includes(content.content_id)) {
                 existingEdge.contentIds.push(content.content_id);
               }
             } else {
-              dialogueEdges.set(edgeKey, {
+              mentionEdges.set(edgeKey, {
                 source: segment.speaker,
                 target: concept,
-                topic: '', // Empty topic for person->concept edges
-                weight: 1,
+                topic: concept,
+                weight: 3,
                 contentIds: [content.content_id],
+              });
+            }
+
+            // Add person node
+            if (!mentionNodes.has(segment.speaker)) {
+              const person = persons.find((p) => p.id === segment.speaker);
+              mentionNodes.set(segment.speaker, {
+                id: segment.speaker,
+                type: 'person',
+                label: person?.name ?? segment.speaker,
+              });
+            }
+
+            // Add concept node
+            if (!mentionNodes.has(concept)) {
+              mentionNodes.set(concept, {
+                id: concept,
+                type: 'concept',
+                label: concept,
               });
             }
           }

@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import { KEY_CONCEPTS_SET } from '@/data/key-concepts';
 import { contents } from '@/generated/contents';
 import { stats } from '@/generated/stats';
 import { chartTheme } from '@/lib/chart-theme';
@@ -17,24 +18,6 @@ interface BigramData {
   char2: string;
   count: number;
 }
-
-// Key concepts for special coloring
-const KEY_CONCEPTS = new Set([
-  '仁',
-  '義',
-  '礼',
-  '禮',
-  '智',
-  '信',
-  '孝',
-  '悌',
-  '忠',
-  '學',
-  '道',
-  '君',
-  '民',
-  '利',
-]);
 
 /**
  * Extract adjacent character pairs (bigrams) from segments
@@ -128,6 +111,7 @@ export function CircularLayout({
   const radius = Math.min(width, height) / 2 - 60;
 
   // Calculate position for each character
+  // Round coordinates to avoid hydration mismatch between server and client
   const charPositions = useMemo(() => {
     const positions = new Map<
       string,
@@ -135,9 +119,12 @@ export function CircularLayout({
     >();
     topChars.forEach((char, i) => {
       const angle = (i / topChars.length) * 2 * Math.PI - Math.PI / 2;
+      const x = centerX + radius * Math.cos(angle);
+      const y = centerY + radius * Math.sin(angle);
+      // Round to 2 decimal places to avoid hydration mismatch
       positions.set(char, {
-        x: centerX + radius * Math.cos(angle),
-        y: centerY + radius * Math.sin(angle),
+        x: Math.round(x * 100) / 100,
+        y: Math.round(y * 100) / 100,
         totalCount: charSet.get(char) || 0,
       });
     });
@@ -172,7 +159,7 @@ export function CircularLayout({
   // Get color for character
   const getColor = (char: string, isHovered: boolean): string => {
     if (isHovered) return chartTheme.colors.primary[600];
-    if (KEY_CONCEPTS.has(char)) return chartTheme.colors.primary[500];
+    if (KEY_CONCEPTS_SET.has(char)) return chartTheme.colors.primary[500];
     return chartTheme.colors.neutral[500];
   };
 
@@ -285,7 +272,9 @@ export function CircularLayout({
                 dominantBaseline="middle"
                 fontSize={fontSize}
                 fontWeight={
-                  KEY_CONCEPTS.has(char) || isHighlighted ? 'bold' : 'normal'
+                  KEY_CONCEPTS_SET.has(char) || isHighlighted
+                    ? 'bold'
+                    : 'normal'
                 }
                 fill={getColor(char, isHighlighted)}
                 className="pointer-events-none transition-all"

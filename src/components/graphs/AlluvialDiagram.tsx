@@ -8,6 +8,7 @@ import {
 } from 'd3-sankey';
 import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
+import { KEY_CONCEPTS_INFO } from '@/data/key-concepts';
 import { getBookById } from '@/generated/books';
 import { contents } from '@/generated/contents';
 import { getPersonName } from '@/generated/persons';
@@ -16,25 +17,30 @@ import type { CharIndex, SpeakerGraph } from '@/generated/stats';
 interface AlluvialDiagramProps {
   charIndex: CharIndex[];
   dialogueGraph: SpeakerGraph;
+  mentionGraph: SpeakerGraph;
   width?: number;
   height?: number;
 }
 
 // Key concepts to track (virtues and important terms)
-const KEY_CONCEPTS = [
-  { char: '仁', label: '仁', desc: '思いやり' },
-  { char: '義', label: '義', desc: '正義' },
-  { char: '禮', label: '禮', desc: '礼儀' },
-  { char: '智', label: '智', desc: '知恵' },
-  { char: '信', label: '信', desc: '誠実' },
-  { char: '孝', label: '孝', desc: '親孝行' },
-  { char: '忠', label: '忠', desc: '忠義' },
-  { char: '學', label: '學', desc: '学問' },
-  { char: '道', label: '道', desc: '道理' },
-  { char: '德', label: '德', desc: '徳' },
-  { char: '民', label: '民', desc: '民衆' },
-  { char: '君', label: '君', desc: '君主' },
-];
+// Filter to only show commonly displayed concepts in alluvial diagram
+const KEY_CONCEPTS = KEY_CONCEPTS_INFO.filter((c) =>
+  [
+    '仁',
+    '義',
+    '禮',
+    '智',
+    '信',
+    '孝',
+    '忠',
+    '學',
+    '道',
+    '德',
+    '民',
+    '君',
+    '君子',
+  ].includes(c.char),
+);
 
 // Book order by approximate composition date
 const BOOK_ORDER = ['lunyu', 'daxue', 'zhongyong', 'mengzi'];
@@ -102,6 +108,7 @@ interface LinkData {
 export function AlluvialDiagram({
   charIndex,
   dialogueGraph,
+  mentionGraph,
   width = 700,
   height = 500,
 }: AlluvialDiagramProps) {
@@ -150,33 +157,29 @@ export function AlluvialDiagram({
     return KEY_CONCEPTS.filter((c) => charToContentIds.has(c.char));
   }, [charToContentIds]);
 
-  // Build concept -> person mapping (how many times each person mentioned each concept)
+  // Build concept -> person mapping from mentionGraph edges
   const conceptPersonCounts = useMemo(() => {
     const counts = new Map<string, Map<string, number>>();
 
-    for (const content of contents) {
-      for (const segment of content.segments) {
-        if (segment.speaker) {
-          const text = segment.text.original;
-          for (const concept of KEY_CONCEPTS) {
-            if (text.includes(concept.char)) {
-              let personMap = counts.get(concept.char);
-              if (!personMap) {
-                personMap = new Map();
-                counts.set(concept.char, personMap);
-              }
-              personMap.set(
-                segment.speaker,
-                (personMap.get(segment.speaker) || 0) + 1,
-              );
-            }
-          }
+    // Use mentionGraph edges instead of parsing text directly
+    for (const edge of mentionGraph.edges) {
+      // Edge format: source (person) -> target (concept)
+      if (edge.source && edge.target) {
+        let personMap = counts.get(edge.target);
+        if (!personMap) {
+          personMap = new Map();
+          counts.set(edge.target, personMap);
         }
+        // Use weight as count (weight represents mention frequency)
+        personMap.set(
+          edge.source,
+          (personMap.get(edge.source) || 0) + edge.weight,
+        );
       }
     }
 
     return counts;
-  }, []);
+  }, [mentionGraph]);
 
   // Build Sankey data with 3 columns: Book → Concept → Person
   const sankeyData = useMemo(() => {

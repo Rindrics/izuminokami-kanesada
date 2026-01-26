@@ -2,6 +2,7 @@
 
 import cloud from 'd3-cloud';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { KEY_CONCEPTS_SET } from '@/data/key-concepts';
 import { books } from '@/generated/books';
 import { contents } from '@/generated/contents';
 import { persons } from '@/generated/persons';
@@ -23,24 +24,6 @@ interface WordData {
   y?: number;
   rotate?: number;
 }
-
-// Key concepts for special coloring
-const KEY_CONCEPTS = new Set([
-  '仁',
-  '義',
-  '礼',
-  '禮',
-  '智',
-  '信',
-  '孝',
-  '悌',
-  '忠',
-  '學',
-  '道',
-  '君',
-  '民',
-  '利',
-]);
 
 /**
  * Calculate character frequencies from text
@@ -171,7 +154,7 @@ export function WordCloud({ width = 600, height = 400 }: WordCloudProps) {
   // Get color for word
   const getWordColor = (text: string, isHovered: boolean) => {
     if (isHovered) return chartTheme.colors.primary[600];
-    if (KEY_CONCEPTS.has(text)) return chartTheme.colors.primary[500];
+    if (KEY_CONCEPTS_SET.has(text)) return chartTheme.colors.primary[500];
     return chartTheme.colors.neutral[500];
   };
 
@@ -314,7 +297,7 @@ export function WordCloud({ width = 600, height = 400 }: WordCloudProps) {
               textAnchor="middle"
               transform={`translate(${word.x}, ${word.y}) rotate(${word.rotate})`}
               fontSize={word.size}
-              fontWeight={KEY_CONCEPTS.has(word.text) ? 'bold' : 'normal'}
+              fontWeight={KEY_CONCEPTS_SET.has(word.text) ? 'bold' : 'normal'}
               fill={getWordColor(word.text, hoveredWord === word.text)}
               className="cursor-pointer transition-colors"
               onMouseEnter={() => setHoveredWord(word.text)}
