@@ -8,71 +8,43 @@ import {
 } from 'd3-sankey';
 import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
+import { KEY_CONCEPTS_INFO } from '@/data/key-concepts';
 import { getBookById } from '@/generated/books';
 import { contents } from '@/generated/contents';
 import { getPersonName } from '@/generated/persons';
 import type { CharIndex, SpeakerGraph } from '@/generated/stats';
+import { chartTheme } from '@/lib/chart-theme';
 
 interface AlluvialDiagramProps {
   charIndex: CharIndex[];
   dialogueGraph: SpeakerGraph;
+  mentionGraph: SpeakerGraph;
   width?: number;
   height?: number;
 }
 
 // Key concepts to track (virtues and important terms)
-const KEY_CONCEPTS = [
-  { char: '仁', label: '仁', desc: '思いやり' },
-  { char: '義', label: '義', desc: '正義' },
-  { char: '禮', label: '禮', desc: '礼儀' },
-  { char: '智', label: '智', desc: '知恵' },
-  { char: '信', label: '信', desc: '誠実' },
-  { char: '孝', label: '孝', desc: '親孝行' },
-  { char: '忠', label: '忠', desc: '忠義' },
-  { char: '學', label: '學', desc: '学問' },
-  { char: '道', label: '道', desc: '道理' },
-  { char: '德', label: '德', desc: '徳' },
-  { char: '民', label: '民', desc: '民衆' },
-  { char: '君', label: '君', desc: '君主' },
-];
+// Filter to only show commonly displayed concepts in alluvial diagram
+const KEY_CONCEPTS = KEY_CONCEPTS_INFO.filter((c) =>
+  [
+    '仁',
+    '義',
+    '禮',
+    '智',
+    '信',
+    '孝',
+    '忠',
+    '學',
+    '道',
+    '德',
+    '民',
+    '君',
+    '君子',
+  ].includes(c.char),
+);
 
 // Book order by approximate composition date
 const BOOK_ORDER = ['lunyu', 'daxue', 'zhongyong', 'mengzi'];
-
-// Book colors
-const bookColors: Record<string, string> = {
-  lunyu: '#1e40af', // Blue
-  daxue: '#166534', // Green
-  zhongyong: '#9a3412', // Orange
-  mengzi: '#7c2d12', // Brown
-};
-
-// Person colors
-const personColors: Record<string, string> = {
-  kongzi: '#7c3aed', // Violet
-  zengzi: '#2563eb', // Blue
-  youzi: '#0891b2', // Cyan
-  zigong: '#059669', // Emerald
-  zixia: '#16a34a', // Green
-  mengzi: '#ca8a04', // Yellow
-  lianghui: '#ea580c', // Orange
-};
-
-// Concept colors
-const conceptColors: Record<string, string> = {
-  仁: '#dc2626', // Red
-  義: '#ea580c', // Orange
-  禮: '#ca8a04', // Yellow
-  智: '#16a34a', // Green
-  信: '#0891b2', // Cyan
-  孝: '#2563eb', // Blue
-  忠: '#7c3aed', // Violet
-  學: '#c026d3', // Fuchsia
-  道: '#db2777', // Pink
-  德: '#64748b', // Slate
-  民: '#059669', // Emerald
-  君: '#4f46e5', // Indigo
-};
 
 type NodeType = 'book' | 'person' | 'concept';
 
@@ -102,6 +74,7 @@ interface LinkData {
 export function AlluvialDiagram({
   charIndex,
   dialogueGraph,
+  mentionGraph,
   width = 700,
   height = 500,
 }: AlluvialDiagramProps) {
@@ -150,33 +123,56 @@ export function AlluvialDiagram({
     return KEY_CONCEPTS.filter((c) => charToContentIds.has(c.char));
   }, [charToContentIds]);
 
-  // Build concept -> person mapping (how many times each person mentioned each concept)
+  // Build concept -> person mapping from mentionGraph edges
   const conceptPersonCounts = useMemo(() => {
     const counts = new Map<string, Map<string, number>>();
 
-    for (const content of contents) {
-      for (const segment of content.segments) {
-        if (segment.speaker) {
-          const text = segment.text.original;
-          for (const concept of KEY_CONCEPTS) {
-            if (text.includes(concept.char)) {
-              let personMap = counts.get(concept.char);
-              if (!personMap) {
-                personMap = new Map();
-                counts.set(concept.char, personMap);
-              }
-              personMap.set(
-                segment.speaker,
-                (personMap.get(segment.speaker) || 0) + 1,
-              );
-            }
+    // Use mentionGraph edges instead of parsing text directly
+    for (const edge of mentionGraph.edges) {
+      // Edge format: source (person) -> target (concept)
+      if (edge.source && edge.target) {
+        let personMap = counts.get(edge.target);
+        if (!personMap) {
+          personMap = new Map();
+          counts.set(edge.target, personMap);
+        }
+        // Use weight as count (weight represents mention frequency)
+        personMap.set(
+          edge.source,
+          (personMap.get(edge.source) || 0) + edge.weight,
+        );
+      }
+    }
+
+    return counts;
+  }, [mentionGraph]);
+
+  // Build book -> concept mapping from mentionGraph edges (for accurate weights)
+  const bookConceptCounts = useMemo(() => {
+    const counts = new Map<string, Map<string, number>>(); // bookId -> concept -> count
+
+    for (const edge of mentionGraph.edges) {
+      // Edge format: source (person) -> target (concept)
+      if (edge.target && edge.contentIds) {
+        const concept = edge.target;
+        // Derive unique bookIds from contentIds to avoid double-counting weight
+        const uniqueBookIds = new Set(
+          edge.contentIds.map((contentId) => contentId.split('/')[0]),
+        );
+        // Add weight once per unique book
+        for (const bookId of uniqueBookIds) {
+          let conceptMap = counts.get(bookId);
+          if (!conceptMap) {
+            conceptMap = new Map();
+            counts.set(bookId, conceptMap);
           }
+          conceptMap.set(concept, (conceptMap.get(concept) || 0) + edge.weight);
         }
       }
     }
 
     return counts;
-  }, []);
+  }, [mentionGraph]);
 
   // Build Sankey data with 3 columns: Book → Concept → Person
   const sankeyData = useMemo(() => {
@@ -190,7 +186,7 @@ export function AlluvialDiagram({
         id: `book-${bookId}`,
         name: book?.name || bookId,
         type: 'book',
-        color: bookColors[bookId] || '#71717a',
+        color: chartTheme.getBookColor(bookId),
         column: 0,
       });
     }
@@ -201,7 +197,7 @@ export function AlluvialDiagram({
         id: `concept-${concept.char}`,
         name: concept.char,
         type: 'concept',
-        color: conceptColors[concept.char] || '#71717a',
+        color: chartTheme.getConceptTopicColor(concept.char),
         column: 1,
       });
     }
@@ -222,12 +218,13 @@ export function AlluvialDiagram({
         id: `person-${personId}`,
         name: getPersonName(personId),
         type: 'person',
-        color: personColors[personId] || '#71717a',
+        color: chartTheme.getPersonColor(personId),
         column: 2,
       });
     }
 
     // Add links: Book → Concept (with chapter details)
+    // Use bookConceptCounts calculated above for accurate weights
     for (const concept of presentConcepts) {
       const contentIds = charToContentIds.get(concept.char) || [];
       const bookContentIds = new Map<string, string[]>();
@@ -244,10 +241,16 @@ export function AlluvialDiagram({
 
       for (const [bookId, ids] of bookContentIds) {
         if (availableBooks.includes(bookId)) {
+          // Use actual mention frequency from mentionGraph instead of chapter count
+          const mentionCount =
+            bookConceptCounts.get(bookId)?.get(concept.char) || 0;
+          // Fallback to chapter count if no mentions found (shouldn't happen, but safety check)
+          const value = mentionCount > 0 ? mentionCount : ids.length;
+
           links.push({
             source: `book-${bookId}`,
             target: `concept-${concept.char}`,
-            value: ids.length,
+            value,
             chapterDetails: {
               bookId,
               char: concept.char,
@@ -280,6 +283,7 @@ export function AlluvialDiagram({
     presentConcepts,
     conceptPersonCounts,
     charToContentIds,
+    bookConceptCounts,
   ]);
 
   // Create Sankey layout
@@ -647,7 +651,7 @@ export function AlluvialDiagram({
             <div key={bookId} className="flex items-center gap-1">
               <div
                 className="h-3 w-3 rounded"
-                style={{ backgroundColor: bookColors[bookId] }}
+                style={{ backgroundColor: chartTheme.getBookColor(bookId) }}
               />
               <span>{book?.name}</span>
             </div>

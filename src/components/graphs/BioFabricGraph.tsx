@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
+import { KEY_CONCEPTS } from '@/data/key-concepts';
 import { getBookById, getSectionById } from '@/generated/books';
 import { getContentById } from '@/generated/contents';
 import { chartTheme } from '@/lib/chart-theme';
@@ -91,30 +92,22 @@ export function BioFabricGraph({ graph, height = 500 }: BioFabricGraphProps) {
     return Math.max(...graph.edges.map((e) => e.weight), 1);
   }, [graph.edges]);
 
+  // Get concepts actually used in the graph (from edges)
+  const usedConcepts = useMemo(() => {
+    const conceptSet = new Set<string>();
+    for (const edge of graph.edges) {
+      if (edge.topic && KEY_CONCEPTS.includes(edge.topic)) {
+        conceptSet.add(edge.topic);
+      }
+    }
+    // Sort by KEY_CONCEPTS order for consistent display
+    return KEY_CONCEPTS.filter((c) => conceptSet.has(c));
+  }, [graph.edges]);
+
   // Get color for edge based on topic
   const getEdgeColor = (edge: GraphEdge, isHovered: boolean) => {
     if (isHovered) return chartTheme.conceptColor;
-
-    // Color by topic for visual distinction (using darker, more visible colors)
-    const topicColors: Record<string, string> = {
-      仁: '#be123c', // rose-700
-      義: '#0e7490', // cyan-700
-      礼: '#6d28d9', // violet-700
-      禮: '#6d28d9',
-      智: '#047857', // emerald-700
-      信: '#b45309', // amber-700
-      孝: '#b91c1c', // red-700
-      悌: '#1d4ed8', // blue-700
-      忠: '#7e22ce', // purple-700
-      學: '#0f766e', // teal-700
-      道: '#4338ca', // indigo-700
-      君: '#991b1b', // red-800
-      民: '#166534', // green-700
-      利: '#a16207', // yellow-700 (darker for visibility)
-    };
-
-    // Default to a visible gray for edges without topic
-    return topicColors[edge.topic] || '#71717a'; // zinc-500
+    return chartTheme.getConceptTopicColor(edge.topic);
   };
 
   // Get opacity based on edge weight (frequency)
@@ -270,25 +263,32 @@ export function BioFabricGraph({ graph, height = 500 }: BioFabricGraphProps) {
         </g>
       </svg>
 
-      {/* Legend */}
-      <div className="absolute right-4 top-4 rounded bg-white/90 p-2 text-xs dark:bg-zinc-800/90">
-        <div className="mb-1 font-semibold text-zinc-700 dark:text-zinc-300">
-          凡例
+      {/* Legend - positioned below the graph */}
+      {usedConcepts.length > 0 && (
+        <div className="mt-4 rounded bg-white/90 p-3 text-xs dark:bg-zinc-800/90">
+          <div className="mb-2 font-semibold text-zinc-700 dark:text-zinc-300">
+            凡例
+          </div>
+          <div className="flex flex-wrap gap-3">
+            {usedConcepts.map((topic) => (
+              <div key={topic} className="flex items-center gap-1.5">
+                <div
+                  className="h-3 w-3 rounded-full"
+                  style={{
+                    backgroundColor: getEdgeColor(
+                      { topic } as GraphEdge,
+                      false,
+                    ),
+                  }}
+                />
+                <span className="text-zinc-600 dark:text-zinc-400">
+                  {topic}
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
-        <div className="flex flex-wrap gap-2">
-          {['仁', '義', '利', '道'].map((topic) => (
-            <div key={topic} className="flex items-center gap-1">
-              <div
-                className="h-2 w-2 rounded-full"
-                style={{
-                  backgroundColor: getEdgeColor({ topic } as GraphEdge, false),
-                }}
-              />
-              <span className="text-zinc-600 dark:text-zinc-400">{topic}</span>
-            </div>
-          ))}
-        </div>
-      </div>
+      )}
 
       {/* Popup for selected edge */}
       {selectedEdge && (

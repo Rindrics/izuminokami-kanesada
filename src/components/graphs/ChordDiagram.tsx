@@ -3,8 +3,9 @@
 import { chord, ribbon } from 'd3-chord';
 import { arc } from 'd3-shape';
 import { useMemo, useState } from 'react';
+import { KEY_CONCEPTS } from '@/data/key-concepts';
 import { chartTheme } from '@/lib/chart-theme';
-import type { SpeakerGraph } from '@/lib/graph/types';
+import type { GraphEdge, SpeakerGraph } from '@/lib/graph/types';
 
 interface ChordDiagramProps {
   graph: SpeakerGraph;
@@ -17,6 +18,7 @@ interface HoverInfo {
   index?: number;
   sourceIndex?: number;
   targetIndex?: number;
+  topic?: string;
 }
 
 /**
@@ -34,24 +36,45 @@ export function ChordDiagram({
     return graph.nodes.filter((n) => n.type === 'person');
   }, [graph.nodes]);
 
-  // Create adjacency matrix from edges
-  const { matrix, indexToId } = useMemo(() => {
+  // Create adjacency matrix from edges (aggregate all edges for layout)
+  // Filter to only person-to-person edges
+  const { matrix, indexToId, idToIndex, edgesByPair } = useMemo(() => {
     const n = persons.length;
     const mat: number[][] = Array.from({ length: n }, () => Array(n).fill(0));
     const idx2id = persons.map((p) => p.id);
     const id2idx = new Map(persons.map((p, i) => [p.id, i]));
+    const edgesMap = new Map<string, GraphEdge[]>();
 
-    for (const edge of graph.edges) {
+    // Filter to only person-to-person edges
+    const personToPersonEdges = graph.edges.filter((edge) => {
+      const srcNode = graph.nodes.find((n) => n.id === edge.source);
+      const tgtNode = graph.nodes.find((n) => n.id === edge.target);
+      return srcNode?.type === 'person' && tgtNode?.type === 'person';
+    });
+
+    for (const edge of personToPersonEdges) {
       const srcIdx = id2idx.get(edge.source);
       const tgtIdx = id2idx.get(edge.target);
       if (srcIdx !== undefined && tgtIdx !== undefined) {
         mat[srcIdx][tgtIdx] += edge.weight;
         mat[tgtIdx][srcIdx] += edge.weight;
+
+        // Group edges by person pair and topic
+        const pairKey = `${Math.min(srcIdx, tgtIdx)}-${Math.max(srcIdx, tgtIdx)}`;
+        if (!edgesMap.has(pairKey)) {
+          edgesMap.set(pairKey, []);
+        }
+        edgesMap.get(pairKey)?.push(edge);
       }
     }
 
-    return { matrix: mat, indexToId: idx2id, idToIndex: id2idx };
-  }, [persons, graph.edges]);
+    return {
+      matrix: mat,
+      indexToId: idx2id,
+      idToIndex: id2idx,
+      edgesByPair: edgesMap,
+    };
+  }, [persons, graph.edges, graph.nodes]);
 
   // Generate chord layout
   const chordLayout = useMemo(() => {
@@ -95,7 +118,25 @@ export function ChordDiagram({
     return false;
   };
 
-  // Check if chord is highlighted
+  // Get concepts actually used in the graph (from edges)
+  const usedConcepts = useMemo(() => {
+    const conceptSet = new Set<string>();
+    for (const edge of graph.edges) {
+      if (edge.topic && KEY_CONCEPTS.includes(edge.topic)) {
+        conceptSet.add(edge.topic);
+      }
+    }
+    // Sort by KEY_CONCEPTS order for consistent display
+    return KEY_CONCEPTS.filter((c) => conceptSet.has(c));
+  }, [graph.edges]);
+
+  // Get color for edge based on topic (same as BioFabricGraph)
+  const getEdgeColor = (topic: string | undefined, isHovered: boolean) => {
+    if (isHovered) return chartTheme.conceptColor;
+    return chartTheme.getConceptTopicColor(topic);
+  };
+
+  // Check if chord is highlighted (for a specific topic)
   const isChordHighlighted = (
     sourceIndex: number,
     targetIndex: number,
@@ -154,6 +195,20 @@ export function ChordDiagram({
     if (
       hoverInfo.type === 'chord' &&
       hoverInfo.sourceIndex !== undefined &&
+      hoverInfo.targetIndex !== undefined &&
+      hoverInfo.topic
+    ) {
+      const srcLabel = getLabel(hoverInfo.sourceIndex);
+      const tgtLabel = getLabel(hoverInfo.targetIndex);
+      const pairKey = `${Math.min(hoverInfo.sourceIndex, hoverInfo.targetIndex)}-${Math.max(hoverInfo.sourceIndex, hoverInfo.targetIndex)}`;
+      const edges = edgesByPair.get(pairKey) || [];
+      const topicEdges = edges.filter((e) => e.topic === hoverInfo.topic);
+      const count = topicEdges.reduce((sum, e) => sum + e.weight, 0);
+      return `${srcLabel} ↔ ${tgtLabel} (${hoverInfo.topic}): ${count}回`;
+    }
+    if (
+      hoverInfo.type === 'chord' &&
+      hoverInfo.sourceIndex !== undefined &&
       hoverInfo.targetIndex !== undefined
     ) {
       const srcLabel = getLabel(hoverInfo.sourceIndex);
@@ -183,39 +238,86 @@ export function ChordDiagram({
       >
         <title>コード・ダイアグラム</title>
         <g transform={`translate(${width / 2}, ${height / 2})`}>
-          {/* Chords (ribbons) */}
-          {chordLayout.map((c) => {
-            const pathData = ribbonGenerator(c) as unknown as string | null;
-            if (!pathData) return null;
+          {/* Chords (ribbons) - one per edge/topic */}
+          {Array.from(edgesByPair.entries())
+            .flatMap(([pairKey, edges]) => {
+              const [srcIdxStr, tgtIdxStr] = pairKey.split('-');
+              const srcIdx = Number.parseInt(srcIdxStr, 10);
+              const tgtIdx = Number.parseInt(tgtIdxStr, 10);
+              const sourceGroup = chordLayout.groups[srcIdx];
+              const targetGroup = chordLayout.groups[tgtIdx];
 
-            const isHighlighted = isChordHighlighted(
-              c.source.index,
-              c.target.index,
-            );
+              if (!sourceGroup || !targetGroup) return null;
 
-            return (
-              // biome-ignore lint/a11y/noStaticElementInteractions: SVG path hover interaction
-              <path
-                key={`chord-${c.source.index}-${c.target.index}`}
-                d={pathData}
-                fill={
-                  isHighlighted
-                    ? chartTheme.colors.primary[500]
-                    : chartTheme.colors.neutral[500]
-                }
-                fillOpacity={getChordOpacity(c.source.index, c.target.index)}
-                className="cursor-pointer transition-all"
-                onMouseEnter={() =>
-                  setHoverInfo({
-                    type: 'chord',
-                    sourceIndex: c.source.index,
-                    targetIndex: c.target.index,
-                  })
-                }
-                onMouseLeave={() => setHoverInfo(null)}
-              />
-            );
-          })}
+              // Sort edges by topic for consistent ordering
+              const sortedEdges = [...edges].sort((a, b) =>
+                (a.topic || '').localeCompare(b.topic || ''),
+              );
+
+              // Calculate cumulative weights for positioning
+              const totalWeight = sortedEdges.reduce(
+                (sum, e) => sum + e.weight,
+                0,
+              );
+              let cumulativeWeight = 0;
+
+              return sortedEdges.map((edge, edgeIndex) => {
+                const weightRatio = edge.weight / totalWeight;
+                const startRatio = cumulativeWeight / totalWeight;
+                const endRatio = (cumulativeWeight + edge.weight) / totalWeight;
+                cumulativeWeight += edge.weight;
+
+                const sourceAngleRange =
+                  sourceGroup.endAngle - sourceGroup.startAngle;
+                const targetAngleRange =
+                  targetGroup.endAngle - targetGroup.startAngle;
+
+                // Create a chord for this specific edge
+                const chordData = {
+                  source: {
+                    startAngle:
+                      sourceGroup.startAngle + sourceAngleRange * startRatio,
+                    endAngle:
+                      sourceGroup.startAngle + sourceAngleRange * endRatio,
+                  },
+                  target: {
+                    startAngle:
+                      targetGroup.startAngle + targetAngleRange * startRatio,
+                    endAngle:
+                      targetGroup.startAngle + targetAngleRange * endRatio,
+                  },
+                };
+
+                const pathData = ribbonGenerator(chordData) as unknown as
+                  | string
+                  | null;
+                if (!pathData) return null;
+
+                const isHighlighted = isChordHighlighted(srcIdx, tgtIdx);
+                const edgeColor = getEdgeColor(edge.topic, isHighlighted);
+
+                return (
+                  // biome-ignore lint/a11y/noStaticElementInteractions: SVG path hover interaction
+                  <path
+                    key={`chord-${edge.source}-${edge.target}-${edge.topic}-${edgeIndex}`}
+                    d={pathData}
+                    fill={edgeColor}
+                    fillOpacity={getChordOpacity(srcIdx, tgtIdx)}
+                    className="cursor-pointer transition-all"
+                    onMouseEnter={() =>
+                      setHoverInfo({
+                        type: 'chord',
+                        sourceIndex: srcIdx,
+                        targetIndex: tgtIdx,
+                        topic: edge.topic,
+                      })
+                    }
+                    onMouseLeave={() => setHoverInfo(null)}
+                  />
+                );
+              });
+            })
+            .filter((item) => item !== null)}
 
           {/* Groups (arcs) */}
           {chordLayout.groups.map((group) => {
@@ -279,34 +381,59 @@ export function ChordDiagram({
       </svg>
 
       {/* Legend */}
-      <div className="mt-4 flex items-center justify-center gap-6 text-xs text-zinc-500">
-        <div className="flex items-center gap-2">
-          <div
-            className="h-3 w-6 rounded"
-            style={{ backgroundColor: chartTheme.colors.neutral[500] }}
-          />
-          <span>人物</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1">
+      <div className="mt-4 space-y-3">
+        {/* Person and dialogue frequency legend */}
+        <div className="flex items-center justify-center gap-6 text-xs text-zinc-500">
+          <div className="flex items-center gap-2">
             <div
-              className="h-1 w-4 rounded"
-              style={{
-                backgroundColor: chartTheme.colors.neutral[500],
-                opacity: 0.3,
-              }}
+              className="h-3 w-6 rounded"
+              style={{ backgroundColor: chartTheme.colors.neutral[500] }}
             />
-            <span>→</span>
-            <div
-              className="h-3 w-4 rounded"
-              style={{
-                backgroundColor: chartTheme.colors.neutral[500],
-                opacity: 0.8,
-              }}
-            />
+            <span>人物</span>
           </div>
-          <span>対話頻度（太いほど多い）</span>
+          <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1">
+              <div
+                className="h-1 w-4 rounded"
+                style={{
+                  backgroundColor: chartTheme.colors.neutral[500],
+                  opacity: 0.3,
+                }}
+              />
+              <span>→</span>
+              <div
+                className="h-3 w-4 rounded"
+                style={{
+                  backgroundColor: chartTheme.colors.neutral[500],
+                  opacity: 0.8,
+                }}
+              />
+            </div>
+            <span>対話頻度（太いほど多い）</span>
+          </div>
         </div>
+
+        {/* Concept legend */}
+        {usedConcepts.length > 0 && (
+          <div className="flex flex-wrap items-center justify-center gap-3 text-xs text-zinc-500">
+            <span className="font-semibold text-zinc-700 dark:text-zinc-300">
+              概念:
+            </span>
+            {usedConcepts.map((topic) => (
+              <div key={topic} className="flex items-center gap-1.5">
+                <div
+                  className="h-3 w-3 rounded-full"
+                  style={{
+                    backgroundColor: getEdgeColor(topic, false),
+                  }}
+                />
+                <span className="text-zinc-600 dark:text-zinc-400">
+                  {topic}
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

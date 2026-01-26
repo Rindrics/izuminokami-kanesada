@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { books } from '@/generated/books';
 import { contents } from '@/generated/contents';
 import { persons } from '@/generated/persons';
+import { chartTheme } from '@/lib/chart-theme';
 
 interface TimelineFineoProps {
   width?: number;
@@ -17,28 +18,6 @@ function formatYear(year: number): string {
   }
   return `${year}年`;
 }
-
-// Person colors
-const PERSON_COLORS: Record<string, string> = {
-  kongzi: '#7c3aed',
-  zengzi: '#2563eb',
-  youzi: '#0891b2',
-  zigong: '#059669',
-  zixia: '#16a34a',
-  ziqin: '#84cc16',
-  zilu: '#f59e0b',
-  yanyuan: '#ef4444',
-  mengzi: '#ec4899',
-  'liang-huiwang': '#6b7280',
-};
-
-// Book colors
-const BOOK_COLORS: Record<string, string> = {
-  lunyu: '#ef4444',
-  mengzi: '#f59e0b',
-  daxue: '#22c55e',
-  zhongyong: '#3b82f6',
-};
 
 interface PersonNode {
   id: string;
@@ -150,33 +129,56 @@ export function TimelineFineo({
 
     // Calculate jitter for each person based on X proximity
     const nodeRadius = 14;
-    const minSpacing = nodeRadius * 2.5; // Minimum X distance before jittering
+    const nodeDiameter = nodeRadius * 2;
+    const minSpacing = nodeDiameter + 10; // Minimum X distance before jittering (with padding)
 
     const personNodes: PersonNode[] = [];
     for (let i = 0; i < sortedPersons.length; i++) {
       const p = sortedPersons[i];
       const x = scale(p.birthYear);
 
-      // Check how many previous nodes are within minSpacing
-      let jitterIndex = 0;
+      // Find all previous nodes within minSpacing and check for actual overlap
+      const nearbyNodes: PersonNode[] = [];
       for (let j = i - 1; j >= 0; j--) {
         const prevNode = personNodes[j];
         if (Math.abs(prevNode.x - x) < minSpacing) {
-          jitterIndex++;
+          nearbyNodes.push(prevNode);
         } else {
           break;
         }
       }
 
-      // Alternate Y offset: 0, -35, +35, -70, +70, ...
-      const jitterOffsets = [0, -40, 40, -80, 80];
-      const yOffset = jitterOffsets[jitterIndex % jitterOffsets.length] || 0;
+      // Try different Y offsets until we find one that doesn't overlap
+      const jitterOffsets = [0, -50, 50, -100, 100, -150, 150];
+      let yOffset = 0;
+      let foundNonOverlap = false;
+
+      for (const offset of jitterOffsets) {
+        const testY = personLaneY + offset;
+        const overlaps = nearbyNodes.some((prevNode) => {
+          const dx = Math.abs(prevNode.x - x);
+          const dy = Math.abs(prevNode.y - testY);
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          return distance < nodeDiameter;
+        });
+
+        if (!overlaps) {
+          yOffset = offset;
+          foundNonOverlap = true;
+          break;
+        }
+      }
+
+      // If still overlapping, use the last offset (farthest)
+      if (!foundNonOverlap && jitterOffsets.length > 0) {
+        yOffset = jitterOffsets[jitterOffsets.length - 1];
+      }
 
       personNodes.push({
         id: p.id,
         name: p.name,
         birthYear: p.birthYear,
-        color: PERSON_COLORS[p.id] || '#6b7280',
+        color: chartTheme.getPersonColor(p.id),
         x,
         y: personLaneY + yOffset,
         labelAbove: yOffset <= 0, // Label above if jittered up or at center
@@ -188,33 +190,57 @@ export function TimelineFineo({
       (a, b) => a.compositionYear - b.compositionYear,
     );
 
-    const bookMinSpacing = 50; // Minimum X distance before jittering
+    const bookWidth = 40; // Width of book node rectangle
+    const bookHeight = 20; // Height of book node rectangle
+    const bookMinSpacing = bookWidth + 15; // Minimum X distance before jittering (with padding)
 
     const bookNodes: BookNode[] = [];
     for (let i = 0; i < sortedBooks.length; i++) {
       const b = sortedBooks[i];
       const x = scale(b.compositionYear);
 
-      // Check how many previous nodes are within minSpacing
-      let jitterIndex = 0;
+      // Find all previous nodes within minSpacing and check for actual overlap
+      const nearbyNodes: BookNode[] = [];
       for (let j = i - 1; j >= 0; j--) {
         const prevNode = bookNodes[j];
         if (Math.abs(prevNode.x - x) < bookMinSpacing) {
-          jitterIndex++;
+          nearbyNodes.push(prevNode);
         } else {
           break;
         }
       }
 
-      // Alternate Y offset for books
-      const jitterOffsets = [0, 35, -35, 70, -70];
-      const yOffset = jitterOffsets[jitterIndex % jitterOffsets.length] || 0;
+      // Try different Y offsets until we find one that doesn't overlap
+      const jitterOffsets = [0, 40, -40, 80, -80, 120, -120];
+      let yOffset = 0;
+      let foundNonOverlap = false;
+
+      for (const offset of jitterOffsets) {
+        const testY = bookLaneY + offset;
+        const overlaps = nearbyNodes.some((prevNode) => {
+          const dx = Math.abs(prevNode.x - x);
+          const dy = Math.abs(prevNode.y - testY);
+          // Check if rectangles overlap
+          return dx < bookWidth && dy < bookHeight;
+        });
+
+        if (!overlaps) {
+          yOffset = offset;
+          foundNonOverlap = true;
+          break;
+        }
+      }
+
+      // If still overlapping, use the last offset (farthest)
+      if (!foundNonOverlap && jitterOffsets.length > 0) {
+        yOffset = jitterOffsets[jitterOffsets.length - 1];
+      }
 
       bookNodes.push({
         id: b.id,
         name: b.name,
         compositionYear: b.compositionYear,
-        color: BOOK_COLORS[b.id] || '#6b7280',
+        color: chartTheme.getBookColor(b.id),
         x,
         y: bookLaneY + yOffset,
       });
@@ -339,11 +365,37 @@ export function TimelineFineo({
     if (hoveredNode) {
       const person = personNodes.find((p) => p.id === hoveredNode);
       if (person) {
-        return `${person.name}（${formatYear(person.birthYear)}生）`;
+        // Count related books
+        const relatedBooks = links
+          .filter((l) => l.personId === person.id)
+          .map((l) => {
+            const book = bookNodes.find((b) => b.id === l.bookId);
+            return book?.name;
+          })
+          .filter((name): name is string => name !== undefined);
+        const bookCount = relatedBooks.length;
+        const bookList =
+          bookCount > 0
+            ? `関連経書: ${relatedBooks.join('、')}（${bookCount}冊）`
+            : '';
+        return `${person.name}（${formatYear(person.birthYear)}生）${bookList ? ` / ${bookList}` : ''}`;
       }
       const book = bookNodes.find((b) => b.id === hoveredNode);
       if (book) {
-        return `${book.name}（${formatYear(book.compositionYear)}成立）`;
+        // Count related persons
+        const relatedPersons = links
+          .filter((l) => l.bookId === book.id)
+          .map((l) => {
+            const person = personNodes.find((p) => p.id === l.personId);
+            return person?.name;
+          })
+          .filter((name): name is string => name !== undefined);
+        const personCount = relatedPersons.length;
+        const personList =
+          personCount > 0
+            ? `関連人物: ${relatedPersons.join('、')}（${personCount}人）`
+            : '';
+        return `${book.name}（${formatYear(book.compositionYear)}成立）${personList ? ` / ${personList}` : ''}`;
       }
     }
     return null;
@@ -359,9 +411,8 @@ export function TimelineFineo({
         height={height}
         className="overflow-visible"
         role="img"
-        aria-label="書籍と人物の時系列図"
+        aria-label="経書と人物の時系列図"
       >
-        <title>書籍と人物の時系列図</title>
         {/* Time axis */}
         <g>
           <line
@@ -410,7 +461,7 @@ export function TimelineFineo({
           fill="#71717a"
           className="dark:fill-zinc-400"
         >
-          書籍
+          経書
         </text>
 
         {/* Links */}
@@ -543,7 +594,7 @@ export function TimelineFineo({
 
       {/* Description */}
       <p className="text-sm text-zinc-500 dark:text-zinc-400">
-        横軸は時間（左が古い）。上段は人物（誕生年）、下段は書籍（成立年）。線の太さは発言回数に比例。
+        横軸は時間（左が古い）。上段は人物（誕生年）、下段は経書（成立年）。線の太さは発言回数に比例。
       </p>
     </div>
   );

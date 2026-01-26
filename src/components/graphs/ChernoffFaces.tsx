@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import { KEY_CONCEPTS } from '@/data/key-concepts';
 import { contents } from '@/generated/contents';
 import { getPersonName } from '@/generated/persons';
 import type { PersonFrequency } from '@/generated/stats';
@@ -11,21 +12,23 @@ interface ChernoffFacesProps {
   height?: number;
 }
 
-// Key concepts to track
-const KEY_CONCEPTS = [
-  '仁',
-  '義',
-  '禮',
-  '智',
-  '信',
-  '孝',
-  '忠',
-  '學',
-  '道',
-  '德',
-  '民',
-  '君',
-];
+// Filter to only show commonly displayed concepts in Chernoff faces
+const DISPLAYED_CONCEPTS = KEY_CONCEPTS.filter((c) =>
+  [
+    '仁',
+    '義',
+    '禮',
+    '智',
+    '信',
+    '孝',
+    '忠',
+    '學',
+    '道',
+    '德',
+    '民',
+    '君子',
+  ].includes(c),
+);
 
 interface FaceData {
   personId: string;
@@ -221,7 +224,7 @@ export function ChernoffFaces({
           personUtteranceLengths.get(segment.speaker)?.push(text.length);
 
           // Track concepts mentioned
-          for (const concept of KEY_CONCEPTS) {
+          for (const concept of DISPLAYED_CONCEPTS) {
             if (text.includes(concept)) {
               if (!personConcepts.has(segment.speaker)) {
                 personConcepts.set(segment.speaker, new Set());

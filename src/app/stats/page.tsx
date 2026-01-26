@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { useMemo } from 'react';
 import { ClickableChar } from '@/components/ClickableChar';
 import { DialogueGraph } from '@/components/DialogueGraph';
 import { AlluvialDiagram } from '@/components/graphs/AlluvialDiagram';
@@ -11,27 +12,14 @@ import { TimelineFineo } from '@/components/graphs/TimelineFineo';
 import { VoronoiTreemap } from '@/components/graphs/VoronoiTreemap';
 import { WordCloud } from '@/components/graphs/WordCloud';
 import { Tabs } from '@/components/ui/Tabs';
+import { KEY_CONCEPTS_INFO } from '@/data/key-concepts';
 import { books, getBookById } from '@/generated/books';
 import { getPersonName } from '@/generated/persons';
 import type { CharIndex } from '@/generated/stats';
 import { stats } from '@/generated/stats';
 
 // Key concepts to track (virtues and important terms in Confucian texts)
-const keyConcepts = [
-  { char: '仁', label: '仁（じん）', desc: '思いやり' },
-  { char: '義', label: '義（ぎ）', desc: '正義' },
-  { char: '礼', label: '礼（れい）', desc: '礼儀' },
-  { char: '禮', label: '禮（れい）', desc: '礼儀' }, // 異体字
-  { char: '智', label: '智（ち）', desc: '知恵' },
-  { char: '信', label: '信（しん）', desc: '誠実' },
-  { char: '孝', label: '孝（こう）', desc: '親孝行' },
-  { char: '悌', label: '悌（てい）', desc: '兄弟愛' },
-  { char: '忠', label: '忠（ちゅう）', desc: '忠義' },
-  { char: '學', label: '學（がく）', desc: '学問' },
-  { char: '道', label: '道（どう）', desc: '道理' },
-  { char: '君子', label: '君子（くんし）', desc: '徳のある人' },
-  { char: '民', label: '民（みん）', desc: '民衆' },
-];
+const keyConcepts = KEY_CONCEPTS_INFO;
 
 // Aggregation level for heatmap
 type AggregationLevel = 'section' | 'book';
@@ -240,6 +228,26 @@ export default function StatsPage() {
         10,
     ) / 10;
 
+  // Merge dialogueGraph and mentionGraph for BioFabric visualization
+  const combinedGraph = useMemo(() => {
+    // Combine nodes (deduplicate by id)
+    const nodeMap = new Map<string, (typeof stats.dialogueGraph.nodes)[0]>();
+    for (const node of stats.dialogueGraph.nodes) {
+      nodeMap.set(node.id, node);
+    }
+    for (const node of stats.mentionGraph.nodes) {
+      nodeMap.set(node.id, node);
+    }
+
+    // Combine edges
+    const edges = [...stats.dialogueGraph.edges, ...stats.mentionGraph.edges];
+
+    return {
+      nodes: Array.from(nodeMap.values()),
+      edges,
+    };
+  }, []);
+
   return (
     <div className="bg-zinc-50 dark:bg-black">
       <main className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
@@ -333,6 +341,7 @@ export default function StatsPage() {
           <AlluvialDiagram
             charIndex={stats.charIndex}
             dialogueGraph={stats.dialogueGraph}
+            mentionGraph={stats.mentionGraph}
             width={700}
             height={500}
           />
@@ -341,10 +350,10 @@ export default function StatsPage() {
         {/* Timeline Fineo - Books and Persons */}
         <section className="mb-8">
           <h2 className="mb-4 text-xl font-bold text-black dark:text-white">
-            書籍と人物の時系列
+            経書と人物の時系列
           </h2>
           <p className="mb-3 text-sm text-zinc-500">
-            人物の誕生年と書籍の成立年を時系列で表示
+            人物の誕生年と経書の成立年を時系列で表示
           </p>
           <TimelineFineo width={850} height={500} />
         </section>
@@ -542,7 +551,7 @@ export default function StatsPage() {
                   {
                     id: 'biofabric',
                     label: 'BioFabric',
-                    content: <BioFabricGraph graph={stats.dialogueGraph} />,
+                    content: <BioFabricGraph graph={combinedGraph} />,
                   },
                   {
                     id: 'chord',
@@ -558,7 +567,7 @@ export default function StatsPage() {
                   {
                     id: 'network',
                     label: 'ネットワーク図',
-                    content: <DialogueGraph graph={stats.dialogueGraph} />,
+                    content: <DialogueGraph graph={combinedGraph} />,
                   },
                   {
                     id: 'chernoff',

@@ -51,8 +51,8 @@ export function DialogueGraph({ graph, height = '600px' }: DialogueGraphProps) {
   const [isPinned, setIsPinned] = useState(false);
   const isDarkMode = useIsDarkMode();
 
-  // Edge colors based on theme
-  const edgeColor = isDarkMode ? '#9CA3AF' : '#71717A'; // gray-400 for dark, zinc-500 for light
+  // Edge colors based on theme (fallback for edges without topic)
+  const defaultEdgeColor = isDarkMode ? '#9CA3AF' : '#71717A'; // gray-400 for dark, zinc-500 for light
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -100,7 +100,11 @@ export function DialogueGraph({ graph, height = '600px' }: DialogueGraphProps) {
           color: '#FFFFFF', // White text for concept nodes
           'font-size': 20,
           'font-weight': 'bold',
-          'background-color': chartTheme.colors.neutral[700], // Dark gray for better contrast
+          'background-color': (node: NodeSingular) => {
+            const nodeData = node.data() as { id: string };
+            // Use concept-based color for concept nodes
+            return chartTheme.getConceptTopicColor(nodeData.id);
+          },
         },
       },
       {
@@ -113,19 +117,42 @@ export function DialogueGraph({ graph, height = '600px' }: DialogueGraphProps) {
             const normalizedWeight = Math.min(edgeData.weight || 1, 10);
             return min + (normalizedWeight / 10) * (max - min);
           },
-          'line-color': edgeColor,
-          'target-arrow-color': edgeColor,
+          'line-color': (edge: EdgeSingular) => {
+            const edgeData = edge.data() as { topic: string };
+            // Use concept-based color if topic exists, otherwise use default
+            return edgeData.topic
+              ? chartTheme.getConceptTopicColor(edgeData.topic)
+              : defaultEdgeColor;
+          },
+          'target-arrow-color': (edge: EdgeSingular) => {
+            const edgeData = edge.data() as { topic: string };
+            // Use concept-based color if topic exists, otherwise use default
+            return edgeData.topic
+              ? chartTheme.getConceptTopicColor(edgeData.topic)
+              : defaultEdgeColor;
+          },
           'target-arrow-shape': chartTheme.cytoscape.edge.targetArrowShape,
           'curve-style': chartTheme.cytoscape.edge.curveStyle,
           label: (edge: EdgeSingular) => {
             const edgeData = edge.data() as { topic: string };
-            // Only show label if topic is not empty (person->person edges)
+            const targetType = edge.target().data('type');
+            // Only show label for person-to-person edges (not for person-to-concept edges)
+            if (targetType === 'concept') {
+              return '';
+            }
+            // Show topic label for person-to-person edges
             return edgeData.topic || '';
           },
           'text-rotation': chartTheme.cytoscape.edge.textRotation,
           'text-margin-y': chartTheme.cytoscape.edge.textMarginY,
           'font-size': 16,
-          color: edgeColor,
+          color: (edge: EdgeSingular) => {
+            const edgeData = edge.data() as { topic: string };
+            // Use concept-based color if topic exists, otherwise use default
+            return edgeData.topic
+              ? chartTheme.getConceptTopicColor(edgeData.topic)
+              : defaultEdgeColor;
+          },
         },
       },
     ];
@@ -207,7 +234,7 @@ export function DialogueGraph({ graph, height = '600px' }: DialogueGraphProps) {
         cyRef.current = null;
       }
     };
-  }, [graph, edgeColor]);
+  }, [graph, defaultEdgeColor]);
 
   // Separate effect for event handlers (doesn't trigger layout)
   useEffect(() => {
