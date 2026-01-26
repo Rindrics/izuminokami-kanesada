@@ -107,48 +107,7 @@ export function BioFabricGraph({ graph, height = 500 }: BioFabricGraphProps) {
   // Get color for edge based on topic
   const getEdgeColor = (edge: GraphEdge, isHovered: boolean) => {
     if (isHovered) return chartTheme.conceptColor;
-
-    // Color by topic for visual distinction (using darker, more visible colors)
-    const topicColors: Record<string, string> = {
-      仁: '#be123c', // rose-700
-      義: '#0e7490', // cyan-700
-      礼: '#6d28d9', // violet-700
-      禮: '#6d28d9', // variant
-      智: '#047857', // emerald-700
-      信: '#b45309', // amber-700
-      孝: '#b91c1c', // red-700
-      悌: '#1d4ed8', // blue-700
-      忠: '#7e22ce', // purple-700
-      學: '#0f766e', // teal-700
-      道: '#4338ca', // indigo-700
-      君: '#991b1b', // red-800
-      君子: '#dc2626', // red-600
-      民: '#166534', // green-700
-      利: '#a16207', // yellow-700
-      怨: '#7f1d1d', // red-900
-      過: '#92400e', // amber-800
-      德: '#64748b', // slate-500
-      改: '#059669', // emerald-600
-      樂: '#ca8a04', // yellow-600
-      観: '#0891b2', // cyan-600
-      謹: '#7c3aed', // violet-600
-      政: '#be185d', // pink-700
-      達: '#0d9488', // teal-600
-      知: '#16a34a', // green-600
-      得: '#ea580c', // orange-600
-      難: '#b91c1c', // red-700
-      惡: '#1f2937', // gray-800
-      聖: '#f59e0b', // amber-500
-      賢: '#8b5cf6', // violet-500
-      愚: '#6b7280', // gray-500
-      文: '#ec4899', // pink-500
-      友: '#14b8a6', // teal-500
-      命: '#6366f1', // indigo-500
-      欲: '#f97316', // orange-500
-    };
-
-    // Default to a visible gray for edges without topic
-    return topicColors[edge.topic] || '#71717a'; // zinc-500
+    return chartTheme.getConceptTopicColor(edge.topic);
   };
 
   // Get opacity based on edge weight (frequency)
