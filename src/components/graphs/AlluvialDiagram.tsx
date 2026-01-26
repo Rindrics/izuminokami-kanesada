@@ -181,6 +181,31 @@ export function AlluvialDiagram({
     return counts;
   }, [mentionGraph]);
 
+  // Build book -> concept mapping from mentionGraph edges (for accurate weights)
+  const bookConceptCounts = useMemo(() => {
+    const counts = new Map<string, Map<string, number>>(); // bookId -> concept -> count
+
+    for (const edge of mentionGraph.edges) {
+      // Edge format: source (person) -> target (concept)
+      if (edge.target && edge.contentIds) {
+        const concept = edge.target;
+        // Count occurrences per book
+        for (const contentId of edge.contentIds) {
+          const bookId = contentId.split('/')[0];
+          let conceptMap = counts.get(bookId);
+          if (!conceptMap) {
+            conceptMap = new Map();
+            counts.set(bookId, conceptMap);
+          }
+          // Add weight (mention frequency) for this concept in this book
+          conceptMap.set(concept, (conceptMap.get(concept) || 0) + edge.weight);
+        }
+      }
+    }
+
+    return counts;
+  }, [mentionGraph]);
+
   // Build Sankey data with 3 columns: Book → Concept → Person
   const sankeyData = useMemo(() => {
     const nodes: NodeData[] = [];
@@ -231,6 +256,7 @@ export function AlluvialDiagram({
     }
 
     // Add links: Book → Concept (with chapter details)
+    // Use bookConceptCounts calculated above for accurate weights
     for (const concept of presentConcepts) {
       const contentIds = charToContentIds.get(concept.char) || [];
       const bookContentIds = new Map<string, string[]>();
@@ -247,10 +273,16 @@ export function AlluvialDiagram({
 
       for (const [bookId, ids] of bookContentIds) {
         if (availableBooks.includes(bookId)) {
+          // Use actual mention frequency from mentionGraph instead of chapter count
+          const mentionCount =
+            bookConceptCounts.get(bookId)?.get(concept.char) || 0;
+          // Fallback to chapter count if no mentions found (shouldn't happen, but safety check)
+          const value = mentionCount > 0 ? mentionCount : ids.length;
+
           links.push({
             source: `book-${bookId}`,
             target: `concept-${concept.char}`,
-            value: ids.length,
+            value,
             chapterDetails: {
               bookId,
               char: concept.char,
@@ -283,6 +315,7 @@ export function AlluvialDiagram({
     presentConcepts,
     conceptPersonCounts,
     charToContentIds,
+    bookConceptCounts,
   ]);
 
   // Create Sankey layout
