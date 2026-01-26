@@ -155,15 +155,17 @@ export function AlluvialDiagram({
       // Edge format: source (person) -> target (concept)
       if (edge.target && edge.contentIds) {
         const concept = edge.target;
-        // Count occurrences per book
-        for (const contentId of edge.contentIds) {
-          const bookId = contentId.split('/')[0];
+        // Derive unique bookIds from contentIds to avoid double-counting weight
+        const uniqueBookIds = new Set(
+          edge.contentIds.map((contentId) => contentId.split('/')[0]),
+        );
+        // Add weight once per unique book
+        for (const bookId of uniqueBookIds) {
           let conceptMap = counts.get(bookId);
           if (!conceptMap) {
             conceptMap = new Map();
             counts.set(bookId, conceptMap);
           }
-          // Add weight (mention frequency) for this concept in this book
           conceptMap.set(concept, (conceptMap.get(concept) || 0) + edge.weight);
         }
       }
