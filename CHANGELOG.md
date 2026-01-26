@@ -1,5 +1,9 @@
 # Changelog
 
+## [v0.2.4](https://github.com/Rindrics/izuminokami-kanesada/compare/v0.2.3...v0.2.4) - 2026-01-26
+- fix: lunyu 17-8 by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/80
+- chore: improve stats diagrams by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/82
+
 ## [v0.2.3](https://github.com/Rindrics/izuminokami-kanesada/compare/v0.2.2...v0.2.3) - 2026-01-25
 - feat(stats): add visualizations by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/78
 
