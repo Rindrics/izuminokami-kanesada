@@ -1,3 +1,4 @@
+import { GoogleAnalytics } from '@next/third-parties/google';
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { Footer } from '@/components/Footer';
@@ -20,6 +21,8 @@ export const metadata: Metadata = {
     '四書五経およびその他の中国古典を学習するためのWebアプリケーション',
 };
 
+const gaId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -33,6 +36,7 @@ export default function RootLayout({
         <Navbar />
         <div className="flex-1">{children}</div>
         <Footer />
+        {gaId && <GoogleAnalytics gaId={gaId} />}
       </body>
     </html>
   );
