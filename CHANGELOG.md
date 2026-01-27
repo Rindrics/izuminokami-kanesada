@@ -1,5 +1,8 @@
 # Changelog
 
+## [v0.2.5](https://github.com/Rindrics/izuminokami-kanesada/compare/v0.2.4...v0.2.5) - 2026-01-27
+- feat: add Google Analytics tag by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/92
+
 ## [v0.2.4](https://github.com/Rindrics/izuminokami-kanesada/compare/v0.2.3...v0.2.4) - 2026-01-26
 - fix: lunyu 17-8 by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/80
 - chore: improve stats diagrams by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/82
