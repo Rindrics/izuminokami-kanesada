@@ -72,7 +72,8 @@ describe('toChineseSsml', () => {
     const result = toChineseSsml(mockHanziDict, segments);
 
     // Should have pause where space was
-    expect(result).toContain('<break time="1.3s"/>');
+    // spacePause (0.3s) * pauseMultiplier (1.3) = 0.39s ≈ 0.4s
+    expect(result).toContain('<break time="0.4s"/>');
   });
 
   it('should generate phoneme tags with numeric tone pinyin', () => {

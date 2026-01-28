@@ -218,6 +218,7 @@ interface InputContent {
 const BASE_PAUSE = {
   sentenceEnd: 1.5, // After sentence-ending punctuation (。)
   clauseEnd: 1.0, // After clause-ending punctuation (，、)
+  spacePause: 0.3, // For spaces within segments (shorter than clause pause)
   finalPause: 1.0, // At the very end of the audio
 };
 
@@ -266,6 +267,7 @@ function getSpeakerProsody(speaker: string | null): SpeakerProsody {
 const PLACEHOLDER = {
   sentenceEnd: '{{SENTENCE_BREAK}}',
   clauseEnd: '{{CLAUSE_BREAK}}',
+  spacePause: '{{SPACE_BREAK}}',
 };
 
 /**
@@ -290,6 +292,7 @@ function placeholdersToSsml(text: string, pauseMultiplier = 1.0): string {
   // Calculate adjusted pause durations
   const sentencePause = (BASE_PAUSE.sentenceEnd * pauseMultiplier).toFixed(1);
   const clausePause = (BASE_PAUSE.clauseEnd * pauseMultiplier).toFixed(1);
+  const spacePause = (BASE_PAUSE.spacePause * pauseMultiplier).toFixed(1);
 
   // Now convert placeholders to actual SSML
   result = result.replace(
@@ -299,6 +302,10 @@ function placeholdersToSsml(text: string, pauseMultiplier = 1.0): string {
   result = result.replace(
     new RegExp(PLACEHOLDER.clauseEnd, 'g'),
     `<break time="${clausePause}s"/>`,
+  );
+  result = result.replace(
+    new RegExp(PLACEHOLDER.spacePause, 'g'),
+    `<break time="${spacePause}s"/>`,
   );
 
   return result;
@@ -353,8 +360,8 @@ function segmentToSsmlWithPhonemes(
       continue;
     }
     if (char === ' ') {
-      // Space becomes clause pause
-      result += PLACEHOLDER.clauseEnd;
+      // Space becomes shorter pause
+      result += PLACEHOLDER.spacePause;
       continue;
     }
 
