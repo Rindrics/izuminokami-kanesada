@@ -17,9 +17,9 @@ VARIABLES auth, showLoginForm, showUserMenu, showSignUpForm, showResetForm
 (* Set of auth values *)
 AuthType == {"loading", "guest", "user"}
 
-(* Initial state: guest, no panels open *)
+(* Initial state: loading, no panels open *)
 Init ==
-  /\ auth = "guest"
+  /\ auth = "loading"
   /\ showLoginForm = FALSE
   /\ showUserMenu = FALSE
   /\ showSignUpForm = FALSE
