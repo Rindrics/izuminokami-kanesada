@@ -75,9 +75,12 @@ export function AuthButton() {
       if (isSignUp) {
         await signUpWithEmail(email, password);
         setMessage('アカウントを作成しました');
-        setShowSignUpForm(false);
-        setEmail('');
-        setPassword('');
+        setTimeout(() => {
+          setShowSignUpForm(false);
+          setEmail('');
+          setPassword('');
+          setMessage(null);
+        }, 1500);
       } else {
         await signInWithEmail(email, password);
         setShowLoginForm(false);
@@ -99,8 +102,11 @@ export function AuthButton() {
     try {
       await resetPassword(email);
       setMessage('パスワードリセットメールを送信しました');
-      setShowResetForm(false);
-      setEmail('');
+      setTimeout(() => {
+        setShowResetForm(false);
+        setEmail('');
+        setMessage(null);
+      }, 1500);
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message);
