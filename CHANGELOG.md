@@ -5,6 +5,11 @@
 - feat: provide auth function by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/95
 - chore: disable auth on production by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/97
 
+## [v0.3.0](https://github.com/Rindrics/izuminokami-kanesada/compare/v0.2.5...v0.3.0) - 2026-01-28
+- feat: add 論語 17-21 and 18-1 by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/94
+- feat: provide auth function by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/95
+- chore: disable auth on production by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/97
+
 ## [v0.2.5](https://github.com/Rindrics/izuminokami-kanesada/compare/v0.2.4...v0.2.5) - 2026-01-27
 - feat: add Google Analytics tag by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/92
 
