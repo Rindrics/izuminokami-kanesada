@@ -23,7 +23,7 @@ interface AudioFileMetadata {
 
 interface AudioManifestEntry {
   zh: AudioFileMetadata;
-  ja: AudioFileMetadata;
+  ja?: AudioFileMetadata; // Optional: Japanese audio may not be available for all content
 }
 
 type AudioManifest = Record<string, AudioManifestEntry>;
@@ -116,8 +116,8 @@ function validateAudioManifest(): boolean {
       continue;
     }
 
-    // Check both zh and ja entries exist
-    if (!entry.zh || !entry.ja) {
+    // Check that zh entry exists (ja is optional)
+    if (!entry.zh) {
       missingAudio.push(contentId);
     }
   }
