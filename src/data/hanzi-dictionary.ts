@@ -3555,6 +3555,132 @@ export const hanziDictionary: HanziEntry[] = [
     ],
     is_common: true,
   },
+  {
+    id: '去',
+    meanings: [
+      {
+        id: '去-jī',
+        onyomi: 'キョ',
+        pinyin: 'jī',
+        tone: 1,
+        meaning_ja: '去る',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '箕',
+    meanings: [
+      {
+        id: '箕-jī',
+        onyomi: 'キ',
+        pinyin: 'jī',
+        tone: 1,
+        meaning_ja: '箕子',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '奴',
+    meanings: [
+      {
+        id: '奴-nú',
+        onyomi: 'ド',
+        pinyin: 'nú',
+        tone: 2,
+        meaning_ja: '奴隷',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '比',
+    meanings: [
+      {
+        id: '比-bǐ',
+        onyomi: 'ヒ',
+        pinyin: 'bǐ',
+        tone: 3,
+        meaning_ja: '比干',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '干',
+    meanings: [
+      {
+        id: '干-gàn',
+        onyomi: 'カン',
+        pinyin: 'gàn',
+        tone: 4,
+        meaning_ja: '比干',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '諫',
+    meanings: [
+      {
+        id: '諫-jiàn',
+        onyomi: 'カン',
+        pinyin: 'jiàn',
+        tone: 4,
+        meaning_ja: '諫める',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '死',
+    meanings: [
+      {
+        id: '死-sǐ',
+        onyomi: 'シ',
+        pinyin: 'sǐ',
+        tone: 3,
+        meaning_ja: '死ぬ',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '殷',
+    meanings: [
+      {
+        id: '殷-yīn',
+        onyomi: 'イン',
+        pinyin: 'yīn',
+        tone: 1,
+        meaning_ja: '殷（王朝）',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '孔',
+    meanings: [
+      {
+        id: '孔-kǒng',
+        onyomi: 'コウ',
+        pinyin: 'kǒng',
+        tone: 4,
+        meaning_ja: '孔子',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
 ];
 
 const hanziMap = new Map(hanziDictionary.map((e) => [e.id, e]));
