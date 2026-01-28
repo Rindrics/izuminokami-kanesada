@@ -62,11 +62,29 @@ pnpm dev
 
 ## 環境変数
 
+### サーバー側（Firebase Admin SDK）
+
 音声生成機能を使用する場合、以下の環境変数が必要です。
 
 ```bash
 GOOGLE_APPLICATION_CREDENTIALS=/path/to/service-account.json
 GCS_BUCKET=your-bucket-name
+FIREBASE_PROJECT_ID=your-project-id
+FIREBASE_CLIENT_EMAIL=your-service-account-email@your-project-id.iam.gserviceaccount.com
+FIREBASE_PRIVATE_KEY=your-private-key
+```
+
+### クライアント側（Firebase Client SDK）
+
+認証機能を使用する場合、以下の環境変数が必要です。Firebase Console > Project Settings > General から取得できます。
+
+```bash
+NEXT_PUBLIC_FIREBASE_API_KEY=your-api-key
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your-project-id.firebaseapp.com
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=your-project-id
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your-project-id.appspot.com
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your-messaging-sender-id
+NEXT_PUBLIC_FIREBASE_APP_ID=your-app-id
 ```
 
 ## アーキテクチャ決定記録 (ADR)
