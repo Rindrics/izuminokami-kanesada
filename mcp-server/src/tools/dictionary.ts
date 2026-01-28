@@ -92,74 +92,6 @@ function addToneMark(pinyin: string, tone: number): string {
   return pinyin;
 }
 
-/**
- * Derive onyomi from pinyin (simplified mapping)
- */
-function deriveOnyomi(pinyin: string): string {
-  const mappings: Record<string, string> = {
-    zi: 'シ',
-    yue: 'エツ',
-    xue: 'ガク',
-    er: 'ジ',
-    shi: 'ジ',
-    xi: 'シュウ',
-    zhi: 'シ',
-    bu: 'フ',
-    yi: 'イ',
-    hu: 'コ',
-    you: 'ユウ',
-    peng: 'ホウ',
-    yuan: 'エン',
-    fang: 'ホウ',
-    lai: 'ライ',
-    le: 'ラク',
-    ren: 'ジン',
-    yun: 'ウン',
-    jun: 'クン',
-    qi: 'キ',
-    wei: 'イ',
-    ye: 'ヤ',
-    xiao: 'コウ',
-    di: 'テイ',
-    ti: 'テイ',
-    hao: 'コウ',
-    fan: 'ハン',
-    shang: 'ジョウ',
-    zhe: 'シャ',
-    xian: 'セン',
-    zuo: 'サク',
-    luan: 'ラン',
-    wu: 'ム',
-    ben: 'ホン',
-    li: 'リツ',
-    dao: 'ドウ',
-    sheng: 'セイ',
-    qian: 'セン',
-    guo: 'コク',
-    jing: 'ケイ',
-    xin: 'シン',
-    jie: 'セツ',
-    yong: 'ヨウ',
-    ai: 'アイ',
-    min: 'ミン',
-    qiao: 'コウ',
-    yan: 'ゲン',
-    ling: 'レイ',
-    se: 'ショク',
-    zeng: 'ソウ',
-    san: 'サン',
-    xing: 'セイ',
-    shen: 'シン',
-    mou: 'ボウ',
-    zhong: 'チュウ',
-    jiao: 'コウ',
-    chuan: 'デン',
-    ri: 'ニチ',
-  };
-
-  return mappings[pinyin.toLowerCase()] ?? 'TODO';
-}
-
 export function registerDictionaryTools(server: McpServer): void {
   // Add Hanzi entry
   server.registerTool(
@@ -208,7 +140,8 @@ export function registerDictionaryTools(server: McpServer): void {
 
       // Convert pinyin to pinyin with tone mark
       const pinyinWithTone = addToneMark(pinyin, tone);
-      const onyomi = deriveOnyomi(pinyin);
+      // Set onyomi to 'TODO' - must be updated manually using update_hanzi_onyomi tool
+      const onyomi = 'TODO';
       const entryId = `${character}-${pinyinWithTone}`;
 
       // Format the entry as HanziEntry

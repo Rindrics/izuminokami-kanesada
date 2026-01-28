@@ -1,0 +1,23 @@
+segments:
+  - text:
+      original: 微子去之
+      japanese: 微子 之を去り、
+    speaker: null
+  - text:
+      original: 箕子為之奴
+      japanese: 箕子 之が奴と為り、
+    speaker: null
+  - text:
+      original: 比干諫而死
+      japanese: 比干 諫めて死す。
+    speaker: null
+  - text:
+      original: 孔子曰
+      japanese: 孔子曰く、
+    speaker: null
+  - text:
+      original: 殷有三仁焉
+      japanese: 殷に三（さん）仁有り、と。
+    speaker: kongzi
+mentioned: []
+pinyin_reviewed: true

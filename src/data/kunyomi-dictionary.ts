@@ -1281,6 +1281,177 @@ export const kunyomiDictionary: KunyomiEntry[] = [
     text: '上下',
     readings: [{ id: '上下-じょうげ', ruby: 'じょうげ', is_default: true }],
   },
+  {
+    id: '稱',
+    text: '稱',
+    readings: [
+      { id: '稱-しょう', ruby: 'しょう', okurigana: 'する', is_default: true },
+    ],
+  },
+  {
+    id: '称',
+    text: '称',
+    readings: [
+      { id: '称-しょう', ruby: 'しょう', okurigana: 'する', is_default: true },
+    ],
+  },
+  {
+    id: '訕',
+    text: '訕',
+    readings: [
+      { id: '訕-そし', ruby: 'そし', okurigana: 'る', is_default: true },
+    ],
+  },
+  {
+    id: '果',
+    text: '果',
+    readings: [{ id: '果-か', ruby: 'か', is_default: true }],
+  },
+  {
+    id: '敢',
+    text: '敢',
+    readings: [{ id: '敢-かん', ruby: 'かん', is_default: true }],
+  },
+  {
+    id: '窒',
+    text: '窒',
+    readings: [
+      { id: '窒-ふさが', ruby: 'ふさが', okurigana: 'がる', is_default: true },
+    ],
+  },
+  {
+    id: '賜',
+    text: '賜',
+    readings: [{ id: '賜-し', ruby: 'し', is_default: true }],
+  },
+  {
+    id: '徼',
+    text: '徼',
+    readings: [
+      { id: '徼-もと', ruby: 'もと', okurigana: 'めて', is_default: true },
+    ],
+  },
+  {
+    id: '訐',
+    text: '訐',
+    readings: [
+      { id: '訐-あば', ruby: 'あば', okurigana: 'きて', is_default: true },
+    ],
+  },
+  {
+    id: '悪',
+    text: '悪',
+    readings: [
+      { id: '悪-にく', ruby: 'にく', okurigana: 'む', is_default: true },
+    ],
+  },
+  {
+    id: '乎',
+    text: '乎',
+    readings: [{ id: '乎-や', ruby: 'や', is_default: true }],
+  },
+  {
+    id: '流',
+    text: '流',
+    readings: [{ id: '流-りゅう', ruby: 'りゅう', is_default: true }],
+  },
+  {
+    id: '而',
+    text: '而',
+    readings: [{ id: '而-して', ruby: 'して', is_default: true }],
+  },
+  {
+    id: '也',
+    text: '也',
+    readings: [{ id: '也-や', ruby: 'や', is_default: true }],
+  },
+  {
+    id: '爲',
+    text: '爲',
+    readings: [{ id: '爲-な', ruby: 'な', okurigana: 'す', is_default: true }],
+  },
+  {
+    id: '不',
+    text: '不',
+    readings: [{ id: '不-ふ', ruby: 'ふ', is_default: true }],
+  },
+  {
+    id: '孫',
+    text: '孫',
+    readings: [{ id: '孫-そん', ruby: 'そん', is_default: true }],
+  },
+  {
+    id: '下流',
+    text: '下流',
+    readings: [{ id: '下流-かりゅう', ruby: 'かりゅう', is_default: true }],
+  },
+  {
+    id: '果敢',
+    text: '果敢',
+    readings: [{ id: '果敢-かかん', ruby: 'かかん', is_default: true }],
+  },
+  {
+    id: '不孫',
+    text: '不孫',
+    readings: [{ id: '不孫-ふそん', ruby: 'ふそん', is_default: true }],
+  },
+  {
+    id: '礼',
+    text: '礼',
+    readings: [{ id: '礼-れい', ruby: 'れい', is_default: true }],
+  },
+  {
+    id: '箕',
+    text: '箕',
+    readings: [{ id: '箕-き', ruby: 'き', is_default: true }],
+  },
+  {
+    id: '奴',
+    text: '奴',
+    readings: [{ id: '奴-ど', ruby: 'ど', is_default: true }],
+  },
+  {
+    id: '比',
+    text: '比',
+    readings: [{ id: '比-ひ', ruby: 'ひ', is_default: true }],
+  },
+  {
+    id: '干',
+    text: '干',
+    readings: [{ id: '干-かん', ruby: 'かん', is_default: true }],
+  },
+  {
+    id: '諫',
+    text: '諫',
+    readings: [
+      {
+        id: '諫-いさ',
+        ruby: 'いさ',
+        okurigana: 'める',
+        is_default: true,
+      },
+    ],
+  },
+  {
+    id: '死',
+    text: '死',
+    readings: [{ id: '死-し', ruby: 'し', okurigana: 'ぬ', is_default: true }],
+  },
+  {
+    id: '殷',
+    text: '殷',
+    readings: [{ id: '殷-いん', ruby: 'いん', is_default: true }],
+  },
+  {
+    id: '孔子',
+    text: '孔子',
+    readings: [{ id: '孔子-こうし', ruby: 'こうし', is_default: true }],
+  },
+  {
+    id: '去',
+    text: '去',
+    readings: [{ id: '去-さ', ruby: 'さ', okurigana: 'る', is_default: true }],
+  },
 ];
 
 export function getKunyomiEntry(text: string): KunyomiEntry | undefined {

@@ -63,7 +63,7 @@ const conceptColor = '#9CA3AF'; // gray-400
  * Generate color for a concept using HSL color space
  * This ensures visually distinct colors for different concepts
  */
-function generateConceptColor(concept: string, index: number): string {
+function generateConceptColor(_concept: string, index: number): string {
   // Use HSL color space for better color distribution
   // Hue: distribute evenly across 360 degrees
   // Saturation: 60-80% for vibrant but not overwhelming colors

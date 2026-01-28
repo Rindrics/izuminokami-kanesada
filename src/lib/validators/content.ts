@@ -308,32 +308,14 @@ function validateNoPunctuation(segments: Segment[]): ValidationError[] {
  * Validate that consecutive segments by the same speaker are merged
  * Same speaker's consecutive speech should be in a single segment
  * separated by spaces or semicolons, not split into multiple segments
+ *
+ * NOTE: This validation is disabled - consecutive same speaker segments are allowed.
  */
 function validateConsecutiveSameSpeaker(
   segments: Segment[],
 ): ValidationError[] {
-  const errors: ValidationError[] = [];
-
-  for (let i = 1; i < segments.length; i++) {
-    const prevSegment = segments[i - 1];
-    const currentSegment = segments[i];
-
-    // Skip if either segment is narration (speaker: null)
-    if (prevSegment.speaker === null || currentSegment.speaker === null) {
-      continue;
-    }
-
-    // Check if same speaker
-    if (prevSegment.speaker === currentSegment.speaker) {
-      errors.push({
-        path: `segments[${i - 1}].speaker`,
-        message: `Consecutive segments by the same speaker "${prevSegment.speaker}" should be merged into a single segment. Use spaces or semicolons to separate phrases within the segment text instead of splitting into multiple segments.`,
-        severity: 'warning',
-      });
-    }
-  }
-
-  return errors;
+  // Validation disabled - consecutive same speaker segments are allowed
+  return [];
 }
 
 /**

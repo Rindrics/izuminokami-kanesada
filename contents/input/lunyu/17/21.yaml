@@ -1,0 +1,55 @@
+segments:
+  - text:
+      original: 子貢曰
+      japanese: 子貢曰く、
+    speaker: null
+  - text:
+      original: 君子 亦有惡乎
+      japanese: 君子も亦た悪むこと有るか、と。
+    speaker: zigong
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 有惡
+      japanese: 悪むこと有り。
+    speaker: kongzi
+  - text:
+      original: 惡稱人之惡者
+      japanese: 人の悪（あく）を称する者を悪む。
+    speaker: kongzi
+  - text:
+      original: 惡居下流而訕上者
+      japanese: 下流に居りて上を訕る者を悪む。
+    speaker: kongzi
+  - text:
+      original: 惡勇而無禮者
+      japanese: 勇にして礼無き者を悪む。
+    speaker: kongzi
+  - text:
+      original: 惡果敢而窒者
+      japanese: 果敢にして窒る者を悪む。
+    speaker: kongzi
+  - text:
+      original: 曰
+      japanese: 曰く、
+    speaker: null
+  - text:
+      original: 賜也 亦有惡乎
+      japanese: 賜や、亦た悪むこと有り。
+    speaker: kongzi
+  - text:
+      original: 惡徼以爲知者
+      japanese: 徼めて以て 知と為す者を悪む。
+    speaker: kongzi
+  - text:
+      original: 惡不孫以爲勇者
+      japanese: 不孫にして以て 勇と為す者を悪む。
+    speaker: kongzi
+  - text:
+      original: 惡訐以爲直者
+      japanese: 訐きて以て 直と為す者を悪む、と。
+    speaker: kongzi
+mentioned: []
+pinyin_reviewed: true
