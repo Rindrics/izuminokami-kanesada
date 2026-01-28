@@ -30,7 +30,7 @@ interface AudioFileMetadata {
 
 interface AudioManifestEntry {
   zh: AudioFileMetadata;
-  ja: AudioFileMetadata;
+  ja?: AudioFileMetadata; // Optional: Japanese audio may not be available for all content
 }
 
 type AudioManifest = Record<string, AudioManifestEntry>;
