@@ -3387,6 +3387,174 @@ export const hanziDictionary: HanziEntry[] = [
     ],
     is_common: true,
   },
+  {
+    id: '稱',
+    meanings: [
+      {
+        id: '稱-chēng',
+        onyomi: 'ショウ',
+        pinyin: 'chēng',
+        tone: 1,
+        meaning_ja: '称する、言いふらす',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '訕',
+    meanings: [
+      {
+        id: '訕-shàn',
+        onyomi: 'サン',
+        pinyin: 'shàn',
+        tone: 4,
+        meaning_ja: '訕る、悪口をいう',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '果',
+    meanings: [
+      {
+        id: '果-guǒ',
+        onyomi: 'カ',
+        pinyin: 'guǒ',
+        tone: 3,
+        meaning_ja: '果敢、思い切って実行する',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '敢',
+    meanings: [
+      {
+        id: '敢-gǎn',
+        onyomi: 'カン',
+        pinyin: 'gǎn',
+        tone: 3,
+        meaning_ja: '敢、思い切って',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '窒',
+    meanings: [
+      {
+        id: '窒-zhì',
+        onyomi: 'チツ',
+        pinyin: 'zhì',
+        tone: 4,
+        meaning_ja: '窒がる、道理に通じない',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '賜',
+    meanings: [
+      {
+        id: '賜-cì',
+        onyomi: 'シ',
+        pinyin: 'cì',
+        tone: 4,
+        meaning_ja: '賜、子貢の名前',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '徼',
+    meanings: [
+      {
+        id: '徼-jiǎo',
+        onyomi: 'キョウ',
+        pinyin: 'jiǎo',
+        tone: 3,
+        meaning_ja: '徼める、かすめ取る',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '訐',
+    meanings: [
+      {
+        id: '訐-jié',
+        onyomi: 'ケツ',
+        pinyin: 'jié',
+        tone: 2,
+        meaning_ja: '訐く、人の秘密をあばく',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '惡',
+    meanings: [
+      {
+        id: '惡-wù',
+        onyomi: 'オ',
+        pinyin: 'wù',
+        tone: 4,
+        meaning_ja: '悪む、憎む',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '流',
+    meanings: [
+      {
+        id: '流-liú',
+        onyomi: 'リュウ',
+        pinyin: 'liú',
+        tone: 2,
+        meaning_ja: '流、下流',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '爲',
+    meanings: [
+      {
+        id: '爲-wéi',
+        onyomi: 'イ',
+        pinyin: 'wéi',
+        tone: 2,
+        meaning_ja: '為す、する',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '孫',
+    meanings: [
+      {
+        id: '孫-sūn',
+        onyomi: 'ソン',
+        pinyin: 'sūn',
+        tone: 1,
+        meaning_ja: '孫、不孫',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
 ];
 
 const hanziMap = new Map(hanziDictionary.map((e) => [e.id, e]));
