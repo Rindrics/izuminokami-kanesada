@@ -1289,6 +1289,13 @@ export const kunyomiDictionary: KunyomiEntry[] = [
     ],
   },
   {
+    id: '称',
+    text: '称',
+    readings: [
+      { id: '称-しょう', ruby: 'しょう', okurigana: 'する', is_default: true },
+    ],
+  },
+  {
     id: '訕',
     text: '訕',
     readings: [
@@ -1439,6 +1446,11 @@ export const kunyomiDictionary: KunyomiEntry[] = [
     id: '孔子',
     text: '孔子',
     readings: [{ id: '孔子-こうし', ruby: 'こうし', is_default: true }],
+  },
+  {
+    id: '去',
+    text: '去',
+    readings: [{ id: '去-さ', ruby: 'さ', okurigana: 'る', is_default: true }],
   },
 ];
 
