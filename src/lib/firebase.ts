@@ -36,49 +36,58 @@ if (typeof window === 'undefined') {
   }
 }
 
-// Client-side validation (only check if values are missing, don't throw during module evaluation)
-if (typeof window !== 'undefined') {
-  if (
-    !firebaseConfig.apiKey ||
-    !firebaseConfig.authDomain ||
-    !firebaseConfig.projectId
-  ) {
-    console.error(
-      'Firebase configuration is missing. Please set NEXT_PUBLIC_FIREBASE_* environment variables in .env or .env.local',
-    );
-  }
+// Client-side validation - check if Firebase is properly configured
+export const isFirebaseConfigured = !!(
+  firebaseConfig.apiKey &&
+  firebaseConfig.authDomain &&
+  firebaseConfig.projectId
+);
+
+if (typeof window !== 'undefined' && !isFirebaseConfigured) {
+  console.error(
+    'Firebase configuration is missing. Please set NEXT_PUBLIC_FIREBASE_* environment variables in .env or .env.local',
+  );
 }
 
-// Initialize Firebase
-const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+// Only initialize Firebase if properly configured
+let app: ReturnType<typeof initializeApp> | null = null;
+let auth: ReturnType<typeof getAuth> | null = null;
+let db: ReturnType<typeof getFirestore> | null = null;
 
-// Connect to emulators in development if configured
-const useEmulators = process.env.NEXT_PUBLIC_USE_FIREBASE_EMULATORS === 'true';
+if (isFirebaseConfigured) {
+  // Initialize Firebase
+  app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
 
-if (useEmulators && typeof window !== 'undefined') {
-  const authEmulatorHost =
-    process.env.NEXT_PUBLIC_FIREBASE_AUTH_EMULATOR_HOST || 'localhost:9099';
-  const firestoreEmulatorHost =
-    process.env.NEXT_PUBLIC_FIREBASE_FIRESTORE_EMULATOR_HOST ||
-    'localhost:30602';
-  const [firestoreHost, firestorePort] = firestoreEmulatorHost.split(':');
+  // Connect to emulators in development if configured
+  const useEmulators =
+    process.env.NEXT_PUBLIC_USE_FIREBASE_EMULATORS === 'true';
 
-  try {
-    connectAuthEmulator(getAuth(app), `http://${authEmulatorHost}`, {
-      disableWarnings: true,
-    });
-    connectFirestoreEmulator(
-      getFirestore(app),
-      firestoreHost,
-      parseInt(firestorePort, 10),
-    );
-  } catch (_error) {
-    // Emulators already connected, ignore
+  if (useEmulators && typeof window !== 'undefined') {
+    const authEmulatorHost =
+      process.env.NEXT_PUBLIC_FIREBASE_AUTH_EMULATOR_HOST || 'localhost:9099';
+    const firestoreEmulatorHost =
+      process.env.NEXT_PUBLIC_FIREBASE_FIRESTORE_EMULATOR_HOST ||
+      'localhost:30602';
+    const [firestoreHost, firestorePort] = firestoreEmulatorHost.split(':');
+
+    try {
+      connectAuthEmulator(getAuth(app), `http://${authEmulatorHost}`, {
+        disableWarnings: true,
+      });
+      connectFirestoreEmulator(
+        getFirestore(app),
+        firestoreHost,
+        parseInt(firestorePort, 10),
+      );
+    } catch (_error) {
+      // Emulators already connected, ignore
+    }
   }
+
+  // Initialize Firebase services
+  auth = getAuth(app);
+  db = getFirestore(app);
 }
 
-// Initialize Firebase services
-export const auth = getAuth(app);
-export const db = getFirestore(app);
-
+export { auth, db };
 export default app;
