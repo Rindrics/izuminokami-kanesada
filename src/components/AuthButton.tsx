@@ -3,6 +3,9 @@
 import { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 
+// Only show auth UI in development
+const isDevelopment = process.env.NODE_ENV === 'development';
+
 export function AuthButton() {
   const {
     user,
@@ -21,6 +24,11 @@ export function AuthButton() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
+
+  // Hide auth UI in production
+  if (!isDevelopment) {
+    return null;
+  }
 
   if (loading) {
     return (
