@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { AuthButton } from './AuthButton';
 
 export function Navbar() {
   return (
@@ -10,25 +11,28 @@ export function Navbar() {
         >
           素読庵
         </Link>
-        <div className="flex gap-4 text-sm">
-          <Link
-            href="/"
-            className="text-zinc-600 hover:text-black dark:text-zinc-400 dark:hover:text-white"
-          >
-            経書一覧
-          </Link>
-          <Link
-            href="/sakuin"
-            className="text-zinc-600 hover:text-black dark:text-zinc-400 dark:hover:text-white"
-          >
-            索引
-          </Link>
-          <Link
-            href="/stats"
-            className="text-zinc-600 hover:text-black dark:text-zinc-400 dark:hover:text-white"
-          >
-            統計
-          </Link>
+        <div className="flex items-center gap-4">
+          <div className="flex gap-4 text-sm">
+            <Link
+              href="/"
+              className="text-zinc-600 hover:text-black dark:text-zinc-400 dark:hover:text-white"
+            >
+              経書一覧
+            </Link>
+            <Link
+              href="/sakuin"
+              className="text-zinc-600 hover:text-black dark:text-zinc-400 dark:hover:text-white"
+            >
+              索引
+            </Link>
+            <Link
+              href="/stats"
+              className="text-zinc-600 hover:text-black dark:text-zinc-400 dark:hover:text-white"
+            >
+              統計
+            </Link>
+          </div>
+          <AuthButton />
         </div>
       </div>
     </nav>
