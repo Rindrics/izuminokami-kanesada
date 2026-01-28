@@ -10,7 +10,6 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 import { KEY_CONCEPTS_INFO } from '@/data/key-concepts';
 import { getBookById } from '@/generated/books';
-import { contents } from '@/generated/contents';
 import { getPersonName } from '@/generated/persons';
 import type { CharIndex, SpeakerGraph } from '@/generated/stats';
 import { chartTheme } from '@/lib/chart-theme';
