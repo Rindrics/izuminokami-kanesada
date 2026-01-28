@@ -3559,10 +3559,10 @@ export const hanziDictionary: HanziEntry[] = [
     id: '去',
     meanings: [
       {
-        id: '去-jī',
+        id: '去-qù',
         onyomi: 'キョ',
-        pinyin: 'jī',
-        tone: 1,
+        pinyin: 'qù',
+        tone: 4,
         meaning_ja: '去る',
         is_default: true,
       },
@@ -3674,7 +3674,7 @@ export const hanziDictionary: HanziEntry[] = [
         id: '孔-kǒng',
         onyomi: 'コウ',
         pinyin: 'kǒng',
-        tone: 4,
+        tone: 3,
         meaning_ja: '孔子',
         is_default: true,
       },
