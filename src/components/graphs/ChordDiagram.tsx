@@ -38,7 +38,7 @@ export function ChordDiagram({
 
   // Create adjacency matrix from edges (aggregate all edges for layout)
   // Filter to only person-to-person edges
-  const { matrix, indexToId, idToIndex, edgesByPair } = useMemo(() => {
+  const { matrix, indexToId, edgesByPair } = useMemo(() => {
     const n = persons.length;
     const mat: number[][] = Array.from({ length: n }, () => Array(n).fill(0));
     const idx2id = persons.map((p) => p.id);
@@ -262,7 +262,7 @@ export function ChordDiagram({
               let cumulativeWeight = 0;
 
               return sortedEdges.map((edge, edgeIndex) => {
-                const weightRatio = edge.weight / totalWeight;
+                const _weightRatio = edge.weight / totalWeight;
                 const startRatio = cumulativeWeight / totalWeight;
                 const endRatio = (cumulativeWeight + edge.weight) / totalWeight;
                 cumulativeWeight += edge.weight;
