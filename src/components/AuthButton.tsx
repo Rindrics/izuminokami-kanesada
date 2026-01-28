@@ -88,7 +88,7 @@ export function AuthButton() {
       if (err instanceof Error) {
         setError(err.message);
       } else {
-        setError('ログインに失敗しました');
+        setError(isSignUp ? '登録に失敗しました' : 'ログインに失敗しました');
       }
     }
   };
@@ -105,7 +105,7 @@ export function AuthButton() {
       if (err instanceof Error) {
         setError(err.message);
       } else {
-        setError('ログインに失敗しました');
+        setError('パスワードリセットに失敗しました');
       }
     }
   };
