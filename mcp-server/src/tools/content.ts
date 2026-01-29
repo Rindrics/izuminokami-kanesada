@@ -1409,13 +1409,16 @@ Please follow this workflow:
 
       // Step 2: Load generated contents and validate
       try {
-        // Dynamic import to get the latest generated contents
-        const contentsModule = await import(
-          `${PROJECT_ROOT}/src/generated/contents.js`
+        // Dynamic import to get the latest generated contents after regeneration
+        // Use pathToFileURL to ensure tsx can resolve .ts files correctly
+        const contentsPath = path.join(
+          PROJECT_ROOT,
+          'src/generated/contents/index.ts',
         );
+        const contentsModule = await import(pathToFileURL(contentsPath).href);
         const { contents } = contentsModule;
         const { validateContent } = await import(
-          `${PROJECT_ROOT}/src/lib/validators/content.js`
+          pathToFileURL(validatorPath).href
         );
 
         const content = contents.find(
