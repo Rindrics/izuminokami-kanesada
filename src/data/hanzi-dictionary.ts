@@ -3681,6 +3681,132 @@ export const hanziDictionary: HanziEntry[] = [
     ],
     is_common: true,
   },
+  {
+    id: '張',
+    meanings: [
+      {
+        id: '張-zhāng',
+        onyomi: 'チョウ',
+        pinyin: 'zhāng',
+        tone: 1,
+        meaning_ja: '張る、広げる',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '祭',
+    meanings: [
+      {
+        id: '祭-jì',
+        onyomi: 'サイ',
+        pinyin: 'jì',
+        tone: 4,
+        meaning_ja: '祭る、まつる',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '喪',
+    meanings: [
+      {
+        id: '喪-sāng',
+        onyomi: 'ソウ',
+        pinyin: 'sāng',
+        tone: 1,
+        meaning_ja: '喪、も',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '哀',
+    meanings: [
+      {
+        id: '哀-āi',
+        onyomi: 'アイ',
+        pinyin: 'āi',
+        tone: 1,
+        meaning_ja: '哀しい、かなしい',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '思',
+    meanings: [
+      {
+        id: '思-sī',
+        onyomi: 'シ',
+        pinyin: 'sī',
+        tone: 1,
+        meaning_ja: '思う、考える',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '弘',
+    meanings: [
+      {
+        id: '弘-hóng',
+        onyomi: 'コウ',
+        pinyin: 'hóng',
+        tone: 2,
+        meaning_ja: 'ひろい',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '篤',
+    meanings: [
+      {
+        id: '篤-dǔ',
+        onyomi: 'トク',
+        pinyin: 'dǔ',
+        tone: 3,
+        meaning_ja: 'あつい',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '亡',
+    meanings: [
+      {
+        id: '亡-wáng',
+        onyomi: 'ボウ',
+        pinyin: 'wáng',
+        tone: 2,
+        meaning_ja: 'ない',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '執',
+    meanings: [
+      {
+        id: '執-zhí',
+        onyomi: 'シツ',
+        pinyin: 'zhí',
+        tone: 2,
+        meaning_ja: 'とる',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
 ];
 
 const hanziMap = new Map(hanziDictionary.map((e) => [e.id, e]));

@@ -71,3 +71,10 @@
   family: 魏
   given: 罃
   birthYear: -400
+
+- id: zizhang
+  name: 子張
+  family: 顓孫
+  courtesy: 子張
+  given: 師
+  birthYear: -503

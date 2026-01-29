@@ -305,20 +305,6 @@ function validateNoPunctuation(segments: Segment[]): ValidationError[] {
 }
 
 /**
- * Validate that consecutive segments by the same speaker are merged
- * Same speaker's consecutive speech should be in a single segment
- * separated by spaces or semicolons, not split into multiple segments
- *
- * NOTE: This validation is disabled - consecutive same speaker segments are allowed.
- */
-function validateConsecutiveSameSpeaker(
-  segments: Segment[],
-): ValidationError[] {
-  // Validation disabled - consecutive same speaker segments are allowed
-  return [];
-}
-
-/**
  * Validate connection markers (ADR-0007)
  * - `-` must have characters before and after
  * - No consecutive `-`
@@ -587,9 +573,6 @@ export function validateContent(content: Content): ValidationResult {
 
   // 3. Validate no punctuation in segments
   errors.push(...validateNoPunctuation(content.segments));
-
-  // 4. Validate consecutive same speaker segments
-  errors.push(...validateConsecutiveSameSpeaker(content.segments));
 
   // 5. Validate connection markers
   errors.push(...validateConnectionMarkers(content.text));

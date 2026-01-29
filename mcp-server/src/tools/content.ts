@@ -228,36 +228,6 @@ export function registerContentTools(server: McpServer): void {
         }
       }
 
-      // Detect consecutive segments by the same speaker
-      interface ConsecutiveSpeakerWarning {
-        segmentIndex: number;
-        prevSegmentIndex: number;
-        speaker: string;
-        reason: string;
-      }
-
-      const consecutiveSpeakerWarnings: ConsecutiveSpeakerWarning[] = [];
-
-      for (let i = 1; i < segments.length; i++) {
-        const prevSegment = segments[i - 1];
-        const currentSegment = segments[i];
-
-        // Skip if either segment is narration (speaker: null)
-        if (prevSegment.speaker === null || currentSegment.speaker === null) {
-          continue;
-        }
-
-        // Check if same speaker
-        if (prevSegment.speaker === currentSegment.speaker) {
-          consecutiveSpeakerWarnings.push({
-            segmentIndex: i,
-            prevSegmentIndex: i - 1,
-            speaker: currentSegment.speaker,
-            reason: `Consecutive segments by the same speaker "${currentSegment.speaker}" should be merged into a single segment. Use spaces or semicolons to separate phrases within the segment text instead of splitting into multiple segments.`,
-          });
-        }
-      }
-
       // Build YAML content
       const yamlLines: string[] = ['segments:'];
       for (const segment of segments) {
@@ -409,17 +379,6 @@ export function registerContentTools(server: McpServer): void {
           responseText += `- Segment ${warning.segmentIndex}: "${warning.text}"
     Changed speaker from "${warning.currentSpeaker}" to null (narrator)
     Reason: ${warning.reason}\n`;
-        }
-        responseText += `\n`;
-      }
-
-      // Add consecutive same speaker warnings if any
-      if (consecutiveSpeakerWarnings.length > 0) {
-        responseText += `\n⚠️ Consecutive segments by the same speaker detected:\n`;
-        for (const warning of consecutiveSpeakerWarnings) {
-          responseText += `- Segments ${warning.prevSegmentIndex} and ${warning.segmentIndex}: speaker "${warning.speaker}"
-    Reason: ${warning.reason}
-    Suggestion: Merge these segments into one, using spaces or semicolons to separate phrases.\n`;
         }
         responseText += `\n`;
       }
@@ -1386,7 +1345,7 @@ Please follow this workflow:
       const contentId = `${bookId}/${sectionId}/${chapterId}`;
 
       // Step 1: Regenerate contents from YAML files
-      console.log(`Regenerating contents for validation...`);
+      console.error(`Regenerating contents for validation...`);
       try {
         execSync('pnpm generate:contents', {
           cwd: PROJECT_ROOT,
@@ -1409,13 +1368,20 @@ Please follow this workflow:
 
       // Step 2: Load generated contents and validate
       try {
-        // Dynamic import to get the latest generated contents
-        const contentsModule = await import(
-          `${PROJECT_ROOT}/src/generated/contents.js`
+        // Dynamic import to get the latest generated contents after regeneration
+        // Use pathToFileURL to ensure tsx can resolve .ts files correctly
+        const contentsPath = path.join(
+          PROJECT_ROOT,
+          'src/generated/contents/index.ts',
         );
+        const contentsModule = await import(pathToFileURL(contentsPath).href);
         const { contents } = contentsModule;
+        const validatorPath = path.join(
+          PROJECT_ROOT,
+          'src/lib/validators/content.ts',
+        );
         const { validateContent } = await import(
-          `${PROJECT_ROOT}/src/lib/validators/content.js`
+          pathToFileURL(validatorPath).href
         );
 
         const content = contents.find(
