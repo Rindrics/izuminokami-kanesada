@@ -164,10 +164,6 @@ export default function IndexPage() {
         </nav>
 
         <section className="mb-8 rounded-lg bg-white p-4 shadow-sm dark:bg-zinc-900">
-          <div className="mb-4 text-sm text-zinc-500">
-            総異なり字数: {stats.charIndex.length} 字
-          </div>
-
           {kanaOrder
             .filter((group) => byKanaGroup.has(group))
             .map((group) => {
