@@ -188,9 +188,12 @@ export default function IndexPage() {
                           <span className="absolute -top-4 left-1/2 -translate-x-1/2 whitespace-nowrap text-sm text-zinc-400">
                             {entry.onyomi}
                           </span>
-                          <span className="inline-block text-xl text-black dark:text-white">
+                          <Link
+                            href={`/char/${encodeURIComponent(entry.char)}`}
+                            className="inline-block text-xl text-black hover:text-blue-600 dark:text-white dark:hover:text-blue-400"
+                          >
                             {entry.char}
-                          </span>
+                          </Link>
                         </div>
                         <div className="flex flex-wrap gap-1">
                           {entry.contentIds.map((id) => (
