@@ -181,11 +181,16 @@ export default function IndexPage() {
                     {chars.map((entry) => (
                       <div
                         key={entry.char}
-                        className="mb-2 flex break-inside-avoid items-baseline gap-2"
+                        className="mb-2 flex break-inside-avoid items-baseline gap-2 mb-5"
                       >
-                        <span className="text-xl text-black dark:text-white">
-                          {entry.char}
-                        </span>
+                        <div className="relative inline-flex items-center justify-center">
+                          <span className="absolute -top-4 left-1/2 -translate-x-1/2 whitespace-nowrap text-sm text-zinc-400">
+                            {entry.onyomi}
+                          </span>
+                          <span className="inline-block text-xl text-black dark:text-white">
+                            {entry.char}
+                          </span>
+                        </div>
                         <div className="flex flex-wrap gap-1">
                           {entry.contentIds.map((id) => (
                             <Link
