@@ -143,9 +143,6 @@ export default function IndexPage() {
           <h1 className="text-3xl font-bold text-black dark:text-white">
             漢字索引
           </h1>
-          <p className="mt-2 text-zinc-600 dark:text-zinc-400">
-            音読み五十音順・漢字をクリックすると登場する章を確認できます
-          </p>
         </header>
 
         {/* Quick navigation */}
