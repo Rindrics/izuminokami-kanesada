@@ -161,7 +161,7 @@ export default function IndexPage() {
               <a
                 key={group}
                 href={`#group-${group}`}
-                className="rounded bg-zinc-200 px-3 py-1 text-sm hover:bg-zinc-300 dark:bg-zinc-700 dark:hover:bg-zinc-600"
+                className="rounded px-3 py-1 text-sm hover:bg-zinc-300 dark:hover:bg-zinc-600"
               >
                 {group}行
               </a>
