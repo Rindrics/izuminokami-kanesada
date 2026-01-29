@@ -3751,6 +3751,62 @@ export const hanziDictionary: HanziEntry[] = [
     ],
     is_common: true,
   },
+  {
+    id: '弘',
+    meanings: [
+      {
+        id: '弘-hóng',
+        onyomi: 'コウ',
+        pinyin: 'hóng',
+        tone: 2,
+        meaning_ja: 'ひろい',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '篤',
+    meanings: [
+      {
+        id: '篤-dǔ',
+        onyomi: 'トク',
+        pinyin: 'dǔ',
+        tone: 3,
+        meaning_ja: 'あつい',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '亡',
+    meanings: [
+      {
+        id: '亡-wáng',
+        onyomi: 'ボウ',
+        pinyin: 'wáng',
+        tone: 2,
+        meaning_ja: 'ない',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '執',
+    meanings: [
+      {
+        id: '執-zhí',
+        onyomi: 'シツ',
+        pinyin: 'zhí',
+        tone: 2,
+        meaning_ja: 'とる',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
 ];
 
 const hanziMap = new Map(hanziDictionary.map((e) => [e.id, e]));

@@ -1,0 +1,16 @@
+segments:
+  - text:
+      original: 子張曰
+      japanese: 子張曰く、
+    speaker: null
+  - text:
+      original: 執德不弘 信道不篤
+      japanese: 徳を執ること弘からず、道を信ずること篤からずんば、
+    speaker: zizhang
+  - text:
+      original: 焉能爲有 焉能爲亡
+      japanese: 焉くんぞ能く有りと為さん、焉くんぞ能く亡しと為さん。
+    speaker: zizhang
+mentioned:
+  - zizhang
+pinyin_reviewed: true
