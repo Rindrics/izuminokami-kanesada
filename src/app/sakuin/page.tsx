@@ -7,7 +7,7 @@ import { stats } from '@/generated/stats';
 function formatContentId(contentId: string): string {
   const [bookId, sectionId, chapterId] = contentId.split('/');
   const book = books.find((b) => b.id === bookId);
-  const bookName = book?.name ?? bookId;
+  const bookName = book?.name.substring(0, 1) ?? bookId;
   return `${bookName}${sectionId}-${chapterId}`;
 }
 
