@@ -774,7 +774,7 @@ export const hanziDictionary: HanziEntry[] = [
     meanings: [
       {
         id: '日-rì',
-        onyomi: 'ニチ',
+        onyomi: 'ジツ',
         pinyin: 'rì',
         tone: 4,
         meaning_ja: '日',
@@ -2272,7 +2272,7 @@ export const hanziDictionary: HanziEntry[] = [
     meanings: [
       {
         id: '一-yī',
-        onyomi: 'イ',
+        onyomi: 'イチ',
         pinyin: 'yī',
         tone: 1,
         meaning_ja: 'いち',
