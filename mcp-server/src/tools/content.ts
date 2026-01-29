@@ -1417,6 +1417,10 @@ Please follow this workflow:
         );
         const contentsModule = await import(pathToFileURL(contentsPath).href);
         const { contents } = contentsModule;
+        const validatorPath = path.join(
+          PROJECT_ROOT,
+          'src/lib/validators/content.ts',
+        );
         const { validateContent } = await import(
           pathToFileURL(validatorPath).href
         );
