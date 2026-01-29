@@ -87,32 +87,40 @@ function getKanaGroup(onyomi: string): string {
     ヲ: 'ワ',
     ン: 'ワ',
   };
-  return kanaGroups[firstChar] ?? '他';
+  return kanaGroups[firstChar] ?? 'ワ'; // Fallback to ワ行 for rare kana
 }
 
-const kanaOrder = [
-  'ア',
-  'カ',
-  'サ',
-  'タ',
-  'ナ',
-  'ハ',
-  'マ',
-  'ヤ',
-  'ラ',
-  'ワ',
-  '他',
-];
+const kanaOrder = ['ア', 'カ', 'サ', 'タ', 'ナ', 'ハ', 'マ', 'ヤ', 'ラ', 'ワ'];
+
+// Get onyomi for a character or compound word
+// For compound words, concatenate each character's onyomi
+function getOnyomi(text: string): string {
+  // Try the full text first (single character)
+  if (text.length === 1) {
+    const meaning = getDefaultMeaning(text);
+    return meaning?.onyomi ?? '';
+  }
+
+  // For compound words, concatenate each character's onyomi
+  const onyomiParts: string[] = [];
+  for (const char of text) {
+    const meaning = getDefaultMeaning(char);
+    if (meaning?.onyomi) {
+      onyomiParts.push(meaning.onyomi);
+    }
+  }
+
+  return onyomiParts.length > 0 ? onyomiParts.join('') : '';
+}
 
 export default function IndexPage() {
   // Add onyomi to each entry and sort
-  const entriesWithOnyomi = stats.charIndex.map((entry) => {
-    const meaning = getDefaultMeaning(entry.char);
-    return {
+  const entriesWithOnyomi = stats.charIndex
+    .map((entry) => ({
       ...entry,
-      onyomi: meaning?.onyomi ?? '',
-    };
-  });
+      onyomi: getOnyomi(entry.char),
+    }))
+    .filter((entry) => entry.onyomi !== ''); // Remove entries without onyomi
 
   // Sort by onyomi (Japanese phonetic order)
   entriesWithOnyomi.sort((a, b) => a.onyomi.localeCompare(b.onyomi, 'ja'));
@@ -120,7 +128,7 @@ export default function IndexPage() {
   // Group by kana row
   const byKanaGroup = new Map<string, typeof entriesWithOnyomi>();
   for (const entry of entriesWithOnyomi) {
-    const group = entry.onyomi ? getKanaGroup(entry.onyomi) : '他';
+    const group = getKanaGroup(entry.onyomi);
     if (!byKanaGroup.has(group)) {
       byKanaGroup.set(group, []);
     }
