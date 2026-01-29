@@ -47,11 +47,11 @@ export function KeyboardNavigation({
       {prevUrl ? (
         <Link
           href={prevUrl}
-          className="group relative flex items-center gap-2 rounded-lg bg-zinc-100 px-4 py-2 text-zinc-700 transition hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
+          className="group relative flex items-center gap-2 rounded-lg px-4 py-2 text-zinc-700 transition hover:bg-zinc-200 dark:text-zinc-300 dark:hover:bg-zinc-700"
         >
           <span>←</span>
           <span>前の章</span>
-          <span className="pointer-events-none absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-zinc-800 px-2 py-1 text-xs text-white opacity-0 transition-opacity delay-100 group-hover:opacity-100 dark:bg-zinc-200 dark:text-black">
+          <span className="pointer-events-none absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap px-2 py-1 text-xs text-white opacity-0 transition-opacity delay-100 group-hover:opacity-100 dark:text-black">
             ショートカット: p
           </span>
         </Link>
@@ -61,11 +61,11 @@ export function KeyboardNavigation({
       {nextUrl ? (
         <Link
           href={nextUrl}
-          className="group relative flex items-center gap-2 rounded-lg bg-zinc-100 px-4 py-2 text-zinc-700 transition hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
+          className="group relative flex items-center gap-2 rounded-lg px-4 py-2 text-zinc-700 transition hover:bg-zinc-200 dark:text-zinc-300 dark:hover:bg-zinc-700"
         >
           <span>次の章</span>
           <span>→</span>
-          <span className="pointer-events-none absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-zinc-800 px-2 py-1 text-xs text-white opacity-0 transition-opacity delay-100 group-hover:opacity-100 dark:bg-zinc-200 dark:text-black">
+          <span className="pointer-events-none absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap rounded px-2 py-1 text-xs text-white opacity-0 transition-opacity delay-100 group-hover:opacity-100 dark:text-black">
             ショートカット: n
           </span>
         </Link>
