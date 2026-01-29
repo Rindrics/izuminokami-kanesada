@@ -1386,7 +1386,7 @@ Please follow this workflow:
       const contentId = `${bookId}/${sectionId}/${chapterId}`;
 
       // Step 1: Regenerate contents from YAML files
-      console.log(`Regenerating contents for validation...`);
+      console.error(`Regenerating contents for validation...`);
       try {
         execSync('pnpm generate:contents', {
           cwd: PROJECT_ROOT,
