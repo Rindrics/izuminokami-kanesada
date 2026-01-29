@@ -1,6 +1,15 @@
 import Link from 'next/link';
 import { getDefaultMeaning } from '@/data/hanzi-dictionary';
+import { books } from '@/generated/books';
 import { stats } from '@/generated/stats';
+
+// Convert contentId to display format (e.g., "lunyu/1/1" -> "論語1-1")
+function formatContentId(contentId: string): string {
+  const [bookId, sectionId, chapterId] = contentId.split('/');
+  const book = books.find((b) => b.id === bookId);
+  const bookName = book?.name ?? bookId;
+  return `${bookName}${sectionId}-${chapterId}`;
+}
 
 // Get first kana character for grouping (ア行、カ行、etc.)
 function getKanaGroup(onyomi: string): string {
@@ -165,42 +174,30 @@ export default function IndexPage() {
               const chars = byKanaGroup.get(group) ?? [];
               return (
                 <div key={group} id={`group-${group}`} className="mb-6">
-                  <h2 className="mb-2 text-lg font-bold text-black dark:text-white">
+                  <h2 className="mb-3 text-lg font-bold text-black dark:text-white">
                     {group}行（{chars.length} 字）
                   </h2>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="columns-3 gap-4">
                     {chars.map((entry) => (
-                      <details
+                      <div
                         key={entry.char}
-                        className="group rounded border border-zinc-200 dark:border-zinc-700"
+                        className="mb-2 flex break-inside-avoid items-baseline gap-2"
                       >
-                        <summary className="cursor-pointer px-3 py-2 text-black hover:bg-zinc-50 dark:text-white dark:hover:bg-zinc-800">
-                          <span className="text-xl">{entry.char}</span>
-                          <span className="ml-1 text-xs text-zinc-400">
-                            {entry.onyomi}
-                          </span>
-                        </summary>
-                        <div className="border-t border-zinc-200 bg-zinc-50 px-3 py-2 dark:border-zinc-700 dark:bg-zinc-800">
-                          <div className="text-xs text-zinc-500">
-                            登場章（{entry.contentIds.length}）:
-                          </div>
-                          <div className="mt-1 flex flex-wrap gap-1">
-                            {entry.contentIds.map((id) => {
-                              const parts = id.split('/');
-                              const display = `${parts[1]}-${parts[2]}`;
-                              return (
-                                <Link
-                                  key={id}
-                                  href={`/books/${id}`}
-                                  className="rounded bg-blue-100 px-2 py-0.5 text-xs text-blue-700 hover:bg-blue-200 dark:bg-blue-900 dark:text-blue-300 dark:hover:bg-blue-800"
-                                >
-                                  {display}
-                                </Link>
-                              );
-                            })}
-                          </div>
+                        <span className="text-xl text-black dark:text-white">
+                          {entry.char}
+                        </span>
+                        <div className="flex flex-wrap gap-1">
+                          {entry.contentIds.map((id) => (
+                            <Link
+                              key={id}
+                              href={`/books/${id}`}
+                              className="rounded bg-blue-100 px-1.5 py-0.5 text-xs text-blue-700 hover:bg-blue-200 dark:bg-blue-900 dark:text-blue-300 dark:hover:bg-blue-800"
+                            >
+                              {formatContentId(id)}
+                            </Link>
+                          ))}
                         </div>
-                      </details>
+                      </div>
                     ))}
                   </div>
                 </div>
