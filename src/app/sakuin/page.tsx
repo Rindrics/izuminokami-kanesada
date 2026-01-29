@@ -175,7 +175,7 @@ export default function IndexPage() {
               return (
                 <div key={group} id={`group-${group}`} className="mb-6">
                   <h2 className="mb-3 text-lg font-bold text-black dark:text-white">
-                    {group}行（{chars.length} 字）
+                    {group}行
                   </h2>
                   <div className="columns-3 gap-4">
                     {chars.map((entry) => (
