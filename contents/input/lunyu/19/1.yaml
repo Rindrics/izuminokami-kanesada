@@ -1,0 +1,19 @@
+segments:
+  - text:
+      original: 子張曰
+      japanese: 子張曰く、
+    speaker: null
+  - text:
+      original: 士 見危致命 見得思義
+      japanese: 士は危きを見ては命（いのち）を致し、得（とく）を見ては義を思い、
+    speaker: zizhang
+  - text:
+      original: 祭思敬 喪思哀
+      japanese: 祭には敬を思い、喪には哀を思う。
+    speaker: zizhang
+  - text:
+      original: 其可已矣
+      japanese: 其れ可（か）なるのみ。
+    speaker: zizhang
+mentioned: []
+pinyin_reviewed: true

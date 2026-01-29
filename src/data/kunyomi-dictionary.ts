@@ -1452,6 +1452,31 @@ export const kunyomiDictionary: KunyomiEntry[] = [
     text: '去',
     readings: [{ id: '去-さ', ruby: 'さ', okurigana: 'る', is_default: true }],
   },
+  {
+    id: '子張',
+    text: '子張',
+    readings: [{ id: '子張-しちょう', ruby: 'しちょう', is_default: true }],
+  },
+  {
+    id: '祭',
+    text: '祭',
+    readings: [{ id: '祭-まつり', ruby: 'まつり', is_default: true }],
+  },
+  {
+    id: '喪',
+    text: '喪',
+    readings: [{ id: '喪-そう', ruby: 'そう', is_default: true }],
+  },
+  {
+    id: '哀',
+    text: '哀',
+    readings: [{ id: '哀-あい', ruby: 'あい', is_default: true }],
+  },
+  {
+    id: '思',
+    text: '思',
+    readings: [{ id: '思-おも', ruby: 'おも', is_default: true }],
+  },
 ];
 
 export function getKunyomiEntry(text: string): KunyomiEntry | undefined {
