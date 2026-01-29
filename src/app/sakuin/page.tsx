@@ -191,7 +191,7 @@ export default function IndexPage() {
                             <Link
                               key={id}
                               href={`/books/${id}`}
-                              className="rounded bg-blue-100 px-1.5 py-0.5 text-xs text-blue-700 hover:bg-blue-200 dark:bg-blue-900 dark:text-blue-300 dark:hover:bg-blue-800"
+                              className="rounded bg-zinc-100 px-1.5 py-0.5 text-xs text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
                             >
                               {formatContentId(id)}
                             </Link>
