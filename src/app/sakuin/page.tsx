@@ -167,7 +167,7 @@ export default function IndexPage() {
               const chars = byKanaGroup.get(group) ?? [];
               return (
                 <div key={group} id={`group-${group}`} className="mb-6">
-                  <h2 className="mb-3 text-lg font-bold text-black dark:text-white">
+                  <h2 className="ml-[-10px] mb-5 text-lg font-bold text-black dark:text-white">
                     {group}行
                   </h2>
                   <div className="columns-3 gap-4">
