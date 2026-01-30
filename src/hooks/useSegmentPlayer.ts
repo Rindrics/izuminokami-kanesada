@@ -50,7 +50,7 @@ export function useSegmentPlayer({
     mode: 'full',
     loopEnabled: false,
     rangeStart: 0,
-    rangeEnd: numSegments - 1,
+    rangeEnd: Math.max(0, numSegments - 1),
     currentSegment: null,
   });
 
@@ -67,11 +67,25 @@ export function useSegmentPlayer({
 
   // Update range bounds when numSegments changes
   useEffect(() => {
-    setState((prev) => ({
-      ...prev,
-      rangeEnd: Math.min(prev.rangeEnd, numSegments - 1),
-      rangeStart: Math.min(prev.rangeStart, numSegments - 1),
-    }));
+    setState((prev) => {
+      const maxIndex = Math.max(0, numSegments - 1);
+      const clampedRangeEnd = Math.min(prev.rangeEnd, maxIndex);
+      const clampedRangeStart = Math.min(prev.rangeStart, maxIndex);
+
+      // Only update if values actually changed
+      if (
+        prev.rangeEnd === clampedRangeEnd &&
+        prev.rangeStart === clampedRangeStart
+      ) {
+        return prev;
+      }
+
+      return {
+        ...prev,
+        rangeEnd: clampedRangeEnd,
+        rangeStart: clampedRangeStart,
+      };
+    });
   }, [numSegments]);
 
   // Helper: get first segment of current range
@@ -149,7 +163,7 @@ export function useSegmentPlayer({
       ...prev,
       mode: 'full',
       rangeStart: 0,
-      rangeEnd: numSegments - 1,
+      rangeEnd: Math.max(0, numSegments - 1),
       // If playing, restart from beginning
       currentSegment: prev.playState === 'playing' ? 0 : null,
     }));
