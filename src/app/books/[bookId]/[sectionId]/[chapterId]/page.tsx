@@ -71,14 +71,16 @@ export default async function ContentPage({ params }: Props) {
 
         {/* Mobile: AudioPlayer at top */}
         <div className="lg:hidden mb-6">
-          <AudioPlayer
-            bookId={bookId}
-            sectionId={sectionId}
-            chapterId={chapterId}
-            contentId={contentId}
-            segmentCount={content.segments.length}
-            segmentTexts={content.segments.map((s) => s.text.original)}
-          />
+          <Suspense fallback={null}>
+            <AudioPlayer
+              bookId={bookId}
+              sectionId={sectionId}
+              chapterId={chapterId}
+              contentId={contentId}
+              segmentCount={content.segments.length}
+              segmentTexts={content.segments.map((s) => s.text.original)}
+            />
+          </Suspense>
         </div>
 
         <div className="lg:flex lg:gap-8">
@@ -122,14 +124,16 @@ export default async function ContentPage({ params }: Props) {
           {/* Desktop: AudioPlayer in right column */}
           <aside className="hidden lg:block lg:w-80 lg:shrink-0">
             <div className="sticky top-8">
-              <AudioPlayer
-                bookId={bookId}
-                sectionId={sectionId}
-                chapterId={chapterId}
-                contentId={contentId}
-                segmentCount={content.segments.length}
-                segmentTexts={content.segments.map((s) => s.text.original)}
-              />
+              <Suspense fallback={null}>
+                <AudioPlayer
+                  bookId={bookId}
+                  sectionId={sectionId}
+                  chapterId={chapterId}
+                  contentId={contentId}
+                  segmentCount={content.segments.length}
+                  segmentTexts={content.segments.map((s) => s.text.original)}
+                />
+              </Suspense>
             </div>
           </aside>
         </div>
