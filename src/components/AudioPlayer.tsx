@@ -61,6 +61,7 @@ export function AudioPlayer({
     new Array(segmentCount).fill(true),
   );
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const playSegmentRef = useRef<((segmentIndex: number) => void) | null>(null);
 
   // Reset when content changes
   // biome-ignore lint/correctness/useExhaustiveDependencies: contentId change should reset state
@@ -122,12 +123,12 @@ export function AudioPlayer({
         const next = getNextSelectedSegment(segmentIndex);
         if (next !== null) {
           setCurrentSegment(next);
-          playSegment(next);
+          playSegmentRef.current?.(next);
         } else if (isLooping) {
           const first = getFirstSelectedSegment();
           if (first !== null) {
             setCurrentSegment(first);
-            playSegment(first);
+            playSegmentRef.current?.(first);
           } else {
             setIsPlaying(false);
             setCurrentSegment(null);
@@ -159,6 +160,11 @@ export function AudioPlayer({
       getFirstSelectedSegment,
     ],
   );
+
+  // Keep ref updated so event listeners always call the latest implementation
+  useEffect(() => {
+    playSegmentRef.current = playSegment;
+  }, [playSegment]);
 
   // Stop playback
   const stopPlayback = useCallback(() => {
