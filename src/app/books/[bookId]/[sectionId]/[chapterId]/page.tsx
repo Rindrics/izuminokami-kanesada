@@ -43,7 +43,7 @@ export default async function ContentPage({ params }: Props) {
 
   return (
     <div className="bg-zinc-50 dark:bg-black">
-      <main className="mx-auto max-w-3xl px-4 py-8 sm:px-6 lg:px-8">
+      <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
         <header className="mb-8">
           <nav className="mb-4 text-sm text-zinc-500 dark:text-zinc-400">
             <Link href="/" className="hover:underline">
@@ -69,7 +69,8 @@ export default async function ContentPage({ params }: Props) {
         </header>
         <KeyboardNavigation prevUrl={prevUrl} nextUrl={nextUrl} />
 
-        <article className="space-y-6">
+        {/* Mobile: AudioPlayer at top */}
+        <div className="lg:hidden mb-6">
           <AudioPlayer
             bookId={bookId}
             sectionId={sectionId}
@@ -78,41 +79,60 @@ export default async function ContentPage({ params }: Props) {
             segmentCount={content.segments.length}
             segmentTexts={content.segments.map((s) => s.text.original)}
           />
+        </div>
 
-          {isDev && (
-            <AudioRecorder
-              bookId={bookId}
-              sectionId={sectionId}
-              chapterId={chapterId}
-            />
-          )}
+        <div className="lg:flex lg:gap-8">
+          {/* Main content */}
+          <article className="space-y-6 lg:flex-1 lg:min-w-0">
+            {isDev && (
+              <AudioRecorder
+                bookId={bookId}
+                sectionId={sectionId}
+                chapterId={chapterId}
+              />
+            )}
 
-          <Suspense
-            fallback={<div className="text-zinc-500">読み込み中...</div>}
-          >
-            <HakubunWithTabs
-              segments={content.segments}
-              bookId={bookId}
-              sectionId={sectionId}
-              chapterId={chapterId}
-            />
-          </Suspense>
+            <Suspense
+              fallback={<div className="text-zinc-500">読み込み中...</div>}
+            >
+              <HakubunWithTabs
+                segments={content.segments}
+                bookId={bookId}
+                sectionId={sectionId}
+                chapterId={chapterId}
+              />
+            </Suspense>
 
-          <section>
-            <h2 className="mb-3 text-sm font-medium text-zinc-500 dark:text-zinc-400">
-              読み下し文
-            </h2>
-            <div className="rounded-lg bg-white p-6 shadow-sm dark:bg-zinc-900">
-              <div className="space-y-2 text-lg leading-loose text-zinc-700 dark:text-zinc-300">
-                {content.segments.map((segment) => (
-                  <p key={`${segment.start_pos}-${segment.end_pos}`}>
-                    <JapaneseTextWithRuby text={segment.text.japanese} />
-                  </p>
-                ))}
+            <section>
+              <h2 className="mb-3 text-sm font-medium text-zinc-500 dark:text-zinc-400">
+                読み下し文
+              </h2>
+              <div className="rounded-lg bg-white p-6 shadow-sm dark:bg-zinc-900">
+                <div className="space-y-2 text-lg leading-loose text-zinc-700 dark:text-zinc-300">
+                  {content.segments.map((segment) => (
+                    <p key={`${segment.start_pos}-${segment.end_pos}`}>
+                      <JapaneseTextWithRuby text={segment.text.japanese} />
+                    </p>
+                  ))}
+                </div>
               </div>
+            </section>
+          </article>
+
+          {/* Desktop: AudioPlayer in right column */}
+          <aside className="hidden lg:block lg:w-80 lg:shrink-0">
+            <div className="sticky top-8">
+              <AudioPlayer
+                bookId={bookId}
+                sectionId={sectionId}
+                chapterId={chapterId}
+                contentId={contentId}
+                segmentCount={content.segments.length}
+                segmentTexts={content.segments.map((s) => s.text.original)}
+              />
             </div>
-          </section>
-        </article>
+          </aside>
+        </div>
 
         <div className="mt-6 text-sm text-zinc-500">
           <a
