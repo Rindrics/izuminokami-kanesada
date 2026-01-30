@@ -176,7 +176,7 @@ Fairness == WF_vars(Advance)
 
 \* ループなしの場合、最終的に停止する
 NoLoopEventuallyStops ==
-    ((~loopEnabled) /\ (playState = "playing")) => (<>(playState = "stopped"))
+    []( ((~loopEnabled) /\ (playState = "playing")) => (<>(playState = "stopped")) )
 
 -----------------------------------------------------------------------------
 (* 仕様 *)
