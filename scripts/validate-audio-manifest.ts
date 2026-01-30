@@ -1,19 +1,21 @@
 /**
  * Validate that all changed content YAML files have corresponding audio entries
- * in audio-manifest.json
+ * in audio-manifest.json for all segments
  *
  * Usage:
  *   pnpm validate:audio-manifest
  *
  * This script:
  * 1. Finds content YAML files changed since origin/main
- * 2. Checks that each has an entry in audio-manifest.json
- * 3. Exits with code 1 if any are missing (blocks push)
+ * 2. Reads each YAML to determine segment count
+ * 3. Checks that each segment has an entry in audio-manifest.json
+ * 4. Exits with code 1 if any are missing (blocks push)
  */
 
 import { execSync } from 'node:child_process';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
+import yaml from 'js-yaml';
 import { type AudioManifest, getSegmentAudio } from '../src/lib/audio-manifest';
 
 const MANIFEST_PATH = path.join(process.cwd(), 'audio-manifest.json');
@@ -73,8 +75,30 @@ function readManifest(): AudioManifest {
   return JSON.parse(content) as AudioManifest;
 }
 
+interface ContentYaml {
+  segments: unknown[];
+}
+
 /**
- * Validate that all changed YAML files have audio entries
+ * Read YAML file and return segment count
+ */
+function getSegmentCount(yamlPath: string): number {
+  const fullPath = path.join(process.cwd(), yamlPath);
+  if (!fs.existsSync(fullPath)) {
+    return 0;
+  }
+  const content = fs.readFileSync(fullPath, 'utf-8');
+  const parsed = yaml.load(content) as ContentYaml;
+  return parsed.segments?.length ?? 0;
+}
+
+interface MissingSegment {
+  contentId: string;
+  segmentIndex: number;
+}
+
+/**
+ * Validate that all changed YAML files have audio entries for all segments
  */
 function validateAudioManifest(): boolean {
   console.log('=== Audio Manifest Validation ===\n');
@@ -88,37 +112,63 @@ function validateAudioManifest(): boolean {
   }
 
   console.log(`Found ${changedYamls.length} changed content YAML file(s):`);
-  for (const yaml of changedYamls) {
-    console.log(`  - ${yaml}`);
+  for (const yamlFile of changedYamls) {
+    console.log(`  - ${yamlFile}`);
   }
 
   const manifest = readManifest();
-  const missingAudio: string[] = [];
+  const missingSegments: MissingSegment[] = [];
+  const contentsMissingAll: string[] = [];
 
   for (const yamlPath of changedYamls) {
     const contentId = yamlPathToContentId(yamlPath);
     const entry = manifest[contentId];
+    const segmentCount = getSegmentCount(yamlPath);
 
-    if (!entry) {
-      missingAudio.push(contentId);
+    if (segmentCount === 0) {
+      console.log(`  ⚠️  ${contentId}: No segments found in YAML`);
       continue;
     }
 
-    // Check that zh entry exists for segment 0 (chapter-level)
-    const segmentIndex = 0;
-    const zhAudio = getSegmentAudio(entry, segmentIndex, 'zh');
-    if (!zhAudio) {
-      missingAudio.push(contentId);
+    if (!entry) {
+      contentsMissingAll.push(contentId);
+      continue;
+    }
+
+    // Check that zh entry exists for all segments
+    for (let i = 0; i < segmentCount; i++) {
+      const zhAudio = getSegmentAudio(entry, i, 'zh');
+      if (!zhAudio) {
+        missingSegments.push({ contentId, segmentIndex: i });
+      }
     }
   }
 
-  if (missingAudio.length > 0) {
-    console.log('\n❌ Missing audio for the following content:');
-    for (const contentId of missingAudio) {
+  const hasErrors = contentsMissingAll.length > 0 || missingSegments.length > 0;
+
+  if (contentsMissingAll.length > 0) {
+    console.log('\n❌ No audio entries for the following content:');
+    for (const contentId of contentsMissingAll) {
       console.log(`  - ${contentId}`);
     }
+  }
+
+  if (missingSegments.length > 0) {
+    console.log('\n❌ Missing audio for the following segments:');
+    for (const { contentId, segmentIndex } of missingSegments) {
+      console.log(`  - ${contentId} segment ${segmentIndex}`);
+    }
+  }
+
+  if (hasErrors) {
+    // Get unique content IDs that need audio generation
+    const contentIdsToGenerate = new Set([
+      ...contentsMissingAll,
+      ...missingSegments.map((m) => m.contentId),
+    ]);
+
     console.log('\nPlease run the following commands to generate audio:');
-    for (const contentId of missingAudio) {
+    for (const contentId of contentIdsToGenerate) {
       const [bookId, sectionId, chapterId] = contentId.split('/');
       console.log(`  pnpm generate:audio ${bookId} ${sectionId} ${chapterId}`);
     }
@@ -126,7 +176,7 @@ function validateAudioManifest(): boolean {
     return false;
   }
 
-  console.log('\n✓ All changed content has audio entries.');
+  console.log('\n✓ All changed content has audio entries for all segments.');
   console.log('\n=== Validation Passed ===');
   return true;
 }
