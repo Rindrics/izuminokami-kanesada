@@ -151,11 +151,32 @@ export async function POST(request: NextRequest) {
     const bookId = formData.get('bookId') as string | null;
     const sectionId = formData.get('sectionId') as string | null;
     const chapterId = formData.get('chapterId') as string | null;
+    const segmentIndexStr = formData.get('segmentIndex') as string | null;
 
     if (!audioFile || !bookId || !sectionId || !chapterId) {
       return NextResponse.json(
         {
           error: 'Missing required fields: audio, bookId, sectionId, chapterId',
+        },
+        { status: 400 },
+      );
+    }
+
+    // Parse and validate segmentIndex (required for segment-based audio)
+    if (segmentIndexStr === null) {
+      return NextResponse.json(
+        {
+          error: 'Missing required field: segmentIndex',
+        },
+        { status: 400 },
+      );
+    }
+
+    const segmentIndex = Number.parseInt(segmentIndexStr, 10);
+    if (Number.isNaN(segmentIndex) || segmentIndex < 0) {
+      return NextResponse.json(
+        {
+          error: 'Invalid segmentIndex: must be a non-negative integer',
         },
         { status: 400 },
       );
@@ -213,8 +234,8 @@ export async function POST(request: NextRequest) {
     }
     fs.mkdirSync(audioDir, { recursive: true });
 
-    // Safely construct file path
-    const filename = `${chapterId}-ja.webm`;
+    // Safely construct file path with segment index
+    const filename = `${chapterId}-${segmentIndex}-ja.webm`;
     const filePath = safeJoinPath(audioRoot, bookId, sectionId, filename);
     if (!filePath) {
       return NextResponse.json(
@@ -233,8 +254,6 @@ export async function POST(request: NextRequest) {
     const now = new Date().toISOString();
     const hash = calculateHash(buffer);
 
-    // For chapter-level recording (segment index 0)
-    const segmentIndex = 0;
     const existingEntry = manifest[contentId];
     const metadata: AudioFileMetadata = {
       generatedAt: now,
@@ -254,6 +273,7 @@ export async function POST(request: NextRequest) {
       success: true,
       filePath: `audio/${bookId}/${sectionId}/${filename}`,
       contentId,
+      segmentIndex,
       hash,
     });
   } catch (error) {
