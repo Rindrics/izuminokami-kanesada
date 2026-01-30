@@ -1,5 +1,10 @@
 # Changelog
 
+## [v0.3.1](https://github.com/Rindrics/izuminokami-kanesada/compare/v0.3.0...v0.3.1) - 2026-01-30
+- feat: add contents by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/99
+- Update Japanese translation for text in 21.yaml by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/103
+- feat(ui): improve appearance of index page by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/101
+
 ## [v0.3.0](https://github.com/Rindrics/izuminokami-kanesada/compare/v0.2.5...v0.3.0) - 2026-01-28
 - feat: add 論語 17-21 and 18-1 by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/94
 - feat: provide auth function by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/95
