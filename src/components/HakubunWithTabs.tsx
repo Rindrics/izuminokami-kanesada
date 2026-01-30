@@ -2,6 +2,7 @@
 
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ClickableChar } from '@/components/ClickableChar';
+import { SegmentPlayButton } from '@/components/SegmentPlayButton';
 import { getDefaultMeaning } from '@/data/hanzi-dictionary';
 import { getPersonName } from '@/generated/persons';
 import type { Segment } from '@/types/content';
@@ -10,6 +11,9 @@ type DisplayMode = 'plain' | 'onyomi' | 'pinyin';
 
 interface Props {
   segments: Segment[];
+  bookId?: string;
+  sectionId?: string;
+  chapterId?: string;
 }
 
 // Parse text with - markers and detect tone sandhi
@@ -364,9 +368,19 @@ function TextWithRuby({
   return <span className={wrapperClass}>{elements}</span>;
 }
 
-export function HakubunWithTabs({ segments }: Props) {
+export function HakubunWithTabs({
+  segments,
+  bookId,
+  sectionId,
+  chapterId,
+}: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
+
+  // Read playButtons from URL param (controlled by AudioPlayer checkbox)
+  const playButtonsEnabled = searchParams.get('playButtons') === 'true';
+  const showPlayButtons =
+    bookId && sectionId && chapterId && playButtonsEnabled;
 
   // Read mode from query parameter, default to 'plain'
   const modeParam = searchParams.get('mode');
@@ -429,17 +443,28 @@ export function HakubunWithTabs({ segments }: Props) {
             // Check if all segments are narration (no speakers)
             const allNarration = segments.every((s) => s.speaker === null);
 
-            // Group consecutive segments by speaker
+            // Group consecutive segments by speaker, preserving global index
+            type SegmentWithIndex = (typeof segments)[0] & {
+              globalIndex: number;
+            };
             const groups: {
               speaker: string | null;
-              segments: typeof segments;
+              segments: SegmentWithIndex[];
             }[] = [];
-            for (const segment of segments) {
+            for (let i = 0; i < segments.length; i++) {
+              const segment = segments[i];
+              const segmentWithIndex: SegmentWithIndex = {
+                ...segment,
+                globalIndex: i,
+              };
               const lastGroup = groups[groups.length - 1];
               if (lastGroup && lastGroup.speaker === segment.speaker) {
-                lastGroup.segments.push(segment);
+                lastGroup.segments.push(segmentWithIndex);
               } else {
-                groups.push({ speaker: segment.speaker, segments: [segment] });
+                groups.push({
+                  speaker: segment.speaker,
+                  segments: [segmentWithIndex],
+                });
               }
             }
 
@@ -490,11 +515,27 @@ export function HakubunWithTabs({ segments }: Props) {
                   {group.segments.map((segment, segIndex) => (
                     <span key={`${segment.start_pos}-${segment.end_pos}`}>
                       {segIndex > 0 && <br />}
-                      <TextWithRuby
-                        text={segment.text.original}
-                        mode={mode}
-                        isNarration={isNarration}
-                      />
+                      <span
+                        className={
+                          showPlayButtons && mode !== 'onyomi'
+                            ? 'inline-flex items-center gap-1'
+                            : undefined
+                        }
+                      >
+                        {showPlayButtons && mode !== 'onyomi' && (
+                          <SegmentPlayButton
+                            bookId={bookId}
+                            sectionId={sectionId}
+                            chapterId={chapterId}
+                            segmentIndex={segment.globalIndex}
+                          />
+                        )}
+                        <TextWithRuby
+                          text={segment.text.original}
+                          mode={mode}
+                          isNarration={isNarration}
+                        />
+                      </span>
                     </span>
                   ))}
                 </Wrapper>

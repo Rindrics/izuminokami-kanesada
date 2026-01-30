@@ -2,6 +2,11 @@ import * as crypto from 'node:crypto';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { type NextRequest, NextResponse } from 'next/server';
+import {
+  type AudioFileMetadata,
+  type AudioManifest,
+  updateSegmentAudio,
+} from '@/lib/audio-manifest';
 
 // Only allow in development
 const isDev = process.env.NODE_ENV === 'development';
@@ -102,19 +107,6 @@ function safeJoinPath(root: string, ...segments: string[]): string | null {
   return resolved;
 }
 
-interface AudioFileMetadata {
-  generatedAt?: string;
-  uploadedAt?: string;
-  hash: string;
-}
-
-interface AudioManifestEntry {
-  zh?: AudioFileMetadata;
-  ja?: AudioFileMetadata;
-}
-
-type AudioManifest = Record<string, AudioManifestEntry>;
-
 function calculateHash(buffer: Buffer): string {
   return crypto.createHash('sha256').update(buffer).digest('hex');
 }
@@ -159,11 +151,32 @@ export async function POST(request: NextRequest) {
     const bookId = formData.get('bookId') as string | null;
     const sectionId = formData.get('sectionId') as string | null;
     const chapterId = formData.get('chapterId') as string | null;
+    const segmentIndexStr = formData.get('segmentIndex') as string | null;
 
     if (!audioFile || !bookId || !sectionId || !chapterId) {
       return NextResponse.json(
         {
           error: 'Missing required fields: audio, bookId, sectionId, chapterId',
+        },
+        { status: 400 },
+      );
+    }
+
+    // Parse and validate segmentIndex (required for segment-based audio)
+    if (segmentIndexStr === null) {
+      return NextResponse.json(
+        {
+          error: 'Missing required field: segmentIndex',
+        },
+        { status: 400 },
+      );
+    }
+
+    const segmentIndex = Number.parseInt(segmentIndexStr, 10);
+    if (Number.isNaN(segmentIndex) || segmentIndex < 0) {
+      return NextResponse.json(
+        {
+          error: 'Invalid segmentIndex: must be a non-negative integer',
         },
         { status: 400 },
       );
@@ -221,8 +234,8 @@ export async function POST(request: NextRequest) {
     }
     fs.mkdirSync(audioDir, { recursive: true });
 
-    // Safely construct file path
-    const filename = `${chapterId}-ja.webm`;
+    // Safely construct file path with segment index
+    const filename = `${chapterId}-${segmentIndex}-ja.webm`;
     const filePath = safeJoinPath(audioRoot, bookId, sectionId, filename);
     if (!filePath) {
       return NextResponse.json(
@@ -241,15 +254,18 @@ export async function POST(request: NextRequest) {
     const now = new Date().toISOString();
     const hash = calculateHash(buffer);
 
-    // Preserve existing zh entry if present
     const existingEntry = manifest[contentId];
-    manifest[contentId] = {
-      ...(existingEntry?.zh && { zh: existingEntry.zh }),
-      ja: {
-        generatedAt: now,
-        hash,
-      },
+    const metadata: AudioFileMetadata = {
+      generatedAt: now,
+      hash,
     };
+
+    manifest[contentId] = updateSegmentAudio(
+      existingEntry,
+      segmentIndex,
+      'ja',
+      metadata,
+    );
 
     writeManifest(manifestPath, manifest);
 
@@ -257,6 +273,7 @@ export async function POST(request: NextRequest) {
       success: true,
       filePath: `audio/${bookId}/${sectionId}/${filename}`,
       contentId,
+      segmentIndex,
       hash,
     });
   } catch (error) {

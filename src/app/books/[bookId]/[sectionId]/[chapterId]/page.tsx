@@ -43,7 +43,7 @@ export default async function ContentPage({ params }: Props) {
 
   return (
     <div className="bg-zinc-50 dark:bg-black">
-      <main className="mx-auto max-w-3xl px-4 py-8 sm:px-6 lg:px-8">
+      <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
         <header className="mb-8">
           <nav className="mb-4 text-sm text-zinc-500 dark:text-zinc-400">
             <Link href="/" className="hover:underline">
@@ -69,43 +69,60 @@ export default async function ContentPage({ params }: Props) {
         </header>
         <KeyboardNavigation prevUrl={prevUrl} nextUrl={nextUrl} />
 
-        <article className="space-y-6">
-          <AudioPlayer
-            bookId={bookId}
-            sectionId={sectionId}
-            chapterId={chapterId}
-            contentId={contentId}
-          />
-
-          {isDev && (
-            <AudioRecorder
-              bookId={bookId}
-              sectionId={sectionId}
-              chapterId={chapterId}
-            />
-          )}
-
-          <Suspense
-            fallback={<div className="text-zinc-500">読み込み中...</div>}
-          >
-            <HakubunWithTabs segments={content.segments} />
-          </Suspense>
-
-          <section>
-            <h2 className="mb-3 text-sm font-medium text-zinc-500 dark:text-zinc-400">
-              読み下し文
-            </h2>
-            <div className="rounded-lg bg-white p-6 shadow-sm dark:bg-zinc-900">
-              <div className="space-y-2 text-lg leading-loose text-zinc-700 dark:text-zinc-300">
-                {content.segments.map((segment) => (
-                  <p key={`${segment.start_pos}-${segment.end_pos}`}>
-                    <JapaneseTextWithRuby text={segment.text.japanese} />
-                  </p>
-                ))}
-              </div>
+        <div className="lg:flex lg:flex-row-reverse lg:gap-8">
+          {/* AudioPlayer: top on mobile, right column on desktop */}
+          <aside className="mb-6 lg:mb-0 lg:w-80 lg:shrink-0">
+            <div className="lg:sticky lg:top-8">
+              <Suspense fallback={null}>
+                <AudioPlayer
+                  bookId={bookId}
+                  sectionId={sectionId}
+                  chapterId={chapterId}
+                  contentId={contentId}
+                  segmentCount={content.segments.length}
+                  segmentTexts={content.segments.map((s) => s.text.original)}
+                />
+              </Suspense>
             </div>
-          </section>
-        </article>
+          </aside>
+
+          {/* Main content */}
+          <article className="space-y-6 lg:flex-1 lg:min-w-0">
+            {isDev && (
+              <AudioRecorder
+                bookId={bookId}
+                sectionId={sectionId}
+                chapterId={chapterId}
+              />
+            )}
+
+            <Suspense
+              fallback={<div className="text-zinc-500">読み込み中...</div>}
+            >
+              <HakubunWithTabs
+                segments={content.segments}
+                bookId={bookId}
+                sectionId={sectionId}
+                chapterId={chapterId}
+              />
+            </Suspense>
+
+            <section>
+              <h2 className="mb-3 text-sm font-medium text-zinc-500 dark:text-zinc-400">
+                読み下し文
+              </h2>
+              <div className="rounded-lg bg-white p-6 shadow-sm dark:bg-zinc-900">
+                <div className="space-y-2 text-lg leading-loose text-zinc-700 dark:text-zinc-300">
+                  {content.segments.map((segment) => (
+                    <p key={`${segment.start_pos}-${segment.end_pos}`}>
+                      <JapaneseTextWithRuby text={segment.text.japanese} />
+                    </p>
+                  ))}
+                </div>
+              </div>
+            </section>
+          </article>
+        </div>
 
         <div className="mt-6 text-sm text-zinc-500">
           <a

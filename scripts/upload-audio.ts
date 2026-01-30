@@ -3,45 +3,32 @@
  *
  * Usage:
  *   pnpm upload:audio                    # Upload all pending audio files
- *   pnpm upload:audio lunyu 1 1          # Upload specific content
+ *   pnpm upload:audio lunyu 1 1          # Upload specific content (all segments)
  *
  * Environment variables:
  *   GOOGLE_APPLICATION_CREDENTIALS - Path to service account JSON
  *   GCS_BUCKET - Cloud Storage bucket name (required)
  *
  * This script:
- * 1. Reads audio-manifest.json to find files with generatedAt (not yet uploaded)
+ * 1. Reads audio-manifest.json to find segment files with generatedAt (not yet uploaded)
  * 2. Uploads them to Cloud Storage
  * 3. Updates manifest: removes generatedAt, adds uploadedAt
+ *
+ * File naming convention:
+ * - Segment audio: audio/{bookId}/{sectionId}/{chapterId}-{segmentIndex}-{lang}.{ext}
  */
 
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { Storage } from '@google-cloud/storage';
-
-// ============================================================================
-// Audio Manifest Types
-// ============================================================================
-
-interface AudioFileMetadata {
-  generatedAt?: string;
-  uploadedAt?: string;
-  hash: string;
-}
-
-interface AudioManifestEntry {
-  zh: AudioFileMetadata;
-  ja: AudioFileMetadata;
-}
-
-type AudioManifest = Record<string, AudioManifestEntry>;
-
-const MANIFEST_PATH = path.join(process.cwd(), 'audio-manifest.json');
-const AUDIO_DIR = path.join(process.cwd(), 'audio');
+import type { AudioManifest } from '../src/lib/audio-manifest';
 
 // ============================================================================
 // Manifest Functions
 // ============================================================================
+
+const MANIFEST_PATH = path.join(process.cwd(), 'audio-manifest.json');
+const AUDIO_DIR = path.join(process.cwd(), 'audio');
 
 function readManifest(): AudioManifest {
   if (!fs.existsSync(MANIFEST_PATH)) {
@@ -120,7 +107,7 @@ async function uploadFile(
 // ============================================================================
 
 /**
- * Upload audio files for a specific content
+ * Upload audio files for a specific content (all segments)
  * Exported for use by other scripts
  */
 export async function uploadContentAudio(
@@ -141,7 +128,9 @@ export async function uploadContentAudio(
 
   console.log(`Uploading ${pendingUploads.length} file(s) for ${contentId}:`);
   for (const upload of pendingUploads) {
-    console.log(`  - ${upload.contentId} (${upload.lang})`);
+    console.log(
+      `  - ${upload.contentId} segment ${upload.segmentIndex} (${upload.lang})`,
+    );
   }
   console.log('');
 
@@ -157,7 +146,7 @@ export async function uploadContentAudio(
       // Check if local file exists
       if (!fs.existsSync(upload.localPath)) {
         console.log(
-          `  ❌ ${upload.contentId} (${upload.lang}): Local file not found`,
+          `  ❌ ${upload.contentId} segment ${upload.segmentIndex} (${upload.lang}): Local file not found`,
         );
         errorCount++;
         continue;
@@ -169,22 +158,33 @@ export async function uploadContentAudio(
         upload.localPath,
         upload.remotePath,
       );
-      console.log(`  ✓ ${upload.contentId} (${upload.lang})`);
+      console.log(
+        `  ✓ ${upload.contentId} segment ${upload.segmentIndex} (${upload.lang})`,
+      );
       console.log(`    URL: ${url}`);
 
       // Update manifest: remove generatedAt, add uploadedAt
       const entry = manifest[upload.contentId];
-      const langEntry = entry[upload.lang];
-      const now = new Date().toISOString();
+      const segment = entry.segments.find(
+        (s) => s.index === upload.segmentIndex,
+      );
 
-      delete langEntry.generatedAt;
-      langEntry.uploadedAt = now;
+      if (segment) {
+        const langEntry = segment[upload.lang];
+        if (langEntry) {
+          const now = new Date().toISOString();
+          delete langEntry.generatedAt;
+          langEntry.uploadedAt = now;
+        }
+      }
 
       _successCount++;
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : String(error);
-      console.log(`  ❌ ${upload.contentId} (${upload.lang}): ${errorMessage}`);
+      console.log(
+        `  ❌ ${upload.contentId} segment ${upload.segmentIndex} (${upload.lang}): ${errorMessage}`,
+      );
       errorCount++;
     }
   }
@@ -200,6 +200,7 @@ export async function uploadContentAudio(
 
 interface PendingUpload {
   contentId: string;
+  segmentIndex: number;
   lang: 'zh' | 'ja';
   localPath: string;
   remotePath: string;
@@ -217,36 +218,42 @@ function findPendingUploads(
       continue;
     }
 
-    const [bookId, sectionId, chapterId] = contentId.split('/');
-
-    // Check Chinese audio
-    if (entry.zh.generatedAt && !entry.zh.uploadedAt) {
-      pending.push({
-        contentId,
-        lang: 'zh',
-        localPath: path.join(
-          AUDIO_DIR,
-          bookId,
-          sectionId,
-          `${chapterId}-zh.mp3`,
-        ),
-        remotePath: `audio/${bookId}/${sectionId}/${chapterId}-zh.mp3`,
-      });
+    // Skip entries without segments array (legacy format)
+    if (!entry.segments) {
+      continue;
     }
 
-    // Check Japanese audio (webm format for manually recorded)
-    if (entry.ja?.generatedAt && !entry.ja.uploadedAt) {
-      pending.push({
-        contentId,
-        lang: 'ja',
-        localPath: path.join(
-          AUDIO_DIR,
-          bookId,
-          sectionId,
-          `${chapterId}-ja.webm`,
-        ),
-        remotePath: `audio/${bookId}/${sectionId}/${chapterId}-ja.webm`,
-      });
+    const [bookId, sectionId, chapterId] = contentId.split('/');
+
+    // Process all segments
+    for (const segment of entry.segments) {
+      const segmentIndex = segment.index;
+
+      // Segment audio filename: {chapterId}-{segmentIndex}-{lang}.{ext}
+      const zhFilename = `${chapterId}-${segmentIndex}-zh.mp3`;
+      const jaFilename = `${chapterId}-${segmentIndex}-ja.webm`;
+
+      // Check Chinese audio
+      if (segment.zh?.generatedAt && !segment.zh.uploadedAt) {
+        pending.push({
+          contentId,
+          segmentIndex,
+          lang: 'zh',
+          localPath: path.join(AUDIO_DIR, bookId, sectionId, zhFilename),
+          remotePath: `audio/${bookId}/${sectionId}/${zhFilename}`,
+        });
+      }
+
+      // Check Japanese audio (webm format for manually recorded)
+      if (segment.ja?.generatedAt && !segment.ja.uploadedAt) {
+        pending.push({
+          contentId,
+          segmentIndex,
+          lang: 'ja',
+          localPath: path.join(AUDIO_DIR, bookId, sectionId, jaFilename),
+          remotePath: `audio/${bookId}/${sectionId}/${jaFilename}`,
+        });
+      }
     }
   }
 
@@ -277,7 +284,9 @@ async function main(): Promise<void> {
 
   console.log(`Found ${pendingUploads.length} file(s) to upload:`);
   for (const upload of pendingUploads) {
-    console.log(`  - ${upload.contentId} (${upload.lang})`);
+    console.log(
+      `  - ${upload.contentId} segment ${upload.segmentIndex} (${upload.lang})`,
+    );
   }
   console.log('');
 
@@ -296,7 +305,7 @@ async function main(): Promise<void> {
       // Check if local file exists
       if (!fs.existsSync(upload.localPath)) {
         console.log(
-          `  ❌ ${upload.contentId} (${upload.lang}): Local file not found`,
+          `  ❌ ${upload.contentId} segment ${upload.segmentIndex} (${upload.lang}): Local file not found`,
         );
         errorCount++;
         continue;
@@ -308,22 +317,33 @@ async function main(): Promise<void> {
         upload.localPath,
         upload.remotePath,
       );
-      console.log(`  ✓ ${upload.contentId} (${upload.lang})`);
+      console.log(
+        `  ✓ ${upload.contentId} segment ${upload.segmentIndex} (${upload.lang})`,
+      );
       console.log(`    URL: ${url}`);
 
       // Update manifest: remove generatedAt, add uploadedAt
       const entry = manifest[upload.contentId];
-      const langEntry = entry[upload.lang];
-      const now = new Date().toISOString();
+      const segment = entry.segments.find(
+        (s) => s.index === upload.segmentIndex,
+      );
 
-      delete langEntry.generatedAt;
-      langEntry.uploadedAt = now;
+      if (segment) {
+        const langEntry = segment[upload.lang];
+        if (langEntry) {
+          const now = new Date().toISOString();
+          delete langEntry.generatedAt;
+          langEntry.uploadedAt = now;
+        }
+      }
 
       successCount++;
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : String(error);
-      console.log(`  ❌ ${upload.contentId} (${upload.lang}): ${errorMessage}`);
+      console.log(
+        `  ❌ ${upload.contentId} segment ${upload.segmentIndex} (${upload.lang}): ${errorMessage}`,
+      );
       errorCount++;
     }
   }
