@@ -222,10 +222,11 @@ export function AudioPlayer({
     setSelectedSegments(new Array(segmentCount).fill(false));
   };
 
-  // Get preview text (first few chars without hyphens, with fadeout effect)
+  // Get preview text (first few chars without hyphens)
   const getPreviewText = (text: string): string => {
     const clean = text.replace(/-/g, '').replace(/ /g, '');
-    return clean.slice(0, 4);
+    const preview = clean.slice(0, 4);
+    return clean.length > 4 ? `${preview}...` : preview;
   };
 
   const selectedCount = selectedSegments.filter(Boolean).length;
@@ -343,7 +344,7 @@ export function AudioPlayer({
             </button>
           </div>
         </div>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-col items-start gap-1">
           {selectedSegments.map((selected, index) => (
             <button
               // biome-ignore lint/suspicious/noArrayIndexKey: segment indices are stable
@@ -358,17 +359,7 @@ export function AudioPlayer({
               aria-label={`文節 ${index + 1}`}
               aria-pressed={selected}
             >
-              <span
-                style={{
-                  background:
-                    'linear-gradient(to right, currentColor 0%, currentColor 40%, transparent 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundClip: 'text',
-                }}
-              >
-                {getPreviewText(segmentTexts[index] || '')}
-              </span>
+              {getPreviewText(segmentTexts[index] || '')}
             </button>
           ))}
         </div>
