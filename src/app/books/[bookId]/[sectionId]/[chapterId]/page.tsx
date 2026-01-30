@@ -69,21 +69,23 @@ export default async function ContentPage({ params }: Props) {
         </header>
         <KeyboardNavigation prevUrl={prevUrl} nextUrl={nextUrl} />
 
-        {/* Mobile: AudioPlayer at top */}
-        <div className="lg:hidden mb-6">
-          <Suspense fallback={null}>
-            <AudioPlayer
-              bookId={bookId}
-              sectionId={sectionId}
-              chapterId={chapterId}
-              contentId={contentId}
-              segmentCount={content.segments.length}
-              segmentTexts={content.segments.map((s) => s.text.original)}
-            />
-          </Suspense>
-        </div>
+        <div className="lg:flex lg:flex-row-reverse lg:gap-8">
+          {/* AudioPlayer: top on mobile, right column on desktop */}
+          <aside className="mb-6 lg:mb-0 lg:w-80 lg:shrink-0">
+            <div className="lg:sticky lg:top-8">
+              <Suspense fallback={null}>
+                <AudioPlayer
+                  bookId={bookId}
+                  sectionId={sectionId}
+                  chapterId={chapterId}
+                  contentId={contentId}
+                  segmentCount={content.segments.length}
+                  segmentTexts={content.segments.map((s) => s.text.original)}
+                />
+              </Suspense>
+            </div>
+          </aside>
 
-        <div className="lg:flex lg:gap-8">
           {/* Main content */}
           <article className="space-y-6 lg:flex-1 lg:min-w-0">
             {isDev && (
@@ -120,22 +122,6 @@ export default async function ContentPage({ params }: Props) {
               </div>
             </section>
           </article>
-
-          {/* Desktop: AudioPlayer in right column */}
-          <aside className="hidden lg:block lg:w-80 lg:shrink-0">
-            <div className="sticky top-8">
-              <Suspense fallback={null}>
-                <AudioPlayer
-                  bookId={bookId}
-                  sectionId={sectionId}
-                  chapterId={chapterId}
-                  contentId={contentId}
-                  segmentCount={content.segments.length}
-                  segmentTexts={content.segments.map((s) => s.text.original)}
-                />
-              </Suspense>
-            </div>
-          </aside>
         </div>
 
         <div className="mt-6 text-sm text-zinc-500">
