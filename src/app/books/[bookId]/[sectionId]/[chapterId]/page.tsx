@@ -75,6 +75,8 @@ export default async function ContentPage({ params }: Props) {
             sectionId={sectionId}
             chapterId={chapterId}
             contentId={contentId}
+            segmentCount={content.segments.length}
+            segmentTexts={content.segments.map((s) => s.text.original)}
           />
 
           {isDev && (
