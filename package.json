@@ -16,6 +16,7 @@
     "generate:audio": "tsx scripts/generate-and-upload-audio.ts",
     "upload:audio": "tsx scripts/upload-audio.ts",
     "validate:audio-manifest": "tsx scripts/validate-audio-manifest.ts",
+    "migrate:audio-manifest": "tsx scripts/migrate-audio-manifest.ts",
     "start": "next start -p 30600",
     "lint": "eslint",
     "check": "biome check src",
