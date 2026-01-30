@@ -1,5 +1,8 @@
 # Changelog
 
+## [v0.3.2](https://github.com/Rindrics/izuminokami-kanesada/compare/v0.3.1...v0.3.2) - 2026-01-30
+- feat: provide segment-based playback by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/105
+
 ## [v0.3.1](https://github.com/Rindrics/izuminokami-kanesada/compare/v0.3.0...v0.3.1) - 2026-01-30
 - feat: add contents by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/99
 - Update Japanese translation for text in 21.yaml by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/103
