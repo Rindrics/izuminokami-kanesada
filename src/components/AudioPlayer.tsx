@@ -252,8 +252,8 @@ export function AudioPlayer({
         </button>
 
         <div className="flex flex-1 flex-col gap-2">
-          <div className="flex gap-2">
-            {jaAvailable && (
+          {zhAvailable && jaAvailable && (
+            <div className="flex gap-2">
               <button
                 type="button"
                 onClick={() => handleLanguageChange('ja')}
@@ -265,8 +265,6 @@ export function AudioPlayer({
               >
                 音読み
               </button>
-            )}
-            {zhAvailable && (
               <button
                 type="button"
                 onClick={() => handleLanguageChange('zh')}
@@ -278,8 +276,8 @@ export function AudioPlayer({
               >
                 ピンイン
               </button>
-            )}
-          </div>
+            </div>
+          )}
 
           <label className="flex items-center gap-2 text-sm text-zinc-600 dark:text-zinc-400">
             <input
