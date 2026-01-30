@@ -7,10 +7,10 @@
  *
  * This script:
  * 1. Reads the specified YAML content file
- * 2. Extracts Chinese text (白文)
- * 3. Generates MP3 audio using Google Cloud TTS (Chinese only)
- * 4. Saves to audio/{bookId}/{sectionId}/{chapterId}-zh.mp3
- * 5. Updates audio-manifest.json with file metadata
+ * 2. Extracts Chinese text (白文) for each segment
+ * 3. Generates MP3 audio using Google Cloud TTS for each segment
+ * 4. Saves to audio/{bookId}/{sectionId}/{chapterId}-{segmentIndex}-zh.mp3
+ * 5. Updates audio-manifest.json with segment-level metadata
  *
  * Note: Japanese onyomi audio is manually recorded and uploaded separately.
  */
@@ -66,19 +66,18 @@ function calculateFileHash(filePath: string): string {
 }
 
 /**
- * Update manifest entry for a content (marks as generated, not yet uploaded)
+ * Update manifest entry for a segment (marks as generated, not yet uploaded)
  * Only updates zh entry; ja is preserved if exists (for manual recordings)
  */
-function updateManifestEntry(
+function updateManifestSegment(
   manifest: AudioManifest,
   contentId: string,
+  segmentIndex: number,
   zhFilePath: string,
 ): void {
   const now = new Date().toISOString();
   const existingEntry = manifest[contentId];
 
-  // For chapter-level generation (segment index 0)
-  const segmentIndex = 0;
   const metadata: AudioFileMetadata = {
     generatedAt: now,
     hash: calculateFileHash(zhFilePath),
@@ -418,7 +417,47 @@ function wrapWithSentenceTags(content: string): string {
 }
 
 /**
+ * Convert a single segment to complete SSML with phoneme tags and prosody
+ * - Uses <phoneme alphabet="pinyin" ph="...">漢字</phoneme> for each character
+ * - Uses <prosody> tags for character-specific pitch and rate
+ * - Uses <p> tags to wrap the utterance (paragraph)
+ * - Uses <s> tags to wrap each sentence within the utterance
+ * - Adjusts pause durations based on character's pauseMultiplier
+ */
+export function segmentToChineseSsml(
+  hanziDict: Map<string, HanziMeaning[]>,
+  segment: InputSegment,
+): string {
+  const prosody = getSpeakerProsody(segment.speaker);
+
+  // Convert segment to SSML with phoneme tags (without prosody wrapper yet)
+  let segmentContent = segmentToSsmlWithPhonemes(hanziDict, segment);
+
+  // Add pause placeholders after punctuation within this segment
+  segmentContent = segmentContent
+    .replace(/。/g, `。${PLACEHOLDER.sentenceEnd}`)
+    .replace(/，/g, `，${PLACEHOLDER.clauseEnd}`);
+
+  // Convert placeholders to SSML with character-specific pause multiplier
+  segmentContent = placeholdersToSsml(segmentContent, prosody.pauseMultiplier);
+
+  // Wrap break-separated parts with <s> tags
+  const withSentenceTags = wrapWithSentenceTags(segmentContent);
+
+  // Wrap with prosody tag for pitch and rate
+  const withProsody = `<prosody pitch="${prosody.pitch}" rate="${prosody.rate}">${withSentenceTags}</prosody>`;
+
+  // Wrap with paragraph tag
+  const withParagraph = `<p>${withProsody}</p>`;
+
+  // Add final pause
+  const finalPause = BASE_PAUSE.finalPause.toFixed(1);
+  return `<speak>${withParagraph}<break time="${finalPause}s"/></speak>`;
+}
+
+/**
  * Convert Chinese text to SSML with phoneme tags and character-specific prosody
+ * (For multiple segments - kept for backward compatibility)
  * - Uses <phoneme alphabet="pinyin" ph="...">漢字</phoneme> for each character
  * - Uses <prosody> tags for character-specific pitch and rate
  * - Uses <p> tags to wrap each speaker's utterance (paragraph)
@@ -545,11 +584,6 @@ async function main(): Promise<void> {
   const hanziDict = loadHanziDictionary();
   console.log(`  Hanzi: ${hanziDict.size} entries`);
 
-  // Convert to SSML with pauses and phonemes (Chinese only; Japanese onyomi is manually recorded)
-  const chineseSsml = toChineseSsml(hanziDict, content.segments);
-
-  console.log(`\nChinese SSML:\n${chineseSsml}`);
-
   // Initialize TTS client
   const client = new textToSpeech.TextToSpeechClient();
 
@@ -557,23 +591,48 @@ async function main(): Promise<void> {
   const outputDir = path.join(process.cwd(), 'audio', bookId, sectionId);
   fs.mkdirSync(outputDir, { recursive: true });
 
-  console.log('\nGenerating audio...');
+  console.log(
+    `\nGenerating audio for ${content.segments.length} segments...\n`,
+  );
 
-  // Chinese audio
-  console.log(`  - Chinese (${VOICE_CONFIG.chinese.name})...`);
-  const chineseAudio = await generateChineseAudio(client, chineseSsml);
-  const chineseOutputPath = path.join(outputDir, `${chapterId}-zh.mp3`);
-  fs.writeFileSync(chineseOutputPath, chineseAudio);
-  console.log(`    Saved: ${chineseOutputPath}`);
-
-  // Update audio manifest
-  console.log('\nUpdating audio manifest...');
+  // Read manifest once
   const manifest = readManifest();
-  updateManifestEntry(manifest, contentId, chineseOutputPath);
+
+  // Generate audio for each segment
+  for (let i = 0; i < content.segments.length; i++) {
+    const segment = content.segments[i];
+    const segmentIndex = i;
+
+    console.log(
+      `  Segment ${segmentIndex}: "${segment.text.original.substring(0, 20)}..."`,
+    );
+
+    // Convert single segment to SSML
+    const ssml = segmentToChineseSsml(hanziDict, segment);
+    console.log(`    SSML: ${ssml.substring(0, 80)}...`);
+
+    // Generate audio
+    const audio = await generateChineseAudio(client, ssml);
+
+    // Save with segment index in filename: {chapterId}-{segmentIndex}-zh.mp3
+    const outputPath = path.join(
+      outputDir,
+      `${chapterId}-${segmentIndex}-zh.mp3`,
+    );
+    fs.writeFileSync(outputPath, audio);
+    console.log(`    Saved: ${outputPath}`);
+
+    // Update manifest for this segment
+    updateManifestSegment(manifest, contentId, segmentIndex, outputPath);
+  }
+
+  // Write manifest once after all segments
+  console.log('\nUpdating audio manifest...');
   writeManifest(manifest);
   console.log(`  Updated: ${MANIFEST_PATH}`);
 
   console.log('\n=== Generation Complete ===');
+  console.log(`  Generated ${content.segments.length} segment audio files`);
 }
 
 // Only run main when executed directly (not when imported for testing)
