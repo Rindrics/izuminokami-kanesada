@@ -18,30 +18,19 @@
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { Storage } from '@google-cloud/storage';
-
-// ============================================================================
-// Audio Manifest Types
-// ============================================================================
-
-interface AudioFileMetadata {
-  generatedAt?: string;
-  uploadedAt?: string;
-  hash: string;
-}
-
-interface AudioManifestEntry {
-  zh: AudioFileMetadata;
-  ja: AudioFileMetadata;
-}
-
-type AudioManifest = Record<string, AudioManifestEntry>;
-
-const MANIFEST_PATH = path.join(process.cwd(), 'audio-manifest.json');
-const AUDIO_DIR = path.join(process.cwd(), 'audio');
+import {
+  type AudioFileMetadata,
+  type AudioManifest,
+  type AudioSegment,
+  updateSegmentAudio,
+} from '../src/lib/audio-manifest';
 
 // ============================================================================
 // Manifest Functions
 // ============================================================================
+
+const MANIFEST_PATH = path.join(process.cwd(), 'audio-manifest.json');
+const AUDIO_DIR = path.join(process.cwd(), 'audio');
 
 function readManifest(): AudioManifest {
   if (!fs.existsSync(MANIFEST_PATH)) {
@@ -174,11 +163,17 @@ export async function uploadContentAudio(
 
       // Update manifest: remove generatedAt, add uploadedAt
       const entry = manifest[upload.contentId];
-      const langEntry = entry[upload.lang];
-      const now = new Date().toISOString();
+      const segmentIndex = 0;
+      const segment = entry.segments.find((s) => s.index === segmentIndex);
 
-      delete langEntry.generatedAt;
-      langEntry.uploadedAt = now;
+      if (segment) {
+        const langEntry = segment[upload.lang];
+        if (langEntry) {
+          const now = new Date().toISOString();
+          delete langEntry.generatedAt;
+          langEntry.uploadedAt = now;
+        }
+      }
 
       _successCount++;
     } catch (error) {
@@ -219,8 +214,15 @@ function findPendingUploads(
 
     const [bookId, sectionId, chapterId] = contentId.split('/');
 
+    // Chapter-level audio is stored at segment index 0
+    const segmentIndex = 0;
+    const segment = entry.segments.find((s) => s.index === segmentIndex);
+    if (!segment) {
+      continue;
+    }
+
     // Check Chinese audio
-    if (entry.zh.generatedAt && !entry.zh.uploadedAt) {
+    if (segment.zh?.generatedAt && !segment.zh.uploadedAt) {
       pending.push({
         contentId,
         lang: 'zh',
@@ -235,7 +237,7 @@ function findPendingUploads(
     }
 
     // Check Japanese audio (webm format for manually recorded)
-    if (entry.ja?.generatedAt && !entry.ja.uploadedAt) {
+    if (segment.ja?.generatedAt && !segment.ja.uploadedAt) {
       pending.push({
         contentId,
         lang: 'ja',

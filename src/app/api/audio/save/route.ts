@@ -2,6 +2,11 @@ import * as crypto from 'node:crypto';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { type NextRequest, NextResponse } from 'next/server';
+import {
+  type AudioFileMetadata,
+  type AudioManifest,
+  updateSegmentAudio,
+} from '@/lib/audio-manifest';
 
 // Only allow in development
 const isDev = process.env.NODE_ENV === 'development';
@@ -101,19 +106,6 @@ function safeJoinPath(root: string, ...segments: string[]): string | null {
 
   return resolved;
 }
-
-interface AudioFileMetadata {
-  generatedAt?: string;
-  uploadedAt?: string;
-  hash: string;
-}
-
-interface AudioManifestEntry {
-  zh?: AudioFileMetadata;
-  ja?: AudioFileMetadata;
-}
-
-type AudioManifest = Record<string, AudioManifestEntry>;
 
 function calculateHash(buffer: Buffer): string {
   return crypto.createHash('sha256').update(buffer).digest('hex');
@@ -241,15 +233,20 @@ export async function POST(request: NextRequest) {
     const now = new Date().toISOString();
     const hash = calculateHash(buffer);
 
-    // Preserve existing zh entry if present
+    // For chapter-level recording (segment index 0)
+    const segmentIndex = 0;
     const existingEntry = manifest[contentId];
-    manifest[contentId] = {
-      ...(existingEntry?.zh && { zh: existingEntry.zh }),
-      ja: {
-        generatedAt: now,
-        hash,
-      },
+    const metadata: AudioFileMetadata = {
+      generatedAt: now,
+      hash,
     };
+
+    manifest[contentId] = updateSegmentAudio(
+      existingEntry,
+      segmentIndex,
+      'ja',
+      metadata,
+    );
 
     writeManifest(manifestPath, manifest);
 

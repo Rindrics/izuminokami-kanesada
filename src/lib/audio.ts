@@ -12,6 +12,12 @@
  */
 
 import audioManifest from '../../audio-manifest.json';
+import {
+  type AudioLanguage,
+  type AudioManifest,
+  getSegmentAudio,
+  isSegmentAudioAvailable,
+} from './audio-manifest';
 
 const AUDIO_BUCKET_NAME =
   process.env.NEXT_PUBLIC_AUDIO_BUCKET_NAME || 'pj-7sdv-audio-prd';
@@ -20,20 +26,7 @@ const AUDIO_BASE_URL = `https://storage.googleapis.com/${AUDIO_BUCKET_NAME}`;
 
 const isDev = process.env.NODE_ENV === 'development';
 
-export type AudioLanguage = 'zh' | 'ja';
-
-interface AudioFileMetadata {
-  generatedAt?: string;
-  uploadedAt?: string;
-  hash: string;
-}
-
-interface AudioManifestEntry {
-  zh: AudioFileMetadata;
-  ja?: AudioFileMetadata; // Optional: Japanese audio may not be available for all content
-}
-
-type AudioManifest = Record<string, AudioManifestEntry>;
+export type { AudioLanguage };
 
 /**
  * Generate audio file URL for a content
@@ -55,10 +48,13 @@ export function getAudioUrl(
 ): string {
   // Chinese uses mp3 (TTS), Japanese uses webm (manually recorded)
   const ext = lang === 'zh' ? 'mp3' : 'webm';
-  const manifest = audioManifest as AudioManifest;
+  const manifest = audioManifest as unknown as AudioManifest;
   const contentId = `${bookId}/${sectionId}/${chapterId}`;
   const entry = manifest[contentId];
-  const langEntry = entry?.[lang];
+
+  // Chapter-level audio is stored at segment index 0
+  const segmentIndex = 0;
+  const langEntry = getSegmentAudio(entry, segmentIndex, lang);
 
   // In development, use local file if only generatedAt exists (not yet uploaded)
   if (isDev && langEntry?.generatedAt && !langEntry?.uploadedAt) {
@@ -91,20 +87,10 @@ export function isAudioAvailable(
   contentId: string,
   lang: AudioLanguage,
 ): boolean {
-  const manifest = audioManifest as AudioManifest;
+  const manifest = audioManifest as unknown as AudioManifest;
   const entry = manifest[contentId];
-  if (!entry) {
-    return false;
-  }
-  const langEntry = entry[lang];
-  if (!langEntry) {
-    return false;
-  }
 
-  // In development, local files (generatedAt) are also available
-  if (isDev && langEntry.generatedAt) {
-    return true;
-  }
-
-  return langEntry.uploadedAt !== undefined;
+  // Chapter-level audio is stored at segment index 0
+  const segmentIndex = 0;
+  return isSegmentAudioAvailable(entry, segmentIndex, lang, isDev);
 }

@@ -14,19 +14,7 @@
 import { execSync } from 'node:child_process';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
-
-interface AudioFileMetadata {
-  generatedAt?: string;
-  uploadedAt?: string;
-  hash: string;
-}
-
-interface AudioManifestEntry {
-  zh: AudioFileMetadata;
-  ja?: AudioFileMetadata; // Optional: Japanese audio may not be available for all content
-}
-
-type AudioManifest = Record<string, AudioManifestEntry>;
+import { type AudioManifest, getSegmentAudio } from '../src/lib/audio-manifest';
 
 const MANIFEST_PATH = path.join(process.cwd(), 'audio-manifest.json');
 const CONTENT_INPUT_DIR = 'contents/input';
@@ -116,8 +104,10 @@ function validateAudioManifest(): boolean {
       continue;
     }
 
-    // Check that zh entry exists (ja is optional)
-    if (!entry.zh) {
+    // Check that zh entry exists for segment 0 (chapter-level)
+    const segmentIndex = 0;
+    const zhAudio = getSegmentAudio(entry, segmentIndex, 'zh');
+    if (!zhAudio) {
       missingAudio.push(contentId);
     }
   }
