@@ -58,18 +58,23 @@ export function AudioPlayer({
   const [isLooping, setIsLooping] = useState(false);
   const [currentSegment, setCurrentSegment] = useState<number | null>(null);
   const [selectedSegments, setSelectedSegments] = useState<boolean[]>(() =>
-    new Array(segmentCount).fill(true),
+    new Array(Math.max(0, Math.min(segmentCount, segmentTexts.length))).fill(
+      true,
+    ),
   );
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const playSegmentRef = useRef<((segmentIndex: number) => void) | null>(null);
+  const onEndedRef = useRef<(() => void) | null>(null);
+  const onErrorRef = useRef<(() => void) | null>(null);
 
   // Reset when content changes
   // biome-ignore lint/correctness/useExhaustiveDependencies: contentId change should reset state
   useEffect(() => {
-    setSelectedSegments(new Array(segmentCount).fill(true));
+    const length = Math.max(0, Math.min(segmentCount, segmentTexts.length));
+    setSelectedSegments(new Array(length).fill(true));
     setCurrentSegment(null);
     setIsPlaying(false);
-  }, [segmentCount, contentId]);
+  }, [segmentCount, segmentTexts.length, contentId]);
 
   // Reset language when availability changes
   useEffect(() => {
@@ -101,6 +106,22 @@ export function AudioPlayer({
     [selectedSegments],
   );
 
+  // Helper to cleanup audio listeners
+  const cleanupAudio = useCallback(() => {
+    if (audioRef.current) {
+      if (onEndedRef.current) {
+        audioRef.current.removeEventListener('ended', onEndedRef.current);
+      }
+      if (onErrorRef.current) {
+        audioRef.current.removeEventListener('error', onErrorRef.current);
+      }
+      audioRef.current.pause();
+      audioRef.current = null;
+    }
+    onEndedRef.current = null;
+    onErrorRef.current = null;
+  }, []);
+
   // Play a specific segment
   const playSegment = useCallback(
     (segmentIndex: number) => {
@@ -112,14 +133,13 @@ export function AudioPlayer({
         lang,
       );
 
-      if (audioRef.current) {
-        audioRef.current.pause();
-      }
+      // Cleanup existing audio and listeners
+      cleanupAudio();
 
       const audio = new Audio(url);
       audioRef.current = audio;
 
-      audio.addEventListener('ended', () => {
+      const onEnded = () => {
         const next = getNextSelectedSegment(segmentIndex);
         if (next !== null) {
           setCurrentSegment(next);
@@ -137,12 +157,18 @@ export function AudioPlayer({
           setIsPlaying(false);
           setCurrentSegment(null);
         }
-      });
+      };
 
-      audio.addEventListener('error', () => {
+      const onError = () => {
         setIsPlaying(false);
         setCurrentSegment(null);
-      });
+      };
+
+      onEndedRef.current = onEnded;
+      onErrorRef.current = onError;
+
+      audio.addEventListener('ended', onEnded);
+      audio.addEventListener('error', onError);
 
       audio.play().catch((error) => {
         console.error('Failed to play audio:', error);
@@ -158,6 +184,7 @@ export function AudioPlayer({
       isLooping,
       getNextSelectedSegment,
       getFirstSelectedSegment,
+      cleanupAudio,
     ],
   );
 
@@ -168,12 +195,10 @@ export function AudioPlayer({
 
   // Stop playback
   const stopPlayback = useCallback(() => {
-    if (audioRef.current) {
-      audioRef.current.pause();
-    }
+    cleanupAudio();
     setIsPlaying(false);
     setCurrentSegment(null);
-  }, []);
+  }, [cleanupAudio]);
 
   const handlePlayPause = () => {
     if (isPlaying) {
@@ -365,7 +390,7 @@ export function AudioPlayer({
               aria-label={`文節 ${index + 1}`}
               aria-pressed={selected}
             >
-              {getPreviewText(segmentTexts[index] || '')}
+              {getPreviewText(segmentTexts[index] ?? `#${index + 1}`)}
             </button>
           ))}
         </div>
