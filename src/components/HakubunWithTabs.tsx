@@ -374,9 +374,13 @@ export function HakubunWithTabs({
   sectionId,
   chapterId,
 }: Props) {
-  const showPlayButtons = bookId && sectionId && chapterId;
   const router = useRouter();
   const searchParams = useSearchParams();
+
+  // Read playButtons from URL param (controlled by AudioPlayer checkbox)
+  const playButtonsEnabled = searchParams.get('playButtons') === 'true';
+  const showPlayButtons =
+    bookId && sectionId && chapterId && playButtonsEnabled;
 
   // Read mode from query parameter, default to 'plain'
   const modeParam = searchParams.get('mode');

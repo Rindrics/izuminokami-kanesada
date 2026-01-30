@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   type AudioLanguage,
@@ -24,8 +25,27 @@ export function AudioPlayer({
   segmentCount,
   segmentTexts,
 }: Props) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
   const zhAvailable = isAudioAvailable(contentId, 'zh');
   const jaAvailable = isAudioAvailable(contentId, 'ja');
+
+  // Read showPlayButtons from URL param (default: false)
+  const showPlayButtons = searchParams.get('playButtons') === 'true';
+
+  const handleShowPlayButtonsChange = (checked: boolean) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (checked) {
+      params.set('playButtons', 'true');
+    } else {
+      params.delete('playButtons');
+    }
+    const query = params.toString();
+    router.replace(query ? `?${query}` : window.location.pathname, {
+      scroll: false,
+    });
+  };
 
   const getValidLang = (): AudioLanguage => {
     if (zhAvailable) return 'zh';
@@ -287,6 +307,15 @@ export function AudioPlayer({
               className="h-4 w-4 rounded border-zinc-300 text-zinc-600 focus:ring-zinc-500 dark:border-zinc-600 dark:text-zinc-400"
             />
             <span>ループ再生</span>
+          </label>
+          <label className="flex items-center gap-2 text-sm text-zinc-600 dark:text-zinc-400">
+            <input
+              type="checkbox"
+              checked={showPlayButtons}
+              onChange={(e) => handleShowPlayButtonsChange(e.target.checked)}
+              className="h-4 w-4 rounded border-zinc-300 text-zinc-600 focus:ring-zinc-500 dark:border-zinc-600 dark:text-zinc-400"
+            />
+            <span>白文内に再生ボタンを表示</span>
           </label>
         </div>
       </div>
