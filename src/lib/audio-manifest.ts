@@ -21,46 +21,92 @@ export interface AudioManifestEntry {
   segments: AudioSegment[];
 }
 
-export type AudioManifest = Record<string, AudioManifestEntry>;
+// Legacy format for backward compatibility during migration
+interface LegacyAudioManifestEntry {
+  zh?: AudioFileMetadata;
+  ja?: AudioFileMetadata;
+}
+
+export type AudioManifest = Record<
+  string,
+  AudioManifestEntry | LegacyAudioManifestEntry
+>;
+
+/**
+ * Check if manifest entry is in legacy format (chapter-level without segments array)
+ */
+function isLegacyEntry(
+  entry: AudioManifestEntry | LegacyAudioManifestEntry,
+): entry is LegacyAudioManifestEntry {
+  return !('segments' in entry);
+}
+
+/**
+ * Convert legacy entry to new segment-based format
+ * Legacy entries are treated as segment index 0 (chapter-level)
+ */
+function convertLegacyEntry(
+  entry: LegacyAudioManifestEntry,
+): AudioManifestEntry {
+  const segment: AudioSegment = { index: 0 };
+  if (entry.zh) segment.zh = entry.zh;
+  if (entry.ja) segment.ja = entry.ja;
+  return { segments: [segment] };
+}
+
+/**
+ * Get normalized manifest entry (handles both legacy and new formats)
+ */
+function getNormalizedEntry(
+  entry: AudioManifestEntry | LegacyAudioManifestEntry | undefined,
+): AudioManifestEntry | undefined {
+  if (!entry) return undefined;
+  if (isLegacyEntry(entry)) {
+    return convertLegacyEntry(entry);
+  }
+  return entry;
+}
 
 export type AudioLanguage = 'zh' | 'ja';
 
 /**
  * Get audio metadata for a specific segment
  *
- * @param entry - Audio manifest entry
+ * @param entry - Audio manifest entry (supports both legacy and new formats)
  * @param segmentIndex - Segment index (default: 0 for chapter-level)
  * @param lang - Language code
  * @returns Audio metadata if exists, undefined otherwise
  */
 export function getSegmentAudio(
-  entry: AudioManifestEntry | undefined,
+  entry: AudioManifestEntry | LegacyAudioManifestEntry | undefined,
   segmentIndex: number,
   lang: AudioLanguage,
 ): AudioFileMetadata | undefined {
-  if (!entry) {
+  const normalized = getNormalizedEntry(entry);
+  if (!normalized) {
     return undefined;
   }
-  const segment = entry.segments.find((s) => s.index === segmentIndex);
+  const segment = normalized.segments.find((s) => s.index === segmentIndex);
   return segment?.[lang];
 }
 
 /**
  * Update or add audio metadata for a specific segment
  *
- * @param entry - Existing manifest entry (or undefined for new entry)
+ * @param entry - Existing manifest entry (or undefined for new entry, supports both legacy and new formats)
  * @param segmentIndex - Segment index
  * @param lang - Language code
  * @param metadata - Audio file metadata
- * @returns Updated manifest entry
+ * @returns Updated manifest entry (always in new format)
  */
 export function updateSegmentAudio(
-  entry: AudioManifestEntry | undefined,
+  entry: AudioManifestEntry | LegacyAudioManifestEntry | undefined,
   segmentIndex: number,
   lang: AudioLanguage,
   metadata: AudioFileMetadata,
 ): AudioManifestEntry {
-  const existingSegments = entry?.segments || [];
+  const normalized = getNormalizedEntry(entry);
+  const existingSegments = normalized?.segments || [];
   const existingSegment = existingSegments.find(
     (s) => s.index === segmentIndex,
   );
@@ -88,14 +134,14 @@ export function updateSegmentAudio(
 /**
  * Check if audio is available for a segment
  *
- * @param entry - Audio manifest entry
+ * @param entry - Audio manifest entry (supports both legacy and new formats)
  * @param segmentIndex - Segment index (default: 0 for chapter-level)
  * @param lang - Language code
  * @param isDev - Whether in development mode (local files are also available)
  * @returns true if audio is available
  */
 export function isSegmentAudioAvailable(
-  entry: AudioManifestEntry | undefined,
+  entry: AudioManifestEntry | LegacyAudioManifestEntry | undefined,
   segmentIndex: number,
   lang: AudioLanguage,
   isDev: boolean = false,
