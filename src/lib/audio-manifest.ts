@@ -73,13 +73,13 @@ export type AudioLanguage = 'zh' | 'ja';
  * Get audio metadata for a specific segment
  *
  * @param entry - Audio manifest entry (supports both legacy and new formats)
- * @param segmentIndex - Segment index (default: 0 for chapter-level)
+ * @param segmentIndex - Segment index (0 for chapter-level or first segment)
  * @param lang - Language code
  * @returns Audio metadata if exists, undefined otherwise
  */
 export function getSegmentAudio(
   entry: AudioManifestEntry | LegacyAudioManifestEntry | undefined,
-  segmentIndex: number,
+  segmentIndex: number = 0,
   lang: AudioLanguage,
 ): AudioFileMetadata | undefined {
   const normalized = getNormalizedEntry(entry);
@@ -135,14 +135,14 @@ export function updateSegmentAudio(
  * Check if audio is available for a segment
  *
  * @param entry - Audio manifest entry (supports both legacy and new formats)
- * @param segmentIndex - Segment index (default: 0 for chapter-level)
+ * @param segmentIndex - Segment index (0 for chapter-level or first segment)
  * @param lang - Language code
  * @param isDev - Whether in development mode (local files are also available)
  * @returns true if audio is available
  */
 export function isSegmentAudioAvailable(
   entry: AudioManifestEntry | LegacyAudioManifestEntry | undefined,
-  segmentIndex: number,
+  segmentIndex: number = 0,
   lang: AudioLanguage,
   isDev: boolean = false,
 ): boolean {
