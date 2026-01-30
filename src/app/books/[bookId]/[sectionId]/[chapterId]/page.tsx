@@ -67,6 +67,7 @@ export default async function ContentPage({ params }: Props) {
             {section.name}: {content.chapter}
           </h1>
         </header>
+        <KeyboardNavigation prevUrl={prevUrl} nextUrl={nextUrl} />
 
         <article className="space-y-6">
           <AudioPlayer
@@ -116,8 +117,6 @@ export default async function ContentPage({ params }: Props) {
             このページの元データを見る
           </a>
         </div>
-
-        <KeyboardNavigation prevUrl={prevUrl} nextUrl={nextUrl} />
       </main>
     </div>
   );
