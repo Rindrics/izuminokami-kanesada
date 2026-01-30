@@ -88,7 +88,12 @@ export default async function ContentPage({ params }: Props) {
           <Suspense
             fallback={<div className="text-zinc-500">読み込み中...</div>}
           >
-            <HakubunWithTabs segments={content.segments} />
+            <HakubunWithTabs
+              segments={content.segments}
+              bookId={bookId}
+              sectionId={sectionId}
+              chapterId={chapterId}
+            />
           </Suspense>
 
           <section>
