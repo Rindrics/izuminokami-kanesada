@@ -24,9 +24,16 @@ interface InputSegmentText {
   japanese: string;
 }
 
+interface InputHanziOverride {
+  char: string;
+  position: number;
+  meaning_id: string;
+}
+
 interface InputSegment {
   text: InputSegmentText;
   speaker: string | null;
+  hanzi_overrides?: InputHanziOverride[];
 }
 
 interface InputContent {
@@ -44,6 +51,7 @@ interface OutputSegment {
   start_pos: number;
   end_pos: number;
   speaker: string | null;
+  hanzi_overrides?: InputHanziOverride[];
 }
 
 export interface OutputContent {
@@ -252,6 +260,10 @@ function parseInputFile(filePath: string): InputContent {
       segment.text.japanese =
         typeof segment.text.japanese === 'string' ? segment.text.japanese : '';
     }
+    // Normalize hanzi_overrides
+    if (segment.hanzi_overrides && !Array.isArray(segment.hanzi_overrides)) {
+      segment.hanzi_overrides = undefined;
+    }
   }
 
   return parsed;
@@ -279,6 +291,7 @@ function deriveContent(
       start_pos: startPos,
       end_pos: endPos,
       speaker: segment.speaker,
+      hanzi_overrides: segment.hanzi_overrides,
     });
 
     // Add 1 for space between segments

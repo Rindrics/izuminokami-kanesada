@@ -3,9 +3,9 @@
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ClickableChar } from '@/components/ClickableChar';
 import { SegmentPlayButton } from '@/components/SegmentPlayButton';
-import { getDefaultMeaning } from '@/data/hanzi-dictionary';
+import { getDefaultMeaning, getMeaningById } from '@/data/hanzi-dictionary';
 import { getPersonName } from '@/generated/persons';
-import type { Segment } from '@/types/content';
+import type { HanziOverride, Segment } from '@/types/content';
 
 type DisplayMode = 'plain' | 'onyomi' | 'pinyin';
 
@@ -20,7 +20,10 @@ interface Props {
 // Returns: { chars, originalTones, effectiveTones }
 // - originalTones: base tones from dictionary (for color)
 // - effectiveTones: tones after sandhi applied (for contour shape)
-function parseTextWithToneSandhi(text: string): {
+function parseTextWithToneSandhi(
+  text: string,
+  hanziOverrides?: HanziOverride[],
+): {
   chars: string[];
   originalTones: (number | undefined)[];
   effectiveTones: (number | undefined)[];
@@ -28,11 +31,30 @@ function parseTextWithToneSandhi(text: string): {
   const chars: string[] = [];
   const originalTones: (number | undefined)[] = [];
 
+  // Build override map: map from original text position to meaning_id
+  const overrideMap = new Map<number, string>();
+  if (hanziOverrides) {
+    for (const override of hanziOverrides) {
+      if (
+        override.position >= 0 &&
+        override.position < text.length &&
+        text[override.position] === override.char
+      ) {
+        overrideMap.set(override.position, override.meaning_id);
+      }
+    }
+  }
+
   // First pass: extract characters and their base tones (skip hyphens only)
-  for (const char of text) {
+  for (let i = 0; i < text.length; i++) {
+    const char = text[i];
     if (char !== '-') {
       chars.push(char);
-      const meaning = getDefaultMeaning(char);
+      // Check if there's an override for this position
+      const overrideMeaningId = overrideMap.get(i);
+      const meaning = overrideMeaningId
+        ? getMeaningById(char, overrideMeaningId)
+        : getDefaultMeaning(char);
       originalTones.push(meaning?.tone);
     }
   }
@@ -254,10 +276,12 @@ function TextWithRuby({
   text,
   mode,
   isNarration,
+  hanziOverrides,
 }: {
   text: string;
   mode: DisplayMode;
   isNarration: boolean;
+  hanziOverrides?: HanziOverride[];
 }) {
   const baseClass = isNarration
     ? 'text-zinc-500 dark:text-zinc-400'
@@ -297,8 +321,34 @@ function TextWithRuby({
   }
 
   // Parse text and apply tone sandhi
-  const { chars, originalTones, effectiveTones } =
-    parseTextWithToneSandhi(text);
+  const { chars, originalTones, effectiveTones } = parseTextWithToneSandhi(
+    text,
+    hanziOverrides,
+  );
+
+  // Build override map: map from chars array index to meaning_id
+  // hanzi_overrides.position is in original text (including hyphens),
+  // but chars array excludes hyphens, so we need to convert
+  const overrideMap = new Map<number, string>();
+  if (hanziOverrides) {
+    // Build mapping from original text position to chars array index
+    let charsIndex = 0;
+    for (let textIndex = 0; textIndex < text.length; textIndex++) {
+      if (text[textIndex] !== '-') {
+        // Check if there's an override at this original text position
+        const override = hanziOverrides.find(
+          (o) =>
+            o.position === textIndex &&
+            o.char === text[textIndex] &&
+            text[textIndex] === chars[charsIndex],
+        );
+        if (override) {
+          overrideMap.set(charsIndex, override.meaning_id);
+        }
+        charsIndex++;
+      }
+    }
+  }
 
   // Group characters by semantic units (split by spaces)
   // Each group will be wrapped in nowrap span to prevent mid-word line breaks
@@ -310,7 +360,12 @@ function TextWithRuby({
     const char = chars[i];
     const originalTone = originalTones[i];
     const effectiveTone = effectiveTones[i];
-    const meaning = getDefaultMeaning(char);
+
+    // Check if there's an override for this position
+    const overrideMeaningId = overrideMap.get(i);
+    const meaning = overrideMeaningId
+      ? getMeaningById(char, overrideMeaningId)
+      : getDefaultMeaning(char);
 
     // Space starts a new group
     if (char === ' ') {
@@ -534,6 +589,7 @@ export function HakubunWithTabs({
                           text={segment.text.original}
                           mode={mode}
                           isNarration={isNarration}
+                          hanziOverrides={segment.hanzi_overrides}
                         />
                       </span>
                     </span>
