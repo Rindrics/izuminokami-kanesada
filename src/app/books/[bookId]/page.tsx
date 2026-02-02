@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { Suspense } from 'react';
-import { FavoriteContentList } from '@/components/FavoriteContentList';
+import { ListWithFavoriteSidebar } from '@/components/ListWithFavoriteSidebar';
 import { PageWithSidebar } from '@/components/PageWithSidebar';
 import { getAllBookIds, getBookById } from '@/generated/books';
 
@@ -38,15 +37,8 @@ export default async function BookPage({ params }: Props) {
         <h2 className="mb-4 text-lg font-medium text-zinc-600 dark:text-zinc-400">
           編一覧
         </h2>
-        <div className="lg:flex lg:flex-row-reverse lg:gap-8">
-          <aside className="mb-6 lg:mb-0 lg:w-80 lg:shrink-0">
-            <div className="lg:sticky lg:top-8">
-              <Suspense fallback={null}>
-                <FavoriteContentList maxItems={5} />
-              </Suspense>
-            </div>
-          </aside>
-          <ul className="space-y-2 lg:min-w-0 lg:flex-1">
+        <ListWithFavoriteSidebar>
+          <ul className="space-y-2">
             {book.sections.map((section) => {
               const hasContent = section.chapters.length > 0;
               return (
@@ -77,7 +69,7 @@ export default async function BookPage({ params }: Props) {
               );
             })}
           </ul>
-        </div>
+        </ListWithFavoriteSidebar>
       </section>
     </PageWithSidebar>
   );
