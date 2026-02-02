@@ -1,5 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { ListWithFavoriteSidebar } from '@/components/ListWithFavoriteSidebar';
+import { PageWithSidebar } from '@/components/PageWithSidebar';
 import { getAllBookIds, getBookById } from '@/generated/books';
 
 interface Props {
@@ -19,23 +21,23 @@ export default async function BookPage({ params }: Props) {
   }
 
   return (
-    <div className="bg-zinc-50 dark:bg-black">
-      <main className="mx-auto max-w-3xl px-4 py-8 sm:px-6 lg:px-8">
-        <header className="mb-8">
-          <nav className="mb-4 text-sm text-zinc-500 dark:text-zinc-400">
-            <Link href="/" className="hover:underline">
-              トップ
-            </Link>
-          </nav>
-          <h1 className="text-3xl font-bold text-black dark:text-white">
-            {book.name}
-          </h1>
-        </header>
+    <PageWithSidebar showSidebar={false}>
+      <header className="mb-8">
+        <nav className="mb-4 text-sm text-zinc-500 dark:text-zinc-400">
+          <Link href="/" className="hover:underline">
+            トップ
+          </Link>
+        </nav>
+        <h1 className="text-3xl font-bold text-black dark:text-white">
+          {book.name}
+        </h1>
+      </header>
 
-        <section>
-          <h2 className="mb-4 text-lg font-medium text-zinc-600 dark:text-zinc-400">
-            編一覧
-          </h2>
+      <section>
+        <h2 className="mb-4 text-lg font-medium text-zinc-600 dark:text-zinc-400">
+          編一覧
+        </h2>
+        <ListWithFavoriteSidebar>
           <ul className="space-y-2">
             {book.sections.map((section) => {
               const hasContent = section.chapters.length > 0;
@@ -67,8 +69,8 @@ export default async function BookPage({ params }: Props) {
               );
             })}
           </ul>
-        </section>
-      </main>
-    </div>
+        </ListWithFavoriteSidebar>
+      </section>
+    </PageWithSidebar>
   );
 }

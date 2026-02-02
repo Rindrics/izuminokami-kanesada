@@ -3,6 +3,8 @@ import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 import { AudioPlayer } from '@/components/AudioPlayer';
 import { AudioRecorder } from '@/components/AudioRecorder';
+import { ContentPageClient } from '@/components/ContentPageClient';
+import { FavoriteContentList } from '@/components/FavoriteContentList';
 import { HakubunWithTabs } from '@/components/HakubunWithTabs';
 import { JapaneseTextWithRuby } from '@/components/JapaneseTextWithRuby';
 import { KeyboardNavigation } from '@/components/KeyboardNavigation';
@@ -63,16 +65,21 @@ export default async function ContentPage({ params }: Props) {
             <span className="mx-2">&gt;</span>
             <span>{content.chapter}</span>
           </nav>
-          <h1 className="text-2xl font-bold text-black dark:text-white">
-            {section.name}: {content.chapter}
-          </h1>
+          <div className="flex items-center gap-2">
+            <h1 className="text-2xl font-bold text-black dark:text-white">
+              {section.name}: {content.chapter}
+            </h1>
+            <Suspense fallback={null}>
+              <ContentPageClient contentId={contentId} />
+            </Suspense>
+          </div>
         </header>
         <KeyboardNavigation prevUrl={prevUrl} nextUrl={nextUrl} />
 
         <div className="lg:flex lg:flex-row-reverse lg:gap-8">
           {/* AudioPlayer: top on mobile, right column on desktop */}
-          <aside className="mb-6 lg:mb-0 lg:w-80 lg:shrink-0">
-            <div className="lg:sticky lg:top-8">
+          <aside className="mb-6 space-y-4 lg:mb-0 lg:w-80 lg:shrink-0">
+            <div className="lg:sticky lg:top-8 lg:space-y-4">
               <Suspense fallback={null}>
                 <AudioPlayer
                   bookId={bookId}
@@ -82,6 +89,9 @@ export default async function ContentPage({ params }: Props) {
                   segmentCount={content.segments.length}
                   segmentTexts={content.segments.map((s) => s.text.original)}
                 />
+              </Suspense>
+              <Suspense fallback={null}>
+                <FavoriteContentList maxItems={5} />
               </Suspense>
             </div>
           </aside>

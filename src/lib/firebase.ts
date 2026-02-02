@@ -64,29 +64,59 @@ if (isFirebaseConfigured) {
 
   if (useEmulators && typeof window !== 'undefined') {
     const authEmulatorHost =
-      process.env.NEXT_PUBLIC_FIREBASE_AUTH_EMULATOR_HOST || 'localhost:9099';
+      process.env.NEXT_PUBLIC_FIREBASE_AUTH_EMULATOR_HOST || 'localhost:30603';
     const firestoreEmulatorHost =
       process.env.NEXT_PUBLIC_FIREBASE_FIRESTORE_EMULATOR_HOST ||
       'localhost:30602';
     const [firestoreHost, firestorePort] = firestoreEmulatorHost.split(':');
+    const [authHost, authPort] = authEmulatorHost.split(':');
 
+    // Get Firestore instance and connect to emulator immediately
+    const tempDb = getFirestore(app);
     try {
-      connectAuthEmulator(getAuth(app), `http://${authEmulatorHost}`, {
+      connectFirestoreEmulator(
+        tempDb,
+        firestoreHost,
+        Number.parseInt(firestorePort, 10),
+      );
+      db = tempDb;
+    } catch (error) {
+      // Emulators already connected, ignore
+      if (
+        error instanceof Error &&
+        !error.message.includes('already connected')
+      ) {
+        console.error('[firebase] Firestore emulator connection error:', error);
+      }
+      db = tempDb;
+    }
+
+    // Get Auth instance and connect to emulator immediately
+    const tempAuth = getAuth(app);
+    try {
+      const authEmulatorUrl = `http://${authHost}:${authPort}`;
+      connectAuthEmulator(tempAuth, authEmulatorUrl, {
         disableWarnings: true,
       });
-      connectFirestoreEmulator(
-        getFirestore(app),
-        firestoreHost,
-        parseInt(firestorePort, 10),
-      );
-    } catch (_error) {
+      auth = tempAuth;
+    } catch (error) {
       // Emulators already connected, ignore
+      if (
+        error instanceof Error &&
+        !error.message.includes('already connected')
+      ) {
+        console.warn(
+          '[firebase] Auth emulator connection warning:',
+          error.message,
+        );
+      }
+      auth = tempAuth;
     }
+  } else {
+    // Initialize Firebase services (production mode)
+    auth = getAuth(app);
+    db = getFirestore(app);
   }
-
-  // Initialize Firebase services
-  auth = getAuth(app);
-  db = getFirestore(app);
 }
 
 export { auth, db };

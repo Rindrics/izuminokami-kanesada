@@ -1,24 +1,26 @@
 import Link from 'next/link';
+import { ListWithFavoriteSidebar } from '@/components/ListWithFavoriteSidebar';
+import { PageWithSidebar } from '@/components/PageWithSidebar';
 import { books } from '@/generated/books';
 
 export default function Home() {
   return (
-    <div className="bg-zinc-50 dark:bg-black">
-      <main className="mx-auto max-w-3xl px-4 py-8 sm:px-6 lg:px-8">
-        <header className="mb-8">
-          <h1 className="text-3xl font-bold text-black dark:text-white">
-            素読庵
-          </h1>
-          <p className="mt-2 text-zinc-600 dark:text-zinc-400">
-            漢文素読を子供と実践する &quot;指導者&quot;
-            の学習を支援する意図で作っています。
-          </p>
-        </header>
+    <PageWithSidebar showSidebar={false}>
+      <header className="mb-8">
+        <h1 className="text-3xl font-bold text-black dark:text-white">
+          素読庵
+        </h1>
+        <p className="mt-2 text-zinc-600 dark:text-zinc-400">
+          漢文素読を子供と実践する &quot;指導者&quot;
+          の学習を支援する意図で作っています。
+        </p>
+      </header>
 
-        <section className="mb-8">
-          <h2 className="mb-4 text-lg font-medium text-zinc-600 dark:text-zinc-400">
-            経書一覧
-          </h2>
+      <section className="mb-8">
+        <h2 className="mb-4 text-lg font-medium text-zinc-600 dark:text-zinc-400">
+          経書一覧
+        </h2>
+        <ListWithFavoriteSidebar>
           <ul className="space-y-2">
             {books.map((book) => {
               const currentSections = book.sections.filter(
@@ -71,8 +73,8 @@ export default function Home() {
               );
             })}
           </ul>
-        </section>
-      </main>
-    </div>
+        </ListWithFavoriteSidebar>
+      </section>
+    </PageWithSidebar>
   );
 }
