@@ -1,9 +1,14 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { KeyboardNavigation } from '@/components/KeyboardNavigation';
 import { ListWithFavoriteSidebar } from '@/components/ListWithFavoriteSidebar';
 import { PageWithSidebar } from '@/components/PageWithSidebar';
-import { getAllBookIds, getBookById } from '@/generated/books';
+import {
+  getAdjacentBookIds,
+  getAllBookIds,
+  getBookById,
+} from '@/generated/books';
 import { createMetadata } from '@/lib/metadata';
 
 interface Props {
@@ -48,6 +53,10 @@ export default async function BookPage({ params }: Props) {
     notFound();
   }
 
+  const { prev, next } = getAdjacentBookIds(bookId);
+  const prevUrl = prev ? `/books/${prev}` : null;
+  const nextUrl = next ? `/books/${next}` : null;
+
   return (
     <PageWithSidebar showSidebar={false}>
       <header className="sticky top-14 z-10 mb-8 bg-zinc-50 py-4 dark:bg-black">
@@ -60,6 +69,13 @@ export default async function BookPage({ params }: Props) {
           {book.name}
         </h1>
       </header>
+
+      <KeyboardNavigation
+        prevUrl={prevUrl}
+        nextUrl={nextUrl}
+        prevLabel="前の経書"
+        nextLabel="次の経書"
+      />
 
       <section>
         <h2 className="mb-4 text-lg font-medium text-zinc-600 dark:text-zinc-400">
