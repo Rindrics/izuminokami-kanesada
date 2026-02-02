@@ -2,6 +2,7 @@
 
 import { Suspense, useEffect, useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import { getFavoriteContentIds } from '@/lib/favorites';
 import { FavoriteContentList } from './FavoriteContentList';
 
 interface Props {
@@ -17,6 +18,8 @@ export function ListWithFavoriteSidebar({
 }: Props) {
   const { user, loading } = useAuth();
   const [isLargeScreen, setIsLargeScreen] = useState(true);
+  const [hasFavorites, setHasFavorites] = useState(false);
+  const [isFavoritesLoading, setIsFavoritesLoading] = useState(true);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(min-width: 1024px)');
@@ -27,8 +30,33 @@ export function ListWithFavoriteSidebar({
     return () => mediaQuery.removeEventListener('change', handler);
   }, []);
 
-  // Show full width when not authenticated
+  // Check if user has favorites
+  useEffect(() => {
+    if (!user || loading) {
+      setIsFavoritesLoading(true);
+      setHasFavorites(false);
+      return;
+    }
+
+    setIsFavoritesLoading(true);
+    getFavoriteContentIds(user.uid)
+      .then((ids) => {
+        setHasFavorites(ids.length > 0);
+      })
+      .catch(() => {
+        setHasFavorites(false);
+      })
+      .finally(() => {
+        setIsFavoritesLoading(false);
+      });
+  }, [user, loading]);
+
+  // Show full width when not authenticated or when authenticated but no favorites exist
   if (!user && !loading) {
+    return <>{children}</>;
+  }
+
+  if (!isFavoritesLoading && !hasFavorites) {
     return <>{children}</>;
   }
 
