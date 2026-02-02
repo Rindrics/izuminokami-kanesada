@@ -1,7 +1,8 @@
 'use client';
 
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useEffect, useLayoutEffect, useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import { getFavoriteContentIds } from '@/lib/favorites';
 import { FavoriteContentList } from './FavoriteContentList';
 
 interface Props {
@@ -16,9 +17,11 @@ export function ListWithFavoriteSidebar({
   maxItemsMobile = 2,
 }: Props) {
   const { user, loading } = useAuth();
-  const [isLargeScreen, setIsLargeScreen] = useState(true);
+  const [isLargeScreen, setIsLargeScreen] = useState(false);
+  const [hasFavorites, setHasFavorites] = useState(false);
+  const [isFavoritesLoading, setIsFavoritesLoading] = useState(true);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const mediaQuery = window.matchMedia('(min-width: 1024px)');
     setIsLargeScreen(mediaQuery.matches);
 
@@ -27,8 +30,45 @@ export function ListWithFavoriteSidebar({
     return () => mediaQuery.removeEventListener('change', handler);
   }, []);
 
-  // Show full width when not authenticated
-  if (!user && !loading) {
+  // Check if user has favorites
+  useLayoutEffect(() => {
+    if (!user || loading) {
+      setIsFavoritesLoading(true);
+      setHasFavorites(false);
+      return () => {};
+    }
+
+    let cancelled = false;
+
+    setIsFavoritesLoading(true);
+    getFavoriteContentIds(user.uid)
+      .then((ids) => {
+        if (!cancelled) {
+          setHasFavorites(ids.length > 0);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setHasFavorites(false);
+        }
+      })
+      .finally(() => {
+        if (!cancelled) {
+          setIsFavoritesLoading(false);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [user, loading]);
+
+  // Show full width while loading or when authenticated but no favorites exist
+  if (loading || isFavoritesLoading) {
+    return <>{children}</>;
+  }
+
+  if (!user || !hasFavorites) {
     return <>{children}</>;
   }
 
