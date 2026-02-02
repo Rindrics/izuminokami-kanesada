@@ -71,6 +71,16 @@ export default async function ContentPage({ params }: Props) {
   const prevContent = prev ? getContentById(prev) : null;
   const nextContent = next ? getContentById(next) : null;
 
+  // Extract book ID from content ID
+  const prevBookId = prev ? prev.split('/')[0] : null;
+  const nextBookId = next ? next.split('/')[0] : null;
+
+  // Get book objects if crossing books
+  const prevBook =
+    prevBookId && prevBookId !== bookId ? getBookById(prevBookId) : null;
+  const nextBook =
+    nextBookId && nextBookId !== bookId ? getBookById(nextBookId) : null;
+
   const prevUrl = prevContent ? `/books/${prev}` : null;
   const nextUrl = nextContent ? `/books/${next}` : null;
 
@@ -79,17 +89,21 @@ export default async function ContentPage({ params }: Props) {
     if (!c?.segments.length) return '';
     const fullText = c.segments.map((s) => s.text.original).join('');
 
-    const maxLength = 4;
+    const maxLength = 3;
     return fullText.length > maxLength
       ? `${fullText.slice(0, maxLength)}...`
       : fullText;
   };
 
   const prevLabel = prevContent
-    ? `前の章（${getContentLabelText(prevContent)}）へ`
+    ? prevBook
+      ? `${prevBook.name}（${getContentLabelText(prevContent)}）へ`
+      : `前の章（${getContentLabelText(prevContent)}）へ`
     : undefined;
   const nextLabel = nextContent
-    ? `次の章（${getContentLabelText(nextContent)}）へ`
+    ? nextBook
+      ? `${nextBook.name}（${getContentLabelText(nextContent)}）へ`
+      : `次の章（${getContentLabelText(nextContent)}）へ`
     : undefined;
 
   return (
