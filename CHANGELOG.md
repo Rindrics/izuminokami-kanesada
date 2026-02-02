@@ -1,5 +1,9 @@
 # Changelog
 
+## [v0.4.0](https://github.com/Rindrics/izuminokami-kanesada/compare/v0.3.3...v0.4.0) - 2026-02-02
+- feat: provide favorite function by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/111
+- fix: improve UI by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/113
+
 ## [v0.3.3](https://github.com/Rindrics/izuminokami-kanesada/compare/v0.3.2...v0.3.3) - 2026-02-02
 - fix: use hanzi override for content generation by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/108
 
