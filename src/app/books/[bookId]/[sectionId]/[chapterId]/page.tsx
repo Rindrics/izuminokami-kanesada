@@ -4,10 +4,10 @@ import { Suspense } from 'react';
 import { AudioPlayer } from '@/components/AudioPlayer';
 import { AudioRecorder } from '@/components/AudioRecorder';
 import { ContentPageClient } from '@/components/ContentPageClient';
-import { FavoriteContentList } from '@/components/FavoriteContentList';
 import { HakubunWithTabs } from '@/components/HakubunWithTabs';
 import { JapaneseTextWithRuby } from '@/components/JapaneseTextWithRuby';
 import { KeyboardNavigation } from '@/components/KeyboardNavigation';
+import { ResponsiveFavoriteContentList } from '@/components/ResponsiveFavoriteContentList';
 import { getBookById, getSectionById } from '@/generated/books';
 import {
   getAdjacentContentIds,
@@ -91,7 +91,7 @@ export default async function ContentPage({ params }: Props) {
                 />
               </Suspense>
               <Suspense fallback={null}>
-                <FavoriteContentList maxItems={5} />
+                <ResponsiveFavoriteContentList />
               </Suspense>
             </div>
           </aside>
