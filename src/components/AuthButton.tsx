@@ -67,7 +67,7 @@ export function AuthButton() {
                 onClick={() => setShowUserMenu(false)}
                 className="block w-full px-4 py-2 text-left text-sm text-zinc-700 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800"
               >
-                お気に入り
+                お気に入り一覧
               </Link>
               <button
                 type="button"
