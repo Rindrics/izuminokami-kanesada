@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
@@ -10,6 +11,7 @@ import {
   getSectionById,
 } from '@/generated/books';
 import { getContentById } from '@/generated/contents';
+import { createMetadata } from '@/lib/metadata';
 
 interface Props {
   params: Promise<{ bookId: string; sectionId: string }>;
@@ -19,6 +21,25 @@ export async function generateStaticParams() {
   return getAllSectionPaths().map((path) => {
     const [bookId, sectionId] = path.split('/');
     return { bookId, sectionId };
+  });
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { bookId, sectionId } = await params;
+  const book = getBookById(bookId);
+  const section = getSectionById(bookId, sectionId);
+
+  if (!book || !section) {
+    return { title: '編が見つかりません' };
+  }
+
+  const title = `${section.name} - ${book.name}`;
+  const description = `${book.name} ${section.name}の全章を一覧表示。現在${section.chapters.length}/${section.totalChapters}章を収録。孔子の教えを白文と訓読みで学習できます。`;
+
+  return createMetadata({
+    title,
+    description,
+    path: `/books/${bookId}/${sectionId}/`,
   });
 }
 

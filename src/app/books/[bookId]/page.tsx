@@ -1,8 +1,10 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ListWithFavoriteSidebar } from '@/components/ListWithFavoriteSidebar';
 import { PageWithSidebar } from '@/components/PageWithSidebar';
 import { getAllBookIds, getBookById } from '@/generated/books';
+import { createMetadata } from '@/lib/metadata';
 
 interface Props {
   params: Promise<{ bookId: string }>;
@@ -10,6 +12,32 @@ interface Props {
 
 export async function generateStaticParams() {
   return getAllBookIds().map((bookId) => ({ bookId }));
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { bookId } = await params;
+  const book = getBookById(bookId);
+
+  if (!book) {
+    return { title: '書籍が見つかりません' };
+  }
+
+  const currentSections = book.sections.filter(
+    (s) => s.chapters.length > 0,
+  ).length;
+  const currentChapters = book.sections.reduce(
+    (sum, s) => sum + s.chapters.length,
+    0,
+  );
+
+  const title = book.name;
+  const description = `${book.name}の全編を一覧表示。現在${currentSections}/${book.totalSections}編、計${currentChapters}章を収録。白文・訓読み・読み下し文で学習できます。`;
+
+  return createMetadata({
+    title,
+    description,
+    path: `/books/${bookId}/`,
+  });
 }
 
 export default async function BookPage({ params }: Props) {

@@ -1,7 +1,26 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ListWithFavoriteSidebar } from '@/components/ListWithFavoriteSidebar';
 import { PageWithSidebar } from '@/components/PageWithSidebar';
 import { books } from '@/generated/books';
+
+export const metadata: Metadata = {
+  title: '素読庵 - 四書五経を学ぶWebアプリ',
+  description:
+    '論語・孟子・大学・中庸など四書五経を白文・訓読み・読み下し文で学習。音声合成による読み上げと豊富な統計データで漢文素読を支援します。',
+  openGraph: {
+    title: '素読庵 - 四書五経を学ぶWebアプリ',
+    description:
+      '論語・孟子・大学・中庸など四書五経を白文・訓読み・読み下し文で学習。音声合成による読み上げと豊富な統計データで漢文素読を支援します。',
+    url: '/',
+  },
+  twitter: {
+    card: 'summary',
+    title: '素読庵 - 四書五経を学ぶWebアプリ',
+    description:
+      '論語・孟子・大学・中庸など四書五経を白文・訓読み・読み下し文で学習。音声合成による読み上げと豊富な統計データで漢文素読を支援します。',
+  },
+};
 
 export default function Home() {
   return (
