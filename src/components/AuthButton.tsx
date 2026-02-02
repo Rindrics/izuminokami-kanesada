@@ -3,8 +3,10 @@
 import { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 
-// Only show auth UI in development
+// Show auth UI in development or when using emulators
 const isDevelopment = process.env.NODE_ENV === 'development';
+const useEmulators = process.env.NEXT_PUBLIC_USE_FIREBASE_EMULATORS === 'true';
+const showAuthUI = isDevelopment || useEmulators;
 
 export function AuthButton() {
   const {
@@ -25,8 +27,8 @@ export function AuthButton() {
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
 
-  // Hide auth UI in production
-  if (!isDevelopment) {
+  // Hide auth UI in production (unless using emulators)
+  if (!showAuthUI) {
     return null;
   }
 

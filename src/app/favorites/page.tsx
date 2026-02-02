@@ -1,17 +1,49 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { FavoriteButton } from '@/components/FavoriteButton';
+import { PageWithSidebar } from '@/components/PageWithSidebar';
 import { useAuth } from '@/contexts/AuthContext';
 import { getBookById, getSectionById } from '@/generated/books';
 import { getContentById } from '@/generated/contents';
 import { getFavorites } from '@/lib/favorites';
 import type { Favorite } from '@/types/favorite';
 
+/**
+ * Get preview text from content segments
+ */
+function getPreviewText(contentId: string, maxLength = 30): string {
+  const content = getContentById(contentId);
+  if (!content || content.segments.length === 0) {
+    return '';
+  }
+  const text = content.segments.map((s) => s.text.original).join('');
+  if (text.length <= maxLength) {
+    return text;
+  }
+  return `${text.slice(0, maxLength)}…`;
+}
+
 export default function FavoritesPage() {
   const { user, loading } = useAuth();
   const [favorites, setFavorites] = useState<Favorite[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+
+  const loadFavorites = useCallback(async () => {
+    if (!user) return;
+
+    setIsLoading(true);
+    try {
+      const favs = await getFavorites(user.uid);
+      setFavorites(favs);
+    } catch (error) {
+      console.error('Failed to load favorites:', error);
+      setFavorites([]);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [user]);
 
   useEffect(() => {
     if (!user || loading) {
@@ -19,121 +51,99 @@ export default function FavoritesPage() {
       return;
     }
 
-    let cancelled = false;
-    const currentUser = user; // Capture user value to avoid closure issues
-
-    async function loadFavorites() {
-      // Ensure user is still available when async operation completes
-      if (!currentUser) {
-        return;
-      }
-
-      setIsLoading(true);
-      try {
-        const favs = await getFavorites(currentUser.uid);
-        if (!cancelled) {
-          setFavorites(favs);
-        }
-      } catch (error) {
-        console.error('Failed to load favorites:', error);
-        if (!cancelled) {
-          setFavorites([]);
-        }
-      } finally {
-        if (!cancelled) {
-          setIsLoading(false);
-        }
-      }
-    }
-
     loadFavorites();
 
-    return () => {
-      cancelled = true;
+    const handleFavoritesChanged = () => {
+      loadFavorites();
     };
-  }, [user, loading]);
+    window.addEventListener('favorites-changed', handleFavoritesChanged);
+
+    return () => {
+      window.removeEventListener('favorites-changed', handleFavoritesChanged);
+    };
+  }, [user, loading, loadFavorites]);
 
   if (loading || isLoading) {
     return (
-      <div className="bg-zinc-50 dark:bg-black">
-        <main className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
-          <h1 className="mb-8 text-3xl font-bold text-black dark:text-white">
-            お気に入り
-          </h1>
-          <div className="text-zinc-500">読み込み中...</div>
-        </main>
-      </div>
+      <PageWithSidebar maxWidth="4xl" showSidebar={false}>
+        <h1 className="mb-8 text-3xl font-bold text-black dark:text-white">
+          お気に入り
+        </h1>
+        <div className="text-zinc-500">読み込み中...</div>
+      </PageWithSidebar>
     );
   }
 
   if (!user) {
     return (
-      <div className="bg-zinc-50 dark:bg-black">
-        <main className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
-          <h1 className="mb-8 text-3xl font-bold text-black dark:text-white">
-            お気に入り
-          </h1>
-          <div className="text-zinc-500">
-            お気に入り機能をご利用いただくには、ログインが必要です。
-          </div>
-        </main>
-      </div>
+      <PageWithSidebar maxWidth="4xl" showSidebar={false}>
+        <h1 className="mb-8 text-3xl font-bold text-black dark:text-white">
+          お気に入り
+        </h1>
+        <div className="text-zinc-500">
+          お気に入り機能をご利用いただくには、ログインが必要です。
+        </div>
+      </PageWithSidebar>
     );
   }
 
   if (favorites.length === 0) {
     return (
-      <div className="bg-zinc-50 dark:bg-black">
-        <main className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
-          <h1 className="mb-8 text-3xl font-bold text-black dark:text-white">
-            お気に入り
-          </h1>
-          <div className="text-zinc-500">
-            お気に入りがありません。コンテンツ詳細ページからお気に入りを追加してください。
-          </div>
-        </main>
-      </div>
+      <PageWithSidebar maxWidth="4xl" showSidebar={false}>
+        <h1 className="mb-8 text-3xl font-bold text-black dark:text-white">
+          お気に入り
+        </h1>
+        <div className="text-zinc-500">
+          お気に入りがありません。コンテンツ詳細ページからお気に入りを追加してください。
+        </div>
+      </PageWithSidebar>
     );
   }
 
   return (
-    <div className="bg-zinc-50 dark:bg-black">
-      <main className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
-        <h1 className="mb-8 text-3xl font-bold text-black dark:text-white">
-          お気に入り
-        </h1>
-        <ul className="space-y-4">
-          {favorites.map((favorite) => {
-            const content = getContentById(favorite.contentId);
-            if (!content) {
-              return null;
-            }
+    <PageWithSidebar maxWidth="4xl" showSidebar={false}>
+      <h1 className="mb-8 text-3xl font-bold text-black dark:text-white">
+        お気に入り
+      </h1>
+      <ul className="space-y-4">
+        {favorites.map((favorite) => {
+          const content = getContentById(favorite.contentId);
+          if (!content) {
+            return null;
+          }
 
-            const book = getBookById(content.book_id);
-            const section = getSectionById(
-              content.book_id,
-              favorite.contentId.split('/')[1],
-            );
+          const book = getBookById(content.book_id);
+          const sectionId = favorite.contentId.split('/')[1];
+          const section = getSectionById(content.book_id, sectionId);
+          const preview = getPreviewText(favorite.contentId);
 
-            return (
-              <li
-                key={favorite.contentId}
-                className="rounded-lg bg-white p-4 shadow-sm dark:bg-zinc-900"
+          return (
+            <li
+              key={favorite.contentId}
+              className="flex items-start gap-3 rounded-lg bg-white p-4 shadow-sm dark:bg-zinc-900"
+            >
+              <Link
+                href={`/books/${favorite.contentId}`}
+                className="min-w-0 flex-1 hover:text-zinc-600 dark:hover:text-zinc-400"
               >
-                <Link
-                  href={`/books/${favorite.contentId}`}
-                  className="block hover:text-zinc-600 dark:hover:text-zinc-400"
-                >
-                  <div className="mb-1 font-medium text-zinc-900 dark:text-white">
-                    {section?.name || book?.name || favorite.contentId}
+                <div className="mb-1 text-sm text-zinc-500">
+                  {book?.name || content.book_id}
+                  {section?.name && ` ${section.name}`}
+                  {` ${content.chapter}`}
+                </div>
+                {preview && (
+                  <div className="text-sm text-zinc-600 dark:text-zinc-400">
+                    {preview}
                   </div>
-                  <div className="text-sm text-zinc-500">{content.chapter}</div>
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
-      </main>
-    </div>
+                )}
+              </Link>
+              <div className="shrink-0">
+                <FavoriteButton contentId={favorite.contentId} />
+              </div>
+            </li>
+          );
+        })}
+      </ul>
+    </PageWithSidebar>
   );
 }

@@ -4,13 +4,19 @@ import {
   doc,
   getDocs,
   limit,
+  onSnapshot,
   orderBy,
   query,
   serverTimestamp,
   setDoc,
+  type Unsubscribe,
 } from 'firebase/firestore';
 import type { AccessHistory } from '@/types/favorite';
-import { getFavoriteContentIds } from './favorites';
+import {
+  decodeContentId,
+  encodeContentId,
+  getFavoriteContentIds,
+} from './favorites';
 import { db } from './firebase';
 
 /**
@@ -24,7 +30,8 @@ export async function recordAccess(
     return;
   }
 
-  const accessRef = doc(db, 'users', userId, 'accessHistory', contentId);
+  const encodedId = encodeContentId(contentId);
+  const accessRef = doc(db, 'users', userId, 'accessHistory', encodedId);
   await setDoc(
     accessRef,
     {
@@ -54,41 +61,186 @@ export async function getAccessHistory(
   }
 
   const snapshot = await getDocs(q);
-  return snapshot.docs.map((doc) => ({
-    contentId: doc.id,
-    lastAccessedAt: doc.data().lastAccessedAt as Timestamp,
+  return snapshot.docs.map((d) => ({
+    contentId: decodeContentId(d.id),
+    lastAccessedAt: d.data().lastAccessedAt as Timestamp,
   }));
 }
 
 /**
  * Get favorite content IDs ordered by last accessed date (most recent first)
+ * If no access history exists, includes favorites without access history
  */
 export async function getFavoriteContentIdsByAccessDate(
   userId: string,
-  maxResults: number = 5,
+  maxResults = 5,
 ): Promise<string[]> {
   if (!db) {
     return [];
   }
 
-  // Get favorite content IDs
-  const favoriteIds = await getFavoriteContentIds(userId);
-  if (favoriteIds.length === 0) {
+  try {
+    // Get favorite content IDs
+    const favoriteIds = await getFavoriteContentIds(userId);
+
+    if (favoriteIds.length === 0) {
+      return [];
+    }
+
+    // Get access history for favorite contents only
+    const accessHistory = await getAccessHistory(userId);
+
+    // Create a map of contentId -> lastAccessedAt for quick lookup
+    const accessHistoryMap = new Map<string, Timestamp>();
+    for (const item of accessHistory) {
+      if (favoriteIds.includes(item.contentId)) {
+        accessHistoryMap.set(item.contentId, item.lastAccessedAt);
+      }
+    }
+
+    // Sort favorites: those with access history first (by last accessed date),
+    // then those without access history
+    const sortedFavorites = favoriteIds.sort((a, b) => {
+      const aAccess = accessHistoryMap.get(a);
+      const bAccess = accessHistoryMap.get(b);
+
+      // Both have access history: sort by last accessed date (most recent first)
+      if (aAccess && bAccess) {
+        return bAccess.toMillis() - aAccess.toMillis();
+      }
+
+      // Only one has access history: prioritize the one with access history
+      if (aAccess && !bAccess) {
+        return -1;
+      }
+      if (!aAccess && bAccess) {
+        return 1;
+      }
+
+      // Neither has access history: maintain original order
+      return 0;
+    });
+
+    return sortedFavorites.slice(0, maxResults);
+  } catch (error) {
+    console.error('[getFavoriteContentIdsByAccessDate] Error:', error);
     return [];
   }
+}
 
-  // Get access history for favorite contents only
-  const accessHistory = await getAccessHistory(userId);
+/**
+ * Subscribe to favorite content IDs ordered by last accessed date (most recent first)
+ * Returns an unsubscribe function
+ */
+export function subscribeFavoriteContentIdsByAccessDate(
+  userId: string,
+  maxResults: number,
+  callback: (contentIds: string[]) => void,
+): Unsubscribe {
+  if (!db) {
+    callback([]);
+    return () => {};
+  }
 
-  // Filter access history to only include favorites and sort by last accessed date
-  const favoriteAccessHistory = accessHistory
-    .filter((item) => favoriteIds.includes(item.contentId))
-    .sort((a, b) => {
-      // Most recent first
-      return b.lastAccessedAt.toMillis() - a.lastAccessedAt.toMillis();
-    })
-    .slice(0, maxResults)
-    .map((item) => item.contentId);
+  let favoriteIdsCache: string[] = [];
+  let accessHistoryCache: AccessHistory[] = [];
 
-  return favoriteAccessHistory;
+  // Helper function to update the list
+  const updateList = async () => {
+    try {
+      if (favoriteIdsCache.length === 0) {
+        callback([]);
+        return;
+      }
+
+      // Get access history if not cached
+      if (accessHistoryCache.length === 0) {
+        accessHistoryCache = await getAccessHistory(userId);
+      }
+
+      // Create a map of contentId -> lastAccessedAt for quick lookup
+      const accessHistoryMap = new Map<string, Timestamp>();
+      for (const item of accessHistoryCache) {
+        if (favoriteIdsCache.includes(item.contentId)) {
+          accessHistoryMap.set(item.contentId, item.lastAccessedAt);
+        }
+      }
+
+      // Sort favorites: those with access history first (by last accessed date),
+      // then those without access history
+      const sortedFavorites = [...favoriteIdsCache].sort((a, b) => {
+        const aAccess = accessHistoryMap.get(a);
+        const bAccess = accessHistoryMap.get(b);
+
+        // Both have access history: sort by last accessed date (most recent first)
+        if (aAccess && bAccess) {
+          return bAccess.toMillis() - aAccess.toMillis();
+        }
+
+        // Only one has access history: prioritize the one with access history
+        if (aAccess && !bAccess) {
+          return -1;
+        }
+        if (!aAccess && bAccess) {
+          return 1;
+        }
+
+        // Neither has access history: maintain original order
+        return 0;
+      });
+
+      callback(sortedFavorites.slice(0, maxResults));
+    } catch (error) {
+      console.error(
+        '[subscribeFavoriteContentIdsByAccessDate] Error in updateList:',
+        error,
+      );
+      callback([]);
+    }
+  };
+
+  // Subscribe to favorites collection
+  const favoritesRef = collection(db, 'favorites', userId, 'items');
+
+  const unsubscribeFavorites = onSnapshot(
+    favoritesRef,
+    (snapshot) => {
+      // Decode document IDs back to contentIds
+      favoriteIdsCache = snapshot.docs.map((d) => decodeContentId(d.id));
+      updateList();
+    },
+    (error) => {
+      console.error(
+        '[subscribeFavoriteContentIdsByAccessDate] Favorites snapshot error:',
+        error,
+      );
+      callback([]);
+    },
+  );
+
+  // Also subscribe to access history changes
+  const accessHistoryRef = collection(db, 'users', userId, 'accessHistory');
+  const unsubscribeAccessHistory = onSnapshot(
+    accessHistoryRef,
+    (snapshot) => {
+      // Decode document IDs back to contentIds
+      accessHistoryCache = snapshot.docs.map((d) => ({
+        contentId: decodeContentId(d.id),
+        lastAccessedAt: d.data().lastAccessedAt as Timestamp,
+      }));
+      updateList();
+    },
+    (error) => {
+      console.error(
+        '[subscribeFavoriteContentIdsByAccessDate] Access history snapshot error:',
+        error,
+      );
+    },
+  );
+
+  // Return unsubscribe function that unsubscribes from both
+  return () => {
+    unsubscribeFavorites();
+    unsubscribeAccessHistory();
+  };
 }

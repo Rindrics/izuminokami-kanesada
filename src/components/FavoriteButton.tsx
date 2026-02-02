@@ -60,8 +60,12 @@ export function FavoriteButton({ contentId }: Props) {
         await addFavorite(user.uid, contentId);
         setFavorited(true);
       }
+      // Dispatch custom event to notify FavoriteContentList to refresh
+      window.dispatchEvent(new CustomEvent('favorites-changed'));
     } catch (error) {
-      console.error('Failed to toggle favorite:', error);
+      console.error('[FavoriteButton] Failed to toggle favorite:', error);
+      // Revert state on error
+      setFavorited((prev) => !prev);
     } finally {
       setIsLoading(false);
     }
