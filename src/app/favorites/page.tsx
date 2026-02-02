@@ -81,7 +81,11 @@ export default function FavoritesPage() {
           お気に入り一覧
         </h1>
         <div className="text-zinc-500">
-          お気に入り機能をご利用いただくには、ログインが必要です。
+          お気に入り機能をご利用いただくには、右上の「
+          <span className="font-medium text-zinc-700 dark:text-zinc-300">
+            我入門也
+          </span>
+          」からログインしてください。
         </div>
       </PageWithSidebar>
     );
