@@ -1257,6 +1257,11 @@ export const kunyomiDictionary: KunyomiEntry[] = [
     readings: [{ id: '奪-うば', ruby: 'うば', is_default: true }],
   },
   {
+    id: '盜',
+    text: '盜',
+    readings: [{ id: '盜-ぬすむ', ruby: 'ぬすむ', is_default: true }],
+  },
+  {
     id: '饜',
     text: '饜',
     readings: [{ id: '饜-あ', ruby: 'あ', is_default: true }],
