@@ -1,5 +1,8 @@
 # Changelog
 
+## [v0.4.1](https://github.com/Rindrics/izuminokami-kanesada/compare/v0.4.0...v0.4.1) - 2026-02-02
+- fix: provide auth function on production by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/114
+
 ## [v0.4.0](https://github.com/Rindrics/izuminokami-kanesada/compare/v0.3.3...v0.4.0) - 2026-02-02
 - feat: provide favorite function by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/111
 - fix: improve UI by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/113
