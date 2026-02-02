@@ -1,5 +1,8 @@
 # Changelog
 
+## [v0.4.2](https://github.com/Rindrics/izuminokami-kanesada/compare/v0.4.1...v0.4.2) - 2026-02-02
+- feat: include metadata to each page by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/116
+
 ## [v0.4.1](https://github.com/Rindrics/izuminokami-kanesada/compare/v0.4.0...v0.4.1) - 2026-02-02
 - fix: provide auth function on production by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/114
 
