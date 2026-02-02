@@ -1,4 +1,15 @@
 {
-  "indexes": [],
+  "indexes": [
+    {
+      "collectionGroup": "accessHistory",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "lastAccessedAt",
+          "order": "DESCENDING"
+        }
+      ]
+    }
+  ],
   "fieldOverrides": []
 }
