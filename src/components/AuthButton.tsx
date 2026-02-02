@@ -4,11 +4,6 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 
-// Show auth UI in development or when using emulators
-const isDevelopment = process.env.NODE_ENV === 'development';
-const useEmulators = process.env.NEXT_PUBLIC_USE_FIREBASE_EMULATORS === 'true';
-const showAuthUI = isDevelopment || useEmulators;
-
 export function AuthButton() {
   const {
     user,
@@ -44,11 +39,6 @@ export function AuthButton() {
     document.addEventListener('keydown', handleEscape);
     return () => document.removeEventListener('keydown', handleEscape);
   }, []);
-
-  // Hide auth UI in production (unless using emulators)
-  if (!showAuthUI) {
-    return null;
-  }
 
   if (loading) {
     return (
