@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useEffect, useLayoutEffect, useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { getFavoriteContentIds } from '@/lib/favorites';
 import { FavoriteContentList } from './FavoriteContentList';
@@ -17,11 +17,11 @@ export function ListWithFavoriteSidebar({
   maxItemsMobile = 2,
 }: Props) {
   const { user, loading } = useAuth();
-  const [isLargeScreen, setIsLargeScreen] = useState(true);
+  const [isLargeScreen, setIsLargeScreen] = useState(false);
   const [hasFavorites, setHasFavorites] = useState(false);
   const [isFavoritesLoading, setIsFavoritesLoading] = useState(true);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const mediaQuery = window.matchMedia('(min-width: 1024px)');
     setIsLargeScreen(mediaQuery.matches);
 
@@ -31,32 +31,44 @@ export function ListWithFavoriteSidebar({
   }, []);
 
   // Check if user has favorites
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!user || loading) {
       setIsFavoritesLoading(true);
       setHasFavorites(false);
-      return;
+      return () => {};
     }
+
+    let cancelled = false;
 
     setIsFavoritesLoading(true);
     getFavoriteContentIds(user.uid)
       .then((ids) => {
-        setHasFavorites(ids.length > 0);
+        if (!cancelled) {
+          setHasFavorites(ids.length > 0);
+        }
       })
       .catch(() => {
-        setHasFavorites(false);
+        if (!cancelled) {
+          setHasFavorites(false);
+        }
       })
       .finally(() => {
-        setIsFavoritesLoading(false);
+        if (!cancelled) {
+          setIsFavoritesLoading(false);
+        }
       });
+
+    return () => {
+      cancelled = true;
+    };
   }, [user, loading]);
 
-  // Show full width when not authenticated or when authenticated but no favorites exist
-  if (!user && !loading) {
+  // Show full width while loading or when authenticated but no favorites exist
+  if (loading || isFavoritesLoading) {
     return <>{children}</>;
   }
 
-  if (!isFavoritesLoading && !hasFavorites) {
+  if (!user || !hasFavorites) {
     return <>{children}</>;
   }
 
