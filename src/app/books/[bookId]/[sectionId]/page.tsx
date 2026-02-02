@@ -1,5 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { Suspense } from 'react';
+import { FavoriteButton } from '@/components/FavoriteButton';
 import {
   getAllSectionPaths,
   getBookById,
@@ -58,19 +60,22 @@ export default async function SectionPage({ params }: Props) {
 
               return (
                 <li key={chapter}>
-                  <Link
-                    href={`/books/${book.id}/${section.id}/${chapter}`}
-                    className="block rounded-lg bg-white p-4 shadow-sm transition hover:bg-zinc-50 dark:bg-zinc-900 dark:hover:bg-zinc-800"
-                  >
-                    <div className="flex items-baseline gap-3">
+                  <div className="flex items-center gap-2 rounded-lg bg-white p-4 shadow-sm transition hover:bg-zinc-50 dark:bg-zinc-900 dark:hover:bg-zinc-800">
+                    <Link
+                      href={`/books/${book.id}/${section.id}/${chapter}`}
+                      className="flex flex-1 items-baseline gap-3"
+                    >
                       <span className="shrink-0 text-lg font-medium text-black dark:text-white">
                         {chapter}
                       </span>
                       <span className="min-w-0 truncate text-sm text-zinc-500 dark:text-zinc-400">
                         {previewText}
                       </span>
-                    </div>
-                  </Link>
+                    </Link>
+                    <Suspense fallback={null}>
+                      <FavoriteButton contentId={contentId} />
+                    </Suspense>
+                  </div>
                 </li>
               );
             })}
