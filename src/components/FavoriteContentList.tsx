@@ -140,8 +140,11 @@ export function FavoriteContentList({ maxItems = 5 }: Props) {
           }
 
           const book = getBookById(content.book_id);
-          const sectionId = contentId.split('/')[1];
-          const section = getSectionById(content.book_id, sectionId);
+          const parts = contentId.split('/');
+          const sectionId = parts.length > 1 ? parts[1] : null;
+          const section = sectionId
+            ? getSectionById(content.book_id, sectionId)
+            : null;
           const preview = getPreviewText(contentId);
 
           return (

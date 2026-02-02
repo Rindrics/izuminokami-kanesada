@@ -100,7 +100,8 @@ export async function getFavoriteContentIdsByAccessDate(
 
     // Sort favorites: those with access history first (by last accessed date),
     // then those without access history
-    const sortedFavorites = favoriteIds.sort((a, b) => {
+    // Copy array to avoid mutating the original
+    const sortedFavorites = [...favoriteIds].sort((a, b) => {
       const aAccess = accessHistoryMap.get(a);
       const bAccess = accessHistoryMap.get(b);
 

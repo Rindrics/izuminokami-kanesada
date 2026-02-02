@@ -51,21 +51,23 @@ export function FavoriteButton({ contentId }: Props) {
       return;
     }
 
+    const previousState = favorited;
+    // Optimistic update
+    setFavorited(!previousState);
     setIsLoading(true);
+
     try {
-      if (favorited) {
+      if (previousState) {
         await removeFavorite(user.uid, contentId);
-        setFavorited(false);
       } else {
         await addFavorite(user.uid, contentId);
-        setFavorited(true);
       }
       // Dispatch custom event to notify FavoriteContentList to refresh
       window.dispatchEvent(new CustomEvent('favorites-changed'));
     } catch (error) {
       console.error('[FavoriteButton] Failed to toggle favorite:', error);
       // Revert state on error
-      setFavorited((prev) => !prev);
+      setFavorited(previousState);
     } finally {
       setIsLoading(false);
     }
