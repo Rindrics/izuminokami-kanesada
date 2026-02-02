@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 import { FavoriteButton } from '@/components/FavoriteButton';
+import { FavoriteContentList } from '@/components/FavoriteContentList';
 import { PageWithSidebar } from '@/components/PageWithSidebar';
 import {
   getAllSectionPaths,
@@ -31,7 +32,7 @@ export default async function SectionPage({ params }: Props) {
   }
 
   return (
-    <PageWithSidebar>
+    <PageWithSidebar showSidebar={false}>
       <header className="mb-8">
         <nav className="mb-4 text-sm text-zinc-500 dark:text-zinc-400">
           <Link href="/" className="hover:underline">
@@ -51,37 +52,46 @@ export default async function SectionPage({ params }: Props) {
         <h2 className="mb-4 text-lg font-medium text-zinc-600 dark:text-zinc-400">
           章一覧
         </h2>
-        <ul className="space-y-2">
-          {section.chapters.map((chapter) => {
-            const contentId = `${book.id}/${section.id}/${chapter}`;
-            const content = getContentById(contentId);
-            // Remove hyphens (tone sandhi markers) for display
-            const previewText = content?.text?.replace(/-/g, '') ?? '';
+        <div className="lg:flex lg:flex-row-reverse lg:gap-8">
+          <aside className="mb-6 lg:mb-0 lg:w-80 lg:shrink-0">
+            <div className="lg:sticky lg:top-8">
+              <Suspense fallback={null}>
+                <FavoriteContentList maxItems={5} />
+              </Suspense>
+            </div>
+          </aside>
+          <ul className="space-y-2 lg:min-w-0 lg:flex-1">
+            {section.chapters.map((chapter) => {
+              const contentId = `${book.id}/${section.id}/${chapter}`;
+              const content = getContentById(contentId);
+              // Remove hyphens (tone sandhi markers) for display
+              const previewText = content?.text?.replace(/-/g, '') ?? '';
 
-            return (
-              <li key={chapter}>
-                <div className="flex items-center gap-2 rounded-lg bg-white p-4 shadow-sm transition hover:bg-zinc-50 dark:bg-zinc-900 dark:hover:bg-zinc-800">
-                  <Link
-                    href={`/books/${book.id}/${section.id}/${chapter}`}
-                    className="flex min-w-0 flex-1 items-baseline gap-3"
-                  >
-                    <span className="shrink-0 text-lg font-medium text-black dark:text-white">
-                      {chapter}
-                    </span>
-                    <span className="min-w-0 truncate text-sm text-zinc-500 dark:text-zinc-400">
-                      {previewText}
-                    </span>
-                  </Link>
-                  <div className="shrink-0">
-                    <Suspense fallback={null}>
-                      <FavoriteButton contentId={contentId} />
-                    </Suspense>
+              return (
+                <li key={chapter}>
+                  <div className="flex items-center gap-2 rounded-lg bg-white p-4 shadow-sm transition hover:bg-zinc-50 dark:bg-zinc-900 dark:hover:bg-zinc-800">
+                    <Link
+                      href={`/books/${book.id}/${section.id}/${chapter}`}
+                      className="flex min-w-0 flex-1 items-baseline gap-3"
+                    >
+                      <span className="shrink-0 text-lg font-medium text-black dark:text-white">
+                        {chapter}
+                      </span>
+                      <span className="min-w-0 truncate text-sm text-zinc-500 dark:text-zinc-400">
+                        {previewText}
+                      </span>
+                    </Link>
+                    <div className="shrink-0">
+                      <Suspense fallback={null}>
+                        <FavoriteButton contentId={contentId} />
+                      </Suspense>
+                    </div>
                   </div>
-                </div>
-              </li>
-            );
-          })}
-        </ul>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
       </section>
     </PageWithSidebar>
   );
