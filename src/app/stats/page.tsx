@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { useMemo } from 'react';
 import { ClickableChar } from '@/components/ClickableChar';
@@ -17,6 +18,7 @@ import { books, getBookById } from '@/generated/books';
 import { getPersonName } from '@/generated/persons';
 import type { CharIndex } from '@/generated/stats';
 import { stats } from '@/generated/stats';
+import { createMetadata } from '@/lib/metadata';
 
 // Key concepts to track (virtues and important terms in Confucian texts)
 const keyConcepts = KEY_CONCEPTS_INFO;
@@ -206,6 +208,13 @@ function KeyConceptsHeatmap({
 
 // Create Set from generated blacklist for efficient lookup
 const frequencyBlacklist = new Set(stats.frequencyBlacklist);
+
+export const metadata: Metadata = createMetadata({
+  title: 'データで見る四書五経',
+  description:
+    '論語・孟子など四書五経の統計分析。漢字頻度、人物登場回数、概念分布など9種類のビジュアライゼーションで古典を多角的に理解できます。',
+  path: '/stats/',
+});
 
 export default function StatsPage() {
   // Filter out blacklisted characters and take top 10

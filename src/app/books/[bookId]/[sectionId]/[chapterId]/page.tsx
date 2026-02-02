@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
@@ -14,6 +15,7 @@ import {
   getAllContentIds,
   getContentById,
 } from '@/generated/contents';
+import { cleanChineseText, createMetadata } from '@/lib/metadata';
 
 const isDev = process.env.NODE_ENV === 'development';
 
@@ -25,6 +27,31 @@ export async function generateStaticParams() {
   return getAllContentIds().map((contentId) => {
     const [bookId, sectionId, chapterId] = contentId.split('/');
     return { bookId, sectionId, chapterId };
+  });
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { bookId, sectionId, chapterId } = await params;
+  const contentId = `${bookId}/${sectionId}/${chapterId}`;
+
+  const content = getContentById(contentId);
+  const book = getBookById(bookId);
+  const section = getSectionById(bookId, sectionId);
+
+  if (!content || !book || !section) {
+    return { title: '章が見つかりません' };
+  }
+
+  // Extract first 100 characters of original text for description
+  const previewText = cleanChineseText(content.text).substring(0, 100);
+
+  const title = `${section.name}: ${content.chapter}`;
+  const description = `${book.name} ${section.name}の第${content.chapter}章。${previewText}`;
+
+  return createMetadata({
+    title,
+    description,
+    path: `/books/${contentId}/`,
   });
 }
 

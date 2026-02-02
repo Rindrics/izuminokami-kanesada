@@ -17,9 +17,23 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: '素読庵',
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL || 'https://sodoku.learn-to.live',
+  ),
+  title: {
+    default: '素読庵',
+    template: '%s | 素読庵',
+  },
   description:
     '四書五経およびその他の中国古典を学習するためのWebアプリケーション',
+  openGraph: {
+    type: 'website',
+    locale: 'ja_JP',
+    siteName: '素読庵',
+  },
+  twitter: {
+    card: 'summary',
+  },
 };
 
 const gaId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
