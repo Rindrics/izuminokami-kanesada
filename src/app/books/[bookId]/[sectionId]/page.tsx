@@ -63,7 +63,7 @@ export default async function SectionPage({ params }: Props) {
                   <div className="flex items-center gap-2 rounded-lg bg-white p-4 shadow-sm transition hover:bg-zinc-50 dark:bg-zinc-900 dark:hover:bg-zinc-800">
                     <Link
                       href={`/books/${book.id}/${section.id}/${chapter}`}
-                      className="flex flex-1 items-baseline gap-3"
+                      className="flex min-w-0 flex-1 items-baseline gap-3"
                     >
                       <span className="shrink-0 text-lg font-medium text-black dark:text-white">
                         {chapter}
@@ -72,9 +72,11 @@ export default async function SectionPage({ params }: Props) {
                         {previewText}
                       </span>
                     </Link>
-                    <Suspense fallback={null}>
-                      <FavoriteButton contentId={contentId} />
-                    </Suspense>
+                    <div className="shrink-0">
+                      <Suspense fallback={null}>
+                        <FavoriteButton contentId={contentId} />
+                      </Suspense>
+                    </div>
                   </div>
                 </li>
               );
