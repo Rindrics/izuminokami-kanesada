@@ -260,9 +260,50 @@ function parseInputFile(filePath: string): InputContent {
       segment.text.japanese =
         typeof segment.text.japanese === 'string' ? segment.text.japanese : '';
     }
-    // Normalize hanzi_overrides
-    if (segment.hanzi_overrides && !Array.isArray(segment.hanzi_overrides)) {
+    // Normalize and validate hanzi_overrides
+    if (!Array.isArray(segment.hanzi_overrides)) {
       segment.hanzi_overrides = undefined;
+    } else {
+      // Filter and validate each override entry
+      const text = segment.text.original;
+      segment.hanzi_overrides = segment.hanzi_overrides.filter((override) => {
+        // Check if override has the expected shape (char, position, meaning_id)
+        if (
+          typeof override !== 'object' ||
+          override === null ||
+          typeof override.char !== 'string' ||
+          typeof override.position !== 'number' ||
+          typeof override.meaning_id !== 'string'
+        ) {
+          return false;
+        }
+
+        // Check if position is within bounds
+        if (
+          override.position < 0 ||
+          override.position >= text.length ||
+          !Number.isInteger(override.position)
+        ) {
+          return false;
+        }
+
+        // Check if override character matches the character at that position
+        // or is a valid replacement (e.g., simplified/traditional variant)
+        const actualChar = text[override.position];
+        if (actualChar !== override.char) {
+          // Allow valid character replacements (simplified/traditional variants)
+          // For now, only exact matches are allowed
+          // This can be extended later if needed
+          return false;
+        }
+
+        return true;
+      });
+
+      // Set to undefined if array is empty after filtering
+      if (segment.hanzi_overrides.length === 0) {
+        segment.hanzi_overrides = undefined;
+      }
     }
   }
 
