@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 
 // Show auth UI in development or when using emulators
@@ -26,6 +27,23 @@ export function AuthButton() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
+
+  // Close dropdowns on Escape key
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setShowUserMenu(false);
+        setShowLoginForm(false);
+        setShowSignUpForm(false);
+        setShowResetForm(false);
+        setError(null);
+        setMessage(null);
+      }
+    };
+
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, []);
 
   // Hide auth UI in production (unless using emulators)
   if (!showAuthUI) {
@@ -61,6 +79,13 @@ export function AuthButton() {
               aria-label="メニューを閉じる"
             />
             <div className="absolute right-0 top-full z-50 mt-2 min-w-40 rounded-lg border border-zinc-200 bg-white py-1 shadow-lg dark:border-zinc-800 dark:bg-zinc-900">
+              <Link
+                href="/favorites"
+                onClick={() => setShowUserMenu(false)}
+                className="block w-full px-4 py-2 text-left text-sm text-zinc-700 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800"
+              >
+                お気に入り一覧
+              </Link>
               <button
                 type="button"
                 onClick={() => {

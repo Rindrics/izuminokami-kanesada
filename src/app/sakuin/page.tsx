@@ -184,17 +184,17 @@ export default function IndexPage() {
                         key={entry.char}
                         className="mb-2 flex break-inside-avoid items-baseline gap-2 mb-5"
                       >
-                        <div className="relative inline-flex items-center justify-center">
-                          <span className="absolute -top-4 left-1/2 -translate-x-1/2 whitespace-nowrap text-sm text-zinc-400">
-                            {entry.onyomi}
-                          </span>
-                          <Link
-                            href={`/char/${encodeURIComponent(entry.char)}`}
-                            className="inline-block text-xl text-black hover:text-blue-600 dark:text-white dark:hover:text-blue-400"
-                          >
+                        <Link
+                          href={`/char/${encodeURIComponent(entry.char)}`}
+                          className="inline-block text-xl text-black hover:text-blue-600 dark:text-white dark:hover:text-blue-400"
+                        >
+                          <ruby className="ruby">
                             {entry.char}
-                          </Link>
-                        </div>
+                            <rt className="text-xs text-zinc-400">
+                              {entry.onyomi}
+                            </rt>
+                          </ruby>
+                        </Link>
                         <div className="flex flex-wrap gap-1">
                           {entry.contentIds.map((id) => (
                             <Link

@@ -4,10 +4,10 @@ import { Suspense } from 'react';
 import { AudioPlayer } from '@/components/AudioPlayer';
 import { AudioRecorder } from '@/components/AudioRecorder';
 import { ContentPageClient } from '@/components/ContentPageClient';
-import { FavoriteContentList } from '@/components/FavoriteContentList';
 import { HakubunWithTabs } from '@/components/HakubunWithTabs';
 import { JapaneseTextWithRuby } from '@/components/JapaneseTextWithRuby';
 import { KeyboardNavigation } from '@/components/KeyboardNavigation';
+import { ResponsiveFavoriteContentList } from '@/components/ResponsiveFavoriteContentList';
 import { getBookById, getSectionById } from '@/generated/books';
 import {
   getAdjacentContentIds,
@@ -46,7 +46,7 @@ export default async function ContentPage({ params }: Props) {
   return (
     <div className="bg-zinc-50 dark:bg-black">
       <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
-        <header className="mb-8">
+        <header className="sticky top-14 z-10 mb-8 bg-zinc-50 py-4 dark:bg-black">
           <nav className="mb-4 text-sm text-zinc-500 dark:text-zinc-400">
             <Link href="/" className="hover:underline">
               トップ
@@ -91,7 +91,7 @@ export default async function ContentPage({ params }: Props) {
                 />
               </Suspense>
               <Suspense fallback={null}>
-                <FavoriteContentList maxItems={5} />
+                <ResponsiveFavoriteContentList />
               </Suspense>
             </div>
           </aside>

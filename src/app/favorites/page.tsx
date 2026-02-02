@@ -67,7 +67,7 @@ export default function FavoritesPage() {
     return (
       <PageWithSidebar maxWidth="4xl" showSidebar={false}>
         <h1 className="mb-8 text-3xl font-bold text-black dark:text-white">
-          お気に入り
+          お気に入り一覧
         </h1>
         <div className="text-zinc-500">読み込み中...</div>
       </PageWithSidebar>
@@ -78,10 +78,14 @@ export default function FavoritesPage() {
     return (
       <PageWithSidebar maxWidth="4xl" showSidebar={false}>
         <h1 className="mb-8 text-3xl font-bold text-black dark:text-white">
-          お気に入り
+          お気に入り一覧
         </h1>
         <div className="text-zinc-500">
-          お気に入り機能をご利用いただくには、ログインが必要です。
+          お気に入り機能をご利用いただくには、右上の「
+          <span className="font-medium text-zinc-700 dark:text-zinc-300">
+            我入門也
+          </span>
+          」からログインしてください。
         </div>
       </PageWithSidebar>
     );
@@ -91,7 +95,7 @@ export default function FavoritesPage() {
     return (
       <PageWithSidebar maxWidth="4xl" showSidebar={false}>
         <h1 className="mb-8 text-3xl font-bold text-black dark:text-white">
-          お気に入り
+          お気に入り一覧
         </h1>
         <div className="text-zinc-500">
           お気に入りがありません。コンテンツ詳細ページからお気に入りを追加してください。
@@ -103,7 +107,7 @@ export default function FavoritesPage() {
   return (
     <PageWithSidebar maxWidth="4xl" showSidebar={false}>
       <h1 className="mb-8 text-3xl font-bold text-black dark:text-white">
-        お気に入り
+        お気に入り一覧
       </h1>
       <ul className="space-y-4">
         {favorites.map((favorite) => {
