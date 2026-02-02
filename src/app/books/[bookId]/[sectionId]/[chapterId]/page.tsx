@@ -67,8 +67,30 @@ export default async function ContentPage({ params }: Props) {
   }
 
   const { prev, next } = getAdjacentContentIds(contentId);
-  const prevUrl = prev ? `/books/${prev}` : null;
-  const nextUrl = next ? `/books/${next}` : null;
+
+  const prevContent = prev ? getContentById(prev) : null;
+  const nextContent = next ? getContentById(next) : null;
+
+  const prevUrl = prevContent ? `/books/${prev}` : null;
+  const nextUrl = nextContent ? `/books/${next}` : null;
+
+  // Extract first 3 characters of original text for display, with ellipsis if longer
+  const getContentLabelText = (c: ReturnType<typeof getContentById>) => {
+    if (!c?.segments.length) return '';
+    const fullText = c.segments.map((s) => s.text.original).join('');
+
+    const maxLength = 4;
+    return fullText.length > maxLength
+      ? `${fullText.slice(0, maxLength)}...`
+      : fullText;
+  };
+
+  const prevLabel = prevContent
+    ? `前の章（${getContentLabelText(prevContent)}）へ`
+    : undefined;
+  const nextLabel = nextContent
+    ? `次の章（${getContentLabelText(nextContent)}）へ`
+    : undefined;
 
   return (
     <div className="bg-zinc-50 dark:bg-black">
@@ -101,7 +123,12 @@ export default async function ContentPage({ params }: Props) {
             </Suspense>
           </div>
         </header>
-        <KeyboardNavigation prevUrl={prevUrl} nextUrl={nextUrl} />
+        <KeyboardNavigation
+          prevUrl={prevUrl}
+          nextUrl={nextUrl}
+          prevLabel={prevLabel}
+          nextLabel={nextLabel}
+        />
 
         <div className="lg:flex lg:flex-row-reverse lg:gap-8">
           {/* AudioPlayer: top on mobile, right column on desktop */}

@@ -54,8 +54,15 @@ export default async function BookPage({ params }: Props) {
   }
 
   const { prev, next } = getAdjacentBookIds(bookId);
-  const prevUrl = prev ? `/books/${prev}` : null;
-  const nextUrl = next ? `/books/${next}` : null;
+
+  const prevBook = prev ? getBookById(prev) : null;
+  const nextBook = next ? getBookById(next) : null;
+
+  const prevUrl = prevBook ? `/books/${prev}` : null;
+  const nextUrl = nextBook ? `/books/${next}` : null;
+
+  const prevLabel = prevBook ? `前の経書（${prevBook.name}）へ` : undefined;
+  const nextLabel = nextBook ? `次の経書（${nextBook.name}）へ` : undefined;
 
   return (
     <PageWithSidebar showSidebar={false}>
@@ -73,8 +80,8 @@ export default async function BookPage({ params }: Props) {
       <KeyboardNavigation
         prevUrl={prevUrl}
         nextUrl={nextUrl}
-        prevLabel="前の経書"
-        nextLabel="次の経書"
+        prevLabel={prevLabel}
+        nextLabel={nextLabel}
       />
 
       <section>

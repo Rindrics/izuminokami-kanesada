@@ -55,8 +55,15 @@ export default async function SectionPage({ params }: Props) {
   }
 
   const { prev, next } = getAdjacentSectionIds(bookId, sectionId);
-  const prevUrl = prev ? `/books/${bookId}/${prev}` : null;
-  const nextUrl = next ? `/books/${bookId}/${next}` : null;
+
+  const prevSection = prev ? getSectionById(bookId, prev) : null;
+  const nextSection = next ? getSectionById(bookId, next) : null;
+
+  const prevUrl = prevSection ? `/books/${bookId}/${prev}` : null;
+  const nextUrl = nextSection ? `/books/${bookId}/${next}` : null;
+
+  const prevLabel = prevSection ? `前の編（${prevSection.name}）へ` : undefined;
+  const nextLabel = nextSection ? `次の編（${nextSection.name}）へ` : undefined;
 
   return (
     <PageWithSidebar showSidebar={false}>
@@ -78,8 +85,8 @@ export default async function SectionPage({ params }: Props) {
       <KeyboardNavigation
         prevUrl={prevUrl}
         nextUrl={nextUrl}
-        prevLabel="前の編"
-        nextLabel="次の編"
+        prevLabel={prevLabel}
+        nextLabel={nextLabel}
       />
 
       <section>
