@@ -1257,6 +1257,11 @@ export const kunyomiDictionary: KunyomiEntry[] = [
     readings: [{ id: '奪-うば', ruby: 'うば', is_default: true }],
   },
   {
+    id: '盜',
+    text: '盜',
+    readings: [{ id: '盜-ぬすむ', ruby: 'ぬすむ', is_default: true }],
+  },
+  {
     id: '饜',
     text: '饜',
     readings: [{ id: '饜-あ', ruby: 'あ', is_default: true }],
@@ -1501,6 +1506,46 @@ export const kunyomiDictionary: KunyomiEntry[] = [
     id: '執',
     text: '執',
     readings: [{ id: '執-と', ruby: 'と', is_default: true }],
+  },
+  {
+    id: '厲',
+    text: '厲',
+    readings: [{ id: '厲-れい', ruby: 'れい', is_default: true }],
+  },
+  {
+    id: '内',
+    text: '内',
+    readings: [{ id: '内-ない', ruby: 'ない', is_default: true }],
+  },
+  {
+    id: '荏',
+    text: '荏',
+    readings: [{ id: '荏-じん', ruby: 'じん', is_default: true }],
+  },
+  {
+    id: '小',
+    text: '小',
+    readings: [{ id: '小-しょう', ruby: 'しょう', is_default: true }],
+  },
+  {
+    id: '猶',
+    text: '猶',
+    readings: [{ id: '猶-なお', ruby: 'なお', is_default: true }],
+  },
+  {
+    id: '穿',
+    text: '穿',
+    readings: [{ id: '穿-うがつ', ruby: 'うがつ', is_default: true }],
+  },
+  {
+    id: '窬',
+    text: '窬',
+    readings: [{ id: '窬-ゆ', ruby: 'ゆ', is_default: true }],
+  },
+  {
+    id: '盗',
+    text: '盗',
+    readings: [{ id: '盗-ぬすむ', ruby: 'ぬすむ', is_default: true }],
   },
 ];
 

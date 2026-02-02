@@ -5,11 +5,18 @@ export interface SegmentText {
   japanese: string; // Japanese reading (書き下し文)
 }
 
+export interface HanziOverride {
+  char: string; // The character to override (e.g., "惡")
+  position: number; // Position within the segment text (0-indexed, including markers)
+  meaning_id: string; // Meaning ID from hanzi-dictionary (e.g., "惡-è")
+}
+
 export interface Segment {
   text: SegmentText;
   start_pos: number;
   end_pos: number;
   speaker: string | null; // null = narration
+  hanzi_overrides?: HanziOverride[]; // Override readings for polyphonic characters
 }
 
 // ADR-0005: Kunyomi dictionary types

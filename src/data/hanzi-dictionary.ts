@@ -3510,6 +3510,14 @@ export const hanziDictionary: HanziEntry[] = [
         meaning_ja: '悪む、憎む',
         is_default: true,
       },
+      {
+        id: '惡-è',
+        onyomi: 'アク',
+        pinyin: 'è',
+        tone: 4,
+        meaning_ja: '悪',
+        is_default: false,
+      },
     ],
     is_common: true,
   },
@@ -3545,11 +3553,11 @@ export const hanziDictionary: HanziEntry[] = [
     id: '孫',
     meanings: [
       {
-        id: '孫-sūn',
+        id: '孫-xùn',
         onyomi: 'ソン',
-        pinyin: 'sūn',
-        tone: 1,
-        meaning_ja: '孫、不孫',
+        pinyin: 'xùn',
+        tone: 4,
+        meaning_ja: 'へりくだる',
         is_default: true,
       },
     ],
@@ -3615,10 +3623,10 @@ export const hanziDictionary: HanziEntry[] = [
     id: '干',
     meanings: [
       {
-        id: '干-gàn',
+        id: '干-gān',
         onyomi: 'カン',
-        pinyin: 'gàn',
-        tone: 4,
+        pinyin: 'gān',
+        tone: 1,
         meaning_ja: '比干',
         is_default: true,
       },
@@ -3783,11 +3791,11 @@ export const hanziDictionary: HanziEntry[] = [
     id: '亡',
     meanings: [
       {
-        id: '亡-wáng',
+        id: '亡-wú',
         onyomi: 'ボウ',
-        pinyin: 'wáng',
+        pinyin: 'wú',
         tone: 2,
-        meaning_ja: 'ない',
+        meaning_ja: '亡くす',
         is_default: true,
       },
     ],
@@ -3802,6 +3810,118 @@ export const hanziDictionary: HanziEntry[] = [
         pinyin: 'zhí',
         tone: 2,
         meaning_ja: 'とる',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '厲',
+    meanings: [
+      {
+        id: '厲-lì',
+        onyomi: 'レイ',
+        pinyin: 'lì',
+        tone: 4,
+        meaning_ja: '厳しい',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '内',
+    meanings: [
+      {
+        id: '内-nèi',
+        onyomi: 'ナイ',
+        pinyin: 'nèi',
+        tone: 4,
+        meaning_ja: '内、内部',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '荏',
+    meanings: [
+      {
+        id: '荏-rěn',
+        onyomi: 'ジン',
+        pinyin: 'rěn',
+        tone: 3,
+        meaning_ja: '弱い、柔らかい',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '小',
+    meanings: [
+      {
+        id: '小-xiǎo',
+        onyomi: 'ショウ',
+        pinyin: 'xiǎo',
+        tone: 3,
+        meaning_ja: '小さい',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '猶',
+    meanings: [
+      {
+        id: '猶-yóu',
+        onyomi: 'ユウ',
+        pinyin: 'yóu',
+        tone: 2,
+        meaning_ja: 'なお、まだ',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '穿',
+    meanings: [
+      {
+        id: '穿-chuān',
+        onyomi: 'セン',
+        pinyin: 'chuān',
+        tone: 1,
+        meaning_ja: 'うがつ、貫く',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '窬',
+    meanings: [
+      {
+        id: '窬-yú',
+        onyomi: 'ユ',
+        pinyin: 'yú',
+        tone: 2,
+        meaning_ja: '穴、壁の穴',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '盜',
+    meanings: [
+      {
+        id: '盜-dào',
+        onyomi: 'トウ',
+        pinyin: 'dào',
+        tone: 4,
+        meaning_ja: '盗む',
         is_default: true,
       },
     ],

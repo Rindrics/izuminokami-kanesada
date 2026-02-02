@@ -19,6 +19,10 @@ segments:
       original: 惡稱人之惡者
       japanese: 人の悪（あく）を称する者を悪む。
     speaker: kongzi
+    hanzi_overrides:
+      - char: 惡
+        position: 4
+        meaning_id: 惡-è
   - text:
       original: 惡居下流而訕上者
       japanese: 下流に居りて上を訕る者を悪む。
