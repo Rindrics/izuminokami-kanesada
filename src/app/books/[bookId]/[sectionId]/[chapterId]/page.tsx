@@ -86,8 +86,8 @@ export default async function ContentPage({ params }: Props) {
 
   // Extract first 3 characters of original text for display, with ellipsis if longer
   const getContentLabelText = (c: ReturnType<typeof getContentById>) => {
-    if (!c?.segments.length) return '';
-    const fullText = c.segments.map((s) => s.text.original).join('');
+    if (!c?.segments?.length) return '';
+    const fullText = c.segments.map((s) => s?.text?.original ?? '').join('');
 
     const maxLength = 3;
     return fullText.length > maxLength
