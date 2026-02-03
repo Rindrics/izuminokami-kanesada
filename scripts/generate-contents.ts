@@ -425,6 +425,39 @@ export function getAllSectionPaths(): string[] {
   }
   return paths;
 }
+
+// Navigation helpers
+export function getAdjacentBookIds(bookId: string): {
+  prev?: string;
+  next?: string;
+} {
+  const index = books.findIndex((b) => b.id === bookId);
+  if (index === -1) return {};
+  return {
+    prev: index > 0 ? books[index - 1].id : undefined,
+    next: index < books.length - 1 ? books[index + 1].id : undefined,
+  };
+}
+
+export function getAdjacentSectionIds(
+  bookId: string,
+  sectionId: string,
+): {
+  prev?: string;
+  next?: string;
+} {
+  const book = getBookById(bookId);
+  if (!book) return {};
+  const index = book.sections.findIndex((s) => s.id === sectionId);
+  if (index === -1) return {};
+  return {
+    prev: index > 0 ? book.sections[index - 1].id : undefined,
+    next:
+      index < book.sections.length - 1
+        ? book.sections[index + 1].id
+        : undefined,
+  };
+}
 `;
 }
 
