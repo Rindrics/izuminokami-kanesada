@@ -3,9 +3,11 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 import { FavoriteButton } from '@/components/FavoriteButton';
+import { KeyboardNavigation } from '@/components/KeyboardNavigation';
 import { ListWithFavoriteSidebar } from '@/components/ListWithFavoriteSidebar';
 import { PageWithSidebar } from '@/components/PageWithSidebar';
 import {
+  getAdjacentSectionIds,
   getAllSectionPaths,
   getBookById,
   getSectionById,
@@ -52,6 +54,17 @@ export default async function SectionPage({ params }: Props) {
     notFound();
   }
 
+  const { prev, next } = getAdjacentSectionIds(bookId, sectionId);
+
+  const prevSection = prev ? getSectionById(bookId, prev) : null;
+  const nextSection = next ? getSectionById(bookId, next) : null;
+
+  const prevUrl = prevSection ? `/books/${bookId}/${prev}` : null;
+  const nextUrl = nextSection ? `/books/${bookId}/${next}` : null;
+
+  const prevLabel = prevSection ? `前の編（${prevSection.name}）へ` : undefined;
+  const nextLabel = nextSection ? `次の編（${nextSection.name}）へ` : undefined;
+
   return (
     <PageWithSidebar showSidebar={false}>
       <header className="sticky top-14 z-10 mb-8 bg-zinc-50 py-4 dark:bg-black">
@@ -68,6 +81,13 @@ export default async function SectionPage({ params }: Props) {
           {section.name}
         </h1>
       </header>
+
+      <KeyboardNavigation
+        prevUrl={prevUrl}
+        nextUrl={nextUrl}
+        prevLabel={prevLabel}
+        nextLabel={nextLabel}
+      />
 
       <section>
         <h2 className="mb-4 text-lg font-medium text-zinc-600 dark:text-zinc-400">
