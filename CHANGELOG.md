@@ -1,5 +1,8 @@
 # Changelog
 
+## [v0.5.0](https://github.com/Rindrics/izuminokami-kanesada/compare/v0.4.2...v0.5.0) - 2026-02-03
+- feat: add navigation to [bookId]/ and [sectionId]/ pages by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/118
+
 ## [v0.4.2](https://github.com/Rindrics/izuminokami-kanesada/compare/v0.4.1...v0.4.2) - 2026-02-02
 - feat: include metadata to each page by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/116
 
