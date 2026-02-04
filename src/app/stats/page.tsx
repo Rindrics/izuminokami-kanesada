@@ -269,9 +269,6 @@ export default function StatsPage() {
           <h1 className="text-3xl font-bold text-black dark:text-white">
             データで見る四書五経
           </h1>
-          <p className="mt-2 text-zinc-600 dark:text-zinc-400">
-            収録コンテンツの統計分析
-          </p>
         </header>
 
         {/* Data Source */}

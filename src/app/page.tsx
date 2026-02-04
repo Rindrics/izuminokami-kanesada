@@ -29,10 +29,6 @@ export default function Home() {
         <h1 className="text-3xl font-bold text-black dark:text-white">
           素読庵
         </h1>
-        <p className="mt-2 text-zinc-600 dark:text-zinc-400">
-          漢文素読を子供と実践する &quot;指導者&quot;
-          の学習を支援する意図で作っています。
-        </p>
       </header>
 
       <section className="mb-8">
