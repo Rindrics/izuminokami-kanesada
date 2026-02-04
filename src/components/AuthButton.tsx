@@ -54,7 +54,7 @@ export function AuthButton() {
         <button
           type="button"
           onClick={() => setShowUserMenu(!showUserMenu)}
-          className="rounded bg-zinc-200 px-3 py-1.5 text-sm text-black hover:bg-zinc-300 dark:bg-zinc-800 dark:text-white dark:hover:bg-zinc-700"
+          className="border-b border-zinc-400 text-sm text-zinc-600 hover:border-zinc-600 hover:text-black dark:border-zinc-500 dark:text-zinc-400 dark:hover:border-zinc-300 dark:hover:text-white"
           aria-expanded={showUserMenu}
           aria-haspopup="true"
         >
@@ -166,7 +166,7 @@ export function AuthButton() {
             setError(null);
             setMessage(null);
           }}
-          className="rounded bg-zinc-200 px-3 py-1.5 text-sm text-black hover:bg-zinc-300 dark:bg-zinc-800 dark:text-white dark:hover:bg-zinc-700"
+          className="border-b border-zinc-400 text-sm text-zinc-600 hover:border-zinc-600 hover:text-black dark:border-zinc-500 dark:text-zinc-400 dark:hover:border-zinc-300 dark:hover:text-white"
         >
           我入門也
         </button>
