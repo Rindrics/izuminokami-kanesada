@@ -154,7 +154,7 @@ export default function IndexPage() {
         </header>
 
         {/* Quick navigation */}
-        <nav className="sticky top-12 z-10 mb-6 flex flex-wrap gap-2 bg-zinc-50 py-2 dark:bg-black">
+        <nav className="sticky top-(--navbar-height) z-10 mb-6 flex flex-wrap gap-2 bg-zinc-50 py-2 dark:bg-black">
           {kanaOrder
             .filter((k) => byKanaGroup.has(k))
             .map((group) => (
