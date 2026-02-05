@@ -770,7 +770,7 @@ Use this when the default kunyomi doesn't match the intended reading in context.
       const notInDict: Array<{ segmentIndex: number; char: string }> = [];
 
       // Regex to detect existing overrides: 漢字（読み）
-      const overrideRegex = /([一-龥])（([ぁ-ん]+)）/g;
+      const overrideRegex = /([一-龥\u3400-\u4DBF])（([ぁ-ん]+)）/g;
 
       for (let segIdx = 0; segIdx < (parsed.segments || []).length; segIdx++) {
         const segment = parsed.segments[segIdx];
