@@ -399,35 +399,22 @@ export function registerDictionaryTools(server: McpServer): void {
       const yamlContent = fs.readFileSync(yamlPath, 'utf-8');
       const parsed = yaml.parse(yamlContent);
 
-      // Collect all unique CJK characters from the content
-      const characters = new Set<string>();
-      for (const segment of parsed.segments || []) {
-        const text = segment.text?.original || '';
-        for (const char of text) {
-          if (isCJK(char)) {
-            characters.add(char);
-          }
-        }
-      }
-
-      if (characters.size === 0) {
-        return {
-          content: [
-            {
-              type: 'text',
-              text: `No CJK characters found in content ${bookId}/${sectionId}/${chapterId}`,
-            },
-          ],
-        };
-      }
-
-      // Load hanzi dictionary
+      // Load dictionaries
       const hanziDictPath = path.join(
         PROJECT_ROOT,
         'src/data/hanzi-dictionary.ts',
       );
       const hanziDictModule = await import(pathToFileURL(hanziDictPath).href);
       const { hanziDictionary } = hanziDictModule;
+
+      const kunyomiDictPath = path.join(
+        PROJECT_ROOT,
+        'src/data/kunyomi-dictionary.ts',
+      );
+      const kunyomiDictModule = await import(
+        pathToFileURL(kunyomiDictPath).href
+      );
+      const { kunyomiDictionary } = kunyomiDictModule;
 
       // Build a map of characters to their meanings
       type MeaningInfo = {
@@ -447,31 +434,79 @@ export function registerDictionaryTools(server: McpServer): void {
         charMeanings.set(entry.id, entry);
       }
 
-      // Load kunyomi dictionary
-      const kunyomiDictPath = path.join(
-        PROJECT_ROOT,
-        'src/data/kunyomi-dictionary.ts',
-      );
-      const kunyomiDictModule = await import(
-        pathToFileURL(kunyomiDictPath).href
-      );
-      const { kunyomiDictionary } = kunyomiDictModule;
-
-      // Build a set of characters with kunyomi
-      const kunyomiChars = new Set<string>();
+      // Build a set of kanji covered by kunyomi dictionary (matching validateKunyomiInDictionary logic)
+      // Single-character entries cover individual kanji
+      // Compound entries like "顏淵" also cover all individual kanji within them
+      const coveredKanji = new Set<string>();
       for (const entry of kunyomiDictionary) {
-        kunyomiChars.add(entry.id);
+        if (isCJK(entry.text[0])) {
+          if (entry.text.length === 1) {
+            // Single-character entry: add the character itself
+            coveredKanji.add(entry.text);
+          } else {
+            // Compound entry: add all individual CJK characters within it
+            for (const char of entry.text) {
+              if (isCJK(char)) {
+                coveredKanji.add(char);
+              }
+            }
+          }
+        }
       }
 
-      // Check each character
+      // Collect kanji from japanese text by segment (to provide context)
+      interface SegmentMissingKunyomi {
+        segmentIndex: number;
+        char: string;
+        snippet: string;
+      }
+
+      const missingKunyomiBySegment: SegmentMissingKunyomi[] = [];
+
+      for (let segIdx = 0; segIdx < (parsed.segments || []).length; segIdx++) {
+        const segment = parsed.segments[segIdx];
+        const japanese = segment.text?.japanese || '';
+
+        if (!japanese) {
+          continue;
+        }
+
+        // Extract kanji from japanese text
+        const segmentKanji = new Set<string>();
+        for (const char of japanese) {
+          if (isCJK(char)) {
+            segmentKanji.add(char);
+          }
+        }
+
+        // Check which kanji are missing from kunyomi dictionary
+        for (const kanji of segmentKanji) {
+          if (!coveredKanji.has(kanji)) {
+            missingKunyomiBySegment.push({
+              segmentIndex: segIdx,
+              char: kanji,
+              snippet: japanese.slice(0, 30), // Show first 30 chars as context
+            });
+          }
+        }
+      }
+
+      if (coveredKanji.size === 0) {
+        return {
+          content: [
+            {
+              type: 'text',
+              text: `No kanji found in kunyomi dictionary coverage for content ${bookId}/${sectionId}/${chapterId}`,
+            },
+          ],
+        };
+      }
+
+      // Check each character in hanzi dictionary for missing onyomi
       interface MissingOnyomi {
         char: string;
         pinyin: string;
         meaning_ja: string;
-      }
-
-      interface MissingKunyomi {
-        char: string;
       }
 
       interface NotInHanziDict {
@@ -479,10 +514,20 @@ export function registerDictionaryTools(server: McpServer): void {
       }
 
       const missingOnyomi: MissingOnyomi[] = [];
-      const missingKunyomi: MissingKunyomi[] = [];
       const notInHanziDict: NotInHanziDict[] = [];
 
-      for (const char of characters) {
+      // Collect all unique characters from segments for analysis
+      const allChars = new Set<string>();
+      for (const segment of parsed.segments || []) {
+        const text = segment.text?.original || '';
+        for (const char of text) {
+          if (isCJK(char)) {
+            allChars.add(char);
+          }
+        }
+      }
+
+      for (const char of allChars) {
         const entry = charMeanings.get(char);
 
         if (!entry) {
@@ -501,17 +546,12 @@ export function registerDictionaryTools(server: McpServer): void {
             });
           }
         }
-
-        // Check for missing kunyomi
-        if (!kunyomiChars.has(char)) {
-          missingKunyomi.push({ char });
-        }
       }
 
       // Build response
       const contentId = `${bookId}/${sectionId}/${chapterId}`;
       let responseText = `=== Reading Check for ${contentId} ===\n`;
-      responseText += `Total unique CJK characters: ${characters.size}\n\n`;
+      responseText += `Total unique CJK characters: ${allChars.size}\n\n`;
 
       let hasIssues = false;
 
@@ -535,11 +575,11 @@ export function registerDictionaryTools(server: McpServer): void {
         responseText += '\n';
       }
 
-      if (missingKunyomi.length > 0) {
+      if (missingKunyomiBySegment.length > 0) {
         hasIssues = true;
-        responseText += `⚠️ Missing kunyomi (${missingKunyomi.length}):\n`;
-        for (const item of missingKunyomi) {
-          responseText += `  - "${item.char}"\n`;
+        responseText += `⚠️ Missing kunyomi (${missingKunyomiBySegment.length}):\n`;
+        for (const item of missingKunyomiBySegment) {
+          responseText += `  - "${item.char}" (segment ${item.segmentIndex}: "${item.snippet}...")\n`;
           responseText += `    Action: Use add_kunyomi_entry with character="${item.char}", ruby="適切な読み"\n`;
         }
         responseText += '\n';
