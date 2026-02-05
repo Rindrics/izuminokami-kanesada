@@ -5,6 +5,10 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import * as yaml from 'yaml';
 import { z } from 'zod';
+import {
+  isPathWithinBase,
+  SafePathSegmentSchema,
+} from '../utils/path-safety.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PROJECT_ROOT = path.resolve(__dirname, '../../..');
@@ -87,36 +91,6 @@ const SegmentSchema = z
       message: `Segment text contains forbidden punctuation: ${containsForbiddenPunctuation(segment.text.original).join(' ')}. Do not include punctuation marks in segment text.`,
     }),
   );
-
-/**
- * Safe path segment pattern: alphanumeric, hyphen, underscore only
- * Prevents path traversal attacks (e.g., "../", "/", etc.)
- */
-const SAFE_PATH_SEGMENT_PATTERN = /^[a-zA-Z0-9_-]+$/;
-
-/**
- * Validate that a path segment is safe (no path traversal)
- */
-function isSafePathSegment(segment: string): boolean {
-  return SAFE_PATH_SEGMENT_PATTERN.test(segment) && !segment.includes('..');
-}
-
-/**
- * Validate that the resolved path is within the allowed base directory
- */
-function isPathWithinBase(filePath: string, baseDir: string): boolean {
-  const resolvedPath = path.resolve(filePath);
-  const resolvedBase = path.resolve(baseDir);
-  return resolvedPath.startsWith(resolvedBase + path.sep);
-}
-
-/**
- * Zod schema for safe path segment (prevents path traversal)
- */
-const SafePathSegmentSchema = z.string().refine(isSafePathSegment, {
-  message:
-    'Invalid path segment: must contain only alphanumeric characters, hyphens, or underscores',
-});
 
 const ContentYamlSchema = z.object({
   bookId: SafePathSegmentSchema.describe('Book ID (e.g., "lunyu")'),
