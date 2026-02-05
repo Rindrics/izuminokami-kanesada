@@ -1715,6 +1715,279 @@ Please follow this workflow:
     },
   );
 
+  // Auto-apply hanzi overrides based on context-based disambiguation
+  const AutoApplyHanziOverridesSchema = z.object({
+    bookId: SafePathSegmentSchema.describe('Book ID (e.g., "lunyu")'),
+    sectionId: SafePathSegmentSchema.describe('Section ID (e.g., "1")'),
+    chapterId: SafePathSegmentSchema.describe(
+      'Chapter ID without .yaml (e.g., "1")',
+    ),
+  });
+
+  server.registerTool(
+    'auto_apply_hanzi_overrides',
+    {
+      description:
+        'Automatically detect and apply hanzi overrides based on context. ' +
+        'Analyzes the japanese field to infer correct readings for polyphonic characters ' +
+        'and generates hanzi_overrides entries. Updates the YAML file with overrides.',
+      inputSchema: AutoApplyHanziOverridesSchema,
+    },
+    async ({ bookId, sectionId, chapterId }) => {
+      const baseDir = path.join(PROJECT_ROOT, 'contents/input');
+      const yamlPath = path.join(
+        baseDir,
+        bookId,
+        sectionId,
+        `${chapterId}.yaml`,
+      );
+
+      // Defense in depth: verify path is within allowed directory
+      if (!isPathWithinBase(yamlPath, baseDir)) {
+        return {
+          content: [
+            {
+              type: 'text',
+              text: 'Invalid path: access denied',
+            },
+          ],
+          isError: true,
+        };
+      }
+
+      if (!fs.existsSync(yamlPath)) {
+        console.error(`Content file not found: ${yamlPath}`);
+        return {
+          content: [
+            {
+              type: 'text',
+              text: 'Content file not found. Please verify the file path and try again.',
+            },
+          ],
+          isError: true,
+        };
+      }
+
+      // Read and parse YAML
+      let yamlContent: string;
+      try {
+        yamlContent = fs.readFileSync(yamlPath, 'utf-8');
+      } catch (err) {
+        console.error(`Error reading YAML file: ${yamlPath}`, err);
+        return {
+          content: [
+            {
+              type: 'text',
+              text: 'Failed to read content file. Please try again.',
+            },
+          ],
+          isError: true,
+        };
+      }
+
+      const parsed = yaml.parse(yamlContent) as Record<string, unknown>;
+
+      // Load hanzi dictionary
+      const hanziDictPath = path.join(
+        PROJECT_ROOT,
+        'src/data/hanzi-dictionary.ts',
+      );
+      const hanziDictModule = await import(pathToFileURL(hanziDictPath).href);
+      const { hanziDictionary } = hanziDictModule;
+
+      type MeaningInfo = {
+        id: string;
+        pinyin: string;
+        tone: number;
+        meaning_ja: string;
+        onyomi: string;
+        is_default: boolean;
+      };
+
+      type HanziEntry = {
+        id: string;
+        meanings: MeaningInfo[];
+        is_common: boolean;
+      };
+
+      const charMeanings = new Map<string, HanziEntry>();
+      for (const entry of hanziDictionary as HanziEntry[]) {
+        charMeanings.set(entry.id, entry);
+      }
+
+      const segments =
+        (parsed.segments as Array<{
+          text?: { japanese?: string; original?: string };
+          hanzi_overrides?: Array<{
+            char: string;
+            position: number;
+            meaning_id: string;
+          }>;
+        }>) || [];
+
+      // Check if a character is CJK
+      const isCJK = (char: string): boolean => {
+        const code = char.charCodeAt(0);
+        return (
+          (code >= 0x4e00 && code <= 0x9fff) ||
+          (code >= 0x3400 && code <= 0x4dbf)
+        );
+      };
+
+      let appliedOverridesCount = 0;
+      let responseText = `=== Auto-Apply Hanzi Overrides for ${bookId}/${sectionId}/${chapterId} ===\n\n`;
+
+      // Process each segment
+      const overrideRegex = /([一-龥\u3400-\u4DBF])（([ぁ-ん]+)）/g;
+
+      for (let segIdx = 0; segIdx < segments.length; segIdx++) {
+        const segment = segments[segIdx];
+        const original = (segment.text?.original as string) || '';
+        const japanese = (segment.text?.japanese as string) || '';
+
+        if (!japanese) continue;
+
+        // Extract position-based overrides from japanese text (mirrors parseInlineOverrides)
+        const positionBasedOverrides = new Map<
+          number,
+          { kanji: string; ruby: string }
+        >();
+        let cleanText = '';
+        let lastIndex = 0;
+
+        for (const match of japanese.matchAll(overrideRegex)) {
+          cleanText += japanese.slice(lastIndex, match.index);
+          const position = cleanText.length;
+          const kanji = match[1];
+          const ruby = match[2];
+
+          positionBasedOverrides.set(position, { kanji, ruby });
+
+          cleanText += kanji;
+          lastIndex = (match.index ?? 0) + match[0].length;
+        }
+        cleanText += japanese.slice(lastIndex);
+
+        if (positionBasedOverrides.size === 0) continue;
+
+        // Map cleanText positions to original positions
+        let japaneseKanjiIndex = 0;
+        const overridesToAdd: Array<{
+          char: string;
+          position: number;
+          meaning_id: string;
+        }> = [];
+
+        for (let origPos = 0; origPos < original.length; origPos++) {
+          const char = original[origPos];
+          if (!isCJK(char)) continue;
+
+          // Find position in cleanText
+          let cleanTextPos = 0;
+          let currentKanjiCount = 0;
+          for (let i = 0; i < cleanText.length; i++) {
+            if (isCJK(cleanText[i])) {
+              if (currentKanjiCount === japaneseKanjiIndex) {
+                cleanTextPos = i;
+                break;
+              }
+              currentKanjiCount++;
+            }
+          }
+
+          const override = positionBasedOverrides.get(cleanTextPos);
+          if (override) {
+            // Find meaning_id matching the ruby (reading)
+            const entry = charMeanings.get(char);
+            if (entry && entry.meanings.length > 1) {
+              // Find the meaning that matches this ruby reading
+              const matchingMeaning = entry.meanings.find((m) =>
+                m.meaning_ja.includes(override.ruby),
+              );
+
+              if (matchingMeaning) {
+                overridesToAdd.push({
+                  char,
+                  position: origPos,
+                  meaning_id: matchingMeaning.id,
+                });
+              }
+            }
+          }
+
+          japaneseKanjiIndex++;
+        }
+
+        // Add overrides to segment
+        if (overridesToAdd.length > 0) {
+          if (!segment.hanzi_overrides) {
+            segment.hanzi_overrides = [];
+          }
+
+          for (const override of overridesToAdd) {
+            // Check if override already exists
+            const exists = (
+              segment.hanzi_overrides as Array<{
+                char: string;
+                position: number;
+                meaning_id: string;
+              }>
+            ).some(
+              (o) =>
+                o.char === override.char && o.position === override.position,
+            );
+
+            if (!exists) {
+              (
+                segment.hanzi_overrides as Array<{
+                  char: string;
+                  position: number;
+                  meaning_id: string;
+                }>
+              ).push(override);
+              appliedOverridesCount++;
+            }
+          }
+
+          responseText += `Segment ${segIdx}: Applied ${overridesToAdd.length} override(s)\n`;
+          for (const override of overridesToAdd) {
+            responseText += `  - char: ${override.char}, position: ${override.position}, meaning_id: ${override.meaning_id}\n`;
+          }
+          responseText += '\n';
+        }
+      }
+
+      if (appliedOverridesCount === 0) {
+        responseText += 'No context-based overrides found to apply.\n';
+        return {
+          content: [{ type: 'text', text: responseText }],
+        };
+      }
+
+      // Write updated YAML back
+      try {
+        const updatedYaml = yaml.stringify(parsed, { indent: 2 });
+        fs.writeFileSync(yamlPath, updatedYaml);
+
+        responseText += `\n✓ Successfully applied and saved ${appliedOverridesCount} override(s) to ${yamlPath}`;
+        return {
+          content: [{ type: 'text', text: responseText }],
+        };
+      } catch (err) {
+        console.error(`Error writing YAML file: ${yamlPath}`, err);
+        return {
+          content: [
+            {
+              type: 'text',
+              text: `Failed to save updated content. Overrides detected but not saved: ${appliedOverridesCount}`,
+            },
+          ],
+          isError: true,
+        };
+      }
+    },
+  );
+
   // List primer contents for a book
   const ListPrimersSchema = z.object({
     bookId: SafePathSegmentSchema.describe('Book ID (e.g., "lunyu")'),
