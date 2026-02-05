@@ -2022,12 +2022,25 @@ Please follow this workflow:
 
         for (const entry of entries) {
           if (entry.isDirectory()) {
-            // This is a section directory
-            scanDir(path.join(dir, entry.name), entry.name);
-          } else if (entry.isFile() && entry.name.endsWith('.yaml')) {
-            const filePath = path.join(dir, entry.name);
+            const entryPath = path.join(dir, entry.name);
+
+            // Symlink protection: detect and skip symlinks
             try {
-              const content = fs.readFileSync(filePath, 'utf-8');
+              const stats = fs.lstatSync(entryPath);
+              if (stats.isSymbolicLink()) {
+                console.warn(`Skipping symlink for security: ${entryPath}`);
+                continue;
+              }
+            } catch (err) {
+              console.warn(`Failed to check symlink status: ${entryPath}`, err);
+              continue;
+            }
+
+            // This is a section directory
+            scanDir(entryPath, entry.name);
+          } else if (entry.isFile() && entry.name.endsWith('.yaml')) {
+            try {
+              const content = fs.readFileSync(entryPath, 'utf-8');
               const parsed = yaml.parse(content);
 
               if (parsed.primer === true) {
@@ -2036,13 +2049,13 @@ Please follow this workflow:
                   contentId: `${bookId}/${sectionId}/${chapterId}`,
                   sectionId: sectionId || '',
                   chapterId,
-                  path: filePath,
+                  path: entryPath,
                 });
               }
             } catch (err) {
               // Log error for visibility, but continue scanning other files
               console.warn(
-                `Failed to parse YAML at ${filePath}:`,
+                `Failed to parse YAML at ${entryPath}:`,
                 err instanceof Error ? err.message : String(err),
               );
             }
