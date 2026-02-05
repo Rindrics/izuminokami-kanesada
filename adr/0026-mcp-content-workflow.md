@@ -18,7 +18,7 @@ ADR-0009 で MCP（Model Context Protocol）によるコンテンツ生成戦略
 
 ### ワークフロー状態遷移
 
-```
+```plaintext
                          ┌───────────┐
                          │   Init    │
                          └─────┬─────┘
