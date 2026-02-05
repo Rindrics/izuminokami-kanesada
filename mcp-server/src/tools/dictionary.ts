@@ -652,12 +652,12 @@ Note: If you need multiple readings for this character, you may need to manually
 
       responseText += `\n--- Override Notation (ADR-0014) ---
 If the default reading is not appropriate for the context,
-use parentheses in the japanese field to override:
+use full-width parentheses in the japanese field to override:
 
-Example: 子(こ)曰く → forces "子" to be read as "こ" instead of default
-Example: 有(あ)りて → forces "有" to be read as "あ"
+Example: 子（こ）曰く → forces "子" to be read as "こ" instead of default
+Example: 有（あ）りて → forces "有" to be read as "あ"
 
-Use this when the default kunyomi doesn't match the intended reading in context.`;
+Use full-width parentheses （ ）; half-width () will not be recognized.`;
 
       return {
         content: [
@@ -723,8 +723,37 @@ Use this when the default kunyomi doesn't match the intended reading in context.
       }
 
       // Read and parse YAML
-      const yamlContent = fs.readFileSync(yamlPath, 'utf-8');
-      const parsed = yaml.parse(yamlContent);
+      let yamlContent: string;
+      try {
+        yamlContent = fs.readFileSync(yamlPath, 'utf-8');
+      } catch (err) {
+        console.error(`Error reading YAML file: ${yamlPath}`, err);
+        return {
+          content: [
+            {
+              type: 'text',
+              text: 'Failed to read content file. Please try again.',
+            },
+          ],
+          isError: true,
+        };
+      }
+
+      let parsed: unknown;
+      try {
+        parsed = yaml.parse(yamlContent);
+      } catch (err) {
+        console.error(`Error parsing YAML: ${yamlPath}`, err);
+        return {
+          content: [
+            {
+              type: 'text',
+              text: 'Invalid YAML format. Please check the file content.',
+            },
+          ],
+          isError: true,
+        };
+      }
 
       // Load kunyomi dictionary
       const kunyomiDictPath = path.join(
