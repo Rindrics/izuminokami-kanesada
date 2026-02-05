@@ -1517,7 +1517,21 @@ Please follow this workflow:
       }
 
       // Read and parse YAML
-      const yamlContent = fs.readFileSync(yamlPath, 'utf-8');
+      let yamlContent: string;
+      try {
+        yamlContent = fs.readFileSync(yamlPath, 'utf-8');
+      } catch (err) {
+        console.error(`Error reading YAML file: ${yamlPath}`, err);
+        return {
+          content: [
+            {
+              type: 'text',
+              text: 'Failed to read content file. Please try again.',
+            },
+          ],
+          isError: true,
+        };
+      }
       const parsed = yaml.parse(yamlContent);
 
       // Load hanzi dictionary
@@ -1778,8 +1792,12 @@ Please follow this workflow:
                   path: filePath,
                 });
               }
-            } catch {
-              // Skip invalid YAML files
+            } catch (err) {
+              // Log error for visibility, but continue scanning other files
+              console.warn(
+                `Failed to parse YAML at ${filePath}:`,
+                err instanceof Error ? err.message : String(err),
+              );
             }
           }
         }
