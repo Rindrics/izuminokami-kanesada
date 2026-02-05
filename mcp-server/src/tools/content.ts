@@ -1699,4 +1699,206 @@ Please follow this workflow:
       };
     },
   );
+
+  // List primer contents for a book
+  const ListPrimersSchema = z.object({
+    bookId: SafePathSegmentSchema.describe('Book ID (e.g., "lunyu")'),
+  });
+
+  server.registerTool(
+    'list_primers',
+    {
+      description:
+        'List all primer contents for a book. ' +
+        'Primers are example contents (primer: true in YAML) that AI can reference ' +
+        'to learn the style and format of the book. ' +
+        'Use this to find examples before generating new content.',
+      inputSchema: ListPrimersSchema,
+    },
+    async ({ bookId }) => {
+      const baseDir = path.join(PROJECT_ROOT, 'contents/input');
+      const bookDir = path.join(baseDir, bookId);
+
+      // Defense in depth: verify path is within allowed directory
+      if (!isPathWithinBase(bookDir, baseDir)) {
+        return {
+          content: [
+            {
+              type: 'text',
+              text: 'Invalid path: access denied',
+            },
+          ],
+          isError: true,
+        };
+      }
+
+      if (!fs.existsSync(bookDir)) {
+        return {
+          content: [
+            {
+              type: 'text',
+              text: `Book directory not found: ${bookDir}`,
+            },
+          ],
+          isError: true,
+        };
+      }
+
+      // Find all YAML files with primer: true
+      interface PrimerInfo {
+        contentId: string;
+        sectionId: string;
+        chapterId: string;
+        path: string;
+      }
+
+      const primers: PrimerInfo[] = [];
+
+      // Recursively scan directories
+      const scanDir = (dir: string, sectionId?: string) => {
+        const entries = fs.readdirSync(dir, { withFileTypes: true });
+
+        for (const entry of entries) {
+          if (entry.isDirectory()) {
+            // This is a section directory
+            scanDir(path.join(dir, entry.name), entry.name);
+          } else if (entry.isFile() && entry.name.endsWith('.yaml')) {
+            const filePath = path.join(dir, entry.name);
+            try {
+              const content = fs.readFileSync(filePath, 'utf-8');
+              const parsed = yaml.parse(content);
+
+              if (parsed.primer === true) {
+                const chapterId = entry.name.replace('.yaml', '');
+                primers.push({
+                  contentId: `${bookId}/${sectionId}/${chapterId}`,
+                  sectionId: sectionId || '',
+                  chapterId,
+                  path: filePath,
+                });
+              }
+            } catch {
+              // Skip invalid YAML files
+            }
+          }
+        }
+      };
+
+      scanDir(bookDir);
+
+      if (primers.length === 0) {
+        return {
+          content: [
+            {
+              type: 'text',
+              text: `No primer contents found for book "${bookId}".\n\nTo create a primer, add "primer: true" to a YAML content file.`,
+            },
+          ],
+        };
+      }
+
+      // Sort by section and chapter
+      primers.sort((a, b) => {
+        const sectionCmp = a.sectionId.localeCompare(b.sectionId, undefined, {
+          numeric: true,
+        });
+        if (sectionCmp !== 0) return sectionCmp;
+        return a.chapterId.localeCompare(b.chapterId, undefined, {
+          numeric: true,
+        });
+      });
+
+      let responseText = `=== Primer Contents for "${bookId}" ===\n\n`;
+      responseText += `Found ${primers.length} primer(s):\n\n`;
+
+      for (const primer of primers) {
+        responseText += `- ${primer.contentId}\n`;
+      }
+
+      responseText += `\nUse read_primer_content to view the full content of a primer.`;
+
+      return {
+        content: [
+          {
+            type: 'text',
+            text: responseText,
+          },
+        ],
+      };
+    },
+  );
+
+  // Read primer content
+  server.registerTool(
+    'read_primer_content',
+    {
+      description:
+        'Read the full content of a primer. ' +
+        'Use this to learn the style and format before generating new content.',
+      inputSchema: ReadContentYamlSchema.shape,
+    },
+    async ({ bookId, sectionId, chapterId }) => {
+      const baseDir = path.join(PROJECT_ROOT, 'contents/input');
+      const filePath = path.join(
+        baseDir,
+        bookId,
+        sectionId,
+        `${chapterId}.yaml`,
+      );
+
+      // Defense in depth: verify path is within allowed directory
+      if (!isPathWithinBase(filePath, baseDir)) {
+        return {
+          content: [
+            {
+              type: 'text',
+              text: 'Invalid path: access denied',
+            },
+          ],
+          isError: true,
+        };
+      }
+
+      if (!fs.existsSync(filePath)) {
+        return {
+          content: [
+            {
+              type: 'text',
+              text: `Content file not found: ${filePath}`,
+            },
+          ],
+          isError: true,
+        };
+      }
+
+      const yamlContent = fs.readFileSync(filePath, 'utf-8');
+      const parsed = yaml.parse(yamlContent);
+
+      if (parsed.primer !== true) {
+        return {
+          content: [
+            {
+              type: 'text',
+              text: `Warning: This content is not marked as a primer (primer: true not set).\n\nContent:\n${yamlContent}`,
+            },
+          ],
+        };
+      }
+
+      const contentId = `${bookId}/${sectionId}/${chapterId}`;
+      let responseText = `=== Primer Content: ${contentId} ===\n\n`;
+      responseText += `--- YAML Source ---\n${yamlContent}\n`;
+      responseText += `--- Parsed Structure ---\n`;
+      responseText += JSON.stringify(parsed, null, 2);
+
+      return {
+        content: [
+          {
+            type: 'text',
+            text: responseText,
+          },
+        ],
+      };
+    },
+  );
 }
