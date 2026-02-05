@@ -2,10 +2,51 @@ import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import * as yaml from 'yaml';
 import { z } from 'zod';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PROJECT_ROOT = path.resolve(__dirname, '../../..');
+
+/**
+ * Safe path segment pattern: alphanumeric, hyphen, underscore only
+ * Prevents path traversal attacks (e.g., "../", "/", etc.)
+ */
+const SAFE_PATH_SEGMENT_PATTERN = /^[a-zA-Z0-9_-]+$/;
+
+/**
+ * Validate that a path segment is safe (no path traversal)
+ */
+function isSafePathSegment(segment: string): boolean {
+  return SAFE_PATH_SEGMENT_PATTERN.test(segment) && !segment.includes('..');
+}
+
+/**
+ * Validate that the resolved path is within the allowed base directory
+ */
+function isPathWithinBase(filePath: string, baseDir: string): boolean {
+  const resolvedPath = path.resolve(filePath);
+  const resolvedBase = path.resolve(baseDir);
+  return resolvedPath.startsWith(resolvedBase + path.sep);
+}
+
+/**
+ * Zod schema for safe path segment (prevents path traversal)
+ */
+const SafePathSegmentSchema = z.string().refine(isSafePathSegment, {
+  message:
+    'Invalid path segment: must contain only alphanumeric characters, hyphens, or underscores',
+});
+
+/**
+ * Check if a character is a CJK character
+ */
+function isCJK(char: string): boolean {
+  const code = char.charCodeAt(0);
+  return (
+    (code >= 0x4e00 && code <= 0x9fff) || (code >= 0x3400 && code <= 0x4dbf)
+  );
+}
 
 const HanziEntrySchema = z.object({
   character: z.string().describe('Chinese character (e.g., "學")'),
@@ -301,6 +342,223 @@ export function registerDictionaryTools(server: McpServer): void {
           isError: true,
         };
       }
+    },
+  );
+
+  // Check missing readings for content
+  const CheckMissingReadingsSchema = z.object({
+    bookId: SafePathSegmentSchema.describe('Book ID (e.g., "lunyu")'),
+    sectionId: SafePathSegmentSchema.describe('Section ID (e.g., "1")'),
+    chapterId: SafePathSegmentSchema.describe('Chapter ID (e.g., "1")'),
+  });
+
+  server.registerTool(
+    'check_missing_readings',
+    {
+      description:
+        'Check for missing onyomi and kunyomi readings in a content. ' +
+        'Scans all characters in the content and reports which characters lack ' +
+        'onyomi registration (TODO in hanzi-dictionary) or kunyomi registration (not in kunyomi-dictionary).',
+      inputSchema: CheckMissingReadingsSchema,
+    },
+    async ({ bookId, sectionId, chapterId }) => {
+      const baseDir = path.join(PROJECT_ROOT, 'contents/input');
+      const yamlPath = path.join(
+        baseDir,
+        bookId,
+        sectionId,
+        `${chapterId}.yaml`,
+      );
+
+      // Defense in depth: verify path is within allowed directory
+      if (!isPathWithinBase(yamlPath, baseDir)) {
+        return {
+          content: [
+            {
+              type: 'text',
+              text: 'Invalid path: access denied',
+            },
+          ],
+          isError: true,
+        };
+      }
+
+      if (!fs.existsSync(yamlPath)) {
+        return {
+          content: [
+            {
+              type: 'text',
+              text: `Content file not found: ${yamlPath}`,
+            },
+          ],
+          isError: true,
+        };
+      }
+
+      // Read and parse YAML
+      const yamlContent = fs.readFileSync(yamlPath, 'utf-8');
+      const parsed = yaml.parse(yamlContent);
+
+      // Collect all unique CJK characters from the content
+      const characters = new Set<string>();
+      for (const segment of parsed.segments || []) {
+        const text = segment.text?.original || '';
+        for (const char of text) {
+          if (isCJK(char)) {
+            characters.add(char);
+          }
+        }
+      }
+
+      if (characters.size === 0) {
+        return {
+          content: [
+            {
+              type: 'text',
+              text: `No CJK characters found in content ${bookId}/${sectionId}/${chapterId}`,
+            },
+          ],
+        };
+      }
+
+      // Load hanzi dictionary
+      const hanziDictPath = path.join(
+        PROJECT_ROOT,
+        'src/data/hanzi-dictionary.ts',
+      );
+      const hanziDictModule = await import(pathToFileURL(hanziDictPath).href);
+      const { hanziDictionary } = hanziDictModule;
+
+      // Build a map of characters to their meanings
+      type MeaningInfo = {
+        id: string;
+        pinyin: string;
+        tone: number;
+        meaning_ja: string;
+        onyomi: string;
+        is_default: boolean;
+      };
+
+      const charMeanings = new Map<
+        string,
+        { id: string; meanings: MeaningInfo[] }
+      >();
+      for (const entry of hanziDictionary) {
+        charMeanings.set(entry.id, entry);
+      }
+
+      // Load kunyomi dictionary
+      const kunyomiDictPath = path.join(
+        PROJECT_ROOT,
+        'src/data/kunyomi-dictionary.ts',
+      );
+      const kunyomiDictModule = await import(
+        pathToFileURL(kunyomiDictPath).href
+      );
+      const { kunyomiDictionary } = kunyomiDictModule;
+
+      // Build a set of characters with kunyomi
+      const kunyomiChars = new Set<string>();
+      for (const entry of kunyomiDictionary) {
+        kunyomiChars.add(entry.id);
+      }
+
+      // Check each character
+      interface MissingOnyomi {
+        char: string;
+        pinyin: string;
+        meaning_ja: string;
+      }
+
+      interface MissingKunyomi {
+        char: string;
+      }
+
+      interface NotInHanziDict {
+        char: string;
+      }
+
+      const missingOnyomi: MissingOnyomi[] = [];
+      const missingKunyomi: MissingKunyomi[] = [];
+      const notInHanziDict: NotInHanziDict[] = [];
+
+      for (const char of characters) {
+        const entry = charMeanings.get(char);
+
+        if (!entry) {
+          // Character not in hanzi dictionary at all
+          notInHanziDict.push({ char });
+          continue;
+        }
+
+        // Check for missing onyomi (TODO)
+        for (const meaning of entry.meanings) {
+          if (meaning.onyomi === 'TODO') {
+            missingOnyomi.push({
+              char,
+              pinyin: meaning.pinyin,
+              meaning_ja: meaning.meaning_ja,
+            });
+          }
+        }
+
+        // Check for missing kunyomi
+        if (!kunyomiChars.has(char)) {
+          missingKunyomi.push({ char });
+        }
+      }
+
+      // Build response
+      const contentId = `${bookId}/${sectionId}/${chapterId}`;
+      let responseText = `=== Reading Check for ${contentId} ===\n`;
+      responseText += `Total unique CJK characters: ${characters.size}\n\n`;
+
+      let hasIssues = false;
+
+      if (notInHanziDict.length > 0) {
+        hasIssues = true;
+        responseText += `❌ Not in hanzi-dictionary (${notInHanziDict.length}):\n`;
+        for (const item of notInHanziDict) {
+          responseText += `  - "${item.char}"\n`;
+          responseText += `    Action: Use add_hanzi_entry to register this character\n`;
+        }
+        responseText += '\n';
+      }
+
+      if (missingOnyomi.length > 0) {
+        hasIssues = true;
+        responseText += `❌ Missing onyomi - TODO (${missingOnyomi.length}):\n`;
+        for (const item of missingOnyomi) {
+          responseText += `  - "${item.char}" (${item.pinyin}: ${item.meaning_ja})\n`;
+          responseText += `    Action: Use update_hanzi_onyomi with character="${item.char}", pinyin="${item.pinyin}", onyomi="適切な音読み"\n`;
+        }
+        responseText += '\n';
+      }
+
+      if (missingKunyomi.length > 0) {
+        hasIssues = true;
+        responseText += `⚠️ Missing kunyomi (${missingKunyomi.length}):\n`;
+        for (const item of missingKunyomi) {
+          responseText += `  - "${item.char}"\n`;
+          responseText += `    Action: Use add_kunyomi_entry with character="${item.char}", ruby="適切な読み"\n`;
+        }
+        responseText += '\n';
+      }
+
+      if (!hasIssues) {
+        responseText += `✓ All characters have complete readings registered.\n`;
+      }
+
+      return {
+        content: [
+          {
+            type: 'text',
+            text: responseText,
+          },
+        ],
+        isError:
+          hasIssues && (notInHanziDict.length > 0 || missingOnyomi.length > 0),
+      };
     },
   );
 }
