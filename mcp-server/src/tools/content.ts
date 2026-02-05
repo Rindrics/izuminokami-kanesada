@@ -1504,11 +1504,12 @@ Please follow this workflow:
       }
 
       if (!fs.existsSync(yamlPath)) {
+        console.error(`Content file not found: ${yamlPath}`);
         return {
           content: [
             {
               type: 'text',
-              text: `Content file not found: ${yamlPath}`,
+              text: 'Content file not found. Please verify the file path and try again.',
             },
           ],
           isError: true,
