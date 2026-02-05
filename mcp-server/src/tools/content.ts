@@ -408,12 +408,15 @@ Then call set_pinyin_reviewed to mark the content as reviewed before generating 
 確認後、set_pinyin_reviewed を呼び出してから generate_audio を実行してください。`;
       }
 
-      // Check for missing onyomi (TODO)
+      // Check for missing onyomi (TODO) - this is a blocking error
+      let hasMissingOnyomi = false;
       if (missingOnyomiChars.length > 0) {
-        responseText += `\n\n⚠️ Missing Onyomi (音読み未登録)
+        hasMissingOnyomi = true;
+        responseText += `\n\n❌ Missing Onyomi (音読み未登録) - BLOCKING ERROR
 
 === Onyomi Registration Required ===
-The following characters have onyomi set to "TODO" in hanzi-dictionary. Please register onyomi readings:
+The following characters have onyomi set to "TODO" in hanzi-dictionary.
+You must register onyomi readings before proceeding:
 
 ${missingOnyomiChars
   .map(
@@ -425,12 +428,13 @@ ${missingOnyomiChars
   )
   .join('\n\n')}
 
-Note: Onyomi is required for Japanese audio generation (onyomi reading).`;
+Note: Onyomi is required for Japanese audio generation (onyomi reading).
+This content cannot be published until all onyomi readings are registered.`;
       }
 
       // Step 3: Generate contents and validate
       responseText += `\n\n=== Validating Content ===\n`;
-      let hasValidationErrors = false;
+      let hasValidationErrors = hasMissingOnyomi;
       try {
         // Regenerate contents from YAML files
         execSync('pnpm generate:contents', {
