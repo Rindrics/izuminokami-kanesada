@@ -842,20 +842,61 @@ Use full-width parentheses （ ）; half-width () will not be recognized.`;
       // Regex to detect existing overrides: 漢字（読み）
       const overrideRegex = /([一-龥\u3400-\u4DBF])（([ぁ-ん]+)）/g;
 
-      for (let segIdx = 0; segIdx < (parsed.segments || []).length; segIdx++) {
-        const segment = parsed.segments[segIdx];
+      for (let segIdx = 0; segIdx < segments.length; segIdx++) {
+        const segment = segments[segIdx];
         const original = segment.text?.original || '';
-        const japanese = segment.text?.japanese || '';
+        const japanese = (segment.text?.japanese as string) || '';
 
-        // Find existing overrides in japanese text
-        const overrides = new Map<string, string>();
+        // Parse inline overrides to extract position-based overrides from japanese text
+        // This mirrors JapaneseTextWithRuby.parseInlineOverrides logic
+        const positionBasedOverrides = new Map<
+          number,
+          { text: string; ruby: string }
+        >();
+        let cleanText = '';
+        let lastIndex = 0;
+
         for (const match of japanese.matchAll(overrideRegex)) {
-          const char = match[1];
-          const reading = match[2];
-          overrides.set(char, reading);
+          // Add text before this match to clean text
+          cleanText += japanese.slice(lastIndex, match.index);
+
+          // Record override at the position in clean text
+          const position = cleanText.length;
+          const kanji = match[1];
+          const ruby = match[2];
+
+          positionBasedOverrides.set(position, { text: kanji, ruby });
+
+          // Add the kanji to clean text
+          cleanText += kanji;
+          lastIndex = (match.index ?? 0) + match[0].length;
+        }
+        cleanText += japanese.slice(lastIndex);
+
+        // Map cleanText positions to original positions
+        // For this, we need to build a position mapping from japanese to original
+        const japanesePosToOriginalPos = new Map<number, number>();
+        let japaneseIdx = 0;
+        for (let origIdx = 0; origIdx < original.length; origIdx++) {
+          const char = original[origIdx];
+          if (isCJK(char)) {
+            // Count kanji characters in japanese to find corresponding position
+            let kanjiCount = 0;
+            for (let j = 0; j < cleanText.length; j++) {
+              if (isCJK(cleanText[j])) {
+                kanjiCount++;
+                if (kanjiCount - 1 === japaneseIdx) {
+                  japanesePosToOriginalPos.set(j, origIdx);
+                  break;
+                }
+              }
+            }
+            japaneseIdx++;
+          }
         }
 
         // Analyze each character in original
+        let japaneseKanjiIndex = 0;
         for (let pos = 0; pos < original.length; pos++) {
           const char = original[pos];
 
@@ -866,9 +907,24 @@ Use full-width parentheses （ ）; half-width () will not be recognized.`;
 
           if (!entry) {
             notInDict.push({ segmentIndex: segIdx, char });
+            japaneseKanjiIndex++;
             continue;
           }
 
+          // Find position of this kanji in cleanText
+          let cleanTextPos = 0;
+          let currentKanjiCount = 0;
+          for (let i = 0; i < cleanText.length; i++) {
+            if (isCJK(cleanText[i])) {
+              if (currentKanjiCount === japaneseKanjiIndex) {
+                cleanTextPos = i;
+                break;
+              }
+              currentKanjiCount++;
+            }
+          }
+
+          const override = positionBasedOverrides.get(cleanTextPos);
           const defaultReading = entry.readings.find((r) => r.is_default);
           const alternatives = entry.readings.filter((r) => !r.is_default);
 
@@ -882,9 +938,11 @@ Use full-width parentheses （ ）; half-width () will not be recognized.`;
               ruby: r.ruby,
               note: r.note,
             })),
-            hasOverride: overrides.has(char),
-            currentOverride: overrides.get(char) || null,
+            hasOverride: !!override,
+            currentOverride: override?.ruby || null,
           });
+
+          japaneseKanjiIndex++;
         }
       }
 
