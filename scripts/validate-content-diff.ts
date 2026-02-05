@@ -181,6 +181,12 @@ function main(): void {
       continue;
     }
 
+    // Skip validation for primer contents (placeholder entries for reference)
+    if ((content as Record<string, unknown>).primer === true) {
+      console.log(`SKIP: ${contentId} (primer entry)`);
+      continue;
+    }
+
     const result = validateContent(content);
     const errors = result.errors.filter((e) => e.severity === 'error');
     const warnings = result.errors.filter((e) => e.severity === 'warning');
