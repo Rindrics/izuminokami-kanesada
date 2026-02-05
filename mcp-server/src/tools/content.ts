@@ -1469,4 +1469,234 @@ Please follow this workflow:
       }
     },
   );
+
+  // Suggest hanzi overrides for polyphonic characters
+  server.registerTool(
+    'suggest_hanzi_overrides',
+    {
+      description:
+        'Analyze a content and suggest hanzi_overrides for polyphonic characters (多音字). ' +
+        'For each polyphonic character in the content, shows the default pinyin/meaning ' +
+        'and available alternatives. Use this to identify where hanzi_overrides might be needed ' +
+        'when the default reading does not match the intended meaning in context.',
+      inputSchema: ReadContentYamlSchema.shape,
+    },
+    async ({ bookId, sectionId, chapterId }) => {
+      const baseDir = path.join(PROJECT_ROOT, 'contents/input');
+      const yamlPath = path.join(
+        baseDir,
+        bookId,
+        sectionId,
+        `${chapterId}.yaml`,
+      );
+
+      // Defense in depth: verify path is within allowed directory
+      if (!isPathWithinBase(yamlPath, baseDir)) {
+        return {
+          content: [
+            {
+              type: 'text',
+              text: 'Invalid path: access denied',
+            },
+          ],
+          isError: true,
+        };
+      }
+
+      if (!fs.existsSync(yamlPath)) {
+        return {
+          content: [
+            {
+              type: 'text',
+              text: `Content file not found: ${yamlPath}`,
+            },
+          ],
+          isError: true,
+        };
+      }
+
+      // Read and parse YAML
+      const yamlContent = fs.readFileSync(yamlPath, 'utf-8');
+      const parsed = yaml.parse(yamlContent);
+
+      // Load hanzi dictionary
+      const hanziDictPath = path.join(
+        PROJECT_ROOT,
+        'src/data/hanzi-dictionary.ts',
+      );
+      const hanziDictModule = await import(pathToFileURL(hanziDictPath).href);
+      const { hanziDictionary } = hanziDictModule;
+
+      // Build a map of characters to their meanings
+      type MeaningInfo = {
+        id: string;
+        pinyin: string;
+        tone: number;
+        meaning_ja: string;
+        onyomi: string;
+        is_default: boolean;
+      };
+
+      type HanziEntry = {
+        id: string;
+        meanings: MeaningInfo[];
+        is_common: boolean;
+      };
+
+      const charMeanings = new Map<string, HanziEntry>();
+      for (const entry of hanziDictionary as HanziEntry[]) {
+        charMeanings.set(entry.id, entry);
+      }
+
+      // Analyze each segment
+      interface PolyphonicAnalysis {
+        segmentIndex: number;
+        position: number;
+        char: string;
+        defaultPinyin: string;
+        defaultMeaning: string;
+        defaultMeaningId: string;
+        alternatives: Array<{
+          meaning_id: string;
+          pinyin: string;
+          meaning_ja: string;
+        }>;
+        hasOverride: boolean;
+        currentOverrideMeaningId: string | null;
+      }
+
+      const analysis: PolyphonicAnalysis[] = [];
+      const notInDict: Array<{ segmentIndex: number; char: string }> = [];
+
+      // Check if a character is CJK
+      const isCJK = (char: string): boolean => {
+        const code = char.charCodeAt(0);
+        return (
+          (code >= 0x4e00 && code <= 0x9fff) ||
+          (code >= 0x3400 && code <= 0x4dbf)
+        );
+      };
+
+      for (let segIdx = 0; segIdx < (parsed.segments || []).length; segIdx++) {
+        const segment = parsed.segments[segIdx];
+        const original = segment.text?.original || '';
+
+        // Get existing hanzi_overrides for this segment
+        const existingOverrides = new Map<string, string>();
+        if (segment.hanzi_overrides) {
+          for (const override of segment.hanzi_overrides) {
+            const key = `${override.char}-${override.position}`;
+            existingOverrides.set(key, override.meaning_id);
+          }
+        }
+
+        // Analyze each character in original
+        for (let pos = 0; pos < original.length; pos++) {
+          const char = original[pos];
+
+          // Skip if not CJK
+          if (!isCJK(char)) continue;
+
+          const entry = charMeanings.get(char);
+
+          if (!entry) {
+            notInDict.push({ segmentIndex: segIdx, char });
+            continue;
+          }
+
+          // Only include polyphonic characters (2+ meanings)
+          if (entry.meanings.length < 2) continue;
+
+          const defaultMeaning = entry.meanings.find((m) => m.is_default);
+          const alternatives = entry.meanings.filter((m) => !m.is_default);
+
+          if (!defaultMeaning) continue;
+
+          const overrideKey = `${char}-${pos}`;
+          const hasOverride = existingOverrides.has(overrideKey);
+
+          analysis.push({
+            segmentIndex: segIdx,
+            position: pos,
+            char,
+            defaultPinyin: defaultMeaning.pinyin,
+            defaultMeaning: defaultMeaning.meaning_ja,
+            defaultMeaningId: defaultMeaning.id,
+            alternatives: alternatives.map((m) => ({
+              meaning_id: m.id,
+              pinyin: m.pinyin,
+              meaning_ja: m.meaning_ja,
+            })),
+            hasOverride,
+            currentOverrideMeaningId:
+              existingOverrides.get(overrideKey) || null,
+          });
+        }
+      }
+
+      // Build response
+      const contentId = `${bookId}/${sectionId}/${chapterId}`;
+      let responseText = `=== Hanzi Override Analysis for ${contentId} ===\n\n`;
+
+      // Characters not in dictionary
+      if (notInDict.length > 0) {
+        const uniqueChars = [...new Set(notInDict.map((c) => c.char))];
+        responseText += `⚠️ Characters not in hanzi-dictionary (${uniqueChars.length}):\n`;
+        for (const char of uniqueChars) {
+          responseText += `  - "${char}" → add_hanzi_entry to register\n`;
+        }
+        responseText += '\n';
+      }
+
+      // Polyphonic characters analysis
+      if (analysis.length > 0) {
+        responseText += `📝 Polyphonic characters (多音字) found:\n\n`;
+        for (const item of analysis) {
+          responseText += `Segment ${item.segmentIndex}, position ${item.position}: "${item.char}"\n`;
+          responseText += `  Default: ${item.defaultPinyin} (${item.defaultMeaning})\n`;
+          responseText += `  Alternatives:\n`;
+          for (const alt of item.alternatives) {
+            responseText += `    - ${alt.pinyin} (${alt.meaning_ja}) → meaning_id: "${alt.meaning_id}"\n`;
+          }
+          if (item.hasOverride) {
+            responseText += `  ✓ Currently overridden to: ${item.currentOverrideMeaningId}\n`;
+          } else {
+            responseText += `  → If default is wrong, add hanzi_overrides:\n`;
+            responseText += `      - char: ${item.char}\n`;
+            responseText += `        position: ${item.position}\n`;
+            responseText += `        meaning_id: "適切なmeaning_id"\n`;
+          }
+          responseText += '\n';
+        }
+      } else if (notInDict.length === 0) {
+        responseText += `✓ No polyphonic characters found in this content.\n`;
+      }
+
+      // Summary
+      const totalPolyphonic = analysis.length;
+      const withOverrides = analysis.filter((a) => a.hasOverride).length;
+      const needsReview = totalPolyphonic - withOverrides;
+
+      responseText += `--- Summary ---\n`;
+      responseText += `Total polyphonic characters: ${totalPolyphonic}\n`;
+      responseText += `Characters with overrides: ${withOverrides}\n`;
+      responseText += `Characters needing review: ${needsReview}\n`;
+      responseText += `Characters not in dictionary: ${notInDict.length}\n`;
+
+      if (needsReview > 0) {
+        responseText += `\n⚠️ Review the ${needsReview} polyphonic character(s) without overrides.\n`;
+        responseText += `Consider the context (especially the japanese reading) to determine the correct meaning.\n`;
+        responseText += `Add hanzi_overrides in write_content_yaml if the default is incorrect.\n`;
+      }
+
+      return {
+        content: [
+          {
+            type: 'text',
+            text: responseText,
+          },
+        ],
+      };
+    },
+  );
 }
