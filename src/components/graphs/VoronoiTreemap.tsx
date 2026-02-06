@@ -482,7 +482,7 @@ export function VoronoiTreemap({
                     y={cy}
                     textAnchor="middle"
                     dominantBaseline="middle"
-                    fontSize={9}
+                    fontSize={16}
                     fill={textColor}
                     className="pointer-events-none"
                   >
