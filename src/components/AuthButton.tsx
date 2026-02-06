@@ -247,6 +247,7 @@ export function AuthButton() {
                     type="button"
                     onClick={() => {
                       setShowResetForm(false);
+                      setShowLoginForm(true);
                       setError(null);
                       setMessage(null);
                     }}
