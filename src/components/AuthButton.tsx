@@ -173,190 +173,204 @@ export function AuthButton() {
       </div>
 
       {(showLoginForm || showSignUpForm || showResetForm) && (
-        <div className="absolute right-0 top-full z-50 mt-2 w-80 rounded-lg border border-zinc-200 bg-white p-4 shadow-lg dark:border-zinc-800 dark:bg-zinc-900">
-          {showResetForm ? (
-            <div className="space-y-3">
-              <h3 className="text-sm font-semibold text-black dark:text-white">
-                パスワードリセット
-              </h3>
-              <input
-                type="email"
-                placeholder="メールアドレス"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full rounded border border-zinc-300 bg-white px-3 py-2 text-sm text-black dark:border-zinc-700 dark:bg-zinc-800 dark:text-white"
-              />
-              {error && (
-                <div className="text-xs text-red-600 dark:text-red-400">
-                  {error}
-                </div>
-              )}
-              {message && (
-                <div className="text-xs text-green-600 dark:text-green-400">
-                  {message}
-                </div>
-              )}
-              <div className="flex gap-2">
-                <button
-                  type="button"
-                  onClick={handleResetPassword}
-                  className="flex-1 rounded bg-blue-600 px-3 py-2 text-sm text-white hover:bg-blue-700"
-                >
-                  送信
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setShowResetForm(false);
-                    setError(null);
-                    setMessage(null);
-                  }}
-                  className="rounded bg-zinc-200 px-3 py-2 text-sm text-black hover:bg-zinc-300 dark:bg-zinc-800 dark:text-white dark:hover:bg-zinc-700"
-                >
-                  キャンセル
-                </button>
-              </div>
-            </div>
-          ) : showSignUpForm ? (
-            <div className="space-y-3">
-              <h3 className="text-sm font-semibold text-black dark:text-white">
-                新規登録
-              </h3>
-              <input
-                type="email"
-                placeholder="メールアドレス"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full rounded border border-zinc-300 bg-white px-3 py-2 text-sm text-black dark:border-zinc-700 dark:bg-zinc-800 dark:text-white"
-              />
-              <input
-                type="password"
-                placeholder="パスワード"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full rounded border border-zinc-300 bg-white px-3 py-2 text-sm text-black dark:border-zinc-700 dark:bg-zinc-800 dark:text-white"
-              />
-              {error && (
-                <div className="text-xs text-red-600 dark:text-red-400">
-                  {error}
-                </div>
-              )}
-              {message && (
-                <div className="text-xs text-green-600 dark:text-green-400">
-                  {message}
-                </div>
-              )}
-              <button
-                type="button"
-                onClick={() => handleEmailAuth(true)}
-                className="w-full rounded bg-blue-600 px-3 py-2 text-sm text-white hover:bg-blue-700"
-              >
-                登録
-              </button>
-              <div className="flex justify-between text-xs">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setShowSignUpForm(false);
-                    setShowLoginForm(true);
-                    setError(null);
-                    setMessage(null);
-                  }}
-                  className="text-blue-600 hover:underline dark:text-blue-400"
-                >
-                  ログインに戻る
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setShowSignUpForm(false);
-                    setShowResetForm(true);
-                    setError(null);
-                    setMessage(null);
-                  }}
-                  className="text-blue-600 hover:underline dark:text-blue-400"
-                >
-                  パスワードを忘れた場合
-                </button>
-              </div>
-            </div>
-          ) : (
-            <div className="space-y-3">
-              <h3 className="text-sm font-semibold text-black dark:text-white">
-                ログイン
-              </h3>
-              <button
-                type="button"
-                onClick={handleGoogleSignIn}
-                className="w-full rounded border border-zinc-300 bg-white px-3 py-2 text-sm text-black hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white dark:hover:bg-zinc-700"
-              >
-                Google でログイン
-              </button>
-              <div className="relative">
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-zinc-300 dark:border-zinc-700"></div>
-                </div>
-                <div className="relative flex justify-center text-xs">
-                  <span className="bg-white px-2 text-zinc-500 dark:bg-zinc-900 dark:text-zinc-400">
-                    または
-                  </span>
+        <>
+          <button
+            type="button"
+            className="fixed inset-0 z-40 cursor-default"
+            onClick={() => {
+              setShowLoginForm(false);
+              setShowSignUpForm(false);
+              setShowResetForm(false);
+              setError(null);
+              setMessage(null);
+            }}
+            aria-label="メニューを閉じる"
+          />
+          <div className="absolute right-0 top-full z-50 mt-2 w-80 rounded-lg border border-zinc-200 bg-white p-4 shadow-lg dark:border-zinc-800 dark:bg-zinc-900">
+            {showResetForm ? (
+              <div className="space-y-3">
+                <h3 className="text-sm font-semibold text-black dark:text-white">
+                  パスワードリセット
+                </h3>
+                <input
+                  type="email"
+                  placeholder="メールアドレス"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full rounded border border-zinc-300 bg-white px-3 py-2 text-sm text-black dark:border-zinc-700 dark:bg-zinc-800 dark:text-white"
+                />
+                {error && (
+                  <div className="text-xs text-red-600 dark:text-red-400">
+                    {error}
+                  </div>
+                )}
+                {message && (
+                  <div className="text-xs text-green-600 dark:text-green-400">
+                    {message}
+                  </div>
+                )}
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={handleResetPassword}
+                    className="flex-1 rounded bg-blue-600 px-3 py-2 text-sm text-white hover:bg-blue-700"
+                  >
+                    送信
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowResetForm(false);
+                      setError(null);
+                      setMessage(null);
+                    }}
+                    className="rounded bg-zinc-200 px-3 py-2 text-sm text-black hover:bg-zinc-300 dark:bg-zinc-800 dark:text-white dark:hover:bg-zinc-700"
+                  >
+                    キャンセル
+                  </button>
                 </div>
               </div>
-              <input
-                type="email"
-                placeholder="メールアドレス"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full rounded border border-zinc-300 bg-white px-3 py-2 text-sm text-black dark:border-zinc-700 dark:bg-zinc-800 dark:text-white"
-              />
-              <input
-                type="password"
-                placeholder="パスワード"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full rounded border border-zinc-300 bg-white px-3 py-2 text-sm text-black dark:border-zinc-700 dark:bg-zinc-800 dark:text-white"
-              />
-              {error && (
-                <div className="text-xs text-red-600 dark:text-red-400">
-                  {error}
-                </div>
-              )}
-              <button
-                type="button"
-                onClick={() => handleEmailAuth(false)}
-                className="w-full rounded bg-blue-600 px-3 py-2 text-sm text-white hover:bg-blue-700"
-              >
-                ログイン
-              </button>
-              <div className="flex justify-between text-xs">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setShowLoginForm(false);
-                    setShowSignUpForm(true);
-                    setError(null);
-                    setMessage(null);
-                  }}
-                  className="text-blue-600 hover:underline dark:text-blue-400"
-                >
+            ) : showSignUpForm ? (
+              <div className="space-y-3">
+                <h3 className="text-sm font-semibold text-black dark:text-white">
                   新規登録
-                </button>
+                </h3>
+                <input
+                  type="email"
+                  placeholder="メールアドレス"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full rounded border border-zinc-300 bg-white px-3 py-2 text-sm text-black dark:border-zinc-700 dark:bg-zinc-800 dark:text-white"
+                />
+                <input
+                  type="password"
+                  placeholder="パスワード"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full rounded border border-zinc-300 bg-white px-3 py-2 text-sm text-black dark:border-zinc-700 dark:bg-zinc-800 dark:text-white"
+                />
+                {error && (
+                  <div className="text-xs text-red-600 dark:text-red-400">
+                    {error}
+                  </div>
+                )}
+                {message && (
+                  <div className="text-xs text-green-600 dark:text-green-400">
+                    {message}
+                  </div>
+                )}
                 <button
                   type="button"
-                  onClick={() => {
-                    setShowLoginForm(false);
-                    setShowResetForm(true);
-                    setError(null);
-                    setMessage(null);
-                  }}
-                  className="text-blue-600 hover:underline dark:text-blue-400"
+                  onClick={() => handleEmailAuth(true)}
+                  className="w-full rounded bg-blue-600 px-3 py-2 text-sm text-white hover:bg-blue-700"
                 >
-                  パスワードを忘れた場合
+                  登録
                 </button>
+                <div className="flex justify-between text-xs">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowSignUpForm(false);
+                      setShowLoginForm(true);
+                      setError(null);
+                      setMessage(null);
+                    }}
+                    className="text-blue-600 hover:underline dark:text-blue-400"
+                  >
+                    ログインに戻る
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowSignUpForm(false);
+                      setShowResetForm(true);
+                      setError(null);
+                      setMessage(null);
+                    }}
+                    className="text-blue-600 hover:underline dark:text-blue-400"
+                  >
+                    パスワードを忘れた場合
+                  </button>
+                </div>
               </div>
-            </div>
-          )}
-        </div>
+            ) : (
+              <div className="space-y-3">
+                <h3 className="text-sm font-semibold text-black dark:text-white">
+                  ログイン
+                </h3>
+                <button
+                  type="button"
+                  onClick={handleGoogleSignIn}
+                  className="w-full rounded border border-zinc-300 bg-white px-3 py-2 text-sm text-black hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white dark:hover:bg-zinc-700"
+                >
+                  Google でログイン
+                </button>
+                <div className="relative">
+                  <div className="absolute inset-0 flex items-center">
+                    <div className="w-full border-t border-zinc-300 dark:border-zinc-700"></div>
+                  </div>
+                  <div className="relative flex justify-center text-xs">
+                    <span className="bg-white px-2 text-zinc-500 dark:bg-zinc-900 dark:text-zinc-400">
+                      または
+                    </span>
+                  </div>
+                </div>
+                <input
+                  type="email"
+                  placeholder="メールアドレス"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full rounded border border-zinc-300 bg-white px-3 py-2 text-sm text-black dark:border-zinc-700 dark:bg-zinc-800 dark:text-white"
+                />
+                <input
+                  type="password"
+                  placeholder="パスワード"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full rounded border border-zinc-300 bg-white px-3 py-2 text-sm text-black dark:border-zinc-700 dark:bg-zinc-800 dark:text-white"
+                />
+                {error && (
+                  <div className="text-xs text-red-600 dark:text-red-400">
+                    {error}
+                  </div>
+                )}
+                <button
+                  type="button"
+                  onClick={() => handleEmailAuth(false)}
+                  className="w-full rounded bg-blue-600 px-3 py-2 text-sm text-white hover:bg-blue-700"
+                >
+                  ログイン
+                </button>
+                <div className="flex justify-between text-xs">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowLoginForm(false);
+                      setShowSignUpForm(true);
+                      setError(null);
+                      setMessage(null);
+                    }}
+                    className="text-blue-600 hover:underline dark:text-blue-400"
+                  >
+                    新規登録
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowLoginForm(false);
+                      setShowResetForm(true);
+                      setError(null);
+                      setMessage(null);
+                    }}
+                    className="text-blue-600 hover:underline dark:text-blue-400"
+                  >
+                    パスワードを忘れた場合
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        </>
       )}
     </div>
   );
