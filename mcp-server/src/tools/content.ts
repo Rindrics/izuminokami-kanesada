@@ -1951,15 +1951,18 @@ Please follow this workflow:
                   meaning_id: string;
                 }>
               ).push(override);
+              appliedInSegment.push(override);
               appliedOverridesCount++;
             }
           }
 
-          responseText += `Segment ${segIdx}: Applied ${overridesToAdd.length} override(s)\n`;
-          for (const override of overridesToAdd) {
-            responseText += `  - char: ${override.char}, position: ${override.position}, meaning_id: ${override.meaning_id}\n`;
+          if (appliedInSegment.length > 0) {
+            responseText += `Segment ${segIdx}: Applied ${appliedInSegment.length} override(s)\n`;
+            for (const override of appliedInSegment) {
+              responseText += `  - char: ${override.char}, position: ${override.position}, meaning_id: ${override.meaning_id}\n`;
+            }
+            responseText += '\n';
           }
-          responseText += '\n';
         }
       }
 
@@ -2071,8 +2074,9 @@ Please follow this workflow:
             // This is a section directory
             scanDir(entryPath, entry.name);
           } else if (entry.isFile() && entry.name.endsWith('.yaml')) {
+            const yamlPath = path.join(dir, entry.name);
             try {
-              const content = fs.readFileSync(entryPath, 'utf-8');
+              const content = fs.readFileSync(yamlPath, 'utf-8');
               const parsed = yaml.parse(content);
 
               if (parsed.primer === true) {
@@ -2081,13 +2085,13 @@ Please follow this workflow:
                   contentId: `${bookId}/${sectionId}/${chapterId}`,
                   sectionId: sectionId || '',
                   chapterId,
-                  path: entryPath,
+                  path: yamlPath,
                 });
               }
             } catch (err) {
               // Log error for visibility, but continue scanning other files
               console.warn(
-                `Failed to parse YAML at ${entryPath}:`,
+                `Failed to parse YAML at ${yamlPath}:`,
                 err instanceof Error ? err.message : String(err),
               );
             }
