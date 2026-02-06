@@ -124,7 +124,10 @@ export function registerDictionaryTools(server: McpServer): void {
           PROJECT_ROOT,
           'src/data/hanzi-dictionary.ts',
         );
-        const hanziDictModule = await import(pathToFileURL(hanziDictPath).href);
+        const hanziDictStats = fs.statSync(hanziDictPath);
+        const hanziDictUrl = new URL(pathToFileURL(hanziDictPath).href);
+        hanziDictUrl.searchParams.set('_t', hanziDictStats.mtimeMs.toString());
+        const hanziDictModule = await import(hanziDictUrl.href);
         const { hanziDictionary } = hanziDictModule;
 
         // Check if an entry with the same id already exists
@@ -373,21 +376,28 @@ export function registerDictionaryTools(server: McpServer): void {
       const yamlContent = fs.readFileSync(yamlPath, 'utf-8');
       const parsed = yaml.parse(yamlContent);
 
-      // Load dictionaries
+      // Load dictionaries with cache busting to ensure latest version
       const hanziDictPath = path.join(
         PROJECT_ROOT,
         'src/data/hanzi-dictionary.ts',
       );
-      const hanziDictModule = await import(pathToFileURL(hanziDictPath).href);
+      const hanziDictStats = fs.statSync(hanziDictPath);
+      const hanziDictUrl = new URL(pathToFileURL(hanziDictPath).href);
+      hanziDictUrl.searchParams.set('_t', hanziDictStats.mtimeMs.toString());
+      const hanziDictModule = await import(hanziDictUrl.href);
       const { hanziDictionary } = hanziDictModule;
 
       const kunyomiDictPath = path.join(
         PROJECT_ROOT,
         'src/data/kunyomi-dictionary.ts',
       );
-      const kunyomiDictModule = await import(
-        pathToFileURL(kunyomiDictPath).href
+      const kunyomiDictStats = fs.statSync(kunyomiDictPath);
+      const kunyomiDictUrl = new URL(pathToFileURL(kunyomiDictPath).href);
+      kunyomiDictUrl.searchParams.set(
+        '_t',
+        kunyomiDictStats.mtimeMs.toString(),
       );
+      const kunyomiDictModule = await import(kunyomiDictUrl.href);
       const { kunyomiDictionary } = kunyomiDictModule;
 
       // Build a map of characters to their meanings
@@ -812,6 +822,17 @@ Use full-width parentheses （ ）; half-width () will not be recognized.`;
 
       const analysis: CharacterAnalysis[] = [];
       const notInDict: Array<{ segmentIndex: number; char: string }> = [];
+
+      // Extract segments from parsed YAML
+      const segments =
+        (
+          parsed as {
+            segments?: Array<{
+              text?: { original?: string; japanese?: string };
+              hanzi_overrides?: unknown[];
+            }>;
+          }
+        ).segments || [];
 
       // Regex to detect existing overrides: 漢字（読み）
       const overrideRegex = /([一-龥\u3400-\u4DBF])（([ぁ-ん]+)）/g;
