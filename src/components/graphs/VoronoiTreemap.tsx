@@ -492,7 +492,7 @@ export function VoronoiTreemap({
                     fill={textColor}
                     className="pointer-events-none"
                   >
-                    {node.data.chapterId}
+                    {node.data.sectionId}-{node.data.chapterId}
                   </text>
                 )}
               </g>
