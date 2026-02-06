@@ -218,11 +218,19 @@ export function AuthButton() {
                 <h3 className="text-sm font-semibold text-black dark:text-white">
                   パスワードリセット
                 </h3>
+                <label
+                  htmlFor="reset-email"
+                  className="block text-xs font-medium text-zinc-600 dark:text-zinc-400"
+                >
+                  メールアドレス
+                </label>
                 <input
+                  id="reset-email"
                   type="email"
                   placeholder="メールアドレス"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  autoComplete="email"
                   className="w-full rounded border border-zinc-300 bg-white px-3 py-2 text-sm text-black dark:border-zinc-700 dark:bg-zinc-800 dark:text-white"
                 />
                 {error && (
@@ -262,18 +270,34 @@ export function AuthButton() {
                 <h3 className="text-sm font-semibold text-black dark:text-white">
                   新規登録
                 </h3>
+                <label
+                  htmlFor="signup-email"
+                  className="block text-xs font-medium text-zinc-600 dark:text-zinc-400"
+                >
+                  メールアドレス
+                </label>
                 <input
+                  id="signup-email"
                   type="email"
                   placeholder="メールアドレス"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  autoComplete="email"
                   className="w-full rounded border border-zinc-300 bg-white px-3 py-2 text-sm text-black dark:border-zinc-700 dark:bg-zinc-800 dark:text-white"
                 />
+                <label
+                  htmlFor="signup-password"
+                  className="block text-xs font-medium text-zinc-600 dark:text-zinc-400"
+                >
+                  パスワード
+                </label>
                 <input
+                  id="signup-password"
                   type="password"
                   placeholder="パスワード"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  autoComplete="new-password"
                   className="w-full rounded border border-zinc-300 bg-white px-3 py-2 text-sm text-black dark:border-zinc-700 dark:bg-zinc-800 dark:text-white"
                 />
                 {error && (
@@ -342,18 +366,34 @@ export function AuthButton() {
                     </span>
                   </div>
                 </div>
+                <label
+                  htmlFor="login-email"
+                  className="block text-xs font-medium text-zinc-600 dark:text-zinc-400"
+                >
+                  メールアドレス
+                </label>
                 <input
+                  id="login-email"
                   type="email"
                   placeholder="メールアドレス"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  autoComplete="email"
                   className="w-full rounded border border-zinc-300 bg-white px-3 py-2 text-sm text-black dark:border-zinc-700 dark:bg-zinc-800 dark:text-white"
                 />
+                <label
+                  htmlFor="login-password"
+                  className="block text-xs font-medium text-zinc-600 dark:text-zinc-400"
+                >
+                  パスワード
+                </label>
                 <input
+                  id="login-password"
                   type="password"
                   placeholder="パスワード"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  autoComplete="current-password"
                   className="w-full rounded border border-zinc-300 bg-white px-3 py-2 text-sm text-black dark:border-zinc-700 dark:bg-zinc-800 dark:text-white"
                 />
                 {error && (
