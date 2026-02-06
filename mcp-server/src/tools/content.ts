@@ -1744,23 +1744,22 @@ Please follow this workflow:
       }
 
       // Read and parse YAML
-      let yamlContent: string;
+      let parsed: Record<string, unknown>;
       try {
-        yamlContent = fs.readFileSync(yamlPath, 'utf-8');
+        const yamlContent = fs.readFileSync(yamlPath, 'utf-8');
+        parsed = yaml.parse(yamlContent) as Record<string, unknown>;
       } catch (err) {
-        console.error(`Error reading YAML file: ${yamlPath}`, err);
+        console.error(`Error reading/parsing YAML file: ${yamlPath}`, err);
         return {
           content: [
             {
               type: 'text',
-              text: 'Failed to read content file. Please try again.',
+              text: 'Failed to read or parse content file. Please check the YAML syntax.',
             },
           ],
           isError: true,
         };
       }
-
-      const parsed = yaml.parse(yamlContent) as Record<string, unknown>;
 
       // Load hanzi dictionary
       const hanziDictPath = path.join(
@@ -1858,7 +1857,7 @@ Please follow this workflow:
           if (!isCJK(char)) continue;
 
           // Find position in cleanText
-          let cleanTextPos = 0;
+          let cleanTextPos = -1;
           let currentKanjiCount = 0;
           for (let i = 0; i < cleanText.length; i++) {
             if (isCJK(cleanText[i])) {
@@ -1868,6 +1867,12 @@ Please follow this workflow:
               }
               currentKanjiCount++;
             }
+          }
+
+          // Skip if no matching position found in cleanText
+          if (cleanTextPos === -1) {
+            japaneseKanjiIndex++;
+            continue;
           }
 
           const override = positionBasedOverrides.get(cleanTextPos);
