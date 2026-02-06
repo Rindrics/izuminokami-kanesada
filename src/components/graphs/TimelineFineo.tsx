@@ -404,181 +404,183 @@ export function TimelineFineo({
   const hoverInfo = getHoverInfo();
 
   return (
-    <div className="overflow-x-auto rounded-lg bg-white shadow-sm dark:bg-zinc-900">
-      {/* Chart */}
-      <svg
-        width={width}
-        height={height}
-        className="overflow-visible"
-        style={{ minWidth: width }}
-        role="img"
-        aria-label="経書と人物の時系列図"
-      >
-        {/* Time axis */}
-        <g>
-          <line
-            x1={margin.left}
-            y1={height / 2}
-            x2={width - margin.right}
-            y2={height / 2}
-            stroke="#d4d4d8"
-            strokeWidth={1}
-          />
-          {ticks.map((year) => (
-            <g
-              key={year}
-              transform={`translate(${scale(year)}, ${height / 2})`}
-            >
-              <line y1={-5} y2={5} stroke="#a1a1aa" strokeWidth={1} />
-              <text
-                y={20}
-                textAnchor="middle"
-                fontSize={9}
-                fill="#71717a"
-                className="dark:fill-zinc-400"
+    <div className="rounded-lg bg-white shadow-sm dark:bg-zinc-900">
+      {/* Chart - Scrollable SVG Container */}
+      <div className="overflow-x-auto">
+        <svg
+          width={width}
+          height={height}
+          className="overflow-visible"
+          style={{ minWidth: width }}
+          role="img"
+          aria-label="経書と人物の時系列図"
+        >
+          {/* Time axis */}
+          <g>
+            <line
+              x1={margin.left}
+              y1={height / 2}
+              x2={width - margin.right}
+              y2={height / 2}
+              stroke="#d4d4d8"
+              strokeWidth={1}
+            />
+            {ticks.map((year) => (
+              <g
+                key={year}
+                transform={`translate(${scale(year)}, ${height / 2})`}
               >
-                {year < 0 ? `BC${Math.abs(year)}` : year}
-              </text>
-            </g>
-          ))}
-        </g>
+                <line y1={-5} y2={5} stroke="#a1a1aa" strokeWidth={1} />
+                <text
+                  y={20}
+                  textAnchor="middle"
+                  fontSize={9}
+                  fill="#71717a"
+                  className="dark:fill-zinc-400"
+                >
+                  {year < 0 ? `BC${Math.abs(year)}` : year}
+                </text>
+              </g>
+            ))}
+          </g>
 
-        {/* Lane labels */}
-        <text
-          x={margin.left - 10}
-          y={personLaneY}
-          textAnchor="end"
-          fontSize={11}
-          fill="#71717a"
-          className="dark:fill-zinc-400"
-        >
-          人物
-        </text>
-        <text
-          x={margin.left - 10}
-          y={bookLaneY}
-          textAnchor="end"
-          fontSize={11}
-          fill="#71717a"
-          className="dark:fill-zinc-400"
-        >
-          経書
-        </text>
+          {/* Lane labels */}
+          <text
+            x={margin.left - 10}
+            y={personLaneY}
+            textAnchor="end"
+            fontSize={11}
+            fill="#71717a"
+            className="dark:fill-zinc-400"
+          >
+            人物
+          </text>
+          <text
+            x={margin.left - 10}
+            y={bookLaneY}
+            textAnchor="end"
+            fontSize={11}
+            fill="#71717a"
+            className="dark:fill-zinc-400"
+          >
+            経書
+          </text>
 
-        {/* Links */}
-        <g>
-          {links.map((link) => {
-            const person = personNodes.find((p) => p.id === link.personId);
-            const book = bookNodes.find((b) => b.id === link.bookId);
-            if (!person || !book) return null;
+          {/* Links */}
+          <g>
+            {links.map((link) => {
+              const person = personNodes.find((p) => p.id === link.personId);
+              const book = bookNodes.find((b) => b.id === link.bookId);
+              if (!person || !book) return null;
 
-            const linkId = `${link.personId}::${link.bookId}`;
-            const pathData = generatePath(person, book);
+              const linkId = `${link.personId}::${link.bookId}`;
+              const pathData = generatePath(person, book);
 
-            // Gradient from person to book (use hyphen for CSS ID compatibility)
-            const gradientId = `tl-grad-${link.personId}-${link.bookId}`;
+              // Gradient from person to book (use hyphen for CSS ID compatibility)
+              const gradientId = `tl-grad-${link.personId}-${link.bookId}`;
 
-            return (
-              <g key={linkId}>
-                <defs>
-                  <linearGradient
-                    id={gradientId}
-                    x1="0%"
-                    y1="0%"
-                    x2="0%"
-                    y2="100%"
+              return (
+                <g key={linkId}>
+                  <defs>
+                    <linearGradient
+                      id={gradientId}
+                      x1="0%"
+                      y1="0%"
+                      x2="0%"
+                      y2="100%"
+                    >
+                      <stop offset="0%" stopColor={person.color} />
+                      <stop offset="100%" stopColor={book.color} />
+                    </linearGradient>
+                  </defs>
+                  {/* biome-ignore lint/a11y/noStaticElementInteractions: SVG path hover interaction */}
+                  <path
+                    d={pathData}
+                    fill="none"
+                    stroke={`url(#${gradientId})`}
+                    strokeWidth={Math.max(Math.log(link.value + 1) * 2, 1.5)}
+                    strokeOpacity={getLinkOpacity(link)}
+                    className="cursor-pointer transition-opacity"
+                    onMouseEnter={() => setHoveredLink(linkId)}
+                    onMouseLeave={() => setHoveredLink(null)}
+                  />
+                </g>
+              );
+            })}
+          </g>
+
+          {/* Person nodes */}
+          <g>
+            {personNodes.map((person) => {
+              const isHovered = hoveredNode === person.id;
+              return (
+                <g key={person.id}>
+                  {/* biome-ignore lint/a11y/noStaticElementInteractions: SVG circle hover interaction */}
+                  <circle
+                    cx={person.x}
+                    cy={person.y}
+                    r={isHovered ? 14 : 12}
+                    fill={person.color}
+                    fillOpacity={isHovered ? 1 : 0.9}
+                    stroke={isHovered ? '#000' : '#fff'}
+                    strokeWidth={isHovered ? 2 : 1}
+                    className="cursor-pointer transition-all"
+                    onMouseEnter={() => setHoveredNode(person.id)}
+                    onMouseLeave={() => setHoveredNode(null)}
+                  />
+                  <text
+                    x={person.x}
+                    y={person.labelAbove ? person.y - 20 : person.y + 28}
+                    textAnchor="middle"
+                    fontSize={10}
+                    fill="#374151"
+                    className="pointer-events-none dark:fill-zinc-300"
                   >
-                    <stop offset="0%" stopColor={person.color} />
-                    <stop offset="100%" stopColor={book.color} />
-                  </linearGradient>
-                </defs>
-                {/* biome-ignore lint/a11y/noStaticElementInteractions: SVG path hover interaction */}
-                <path
-                  d={pathData}
-                  fill="none"
-                  stroke={`url(#${gradientId})`}
-                  strokeWidth={Math.max(Math.log(link.value + 1) * 2, 1.5)}
-                  strokeOpacity={getLinkOpacity(link)}
-                  className="cursor-pointer transition-opacity"
-                  onMouseEnter={() => setHoveredLink(linkId)}
-                  onMouseLeave={() => setHoveredLink(null)}
-                />
-              </g>
-            );
-          })}
-        </g>
+                    {person.name}
+                  </text>
+                </g>
+              );
+            })}
+          </g>
 
-        {/* Person nodes */}
-        <g>
-          {personNodes.map((person) => {
-            const isHovered = hoveredNode === person.id;
-            return (
-              <g key={person.id}>
-                {/* biome-ignore lint/a11y/noStaticElementInteractions: SVG circle hover interaction */}
-                <circle
-                  cx={person.x}
-                  cy={person.y}
-                  r={isHovered ? 14 : 12}
-                  fill={person.color}
-                  fillOpacity={isHovered ? 1 : 0.9}
-                  stroke={isHovered ? '#000' : '#fff'}
-                  strokeWidth={isHovered ? 2 : 1}
-                  className="cursor-pointer transition-all"
-                  onMouseEnter={() => setHoveredNode(person.id)}
-                  onMouseLeave={() => setHoveredNode(null)}
-                />
-                <text
-                  x={person.x}
-                  y={person.labelAbove ? person.y - 20 : person.y + 28}
-                  textAnchor="middle"
-                  fontSize={10}
-                  fill="#374151"
-                  className="pointer-events-none dark:fill-zinc-300"
-                >
-                  {person.name}
-                </text>
-              </g>
-            );
-          })}
-        </g>
-
-        {/* Book nodes */}
-        <g>
-          {bookNodes.map((book) => {
-            const isHovered = hoveredNode === book.id;
-            return (
-              <g key={book.id}>
-                {/* biome-ignore lint/a11y/noStaticElementInteractions: SVG rect hover interaction */}
-                <rect
-                  x={book.x - 20}
-                  y={book.y - 10}
-                  width={40}
-                  height={20}
-                  rx={4}
-                  fill={book.color}
-                  fillOpacity={isHovered ? 1 : 0.9}
-                  stroke={isHovered ? '#000' : '#fff'}
-                  strokeWidth={isHovered ? 2 : 1}
-                  className="cursor-pointer transition-all"
-                  onMouseEnter={() => setHoveredNode(book.id)}
-                  onMouseLeave={() => setHoveredNode(null)}
-                />
-                <text
-                  x={book.x}
-                  y={book.y + 4}
-                  textAnchor="middle"
-                  fontSize={10}
-                  fill="#fff"
-                  fontWeight="bold"
-                  className="pointer-events-none"
-                >
-                  {book.name}
-                </text>
-              </g>
-            );
-          })}
-        </g>
-      </svg>
+          {/* Book nodes */}
+          <g>
+            {bookNodes.map((book) => {
+              const isHovered = hoveredNode === book.id;
+              return (
+                <g key={book.id}>
+                  {/* biome-ignore lint/a11y/noStaticElementInteractions: SVG rect hover interaction */}
+                  <rect
+                    x={book.x - 20}
+                    y={book.y - 10}
+                    width={40}
+                    height={20}
+                    rx={4}
+                    fill={book.color}
+                    fillOpacity={isHovered ? 1 : 0.9}
+                    stroke={isHovered ? '#000' : '#fff'}
+                    strokeWidth={isHovered ? 2 : 1}
+                    className="cursor-pointer transition-all"
+                    onMouseEnter={() => setHoveredNode(book.id)}
+                    onMouseLeave={() => setHoveredNode(null)}
+                  />
+                  <text
+                    x={book.x}
+                    y={book.y + 4}
+                    textAnchor="middle"
+                    fontSize={10}
+                    fill="#fff"
+                    fontWeight="bold"
+                    className="pointer-events-none"
+                  >
+                    {book.name}
+                  </text>
+                </g>
+              );
+            })}
+          </g>
+        </svg>
+      </div>
 
       {/* Tooltip */}
       <div className="flex min-h-6 items-center justify-center p-3">

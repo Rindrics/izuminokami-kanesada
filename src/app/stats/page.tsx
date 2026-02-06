@@ -365,9 +365,7 @@ export default function StatsPage() {
           <p className="mb-3 text-sm text-zinc-500">
             人物の誕生年と経書の成立年を時系列で表示
           </p>
-          <div className="max-w-full overflow-x-auto">
-            <TimelineFineo width={850} height={500} />
-          </div>
+          <TimelineFineo width={850} height={500} />
         </section>
 
         {/* Character Frequency */}
