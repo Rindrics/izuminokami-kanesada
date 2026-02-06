@@ -351,8 +351,8 @@ export function VoronoiTreemap({
               className="rounded px-3 py-1 text-xs transition-colors"
               style={{
                 backgroundColor:
-                  selectedBook === book.bookId ? colors.light : colors.lighter,
-                color: selectedBook === book.bookId ? '#FFFFFF' : '#1f2937',
+                  selectedBook === book.bookId ? colors.base : colors.light,
+                color: '#FFFFFF',
               }}
             >
               {book.name}
@@ -362,9 +362,8 @@ export function VoronoiTreemap({
       </div>
 
       <svg
-        width={width}
-        height={height}
-        className="mx-auto"
+        viewBox={`0 0 ${width} ${height}`}
+        className="mx-auto h-auto w-full max-w-full"
         role="img"
         aria-label="書籍別文字数"
       >
@@ -384,8 +383,14 @@ export function VoronoiTreemap({
             const [cx, cy] = getCentroid(polygon);
             const area = getPolygonArea(polygon);
 
-            // Stroke width for inner boundaries only (book boundaries drawn separately)
-            const strokeWidth = depth === 2 ? 2 : isHovered ? 1.5 : 0.5;
+            // Stroke width for inner boundaries (book boundaries drawn separately)
+            // depth 1 = book, depth 2 = section, depth 3 = chapter
+            let strokeWidth = 0.5;
+            if (depth === 2) {
+              strokeWidth = 5; // section boundaries
+            } else if (depth === 3) {
+              strokeWidth = isHovered ? 1.5 : 0.5; // chapter boundaries
+            }
 
             // Show labels only for larger areas
             const showBookLabel = depth === 1;
@@ -483,14 +488,33 @@ export function VoronoiTreemap({
                     y={cy}
                     textAnchor="middle"
                     dominantBaseline="middle"
-                    fontSize={9}
-                    fill={textColor}
+                    fontSize={16}
+                    fill="#FFFFFF"
                     className="pointer-events-none"
                   >
-                    {node.data.chapterId}
+                    {node.data.sectionId}-{node.data.chapterId}
                   </text>
                 )}
               </g>
+            );
+          })}
+
+        {/* Section boundaries - drawn after cells to be on top */}
+        {allNodes
+          .filter((node) => node.depth === 2)
+          .map((node) => {
+            const polygon = node.polygon;
+            if (!polygon) return null;
+            const pathData = polygonToPath(polygon);
+            return (
+              <path
+                key={`section-border-${node.data.bookId}-${node.data.sectionId}`}
+                d={pathData}
+                fill="none"
+                stroke="rgba(255,255,255,0.8)"
+                strokeWidth={2}
+                className="pointer-events-none"
+              />
             );
           })}
 
@@ -529,7 +553,7 @@ export function VoronoiTreemap({
 
       {/* Legend */}
       <div className="mt-4 space-y-2 text-xs">
-        <div className="flex flex-wrap items-center justify-center gap-4">
+        <div className="mx-8 flex flex-wrap items-center justify-start gap-4 sm:mx-0 sm:justify-center">
           {bookSummary.map((book) => {
             const percentage = ((book.charCount / totalChars) * 100).toFixed(1);
             const colors = chartTheme.getBookColorPalette(book.bookId);
