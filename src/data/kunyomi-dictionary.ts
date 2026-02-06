@@ -1552,6 +1552,16 @@ export const kunyomiDictionary: KunyomiEntry[] = [
     text: '盗',
     readings: [{ id: '盗-ぬすむ', ruby: 'ぬすむ', is_default: true }],
   },
+  {
+    id: '労',
+    text: '労',
+    readings: [{ id: '労-ろう', ruby: 'ろう', is_default: true }],
+  },
+  {
+    id: '謗',
+    text: '謗',
+    readings: [{ id: '謗-そし', ruby: 'そし', is_default: true }],
+  },
 ];
 
 export function getKunyomiEntry(text: string): KunyomiEntry | undefined {

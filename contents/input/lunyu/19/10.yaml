@@ -1,0 +1,23 @@
+segments:
+  - text:
+      original: 子夏曰
+      japanese: 子夏曰く、
+    speaker: null
+  - text:
+      original: 君子信而後勞其民
+      japanese: 君子は信ぜられて、而（しか）る後に其の民を労す。
+    speaker: zixia
+  - text:
+      original: 未信則以爲厲己也
+      japanese: 未だ信ぜられざれば、則ち以て己を厲（やま）すと為す。
+    speaker: zixia
+  - text:
+      original: 信而後諫
+      japanese: 信ぜられて而（しか）る後に諫む。
+    speaker: zixia
+  - text:
+      original: 未信則以爲謗己也
+      japanese: 未だ信ぜられざれば、則ち以て己を謗ると為す。
+    speaker: zixia
+mentioned: [zixia]
+pinyin_reviewed: true

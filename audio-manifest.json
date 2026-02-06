@@ -821,6 +821,45 @@
       }
     ]
   },
+  "lunyu/19/10": {
+    "segments": [
+      {
+        "index": 0,
+        "zh": {
+          "hash": "5b265a1da513a3ce99224c30d0207255ae4662f4809d5f50fb1ba58fc615cfc9",
+          "uploadedAt": "2026-02-06T10:57:05.924Z"
+        }
+      },
+      {
+        "index": 1,
+        "zh": {
+          "hash": "12ed673e248176b060b101282162961266573fca99e96fd50c4decf51c803e0b",
+          "uploadedAt": "2026-02-06T10:57:06.046Z"
+        }
+      },
+      {
+        "index": 2,
+        "zh": {
+          "hash": "f82ec89fadbd97d9643cfe76e7f8c5c5980734795207db0cd439eb4783dcfd3b",
+          "uploadedAt": "2026-02-06T10:57:06.193Z"
+        }
+      },
+      {
+        "index": 3,
+        "zh": {
+          "hash": "bd1deebe0782117b4654c94a44a27769e993d5f05a25363ee6132f934d66e9a8",
+          "uploadedAt": "2026-02-06T10:57:06.318Z"
+        }
+      },
+      {
+        "index": 4,
+        "zh": {
+          "hash": "df17b4a61b001ee16cc461afa3823b35bbb0d32f4888c3dfabd9d29d4ec235ed",
+          "uploadedAt": "2026-02-06T10:57:06.659Z"
+        }
+      }
+    ]
+  },
   "lunyu/19/2": {
     "segments": [
       {
