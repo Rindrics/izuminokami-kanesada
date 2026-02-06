@@ -339,6 +339,9 @@ export function registerContentTools(server: McpServer): void {
       // Always set pinyin_reviewed to false - human review is required
       yamlLines[pinyinReviewedLineIndex] = `pinyin_reviewed: false`;
 
+      // Check if file already exists (update vs new creation)
+      const isNewFile = !fs.existsSync(filePath);
+
       // Write the YAML file with the correct pinyin_reviewed value
       const yamlContent = `${yamlLines.join('\n')}\n`;
       fs.writeFileSync(filePath, yamlContent);
@@ -355,6 +358,29 @@ export function registerContentTools(server: McpServer): void {
     Reason: ${warning.reason}\n`;
         }
         responseText += `\n`;
+      }
+
+      // Request Japanese reading review for new files
+      if (isNewFile) {
+        responseText += `\n📝 読み下し文のレビューをお願いします
+
+=== Japanese Reading Review Required ===
+以下の読み下し文（書き下し文）が正しいか確認してください：
+
+${segments
+  .map(
+    (seg, idx) =>
+      `Segment ${idx}:
+  Original: ${seg.text.original}
+  Japanese: ${seg.text.japanese}
+  Speaker: ${seg.speaker === null ? 'null (narrator)' : seg.speaker}`,
+  )
+  .join('\n\n')}
+
+読み下し文に問題があれば、write_content_yaml を再度呼び出して修正してください。
+レビューが完了したら、set_pinyin_reviewed を呼び出してから generate_audio を実行してください。
+
+`;
       }
 
       // Add pinyin review status
