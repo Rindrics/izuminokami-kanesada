@@ -2095,6 +2095,19 @@ Please follow this workflow:
             scanDir(entryPath, entry.name);
           } else if (entry.isFile() && entry.name.endsWith('.yaml')) {
             const yamlPath = path.join(dir, entry.name);
+
+            // Symlink protection: detect and skip symlinks
+            try {
+              const stats = fs.lstatSync(yamlPath);
+              if (stats.isSymbolicLink()) {
+                console.warn(`Skipping symlink for security: ${yamlPath}`);
+                continue;
+              }
+            } catch (err) {
+              console.warn(`Failed to check symlink status: ${yamlPath}`, err);
+              continue;
+            }
+
             try {
               const content = fs.readFileSync(yamlPath, 'utf-8');
               const parsed = yaml.parse(content);
