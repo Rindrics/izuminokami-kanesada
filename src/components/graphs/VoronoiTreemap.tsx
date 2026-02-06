@@ -528,7 +528,7 @@ export function VoronoiTreemap({
 
       {/* Legend */}
       <div className="mt-4 space-y-2 text-xs">
-        <div className="flex flex-wrap items-center justify-center gap-4">
+        <div className="mx-8 flex flex-wrap items-center justify-start gap-4 sm:mx-0 sm:justify-center">
           {bookSummary.map((book) => {
             const percentage = ((book.charCount / totalChars) * 100).toFixed(1);
             const colors = chartTheme.getBookColorPalette(book.bookId);
