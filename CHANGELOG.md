@@ -1,5 +1,12 @@
 # Changelog
 
+## [v0.6.0](https://github.com/Rindrics/izuminokami-kanesada/compare/v0.5.0...v0.6.0) - 2026-02-06
+- feat: improve nav UI by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/120
+- feat(mcp): improve content generation workflow with MCP by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/122
+- fix(mcp): ask human for reviewing after first generation by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/123
+- fix(ui): improve mobile ux by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/124
+- feat: close auth menu on click outside area by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/125
+
 ## [v0.5.0](https://github.com/Rindrics/izuminokami-kanesada/compare/v0.4.2...v0.5.0) - 2026-02-03
 - feat: add navigation to [bookId]/ and [sectionId]/ pages by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/118
 
