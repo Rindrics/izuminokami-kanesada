@@ -113,6 +113,7 @@ ADR-0009 で MCP（Model Context Protocol）によるコンテンツ生成戦略
 | `validate_content` | 単一コンテンツバリデーション | 任意 |
 | `validate_content_with_suggestions` | 声調変化検出・修正提案 | GeneratingReadings |
 | `suggest_hanzi_overrides` | 多音字の hanzi_overrides 提案 | GeneratingReadings |
+| `auto_apply_hanzi_overrides` | 多音字の hanzi_overrides を自動適用 | GeneratingReadings |
 | `set_pinyin_reviewed` | ピンインレビュー完了フラグ設定 | AwaitingFinalReview → Reviewed |
 | `generate_audio` | 音声生成 + GCS アップロード | Reviewed → Ready |
 | `upload_audio` | 音声アップロード | Ready |
