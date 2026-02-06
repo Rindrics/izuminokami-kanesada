@@ -351,8 +351,8 @@ export function VoronoiTreemap({
               className="rounded px-3 py-1 text-xs transition-colors"
               style={{
                 backgroundColor:
-                  selectedBook === book.bookId ? colors.light : colors.lighter,
-                color: selectedBook === book.bookId ? '#FFFFFF' : '#1f2937',
+                  selectedBook === book.bookId ? colors.base : colors.light,
+                color: '#FFFFFF',
               }}
             >
               {book.name}
@@ -489,7 +489,7 @@ export function VoronoiTreemap({
                     textAnchor="middle"
                     dominantBaseline="middle"
                     fontSize={16}
-                    fill={textColor}
+                    fill="#FFFFFF"
                     className="pointer-events-none"
                   >
                     {node.data.sectionId}-{node.data.chapterId}
