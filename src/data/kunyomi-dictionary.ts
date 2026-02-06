@@ -1528,6 +1528,11 @@ export const kunyomiDictionary: KunyomiEntry[] = [
     readings: [{ id: '小-しょう', ruby: 'しょう', is_default: true }],
   },
   {
+    id: '小人',
+    text: '小人',
+    readings: [{ id: '小人-しょうじん', ruby: 'しょうじん', is_default: true }],
+  },
+  {
     id: '猶',
     text: '猶',
     readings: [{ id: '猶-なお', ruby: 'なお', is_default: true }],

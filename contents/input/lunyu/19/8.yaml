@@ -1,0 +1,12 @@
+segments:
+  - text:
+      original: 子夏曰
+      japanese: 子夏曰く、
+    speaker: null
+  - text:
+      original: 小人之過也必文
+      japanese: 小人の過つや、必ず文（かざ）る。
+    speaker: zixia
+mentioned:
+  - zixia
+pinyin_reviewed: true

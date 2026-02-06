@@ -846,6 +846,24 @@
       }
     ]
   },
+  "lunyu/19/8": {
+    "segments": [
+      {
+        "index": 0,
+        "zh": {
+          "hash": "5b265a1da513a3ce99224c30d0207255ae4662f4809d5f50fb1ba58fc615cfc9",
+          "uploadedAt": "2026-02-06T04:48:22.086Z"
+        }
+      },
+      {
+        "index": 1,
+        "zh": {
+          "hash": "6f9a89a6753465ffe38fe7cb679581e3270016551f89ad49faa140b178ec04e4",
+          "uploadedAt": "2026-02-06T04:48:22.233Z"
+        }
+      }
+    ]
+  },
   "lunyu/2/1": {
     "segments": [
       {
