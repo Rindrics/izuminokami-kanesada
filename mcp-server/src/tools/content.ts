@@ -234,7 +234,10 @@ export function registerContentTools(server: McpServer): void {
         PROJECT_ROOT,
         'src/data/hanzi-dictionary.ts',
       );
-      const hanziDictModule = await import(pathToFileURL(hanziDictPath).href);
+      const hanziDictStats = fs.statSync(hanziDictPath);
+      const hanziDictUrl = new URL(pathToFileURL(hanziDictPath).href);
+      hanziDictUrl.searchParams.set('_t', hanziDictStats.mtimeMs.toString());
+      const hanziDictModule = await import(hanziDictUrl.href);
       const { hanziDictionary } = hanziDictModule;
 
       // Build a map of characters to their meanings
@@ -1579,12 +1582,15 @@ Please follow this workflow:
         };
       }
 
-      // Load hanzi dictionary
+      // Load hanzi dictionary with cache busting to ensure latest version
       const hanziDictPath = path.join(
         PROJECT_ROOT,
         'src/data/hanzi-dictionary.ts',
       );
-      const hanziDictModule = await import(pathToFileURL(hanziDictPath).href);
+      const hanziDictStats = fs.statSync(hanziDictPath);
+      const hanziDictUrl = new URL(pathToFileURL(hanziDictPath).href);
+      hanziDictUrl.searchParams.set('_t', hanziDictStats.mtimeMs.toString());
+      const hanziDictModule = await import(hanziDictUrl.href);
       const { hanziDictionary } = hanziDictModule;
 
       // Build a map of characters to their meanings
@@ -1842,12 +1848,15 @@ Please follow this workflow:
         };
       }
 
-      // Load hanzi dictionary
+      // Load hanzi dictionary with cache busting to ensure latest version
       const hanziDictPath = path.join(
         PROJECT_ROOT,
         'src/data/hanzi-dictionary.ts',
       );
-      const hanziDictModule = await import(pathToFileURL(hanziDictPath).href);
+      const hanziDictStats = fs.statSync(hanziDictPath);
+      const hanziDictUrl = new URL(pathToFileURL(hanziDictPath).href);
+      hanziDictUrl.searchParams.set('_t', hanziDictStats.mtimeMs.toString());
+      const hanziDictModule = await import(hanziDictUrl.href);
       const { hanziDictionary } = hanziDictModule;
 
       type MeaningInfo = {
