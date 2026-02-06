@@ -1876,9 +1876,33 @@ Please follow this workflow:
             const entry = charMeanings.get(char);
             if (entry && entry.meanings.length > 1) {
               // Find the meaning that matches this ruby reading
-              const matchingMeaning = entry.meanings.find((m) =>
-                m.meaning_ja.includes(override.ruby),
-              );
+              // Use strict matching: prefer onyomi exact match, then meaning_ja exact match
+              // Avoid false positives from short hiragana substrings
+              const matchingMeaning = entry.meanings.find((m) => {
+                // Exact match against onyomi (if available and not TODO)
+                if (m.onyomi && m.onyomi !== 'TODO') {
+                  // Convert onyomi (katakana) to hiragana for comparison
+                  const onyomiHiragana = m.onyomi.replace(
+                    /[\u30A1-\u30F6]/g,
+                    (ch) => String.fromCharCode(ch.charCodeAt(0) - 0x60),
+                  );
+                  if (onyomiHiragana === override.ruby) {
+                    return true;
+                  }
+                }
+                // Exact match against meaning_ja (not substring)
+                // Only match if ruby is a complete word/reading in meaning_ja
+                // Use word boundary check: meaning_ja should equal ruby or contain ruby as a distinct reading
+                if (m.meaning_ja === override.ruby) {
+                  return true;
+                }
+                // Skip ambiguous short matches (2 chars or less) to avoid false positives
+                if (override.ruby.length <= 2) {
+                  return false;
+                }
+                // For longer readings, allow substring match as fallback
+                return m.meaning_ja.includes(override.ruby);
+              });
 
               if (matchingMeaning) {
                 overridesToAdd.push({
