@@ -1923,6 +1923,13 @@ Please follow this workflow:
             segment.hanzi_overrides = [];
           }
 
+          // Track only actually applied overrides (not already existing)
+          const appliedInSegment: Array<{
+            char: string;
+            position: number;
+            meaning_id: string;
+          }> = [];
+
           for (const override of overridesToAdd) {
             // Check if override already exists
             const exists = (
