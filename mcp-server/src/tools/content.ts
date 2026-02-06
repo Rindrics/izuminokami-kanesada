@@ -336,11 +336,29 @@ export function registerContentTools(server: McpServer): void {
       // Filter to only show polyphonic characters for review
       const polyphonicChars = pinyinAnalysis.filter((a) => a.isPolyphonic);
 
-      // Always set pinyin_reviewed to false - human review is required
-      yamlLines[pinyinReviewedLineIndex] = `pinyin_reviewed: false`;
-
       // Check if file already exists (update vs new creation)
       const isNewFile = !fs.existsSync(filePath);
+
+      // Preserve pinyin_reviewed value if file exists and it's already true
+      // Only humans can set pinyin_reviewed to true via set_pinyin_reviewed tool
+      let pinyinReviewedValue = false;
+      if (!isNewFile) {
+        try {
+          const existingYamlContent = fs.readFileSync(filePath, 'utf-8');
+          const existingParsed = yaml.parse(existingYamlContent);
+          // Preserve true value if it was set by human review
+          if (existingParsed.pinyin_reviewed === true) {
+            pinyinReviewedValue = true;
+          }
+        } catch (error) {
+          // If reading fails, treat as new file (default to false)
+          // This ensures we don't break if file is corrupted
+        }
+      }
+
+      // Set pinyin_reviewed value (preserve true if it was set by human, otherwise false)
+      yamlLines[pinyinReviewedLineIndex] =
+        `pinyin_reviewed: ${pinyinReviewedValue}`;
 
       // Write the YAML file with the correct pinyin_reviewed value
       const yamlContent = `${yamlLines.join('\n')}\n`;
@@ -384,7 +402,13 @@ ${segments
       }
 
       // Add pinyin review status
-      if (polyphonicChars.length > 0) {
+      // If pinyin_reviewed was preserved as true, inform user
+      if (pinyinReviewedValue === true) {
+        responseText += `\n✓ pinyin_reviewed: true (保持されました)
+
+既存のレビュー済みフラグが保持されました。このファイルは既に人間によるレビューが完了しています。
+`;
+      } else if (polyphonicChars.length > 0) {
         responseText += `⚠️ pinyin_reviewed: false (多音字の確認が必要)
 
 === Pinyin Analysis (Review Required) ===
@@ -401,7 +425,8 @@ ${polyphonicChars
 
 After reviewing, call write_content_yaml again with hanzi_overrides if needed.
 Then call set_pinyin_reviewed to mark the content as reviewed before generating audio.`;
-      } else {
+      } else if (!pinyinReviewedValue) {
+        // Only show this message if pinyin_reviewed is false (not preserved as true)
         responseText += `\n⚠️ pinyin_reviewed: false (人間によるレビューが必要)
 
 多音字は検出されませんでしたが、ピンインの確認が必要です。
@@ -827,12 +852,17 @@ This content cannot be published until all onyomi readings are registered.`;
   );
 
   // Set pinyin_reviewed flag
+  // IMPORTANT: This is the ONLY way to set pinyin_reviewed to true.
+  // write_content_yaml will preserve true if already set, but cannot set it to true.
+  // Only humans should call this tool after reviewing the content.
   server.registerTool(
     'set_pinyin_reviewed',
     {
       description:
         'Mark content as pinyin-reviewed after verifying polyphonic character readings. ' +
-        'Call this after reviewing and setting hanzi_overrides if needed.',
+        'ONLY humans should call this tool after reviewing the content. ' +
+        'Call this after reviewing and setting hanzi_overrides if needed. ' +
+        'This is the only way to set pinyin_reviewed to true.',
       inputSchema: ReadContentYamlSchema.shape,
     },
     async ({ bookId, sectionId, chapterId }) => {
