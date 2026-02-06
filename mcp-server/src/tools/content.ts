@@ -1581,8 +1581,18 @@ Please follow this workflow:
         );
       };
 
-      for (let segIdx = 0; segIdx < (parsed.segments || []).length; segIdx++) {
-        const segment = parsed.segments[segIdx];
+      type SegmentType = {
+        text?: { original?: string };
+        hanzi_overrides?: Array<{
+          char: string;
+          position: number;
+          meaning_id: string;
+        }>;
+      };
+      const segments = (parsed.segments || []) as SegmentType[];
+
+      for (let segIdx = 0; segIdx < segments.length; segIdx++) {
+        const segment = segments[segIdx];
         const original = segment.text?.original || '';
 
         // Get existing hanzi_overrides for this segment
@@ -1827,7 +1837,8 @@ Please follow this workflow:
       let responseText = `=== Auto-Apply Hanzi Overrides for ${bookId}/${sectionId}/${chapterId} ===\n\n`;
 
       // Process each segment
-      const overrideRegex = /([一-龥\u3400-\u4DBF])（([ぁ-ん]+)）/g;
+      // CJK range matches isCJK helper: U+4E00-U+9FFF (CJK Unified Ideographs) + U+3400-U+4DBF (Extension A)
+      const overrideRegex = /([\u4E00-\u9FFF\u3400-\u4DBF])（([ぁ-ん]+)）/g;
 
       for (let segIdx = 0; segIdx < segments.length; segIdx++) {
         const segment = segments[segIdx];
@@ -2114,9 +2125,10 @@ Please follow this workflow:
 
               if (parsed.primer === true) {
                 const chapterId = entry.name.replace('.yaml', '');
+                const safeSectionId = sectionId || '';
                 primers.push({
-                  contentId: `${bookId}/${sectionId}/${chapterId}`,
-                  sectionId: sectionId || '',
+                  contentId: `${bookId}/${safeSectionId}/${chapterId}`,
+                  sectionId: safeSectionId,
                   chapterId,
                   path: yamlPath,
                 });
