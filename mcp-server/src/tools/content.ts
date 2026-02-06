@@ -656,8 +656,23 @@ This content cannot be published until all onyomi readings are registered.`;
         };
       }
 
-      const yamlContent = fs.readFileSync(filePath, 'utf-8');
-      const parsed = yaml.parse(yamlContent);
+      let yamlContent: string;
+      let parsed: Record<string, unknown>;
+      try {
+        yamlContent = fs.readFileSync(filePath, 'utf-8');
+        parsed = yaml.parse(yamlContent) as Record<string, unknown>;
+      } catch (err) {
+        console.error(`Error reading/parsing YAML file: ${filePath}`, err);
+        return {
+          content: [
+            {
+              type: 'text',
+              text: 'Failed to read or parse content file. Please check the YAML syntax.',
+            },
+          ],
+          isError: true,
+        };
+      }
 
       return {
         content: [
@@ -1491,7 +1506,7 @@ Please follow this workflow:
       }
 
       // Read and parse YAML
-      let parsed: unknown;
+      let parsed: Record<string, unknown>;
       try {
         const yamlContent = fs.readFileSync(yamlPath, 'utf-8');
         parsed = yaml.parse(yamlContent);
