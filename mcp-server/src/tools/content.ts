@@ -1491,22 +1491,22 @@ Please follow this workflow:
       }
 
       // Read and parse YAML
-      let yamlContent: string;
+      let parsed: unknown;
       try {
-        yamlContent = fs.readFileSync(yamlPath, 'utf-8');
+        const yamlContent = fs.readFileSync(yamlPath, 'utf-8');
+        parsed = yaml.parse(yamlContent);
       } catch (err) {
-        console.error(`Error reading YAML file: ${yamlPath}`, err);
+        console.error(`Error reading/parsing YAML file: ${yamlPath}`, err);
         return {
           content: [
             {
               type: 'text',
-              text: 'Failed to read content file. Please try again.',
+              text: 'Failed to read or parse content file. Please check the YAML syntax.',
             },
           ],
           isError: true,
         };
       }
-      const parsed = yaml.parse(yamlContent);
 
       // Load hanzi dictionary
       const hanziDictPath = path.join(
