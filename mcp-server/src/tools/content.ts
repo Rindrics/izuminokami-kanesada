@@ -1665,12 +1665,13 @@ Please follow this workflow:
       const totalPolyphonic = analysis.length;
       const withOverrides = analysis.filter((a) => a.hasOverride).length;
       const needsReview = totalPolyphonic - withOverrides;
+      const uniqueNotInDict = new Set(notInDict.map((item) => item.char)).size;
 
       responseText += `--- Summary ---\n`;
       responseText += `Total polyphonic characters: ${totalPolyphonic}\n`;
       responseText += `Characters with overrides: ${withOverrides}\n`;
       responseText += `Characters needing review: ${needsReview}\n`;
-      responseText += `Characters not in dictionary: ${notInDict.length}\n`;
+      responseText += `Characters not in dictionary: ${uniqueNotInDict}\n`;
 
       if (needsReview > 0) {
         responseText += `\n⚠️ Review the ${needsReview} polyphonic character(s) without overrides.\n`;
