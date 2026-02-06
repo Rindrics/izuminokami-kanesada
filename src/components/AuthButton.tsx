@@ -32,6 +32,8 @@ export function AuthButton() {
         setShowLoginForm(false);
         setShowSignUpForm(false);
         setShowResetForm(false);
+        setEmail('');
+        setPassword('');
         setError(null);
         setMessage(null);
       }
@@ -183,6 +185,8 @@ export function AuthButton() {
               setShowLoginForm(false);
               setShowSignUpForm(false);
               setShowResetForm(false);
+              setEmail('');
+              setPassword('');
               setError(null);
               setMessage(null);
             }}
