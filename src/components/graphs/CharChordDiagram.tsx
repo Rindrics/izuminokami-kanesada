@@ -216,9 +216,8 @@ export function CharChordDiagram({
   return (
     <div className="relative rounded-lg border border-zinc-200 bg-white p-4 dark:border-zinc-700 dark:bg-zinc-900">
       <svg
-        width={width}
-        height={height}
-        className="mx-auto"
+        viewBox={`0 0 ${width} ${height}`}
+        className="mx-auto h-auto w-full max-w-full"
         role="img"
         aria-label="漢字隣接関係コード・ダイアグラム"
       >

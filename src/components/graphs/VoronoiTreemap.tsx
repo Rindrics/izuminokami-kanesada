@@ -362,9 +362,8 @@ export function VoronoiTreemap({
       </div>
 
       <svg
-        width={width}
-        height={height}
-        className="mx-auto"
+        viewBox={`0 0 ${width} ${height}`}
+        className="mx-auto h-auto w-full max-w-full"
         role="img"
         aria-label="書籍別文字数"
       >

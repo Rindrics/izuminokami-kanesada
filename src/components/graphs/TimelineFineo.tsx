@@ -407,9 +407,8 @@ export function TimelineFineo({
     <div className="flex flex-col gap-4">
       {/* Chart */}
       <svg
-        width={width}
-        height={height}
-        className="overflow-visible"
+        viewBox={`0 0 ${width} ${height}`}
+        className="h-auto w-full max-w-full overflow-visible"
         role="img"
         aria-label="経書と人物の時系列図"
       >

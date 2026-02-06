@@ -282,9 +282,8 @@ export function WordCloud({ width = 600, height = 400 }: WordCloudProps) {
       {/* Word cloud SVG */}
       <svg
         ref={svgRef}
-        width={width}
-        height={height}
-        className="mx-auto"
+        viewBox={`0 0 ${width} ${height}`}
+        className="mx-auto h-auto w-full max-w-full"
         role="img"
         aria-label="ワードクラウド - 漢字の出現頻度を可視化"
       >

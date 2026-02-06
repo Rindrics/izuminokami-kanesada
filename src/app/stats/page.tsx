@@ -329,11 +329,13 @@ export default function StatsPage() {
           <p className="mb-3 text-sm text-zinc-500">
             各書籍の文字数を面積で表現
           </p>
-          <VoronoiTreemap
-            chapterLengths={stats.chapterLengths}
-            width={700}
-            height={400}
-          />
+          <div className="max-w-full overflow-x-auto">
+            <VoronoiTreemap
+              chapterLengths={stats.chapterLengths}
+              width={700}
+              height={400}
+            />
+          </div>
         </section>
 
         {/* Alluvial Diagram */}
@@ -344,13 +346,15 @@ export default function StatsPage() {
           <p className="mb-3 text-sm text-zinc-500">
             各書籍における主要概念の登場頻度（沖積図）
           </p>
-          <AlluvialDiagram
-            charIndex={stats.charIndex}
-            dialogueGraph={stats.dialogueGraph}
-            mentionGraph={stats.mentionGraph}
-            width={700}
-            height={500}
-          />
+          <div className="max-w-full overflow-x-auto">
+            <AlluvialDiagram
+              charIndex={stats.charIndex}
+              dialogueGraph={stats.dialogueGraph}
+              mentionGraph={stats.mentionGraph}
+              width={700}
+              height={500}
+            />
+          </div>
         </section>
 
         {/* Timeline Fineo - Books and Persons */}
@@ -361,7 +365,9 @@ export default function StatsPage() {
           <p className="mb-3 text-sm text-zinc-500">
             人物の誕生年と経書の成立年を時系列で表示
           </p>
-          <TimelineFineo width={850} height={500} />
+          <div className="max-w-full overflow-x-auto">
+            <TimelineFineo width={850} height={500} />
+          </div>
         </section>
 
         {/* Character Frequency */}
@@ -495,7 +501,9 @@ export default function StatsPage() {
           <p className="mb-3 text-sm text-zinc-500">
             漢字の出現頻度を文字サイズで表現（書籍別・人物別にフィルタ可能）
           </p>
-          <WordCloud width={700} height={400} />
+          <div className="max-w-full overflow-x-auto">
+            <WordCloud width={700} height={400} />
+          </div>
         </section>
 
         {/* Adjacent Character Pairs */}
@@ -506,24 +514,26 @@ export default function StatsPage() {
           <p className="mb-3 text-sm text-zinc-500">
             同一セグメント内で隣り合う漢字の関係（線の不透明度が高いほど頻出）
           </p>
-          <Tabs
-            tabs={[
-              {
-                id: 'circular',
-                label: 'サーキュラーレイアウト',
-                content: (
-                  <CircularLayout width={600} height={600} maxChars={80} />
-                ),
-              },
-              {
-                id: 'chord',
-                label: 'コード図',
-                content: (
-                  <CharChordDiagram width={600} height={600} maxChars={30} />
-                ),
-              },
-            ]}
-          />
+          <div className="max-w-full overflow-x-auto">
+            <Tabs
+              tabs={[
+                {
+                  id: 'circular',
+                  label: 'サーキュラーレイアウト',
+                  content: (
+                    <CircularLayout width={600} height={600} maxChars={80} />
+                  ),
+                },
+                {
+                  id: 'chord',
+                  label: 'コード図',
+                  content: (
+                    <CharChordDiagram width={600} height={600} maxChars={30} />
+                  ),
+                },
+              ]}
+            />
+          </div>
         </section>
 
         {/* Key Concepts Heatmap */}
@@ -551,43 +561,45 @@ export default function StatsPage() {
               <p className="mb-3 text-sm text-zinc-500">
                 人物間の対話頻度を可視化
               </p>
-              <Tabs
-                defaultTab="biofabric"
-                tabs={[
-                  {
-                    id: 'biofabric',
-                    label: 'BioFabric',
-                    content: <BioFabricGraph graph={combinedGraph} />,
-                  },
-                  {
-                    id: 'chord',
-                    label: 'コード図',
-                    content: (
-                      <ChordDiagram
-                        graph={stats.dialogueGraph}
-                        width={600}
-                        height={600}
-                      />
-                    ),
-                  },
-                  {
-                    id: 'network',
-                    label: 'ネットワーク図',
-                    content: <DialogueGraph graph={combinedGraph} />,
-                  },
-                  {
-                    id: 'chernoff',
-                    label: '顔型チャート',
-                    content: (
-                      <ChernoffFaces
-                        personFrequencies={stats.personFrequencies}
-                        width={700}
-                        height={400}
-                      />
-                    ),
-                  },
-                ]}
-              />
+              <div className="max-w-full overflow-x-auto">
+                <Tabs
+                  defaultTab="biofabric"
+                  tabs={[
+                    {
+                      id: 'biofabric',
+                      label: 'BioFabric',
+                      content: <BioFabricGraph graph={combinedGraph} />,
+                    },
+                    {
+                      id: 'chord',
+                      label: 'コード図',
+                      content: (
+                        <ChordDiagram
+                          graph={stats.dialogueGraph}
+                          width={600}
+                          height={600}
+                        />
+                      ),
+                    },
+                    {
+                      id: 'network',
+                      label: 'ネットワーク図',
+                      content: <DialogueGraph graph={combinedGraph} />,
+                    },
+                    {
+                      id: 'chernoff',
+                      label: '顔型チャート',
+                      content: (
+                        <ChernoffFaces
+                          personFrequencies={stats.personFrequencies}
+                          width={700}
+                          height={400}
+                        />
+                      ),
+                    },
+                  ]}
+                />
+              </div>
             </section>
           )}
       </main>
