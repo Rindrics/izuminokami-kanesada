@@ -1,3 +1,4 @@
+import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { z } from 'zod';
 
@@ -15,12 +16,29 @@ export function isSafePathSegment(segment: string): boolean {
 }
 
 /**
- * Validate that the resolved path is within the allowed base directory
+ * Validate that the resolved path is within the allowed base directory.
+ * Uses fs.realpathSync to resolve symlinks and prevent symlink bypass attacks.
  */
 export function isPathWithinBase(filePath: string, baseDir: string): boolean {
-  const resolvedPath = path.resolve(filePath);
-  const resolvedBase = path.resolve(baseDir);
-  return resolvedPath.startsWith(resolvedBase + path.sep);
+  try {
+    // Resolve symlinks for both paths to prevent bypass via symlinks
+    const resolvedPath = fs.realpathSync(path.resolve(filePath));
+    const resolvedBase = fs.realpathSync(path.resolve(baseDir));
+
+    // Normalize paths for comparison
+    const normalizedPath = path.normalize(resolvedPath);
+    const normalizedBase = path.normalize(resolvedBase);
+
+    // Check if path equals base or is within base directory
+    return (
+      normalizedPath === normalizedBase ||
+      normalizedPath.startsWith(normalizedBase + path.sep)
+    );
+  } catch {
+    // If realpath fails (e.g., path doesn't exist, permission denied),
+    // return false to deny access
+    return false;
+  }
 }
 
 /**
