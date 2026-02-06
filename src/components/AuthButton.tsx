@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 
 export function AuthButton() {
@@ -22,6 +22,7 @@ export function AuthButton() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
+  const timerIdRef = useRef<NodeJS.Timeout | null>(null);
 
   // Close dropdowns on Escape key
   useEffect(() => {
@@ -67,6 +68,7 @@ export function AuthButton() {
               className="fixed inset-0 z-40 cursor-default"
               onClick={() => setShowUserMenu(false)}
               aria-label="メニューを閉じる"
+              tabIndex={-1}
             />
             <div className="absolute right-0 top-full z-50 mt-2 min-w-40 rounded-lg border border-zinc-200 bg-white py-1 shadow-lg dark:border-zinc-800 dark:bg-zinc-900">
               <Link
@@ -184,7 +186,8 @@ export function AuthButton() {
               setError(null);
               setMessage(null);
             }}
-            aria-label="メニューを閉じる"
+            aria-label="フォームを閉じる"
+            tabIndex={-1}
           />
           <div className="absolute right-0 top-full z-50 mt-2 w-80 rounded-lg border border-zinc-200 bg-white p-4 shadow-lg dark:border-zinc-800 dark:bg-zinc-900">
             {showResetForm ? (
