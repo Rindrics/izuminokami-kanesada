@@ -28,6 +28,10 @@ export function AuthButton() {
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
+        if (timerIdRef.current) {
+          clearTimeout(timerIdRef.current);
+          timerIdRef.current = null;
+        }
         setShowUserMenu(false);
         setShowLoginForm(false);
         setShowSignUpForm(false);
@@ -41,6 +45,15 @@ export function AuthButton() {
 
     document.addEventListener('keydown', handleEscape);
     return () => document.removeEventListener('keydown', handleEscape);
+  }, []);
+
+  // Cleanup pending timers on unmount
+  useEffect(() => {
+    return () => {
+      if (timerIdRef.current) {
+        clearTimeout(timerIdRef.current);
+      }
+    };
   }, []);
 
   if (loading) {
@@ -104,11 +117,12 @@ export function AuthButton() {
       if (isSignUp) {
         await signUpWithEmail(email, password);
         setMessage('アカウントを作成しました');
-        setTimeout(() => {
+        timerIdRef.current = setTimeout(() => {
           setShowSignUpForm(false);
           setEmail('');
           setPassword('');
           setMessage(null);
+          timerIdRef.current = null;
         }, 1500);
       } else {
         await signInWithEmail(email, password);
@@ -131,10 +145,11 @@ export function AuthButton() {
     try {
       await resetPassword(email);
       setMessage('パスワードリセットメールを送信しました');
-      setTimeout(() => {
+      timerIdRef.current = setTimeout(() => {
         setShowResetForm(false);
         setEmail('');
         setMessage(null);
+        timerIdRef.current = null;
       }, 1500);
     } catch (err) {
       if (err instanceof Error) {
@@ -182,6 +197,10 @@ export function AuthButton() {
             type="button"
             className="fixed inset-0 z-40 cursor-default"
             onClick={() => {
+              if (timerIdRef.current) {
+                clearTimeout(timerIdRef.current);
+                timerIdRef.current = null;
+              }
               setShowLoginForm(false);
               setShowSignUpForm(false);
               setShowResetForm(false);
