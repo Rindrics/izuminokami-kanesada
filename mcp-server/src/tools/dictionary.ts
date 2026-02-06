@@ -2,10 +2,25 @@ import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import * as yaml from 'yaml';
 import { z } from 'zod';
+import {
+  isPathWithinBase,
+  SafePathSegmentSchema,
+} from '../utils/path-safety.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PROJECT_ROOT = path.resolve(__dirname, '../../..');
+
+/**
+ * Check if a character is a CJK character
+ */
+function isCJK(char: string): boolean {
+  const code = char.charCodeAt(0);
+  return (
+    (code >= 0x4e00 && code <= 0x9fff) || (code >= 0x3400 && code <= 0x4dbf)
+  );
+}
 
 const HanziEntrySchema = z.object({
   character: z.string().describe('Chinese character (e.g., "學")'),
@@ -301,6 +316,671 @@ export function registerDictionaryTools(server: McpServer): void {
           isError: true,
         };
       }
+    },
+  );
+
+  // Check missing readings for content
+  const CheckMissingReadingsSchema = z.object({
+    bookId: SafePathSegmentSchema.describe('Book ID (e.g., "lunyu")'),
+    sectionId: SafePathSegmentSchema.describe('Section ID (e.g., "1")'),
+    chapterId: SafePathSegmentSchema.describe('Chapter ID (e.g., "1")'),
+  });
+
+  server.registerTool(
+    'check_missing_readings',
+    {
+      description:
+        'Check for missing onyomi and kunyomi readings in a content. ' +
+        'Scans all characters in the content and reports which characters lack ' +
+        'onyomi registration (TODO in hanzi-dictionary) or kunyomi registration (not in kunyomi-dictionary).',
+      inputSchema: CheckMissingReadingsSchema,
+    },
+    async ({ bookId, sectionId, chapterId }) => {
+      const baseDir = path.join(PROJECT_ROOT, 'contents/input');
+      const yamlPath = path.join(
+        baseDir,
+        bookId,
+        sectionId,
+        `${chapterId}.yaml`,
+      );
+
+      // Defense in depth: verify path is within allowed directory
+      if (!isPathWithinBase(yamlPath, baseDir)) {
+        return {
+          content: [
+            {
+              type: 'text',
+              text: 'Invalid path: access denied',
+            },
+          ],
+          isError: true,
+        };
+      }
+
+      if (!fs.existsSync(yamlPath)) {
+        return {
+          content: [
+            {
+              type: 'text',
+              text: `Content file not found: ${yamlPath}`,
+            },
+          ],
+          isError: true,
+        };
+      }
+
+      // Read and parse YAML
+      const yamlContent = fs.readFileSync(yamlPath, 'utf-8');
+      const parsed = yaml.parse(yamlContent);
+
+      // Load dictionaries
+      const hanziDictPath = path.join(
+        PROJECT_ROOT,
+        'src/data/hanzi-dictionary.ts',
+      );
+      const hanziDictModule = await import(pathToFileURL(hanziDictPath).href);
+      const { hanziDictionary } = hanziDictModule;
+
+      const kunyomiDictPath = path.join(
+        PROJECT_ROOT,
+        'src/data/kunyomi-dictionary.ts',
+      );
+      const kunyomiDictModule = await import(
+        pathToFileURL(kunyomiDictPath).href
+      );
+      const { kunyomiDictionary } = kunyomiDictModule;
+
+      // Build a map of characters to their meanings
+      type MeaningInfo = {
+        id: string;
+        pinyin: string;
+        tone: number;
+        meaning_ja: string;
+        onyomi: string;
+        is_default: boolean;
+      };
+
+      const charMeanings = new Map<
+        string,
+        { id: string; meanings: MeaningInfo[] }
+      >();
+      for (const entry of hanziDictionary) {
+        charMeanings.set(entry.id, entry);
+      }
+
+      // Build a set of kanji covered by kunyomi dictionary (matching validateKunyomiInDictionary logic)
+      // Single-character entries cover individual kanji
+      // Compound entries like "顏淵" also cover all individual kanji within them
+      const coveredKanji = new Set<string>();
+      for (const entry of kunyomiDictionary) {
+        if (isCJK(entry.text[0])) {
+          if (entry.text.length === 1) {
+            // Single-character entry: add the character itself
+            coveredKanji.add(entry.text);
+          } else {
+            // Compound entry: add all individual CJK characters within it
+            for (const char of entry.text) {
+              if (isCJK(char)) {
+                coveredKanji.add(char);
+              }
+            }
+          }
+        }
+      }
+
+      // Collect kanji from japanese text by segment (to provide context)
+      interface SegmentMissingKunyomi {
+        segmentIndex: number;
+        char: string;
+        snippet: string;
+      }
+
+      const missingKunyomiBySegment: SegmentMissingKunyomi[] = [];
+
+      for (let segIdx = 0; segIdx < (parsed.segments || []).length; segIdx++) {
+        const segment = parsed.segments[segIdx];
+        const japanese = segment.text?.japanese || '';
+
+        if (!japanese) {
+          continue;
+        }
+
+        // Extract kanji from japanese text
+        const segmentKanji = new Set<string>();
+        for (const char of japanese) {
+          if (isCJK(char)) {
+            segmentKanji.add(char);
+          }
+        }
+
+        // Check which kanji are missing from kunyomi dictionary
+        for (const kanji of segmentKanji) {
+          if (!coveredKanji.has(kanji)) {
+            missingKunyomiBySegment.push({
+              segmentIndex: segIdx,
+              char: kanji,
+              snippet: japanese.slice(0, 30), // Show first 30 chars as context
+            });
+          }
+        }
+      }
+
+      if (coveredKanji.size === 0) {
+        return {
+          content: [
+            {
+              type: 'text',
+              text: `No kanji found in kunyomi dictionary coverage for content ${bookId}/${sectionId}/${chapterId}`,
+            },
+          ],
+        };
+      }
+
+      // Check each character in hanzi dictionary for missing onyomi
+      interface MissingOnyomi {
+        char: string;
+        pinyin: string;
+        meaning_ja: string;
+      }
+
+      interface NotInHanziDict {
+        char: string;
+      }
+
+      const missingOnyomi: MissingOnyomi[] = [];
+      const notInHanziDict: NotInHanziDict[] = [];
+
+      // Collect all unique characters from segments for analysis
+      const allChars = new Set<string>();
+      for (const segment of parsed.segments || []) {
+        const text = segment.text?.original || '';
+        for (const char of text) {
+          if (isCJK(char)) {
+            allChars.add(char);
+          }
+        }
+      }
+
+      for (const char of allChars) {
+        const entry = charMeanings.get(char);
+
+        if (!entry) {
+          // Character not in hanzi dictionary at all
+          notInHanziDict.push({ char });
+          continue;
+        }
+
+        // Check for missing onyomi (TODO)
+        for (const meaning of entry.meanings) {
+          if (meaning.onyomi === 'TODO') {
+            missingOnyomi.push({
+              char,
+              pinyin: meaning.pinyin,
+              meaning_ja: meaning.meaning_ja,
+            });
+          }
+        }
+      }
+
+      // Build response
+      const contentId = `${bookId}/${sectionId}/${chapterId}`;
+      let responseText = `=== Reading Check for ${contentId} ===\n`;
+      responseText += `Total unique CJK characters: ${allChars.size}\n\n`;
+
+      let hasIssues = false;
+
+      if (notInHanziDict.length > 0) {
+        hasIssues = true;
+        responseText += `❌ Not in hanzi-dictionary (${notInHanziDict.length}):\n`;
+        for (const item of notInHanziDict) {
+          responseText += `  - "${item.char}"\n`;
+          responseText += `    Action: Use add_hanzi_entry to register this character\n`;
+        }
+        responseText += '\n';
+      }
+
+      if (missingOnyomi.length > 0) {
+        hasIssues = true;
+        responseText += `❌ Missing onyomi - TODO (${missingOnyomi.length}):\n`;
+        for (const item of missingOnyomi) {
+          responseText += `  - "${item.char}" (${item.pinyin}: ${item.meaning_ja})\n`;
+          responseText += `    Action: Use update_hanzi_onyomi with character="${item.char}", pinyin="${item.pinyin}", onyomi="適切な音読み"\n`;
+        }
+        responseText += '\n';
+      }
+
+      if (missingKunyomiBySegment.length > 0) {
+        hasIssues = true;
+        responseText += `⚠️ Missing kunyomi (${missingKunyomiBySegment.length}):\n`;
+        for (const item of missingKunyomiBySegment) {
+          responseText += `  - "${item.char}" (segment ${item.segmentIndex}: "${item.snippet}...")\n`;
+          responseText += `    Action: Use add_kunyomi_entry with character="${item.char}", ruby="適切な読み"\n`;
+        }
+        responseText += '\n';
+      }
+
+      if (!hasIssues) {
+        responseText += `✓ All characters have complete readings registered.\n`;
+      }
+
+      return {
+        content: [
+          {
+            type: 'text',
+            text: responseText,
+          },
+        ],
+        isError:
+          hasIssues && (notInHanziDict.length > 0 || missingOnyomi.length > 0),
+      };
+    },
+  );
+
+  // Get default kunyomi reading for a character
+  const GetDefaultKunyomiSchema = z.object({
+    character: z
+      .string()
+      .describe('Kanji character to look up (e.g., "學" or "子")'),
+  });
+
+  server.registerTool(
+    'get_default_kunyomi',
+    {
+      description:
+        'Get the default kunyomi (Japanese kun reading) for a character from kunyomi-dictionary. ' +
+        'Use this to check if the default reading is appropriate for the context ' +
+        'and determine if an override is needed in the japanese field (ADR-0014 notation).',
+      inputSchema: GetDefaultKunyomiSchema,
+    },
+    async ({ character }) => {
+      // Load kunyomi dictionary
+      const kunyomiDictPath = path.join(
+        PROJECT_ROOT,
+        'src/data/kunyomi-dictionary.ts',
+      );
+      const kunyomiDictModule = await import(
+        pathToFileURL(kunyomiDictPath).href
+      );
+      const { kunyomiDictionary } = kunyomiDictModule;
+
+      // Find the entry for this character
+      type ReadingInfo = {
+        id: string;
+        ruby: string;
+        is_default: boolean;
+        note?: string;
+      };
+
+      type KunyomiEntry = {
+        id: string;
+        text: string;
+        readings: ReadingInfo[];
+      };
+
+      const entry = (kunyomiDictionary as KunyomiEntry[]).find(
+        (e) => e.id === character,
+      );
+
+      if (!entry) {
+        return {
+          content: [
+            {
+              type: 'text',
+              text: `Character "${character}" not found in kunyomi-dictionary.
+
+To add this character:
+  Use add_kunyomi_entry with character="${character}", ruby="適切な読み"
+
+Note: If you need multiple readings for this character, you may need to manually edit the dictionary file.`,
+            },
+          ],
+          isError: true,
+        };
+      }
+
+      const defaultReading = entry.readings.find((r) => r.is_default);
+      const alternativeReadings = entry.readings.filter((r) => !r.is_default);
+
+      let responseText = `=== Kunyomi for "${character}" ===\n\n`;
+
+      if (defaultReading) {
+        responseText += `Default reading: ${defaultReading.ruby}`;
+        if (defaultReading.note) {
+          responseText += ` (${defaultReading.note})`;
+        }
+        responseText += '\n';
+      } else {
+        responseText += `⚠️ No default reading set\n`;
+      }
+
+      if (alternativeReadings.length > 0) {
+        responseText += `\nAlternative readings:\n`;
+        for (const reading of alternativeReadings) {
+          responseText += `  - ${reading.ruby}`;
+          if (reading.note) {
+            responseText += ` (${reading.note})`;
+          }
+          responseText += '\n';
+        }
+      }
+
+      responseText += `\n--- Override Notation (ADR-0014) ---
+If the default reading is not appropriate for the context,
+use full-width parentheses in the japanese field to override:
+
+Example: 子（こ）曰く → forces "子" to be read as "こ" instead of default
+Example: 有（あ）りて → forces "有" to be read as "あ"
+
+Use full-width parentheses （ ）; half-width () will not be recognized.`;
+
+      return {
+        content: [
+          {
+            type: 'text',
+            text: responseText,
+          },
+        ],
+      };
+    },
+  );
+
+  // Suggest kunyomi overrides for a content
+  const SuggestKunyomiOverridesSchema = z.object({
+    bookId: SafePathSegmentSchema.describe('Book ID (e.g., "lunyu")'),
+    sectionId: SafePathSegmentSchema.describe('Section ID (e.g., "1")'),
+    chapterId: SafePathSegmentSchema.describe('Chapter ID (e.g., "1")'),
+  });
+
+  server.registerTool(
+    'suggest_kunyomi_overrides',
+    {
+      description:
+        'Analyze a content and suggest kunyomi overrides. ' +
+        'For each kanji in the content, shows the default kunyomi reading and available alternatives. ' +
+        'Use this to identify where override notation (ADR-0014) might be needed ' +
+        'when the default reading does not match the intended reading in context.',
+      inputSchema: SuggestKunyomiOverridesSchema,
+    },
+    async ({ bookId, sectionId, chapterId }) => {
+      const baseDir = path.join(PROJECT_ROOT, 'contents/input');
+      const yamlPath = path.join(
+        baseDir,
+        bookId,
+        sectionId,
+        `${chapterId}.yaml`,
+      );
+
+      // Defense in depth: verify path is within allowed directory
+      if (!isPathWithinBase(yamlPath, baseDir)) {
+        return {
+          content: [
+            {
+              type: 'text',
+              text: 'Invalid path: access denied',
+            },
+          ],
+          isError: true,
+        };
+      }
+
+      if (!fs.existsSync(yamlPath)) {
+        console.error(`Content file not found: ${yamlPath}`);
+        return {
+          content: [
+            {
+              type: 'text',
+              text: 'Content file not found. Please verify the file path and try again.',
+            },
+          ],
+          isError: true,
+        };
+      }
+
+      // Read and parse YAML
+      let yamlContent: string;
+      try {
+        yamlContent = fs.readFileSync(yamlPath, 'utf-8');
+      } catch (err) {
+        console.error(`Error reading YAML file: ${yamlPath}`, err);
+        return {
+          content: [
+            {
+              type: 'text',
+              text: 'Failed to read content file. Please try again.',
+            },
+          ],
+          isError: true,
+        };
+      }
+
+      let parsed: unknown;
+      try {
+        parsed = yaml.parse(yamlContent);
+      } catch (err) {
+        console.error(`Error parsing YAML: ${yamlPath}`, err);
+        return {
+          content: [
+            {
+              type: 'text',
+              text: 'Invalid YAML format. Please check the file content.',
+            },
+          ],
+          isError: true,
+        };
+      }
+
+      // Load kunyomi dictionary
+      const kunyomiDictPath = path.join(
+        PROJECT_ROOT,
+        'src/data/kunyomi-dictionary.ts',
+      );
+      const kunyomiDictModule = await import(
+        pathToFileURL(kunyomiDictPath).href
+      );
+      const { kunyomiDictionary } = kunyomiDictModule;
+
+      // Build a map of characters to their readings
+      type ReadingInfo = {
+        id: string;
+        ruby: string;
+        is_default: boolean;
+        note?: string;
+      };
+
+      type KunyomiEntry = {
+        id: string;
+        text: string;
+        readings: ReadingInfo[];
+      };
+
+      const kunyomiMap = new Map<string, KunyomiEntry>();
+      for (const entry of kunyomiDictionary as KunyomiEntry[]) {
+        kunyomiMap.set(entry.id, entry);
+      }
+
+      // Analyze each segment
+      interface CharacterAnalysis {
+        segmentIndex: number;
+        position: number;
+        char: string;
+        defaultReading: string | null;
+        defaultNote: string | null;
+        alternatives: Array<{ ruby: string; note?: string }>;
+        hasOverride: boolean;
+        currentOverride: string | null;
+      }
+
+      const analysis: CharacterAnalysis[] = [];
+      const notInDict: Array<{ segmentIndex: number; char: string }> = [];
+
+      // Regex to detect existing overrides: 漢字（読み）
+      const overrideRegex = /([一-龥\u3400-\u4DBF])（([ぁ-ん]+)）/g;
+
+      for (let segIdx = 0; segIdx < segments.length; segIdx++) {
+        const segment = segments[segIdx];
+        const original = segment.text?.original || '';
+        const japanese = (segment.text?.japanese as string) || '';
+
+        // Parse inline overrides to extract position-based overrides from japanese text
+        // This mirrors JapaneseTextWithRuby.parseInlineOverrides logic
+        const positionBasedOverrides = new Map<
+          number,
+          { text: string; ruby: string }
+        >();
+        let cleanText = '';
+        let lastIndex = 0;
+
+        for (const match of japanese.matchAll(overrideRegex)) {
+          // Add text before this match to clean text
+          cleanText += japanese.slice(lastIndex, match.index);
+
+          // Record override at the position in clean text
+          const position = cleanText.length;
+          const kanji = match[1];
+          const ruby = match[2];
+
+          positionBasedOverrides.set(position, { text: kanji, ruby });
+
+          // Add the kanji to clean text
+          cleanText += kanji;
+          lastIndex = (match.index ?? 0) + match[0].length;
+        }
+        cleanText += japanese.slice(lastIndex);
+
+        // Map cleanText positions to original positions
+        // For this, we need to build a position mapping from japanese to original
+        const japanesePosToOriginalPos = new Map<number, number>();
+        let japaneseIdx = 0;
+        for (let origIdx = 0; origIdx < original.length; origIdx++) {
+          const char = original[origIdx];
+          if (isCJK(char)) {
+            // Count kanji characters in japanese to find corresponding position
+            let kanjiCount = 0;
+            for (let j = 0; j < cleanText.length; j++) {
+              if (isCJK(cleanText[j])) {
+                kanjiCount++;
+                if (kanjiCount - 1 === japaneseIdx) {
+                  japanesePosToOriginalPos.set(j, origIdx);
+                  break;
+                }
+              }
+            }
+            japaneseIdx++;
+          }
+        }
+
+        // Analyze each character in original
+        let japaneseKanjiIndex = 0;
+        for (let pos = 0; pos < original.length; pos++) {
+          const char = original[pos];
+
+          // Skip if not CJK
+          if (!isCJK(char)) continue;
+
+          const entry = kunyomiMap.get(char);
+
+          if (!entry) {
+            notInDict.push({ segmentIndex: segIdx, char });
+            japaneseKanjiIndex++;
+            continue;
+          }
+
+          // Find position of this kanji in cleanText
+          let cleanTextPos = 0;
+          let currentKanjiCount = 0;
+          for (let i = 0; i < cleanText.length; i++) {
+            if (isCJK(cleanText[i])) {
+              if (currentKanjiCount === japaneseKanjiIndex) {
+                cleanTextPos = i;
+                break;
+              }
+              currentKanjiCount++;
+            }
+          }
+
+          const override = positionBasedOverrides.get(cleanTextPos);
+          const defaultReading = entry.readings.find((r) => r.is_default);
+          const alternatives = entry.readings.filter((r) => !r.is_default);
+
+          analysis.push({
+            segmentIndex: segIdx,
+            position: pos,
+            char,
+            defaultReading: defaultReading?.ruby || null,
+            defaultNote: defaultReading?.note || null,
+            alternatives: alternatives.map((r) => ({
+              ruby: r.ruby,
+              note: r.note,
+            })),
+            hasOverride: !!override,
+            currentOverride: override?.ruby || null,
+          });
+
+          japaneseKanjiIndex++;
+        }
+      }
+
+      // Build response
+      const contentId = `${bookId}/${sectionId}/${chapterId}`;
+      let responseText = `=== Kunyomi Analysis for ${contentId} ===\n\n`;
+
+      // Characters not in dictionary
+      if (notInDict.length > 0) {
+        const uniqueChars = [...new Set(notInDict.map((c) => c.char))];
+        responseText += `⚠️ Characters not in kunyomi-dictionary (${uniqueChars.length}):\n`;
+        for (const char of uniqueChars) {
+          responseText += `  - "${char}" → add_kunyomi_entry to register\n`;
+        }
+        responseText += '\n';
+      }
+
+      // Characters with alternatives (potential override candidates)
+      const withAlternatives = analysis.filter(
+        (a) => a.alternatives.length > 0,
+      );
+      if (withAlternatives.length > 0) {
+        responseText += `📝 Characters with multiple readings (review needed):\n\n`;
+        for (const item of withAlternatives) {
+          responseText += `Segment ${item.segmentIndex}, pos ${item.position}: "${item.char}"\n`;
+          responseText += `  Default: ${item.defaultReading || '(none)'}`;
+          if (item.defaultNote) {
+            responseText += ` (${item.defaultNote})`;
+          }
+          responseText += '\n';
+          responseText += `  Alternatives: ${item.alternatives.map((a) => `${a.ruby}${a.note ? ` (${a.note})` : ''}`).join(', ')}\n`;
+          if (item.hasOverride) {
+            responseText += `  ✓ Currently overridden to: ${item.currentOverride}\n`;
+          } else {
+            responseText += `  → If default is wrong, add override: ${item.char}（適切な読み）\n`;
+          }
+          responseText += '\n';
+        }
+      }
+
+      // Summary
+      const totalChars = analysis.length;
+      const withOverrides = analysis.filter((a) => a.hasOverride).length;
+      const needsReview = withAlternatives.filter((a) => !a.hasOverride).length;
+
+      responseText += `--- Summary ---\n`;
+      responseText += `Total CJK characters: ${totalChars}\n`;
+      responseText += `Characters with overrides: ${withOverrides}\n`;
+      responseText += `Characters with alternatives (no override): ${needsReview}\n`;
+      responseText += `Characters not in dictionary: ${notInDict.length}\n`;
+
+      if (needsReview > 0) {
+        responseText += `\n⚠️ Review the ${needsReview} character(s) with alternatives to ensure correct readings.\n`;
+        responseText += `Use override notation: 漢字（読み） to specify non-default readings.\n`;
+      }
+
+      return {
+        content: [
+          {
+            type: 'text',
+            text: responseText,
+          },
+        ],
+      };
     },
   );
 }
