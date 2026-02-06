@@ -383,8 +383,14 @@ export function VoronoiTreemap({
             const [cx, cy] = getCentroid(polygon);
             const area = getPolygonArea(polygon);
 
-            // Stroke width for inner boundaries only (book boundaries drawn separately)
-            const strokeWidth = depth === 2 ? 2 : isHovered ? 1.5 : 0.5;
+            // Stroke width for inner boundaries (book boundaries drawn separately)
+            // depth 1 = book, depth 2 = section, depth 3 = chapter
+            let strokeWidth = 0.5;
+            if (depth === 2) {
+              strokeWidth = 5; // section boundaries
+            } else if (depth === 3) {
+              strokeWidth = isHovered ? 1.5 : 0.5; // chapter boundaries
+            }
 
             // Show labels only for larger areas
             const showBookLabel = depth === 1;
@@ -490,6 +496,25 @@ export function VoronoiTreemap({
                   </text>
                 )}
               </g>
+            );
+          })}
+
+        {/* Section boundaries - drawn after cells to be on top */}
+        {allNodes
+          .filter((node) => node.depth === 2)
+          .map((node) => {
+            const polygon = node.polygon;
+            if (!polygon) return null;
+            const pathData = polygonToPath(polygon);
+            return (
+              <path
+                key={`section-border-${node.data.bookId}-${node.data.sectionId}`}
+                d={pathData}
+                fill="none"
+                stroke="rgba(255,255,255,0.8)"
+                strokeWidth={2}
+                className="pointer-events-none"
+              />
             );
           })}
 
