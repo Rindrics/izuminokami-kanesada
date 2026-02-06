@@ -404,7 +404,7 @@ export function TimelineFineo({
   const hoverInfo = getHoverInfo();
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="overflow-x-auto rounded-lg bg-white shadow-sm dark:bg-zinc-900">
       {/* Chart */}
       <svg
         width={width}
@@ -581,7 +581,7 @@ export function TimelineFineo({
       </svg>
 
       {/* Tooltip */}
-      <div className="flex min-h-6 items-center justify-center">
+      <div className="flex min-h-6 items-center justify-center p-3">
         {hoverInfo ? (
           <span className="rounded bg-zinc-100 px-3 py-1 text-sm text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
             {hoverInfo}
@@ -594,9 +594,9 @@ export function TimelineFineo({
       </div>
 
       {/* Description */}
-      <p className="text-sm text-zinc-500 dark:text-zinc-400">
+      <div className="border-t border-zinc-200 p-3 text-xs text-zinc-500 dark:border-zinc-700">
         横軸は時間（左が古い）。上段は人物（誕生年）、下段は経書（成立年）。線の太さは発言回数に比例。
-      </p>
+      </div>
     </div>
   );
 }
