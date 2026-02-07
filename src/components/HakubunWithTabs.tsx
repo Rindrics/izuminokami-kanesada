@@ -518,191 +518,197 @@ export function HakubunWithTabs({
         id="hakubun-panel"
         role="tabpanel"
         aria-labelledby={`hakubun-tab-${mode}`}
-        className="relative rounded-lg rounded-tl-none bg-white p-6 shadow-sm dark:bg-zinc-900"
+        className="flex flex-col rounded-lg rounded-tl-none bg-white shadow-sm dark:bg-zinc-900"
       >
-        <button
-          type="button"
-          onClick={handleCopyText}
-          className={`absolute right-4 top-4 inline-flex items-center gap-2 rounded border px-2 py-2 transition ${
-            copyError
-              ? 'border-red-200 bg-red-50 text-red-700 dark:border-red-800 dark:bg-red-950 dark:text-red-400'
-              : isCopied
-                ? 'border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-800 dark:bg-emerald-950 dark:text-emerald-400'
-                : 'border-zinc-300 bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700'
-          }`}
-          title={
-            copyError
-              ? 'コピーに失敗しました'
-              : isCopied
-                ? 'コピーしました'
-                : '白文をコピー'
-          }
-          aria-label={
-            copyError
-              ? 'コピーに失敗しました'
-              : isCopied
-                ? 'コピーしました'
-                : '白文をコピー'
-          }
-        >
-          {copyError ? (
-            <>
-              <svg
-                className="h-5 w-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <title>コピーに失敗しました</title>
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-              <span className="text-sm">失敗</span>
-            </>
-          ) : isCopied ? (
-            <>
-              <svg
-                className="h-5 w-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <title>コピーしました</title>
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M5 13l4 4L19 7"
-                />
-              </svg>
-              <span className="text-sm">コピーしました</span>
-            </>
-          ) : (
-            <svg
-              className="h-5 w-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <title>白文をコピー</title>
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
-              />
-            </svg>
-          )}
-        </button>
-        <div className="text-2xl leading-loose tracking-wider">
-          {(() => {
-            // Check if all segments are narration (no speakers)
-            const allNarration = segments.every((s) => s.speaker === null);
-
-            // Group consecutive segments by speaker, preserving global index
-            type SegmentWithIndex = (typeof segments)[0] & {
-              globalIndex: number;
-            };
-            const groups: {
-              speaker: string | null;
-              segments: SegmentWithIndex[];
-            }[] = [];
-            for (let i = 0; i < segments.length; i++) {
-              const segment = segments[i];
-              const segmentWithIndex: SegmentWithIndex = {
-                ...segment,
-                globalIndex: i,
-              };
-              const lastGroup = groups[groups.length - 1];
-              if (lastGroup && lastGroup.speaker === segment.speaker) {
-                lastGroup.segments.push(segmentWithIndex);
-              } else {
-                groups.push({
-                  speaker: segment.speaker,
-                  segments: [segmentWithIndex],
-                });
-              }
+        <div className="flex justify-end px-6 pt-6 pb-3">
+          <button
+            type="button"
+            onClick={handleCopyText}
+            className={`inline-flex items-center gap-2 rounded border px-2 py-2 transition ${
+              copyError
+                ? 'border-red-200 bg-red-50 text-red-700 dark:border-red-800 dark:bg-red-950 dark:text-red-400'
+                : isCopied
+                  ? 'border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-800 dark:bg-emerald-950 dark:text-emerald-400'
+                  : 'border-zinc-300 bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700'
+            }`}
+            title={
+              copyError
+                ? 'コピーに失敗しました'
+                : isCopied
+                  ? 'コピーしました'
+                  : '白文をコピー'
             }
+            aria-label={
+              copyError
+                ? 'コピーに失敗しました'
+                : isCopied
+                  ? 'コピーしました'
+                  : '白文をコピー'
+            }
+          >
+            {copyError ? (
+              <>
+                <svg
+                  className="h-5 w-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <title>コピーに失敗しました</title>
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+                <span className="text-sm">失敗</span>
+              </>
+            ) : isCopied ? (
+              <>
+                <svg
+                  className="h-5 w-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <title>コピーしました</title>
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M5 13l4 4L19 7"
+                  />
+                </svg>
+                <span className="text-sm">コピーしました</span>
+              </>
+            ) : (
+              <svg
+                className="h-5 w-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <title>白文をコピー</title>
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+                />
+              </svg>
+            )}
+          </button>
+        </div>
+        <div className="px-6 pb-6">
+          <div className="text-2xl leading-loose tracking-wider">
+            {(() => {
+              // Check if all segments are narration (no speakers)
+              const allNarration = segments.every((s) => s.speaker === null);
 
-            return groups.map((group, groupIndex) => {
-              // If all segments are narration, don't dim the text
-              const isNarration = allNarration ? false : group.speaker === null;
-              const prevGroup = groups[groupIndex - 1];
-              const prevIsNarration = prevGroup && prevGroup.speaker === null;
-              const isFirstGroup = groupIndex === 0;
-
-              // Detect implicit speaker change (speaker changed without narrator)
-              const isImplicitSpeakerChange =
-                !isFirstGroup &&
-                group.speaker !== null &&
-                prevGroup &&
-                prevGroup.speaker !== null &&
-                prevGroup.speaker !== group.speaker;
-
-              // Determine wrapper element and properties
-              let Wrapper: 'div' | 'span' = 'span';
-              const wrapperProps: { className?: string } = {};
-
-              if (!isFirstGroup) {
-                Wrapper = 'div';
-                // Speech after narration or implicit speaker change: add indent
-                if (
-                  !isNarration &&
-                  (prevIsNarration || isImplicitSpeakerChange)
-                ) {
-                  wrapperProps.className = 'block pl-4';
+              // Group consecutive segments by speaker, preserving global index
+              type SegmentWithIndex = (typeof segments)[0] & {
+                globalIndex: number;
+              };
+              const groups: {
+                speaker: string | null;
+                segments: SegmentWithIndex[];
+              }[] = [];
+              for (let i = 0; i < segments.length; i++) {
+                const segment = segments[i];
+                const segmentWithIndex: SegmentWithIndex = {
+                  ...segment,
+                  globalIndex: i,
+                };
+                const lastGroup = groups[groups.length - 1];
+                if (lastGroup && lastGroup.speaker === segment.speaker) {
+                  lastGroup.segments.push(segmentWithIndex);
+                } else {
+                  groups.push({
+                    speaker: segment.speaker,
+                    segments: [segmentWithIndex],
+                  });
                 }
               }
 
-              const firstSegment = group.segments[0];
-              const lastSegment = group.segments[group.segments.length - 1];
+              return groups.map((group, groupIndex) => {
+                // If all segments are narration, don't dim the text
+                const isNarration = allNarration
+                  ? false
+                  : group.speaker === null;
+                const prevGroup = groups[groupIndex - 1];
+                const prevIsNarration = prevGroup && prevGroup.speaker === null;
+                const isFirstGroup = groupIndex === 0;
 
-              return (
-                <Wrapper
-                  key={`${firstSegment.start_pos}-${lastSegment.end_pos}`}
-                  {...wrapperProps}
-                >
-                  {/* Show implicit speaker name (no indent) */}
-                  {isImplicitSpeakerChange && group.speaker && (
-                    <span className="block -ml-4 text-zinc-300 dark:text-zinc-600">
-                      ― {getPersonName(group.speaker)} ―
-                    </span>
-                  )}
-                  {group.segments.map((segment, segIndex) => (
-                    <span key={`${segment.start_pos}-${segment.end_pos}`}>
-                      {segIndex > 0 && <br />}
-                      <span
-                        className={
-                          showPlayButtons && mode !== 'onyomi'
-                            ? 'inline-flex items-center gap-1'
-                            : undefined
-                        }
-                      >
-                        {showPlayButtons && mode !== 'onyomi' && (
-                          <SegmentPlayButton
-                            bookId={bookId}
-                            sectionId={sectionId}
-                            chapterId={chapterId}
-                            segmentIndex={segment.globalIndex}
-                          />
-                        )}
-                        <TextWithRuby
-                          text={segment.text.original}
-                          mode={mode}
-                          isNarration={isNarration}
-                          hanziOverrides={segment.hanzi_overrides}
-                        />
+                // Detect implicit speaker change (speaker changed without narrator)
+                const isImplicitSpeakerChange =
+                  !isFirstGroup &&
+                  group.speaker !== null &&
+                  prevGroup &&
+                  prevGroup.speaker !== null &&
+                  prevGroup.speaker !== group.speaker;
+
+                // Determine wrapper element and properties
+                let Wrapper: 'div' | 'span' = 'span';
+                const wrapperProps: { className?: string } = {};
+
+                if (!isFirstGroup) {
+                  Wrapper = 'div';
+                  // Speech after narration or implicit speaker change: add indent
+                  if (
+                    !isNarration &&
+                    (prevIsNarration || isImplicitSpeakerChange)
+                  ) {
+                    wrapperProps.className = 'block pl-4';
+                  }
+                }
+
+                const firstSegment = group.segments[0];
+                const lastSegment = group.segments[group.segments.length - 1];
+
+                return (
+                  <Wrapper
+                    key={`${firstSegment.start_pos}-${lastSegment.end_pos}`}
+                    {...wrapperProps}
+                  >
+                    {/* Show implicit speaker name (no indent) */}
+                    {isImplicitSpeakerChange && group.speaker && (
+                      <span className="block -ml-4 text-zinc-300 dark:text-zinc-600">
+                        ― {getPersonName(group.speaker)} ―
                       </span>
-                    </span>
-                  ))}
-                </Wrapper>
-              );
-            });
-          })()}
+                    )}
+                    {group.segments.map((segment, segIndex) => (
+                      <span key={`${segment.start_pos}-${segment.end_pos}`}>
+                        {segIndex > 0 && <br />}
+                        <span
+                          className={
+                            showPlayButtons && mode !== 'onyomi'
+                              ? 'inline-flex items-center gap-1'
+                              : undefined
+                          }
+                        >
+                          {showPlayButtons && mode !== 'onyomi' && (
+                            <SegmentPlayButton
+                              bookId={bookId}
+                              sectionId={sectionId}
+                              chapterId={chapterId}
+                              segmentIndex={segment.globalIndex}
+                            />
+                          )}
+                          <TextWithRuby
+                            text={segment.text.original}
+                            mode={mode}
+                            isNarration={isNarration}
+                            hanziOverrides={segment.hanzi_overrides}
+                          />
+                        </span>
+                      </span>
+                    ))}
+                  </Wrapper>
+                );
+              });
+            })()}
+          </div>
         </div>
       </div>
     </section>
