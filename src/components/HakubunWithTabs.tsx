@@ -431,6 +431,7 @@ export function HakubunWithTabs({
   chapterId,
 }: Props) {
   const [isCopied, setIsCopied] = useState(false);
+  const [copyError, setCopyError] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -470,12 +471,21 @@ export function HakubunWithTabs({
       .join('')
       .replace(/-/g, '');
 
+    // Check if Clipboard API is available
+    if (!navigator.clipboard) {
+      setCopyError(true);
+      setTimeout(() => setCopyError(false), 2000);
+      return;
+    }
+
     try {
       await navigator.clipboard.writeText(textToCopy);
       setIsCopied(true);
       setTimeout(() => setIsCopied(false), 2000);
-    } catch (err) {
-      console.error('Failed to copy text:', err);
+    } catch {
+      // Silent failure - show error state without exposing error details
+      setCopyError(true);
+      setTimeout(() => setCopyError(false), 2000);
     }
   };
 
@@ -514,14 +524,46 @@ export function HakubunWithTabs({
           type="button"
           onClick={handleCopyText}
           className={`absolute right-4 top-4 inline-flex items-center gap-2 rounded border px-2 py-2 transition ${
-            isCopied
-              ? 'border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-800 dark:bg-emerald-950 dark:text-emerald-400'
-              : 'border-zinc-300 bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700'
+            copyError
+              ? 'border-red-200 bg-red-50 text-red-700 dark:border-red-800 dark:bg-red-950 dark:text-red-400'
+              : isCopied
+                ? 'border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-800 dark:bg-emerald-950 dark:text-emerald-400'
+                : 'border-zinc-300 bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700'
           }`}
-          title={isCopied ? 'コピーしました' : '白文をコピー'}
-          aria-label={isCopied ? 'コピーしました' : '白文をコピー'}
+          title={
+            copyError
+              ? 'コピーに失敗しました'
+              : isCopied
+                ? 'コピーしました'
+                : '白文をコピー'
+          }
+          aria-label={
+            copyError
+              ? 'コピーに失敗しました'
+              : isCopied
+                ? 'コピーしました'
+                : '白文をコピー'
+          }
         >
-          {isCopied ? (
+          {copyError ? (
+            <>
+              <svg
+                className="h-5 w-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <title>コピーに失敗しました</title>
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+              <span className="text-sm">失敗</span>
+            </>
+          ) : isCopied ? (
             <>
               <svg
                 className="h-5 w-5"
