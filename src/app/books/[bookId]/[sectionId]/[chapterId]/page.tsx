@@ -5,6 +5,7 @@ import { Suspense } from 'react';
 import { AudioPlayer } from '@/components/AudioPlayer';
 import { AudioRecorder } from '@/components/AudioRecorder';
 import { ContentPageClient } from '@/components/ContentPageClient';
+import { CopyJapaneseTextButton } from '@/components/CopyJapaneseTextButton';
 import { HakubunWithTabs } from '@/components/HakubunWithTabs';
 import { JapaneseTextWithRuby } from '@/components/JapaneseTextWithRuby';
 import { KeyboardNavigation } from '@/components/KeyboardNavigation';
@@ -189,7 +190,10 @@ export default async function ContentPage({ params }: Props) {
               <h2 className="mb-3 text-sm font-medium text-zinc-500 dark:text-zinc-400">
                 読み下し文
               </h2>
-              <div className="rounded-lg bg-white p-6 shadow-sm dark:bg-zinc-900">
+              <div className="relative rounded-lg bg-white p-6 shadow-sm dark:bg-zinc-900">
+                <div className="absolute right-4 top-4">
+                  <CopyJapaneseTextButton segments={content.segments} />
+                </div>
                 <div className="space-y-2 text-lg leading-loose text-zinc-700 dark:text-zinc-300">
                   {content.segments.map((segment) => (
                     <p key={`${segment.start_pos}-${segment.end_pos}`}>
