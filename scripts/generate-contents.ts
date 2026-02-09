@@ -1221,8 +1221,17 @@ function main(): void {
         if (!file.endsWith('.yaml')) continue;
 
         const chapterId = file.replace('.yaml', '');
-        chapters.push(chapterId);
         const filePath = path.join(sectionDir, file);
+
+        // Check if this is a primer content (skip generation)
+        const yamlContent = fs.readFileSync(filePath, 'utf-8');
+        const parsedYaml = yaml.load(yamlContent) as Record<string, unknown>;
+        if (parsedYaml.primer === true) {
+          console.log(`Skipping primer: ${bookId}/${sectionId}/${chapterId}`);
+          continue;
+        }
+
+        chapters.push(chapterId);
 
         console.log(`Processing: ${bookId}/${sectionId}/${chapterId}`);
 
