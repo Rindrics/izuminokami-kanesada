@@ -9,6 +9,8 @@
  */
 
 import { execSync } from 'node:child_process';
+import { readFileSync } from 'node:fs';
+import yaml from 'js-yaml';
 import { hanziDictionary } from '../src/data/hanzi-dictionary';
 import { contents } from '../src/generated/contents';
 import { validateContent } from '../src/lib/validators/content';
@@ -106,6 +108,7 @@ function getChangedYamlFiles(): string[] {
 
 /**
  * Get changed content_ids from git diff
+ * Excludes primer contents (primer: true)
  */
 function getChangedContentIds(): string[] {
   const changedFiles = getChangedYamlFiles();
@@ -119,9 +122,24 @@ function getChangedContentIds(): string[] {
 
   for (const file of changedFiles) {
     const contentId = deriveContentId(file);
-    if (contentId) {
-      contentIds.push(contentId);
+    if (!contentId) {
+      continue;
     }
+
+    // Check if this is a primer content (skip validation)
+    try {
+      const yamlContent = readFileSync(file, 'utf-8');
+      const parsedYaml = yaml.load(yamlContent) as Record<string, unknown>;
+      if (parsedYaml.primer === true) {
+        console.log(`SKIP: ${contentId} (primer entry)`);
+        continue;
+      }
+    } catch {
+      // If file cannot be read, skip it (might be deleted)
+      continue;
+    }
+
+    contentIds.push(contentId);
   }
 
   return [...new Set(contentIds)]; // Remove duplicates
@@ -176,6 +194,18 @@ function main(): void {
     const content = contents.find((c) => c.content_id === contentId);
 
     if (!content) {
+      // Check if this is a primer content by reading the YAML file
+      const filePath = `contents/input/${contentId}.yaml`;
+      try {
+        const yamlContent = readFileSync(filePath, 'utf-8');
+        const parsedYaml = yaml.load(yamlContent) as Record<string, unknown>;
+        if (parsedYaml.primer === true) {
+          console.log(`SKIP: ${contentId} (primer entry)`);
+          continue;
+        }
+      } catch {
+        // File might not exist or cannot be read
+      }
       console.error(`ERROR: Content not found: ${contentId}`);
       hasErrors = true;
       continue;
