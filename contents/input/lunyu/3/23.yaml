@@ -1,0 +1,28 @@
+segments:
+  - text:
+      original: 子語魯大師樂
+      japanese: 子、魯の大師に楽を語る。
+    speaker: null
+  - text:
+      original: 曰
+      japanese: 曰く、
+    speaker: null
+  - text:
+      original: 樂其可-知也
+      japanese: 楽其れ知る可し。
+    speaker: kongzi
+  - text:
+      original: 始作 翕如也
+      japanese: 始め作る、翕如（きゅうじょ）たり。
+    speaker: kongzi
+  - text:
+      original: 從之 純如也 皦如也 繹如也
+      japanese: 之に従う、純如（じゅんじょ）たり、皦如（きょうじょ）たり、繹如（えきじょ）たり。
+    speaker: kongzi
+  - text:
+      original: 以成
+      japanese: 以て成る、と。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

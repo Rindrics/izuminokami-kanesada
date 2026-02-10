@@ -1,0 +1,20 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 吾與回言終日 不-違如愚
+      japanese: 吾回と与に言うこと終日、違うこと無くして愚の如し。
+    speaker: kongzi
+  - text:
+      original: 退而省其私 亦足以發
+      japanese: 退きて其の私を省みれば、亦た以て発するに足る。
+    speaker: kongzi
+  - text:
+      original: 回也不-愚
+      japanese: 回や愚ならず、と。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

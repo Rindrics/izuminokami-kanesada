@@ -1,0 +1,20 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 已矣乎
+      japanese: 已んぬるかな。
+    speaker: kongzi
+  - text:
+      original: 吾未見能見其過
+      japanese: 吾未だ其の過を見て、
+    speaker: kongzi
+  - text:
+      original: 而內自訟者也
+      japanese: 内に自ら訟うる者を見ず。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

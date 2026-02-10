@@ -1,0 +1,40 @@
+segments:
+  - text:
+      original: 子夏問曰
+      japanese: 子夏問いて曰く、
+    speaker: null
+  - text:
+      original: 巧笑倩兮 美目盼兮 素以為絢兮
+      japanese: 巧笑倩（せん）たり、美目盼（はん）たり、素を以て絢（けん）と為す、と。
+    speaker: zixia
+  - text:
+      original: 何謂也
+      japanese: 何を謂うか、と。
+    speaker: zixia
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 繪事後素
+      japanese: 絵事は素に後（あと）づく。
+    speaker: kongzi
+  - text:
+      original: 曰
+      japanese: 曰く、
+    speaker: null
+  - text:
+      original: 禮後乎
+      japanese: 礼後か、と。
+    speaker: zixia
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 起予者商也 始可-與言詩已矣
+      japanese: 予を起す者は商や、始めて詩を言うに与（あずか）る可し、と。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

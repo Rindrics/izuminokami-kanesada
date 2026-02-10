@@ -1,0 +1,20 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 士志於道
+      japanese: 士道に志せば、
+    speaker: kongzi
+  - text:
+      original: 而恥惡衣惡食者
+      japanese: 而して悪衣悪食を恥ずる者は、
+    speaker: kongzi
+  - text:
+      original: 未足與議也
+      japanese: 未だ与に議るに足らず。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

@@ -1,0 +1,24 @@
+segments:
+  - text:
+      original: 或問禘之說
+      japanese: 或る人、禘の説を問う。
+    speaker: null
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 不-知也
+      japanese: 知らず、と。
+    speaker: kongzi
+  - text:
+      original: 知其說者之於天下也 其如示諸斯乎
+      japanese: 其の説を知る者の天下に於けるや、其れ諸を斯に示すが如し、と。
+    speaker: kongzi
+  - text:
+      original: 指其掌
+      japanese: 其の掌を指す。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

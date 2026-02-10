@@ -1,0 +1,20 @@
+segments:
+  - text:
+      original: 子謂韶
+      japanese: 子、韶を謂いて、
+    speaker: null
+  - text:
+      original: 盡美矣 又盡善也
+      japanese: 美を尽くす、又た善を尽くす、と。
+    speaker: kongzi
+  - text:
+      original: 謂武
+      japanese: 武を謂いて、
+    speaker: null
+  - text:
+      original: 盡美矣 未盡善也
+      japanese: 美を尽くす、未だ善を尽くさず、と。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

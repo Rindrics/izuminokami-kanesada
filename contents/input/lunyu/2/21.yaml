@@ -1,0 +1,24 @@
+segments:
+  - text:
+      original: 或謂孔子曰
+      japanese: 或る人孔子に謂いて曰く、
+    speaker: null
+  - text:
+      original: 子奚不-為政
+      japanese: 子奚（なん）ぞ政を為さざる、と。
+    speaker: null
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 書云 孝乎惟孝 友于兄弟 施於有政
+      japanese: 書に云う、孝なるかな惟れ孝、兄弟に友（ゆう）す、政有るに施す、と。
+    speaker: kongzi
+  - text:
+      original: 是亦為政 奚其為為政
+      japanese: 是れ亦た政を為すなり、奚ぞ其れ政を為すを為さんや、と。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

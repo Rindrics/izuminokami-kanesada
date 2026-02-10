@@ -1,0 +1,16 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 溫故而知新
+      japanese: 故きを温めて新しきを知る、
+    speaker: kongzi
+  - text:
+      original: 可以為師矣
+      japanese: 以て師と為る可し、と。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

@@ -1,0 +1,20 @@
+segments:
+  - text:
+      original: 孔子於郷党
+      japanese: 孔子、郷党に於いて、
+    speaker: null
+  - text:
+      original: 恂恂如也 似不-能言者
+      japanese: 恂恂（じゅんじゅん）として、言う能はざるが如し。
+    speaker: kongzi
+  - text:
+      original: 其在宗廟朝廷
+      japanese: 其の宗廟朝廷に在りては、
+    speaker: kongzi
+  - text:
+      original: 便便言 唯謹爾
+      japanese: 便便（べんべん）として言う、唯だ謹みて爾（のみ）。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

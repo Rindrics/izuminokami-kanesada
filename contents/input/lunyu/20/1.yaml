@@ -1,0 +1,24 @@
+segments:
+  - text:
+      original: 堯曰
+      japanese: 堯曰く、
+    speaker: null
+  - text:
+      original: 咨爾舜
+      japanese: 咨（ああ）、爾（なんじ）舜、
+    speaker: yao
+  - text:
+      original: 天之曆數在爾躬
+      japanese: 天の歴数、爾の躬（み）に在り。
+    speaker: yao
+  - text:
+      original: 允執其中
+      japanese: 允（まこと）に其の中を執れ。
+    speaker: yao
+  - text:
+      original: 四海困窮 天祿永終
+      japanese: 四海困窮せば、天禄永く終わらん。
+    speaker: yao
+mentioned: []
+primer: true
+pinyin_reviewed: false

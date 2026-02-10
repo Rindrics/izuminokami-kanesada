@@ -1,0 +1,12 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 夷狄之有君 不-如諸夏之亡也
+      japanese: 夷狄（いてき）の君あるは、諸夏の亡きに如かず、と。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

@@ -1,0 +1,28 @@
+segments:
+  - text:
+      original: 子謂子產
+      japanese: 子、子産を謂いて、
+    speaker: null
+  - text:
+      original: 有君子之道四焉
+      japanese: 君子の道四つ有り。
+    speaker: kongzi
+  - text:
+      original: 其行己也恭
+      japanese: 其の己を行なうや恭、
+    speaker: kongzi
+  - text:
+      original: 其事上也敬
+      japanese: 其の上に事うるや敬、
+    speaker: kongzi
+  - text:
+      original: 其養民也惠
+      japanese: 其の民を養うや恵、
+    speaker: kongzi
+  - text:
+      original: 其使民也義
+      japanese: 其の民を使うや義。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

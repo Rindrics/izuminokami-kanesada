@@ -1,0 +1,32 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 吾未見剛者
+      japanese: 吾未だ剛なる者を見ず。
+    speaker: kongzi
+  - text:
+      original: 或對曰
+      japanese: 或る人対えて曰く、
+    speaker: null
+  - text:
+      original: 申棖
+      japanese: 申棖、と。
+    speaker: null
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 棖也欲
+      japanese: 棖や欲あり。
+    speaker: kongzi
+  - text:
+      original: 焉得剛
+      japanese: 焉くんぞ剛を得ん。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

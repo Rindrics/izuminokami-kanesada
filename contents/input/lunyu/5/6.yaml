@@ -1,0 +1,20 @@
+segments:
+  - text:
+      original: 子使漆雕開仕
+      japanese: 子、漆雕開をして仕えしむ。
+    speaker: null
+  - text:
+      original: 對曰
+      japanese: 対えて曰く、
+    speaker: null
+  - text:
+      original: 吾斯之未能信
+      japanese: 吾斯の信ずるに能わず、と。
+    speaker: null
+  - text:
+      original: 子說
+      japanese: 子説ぶ。
+    speaker: null
+mentioned: []
+primer: true
+pinyin_reviewed: false

@@ -1,0 +1,36 @@
+segments:
+  - text:
+      original: 儀封人請見
+      japanese: 儀の封人、見を請う。
+    speaker: null
+  - text:
+      original: 曰
+      japanese: 曰く、
+    speaker: null
+  - text:
+      original: 君子之至於斯也 吾未嘗不-得見也
+      japanese: 君子の斯に至るや、吾未だ嘗て見ることを得ざること無し、と。
+    speaker: null
+  - text:
+      original: 從者見之
+      japanese: 従者之を見す。
+    speaker: null
+  - text:
+      original: 出曰
+      japanese: 出でて曰く、
+    speaker: null
+  - text:
+      original: 二三子何患於喪乎
+      japanese: 二三子、何ぞ喪を患えんや、と。
+    speaker: null
+  - text:
+      original: 天下之無道也久矣
+      japanese: 天下の道無きや久し。
+    speaker: null
+  - text:
+      original: 天將以夫子為木鐸
+      japanese: 天将に夫子を以て木鐸と為さん、と。
+    speaker: null
+mentioned: []
+primer: true
+pinyin_reviewed: false

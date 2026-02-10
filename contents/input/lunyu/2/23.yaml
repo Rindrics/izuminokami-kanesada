@@ -1,0 +1,28 @@
+segments:
+  - text:
+      original: 子張問
+      japanese: 子張問う、
+    speaker: null
+  - text:
+      original: 十世可-知也
+      japanese: 十世知る可きか、と。
+    speaker: zizhang
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 殷因於夏禮 所損益 可-知也
+      japanese: 殷は夏の禮に因る、損益する所、知る可し。
+    speaker: kongzi
+  - text:
+      original: 周因於殷禮 所損益 可-知也
+      japanese: 周は殷の禮に因る、損益する所、知る可し。
+    speaker: kongzi
+  - text:
+      original: 其或繼周者 雖百世 可-知也
+      japanese: 其れ或は周を継ぐ者、百世と雖も、知る可し、と。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

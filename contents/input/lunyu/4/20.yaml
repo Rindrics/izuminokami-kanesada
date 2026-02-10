@@ -1,0 +1,16 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 三年無改於父之道
+      japanese: 三年父の道を改めざるは、
+    speaker: kongzi
+  - text:
+      original: 可謂孝矣
+      japanese: 孝と謂うべきなり。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

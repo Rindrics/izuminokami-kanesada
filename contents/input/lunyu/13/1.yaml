@@ -1,0 +1,28 @@
+segments:
+  - text:
+      original: 子路問政
+      japanese: 子路、政を問う。
+    speaker: null
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 先之勞之
+      japanese: 先んじて之を労せよ。
+    speaker: kongzi
+  - text:
+      original: 請益
+      japanese: 益を請う。
+    speaker: zilu
+  - text:
+      original: 曰
+      japanese: 曰く、
+    speaker: null
+  - text:
+      original: 無倦
+      japanese: 倦むこと無かれ、と。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

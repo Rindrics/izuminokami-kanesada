@@ -1,0 +1,20 @@
+segments:
+  - text:
+      original: 有子曰
+      japanese: 有子曰く、
+    speaker: null
+  - text:
+      original: 信近於義 言可-復也
+      japanese: 信は義に近く、言は復す可し。
+    speaker: youzi
+  - text:
+      original: 恭近於禮 遠恥辱也
+      japanese: 恭は礼に近く、恥辱を遠ざく。
+    speaker: youzi
+  - text:
+      original: 因不失其親 亦可-宗也
+      japanese: 因りて其の親を失わざれば、亦た宗とす可し。
+    speaker: youzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

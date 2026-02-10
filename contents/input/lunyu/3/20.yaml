@@ -1,0 +1,12 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 關雎 樂而不-淫 哀而不-傷
+      japanese: 関雎は、楽しみて淫ならず、哀しみて傷らず、と。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

@@ -1,0 +1,24 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 視其所以
+      japanese: 其の以てする所を視よ。
+    speaker: kongzi
+  - text:
+      original: 觀其所由
+      japanese: 其の由る所を観よ。
+    speaker: kongzi
+  - text:
+      original: 察其所安
+      japanese: 其の安んずる所を察せよ。
+    speaker: kongzi
+  - text:
+      original: 人焉廋哉 人焉廋哉
+      japanese: 人焉（いずく）んぞ廋（かく）さんや、人焉んぞ廋さんや、と。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

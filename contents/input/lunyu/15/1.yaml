@@ -1,0 +1,24 @@
+segments:
+  - text:
+      original: 衛靈公問陳於孔子
+      japanese: 衛靈公、陳を孔子に問う。
+    speaker: null
+  - text:
+      original: 孔子對曰
+      japanese: 孔子対えて曰く、
+    speaker: null
+  - text:
+      original: 俎豆之事 則嘗聞之矣
+      japanese: 俎豆の事は、則ち嘗て之を聞けり。
+    speaker: kongzi
+  - text:
+      original: 軍旅之事 未之學也
+      japanese: 軍旅の事は、未だ之を学ばざるなり。
+    speaker: kongzi
+  - text:
+      original: 明日遂行
+      japanese: 明日遂に行く。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

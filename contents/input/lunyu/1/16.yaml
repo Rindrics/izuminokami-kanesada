@@ -1,0 +1,12 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 不-患人之不-己知 患不知人也
+      japanese: 人の己を知らざるを患えず、人を知らざるを患う。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

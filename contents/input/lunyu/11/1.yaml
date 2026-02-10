@@ -1,0 +1,20 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 先進於禮樂 野人也
+      japanese: 先進の礼楽は、野人なり。
+    speaker: kongzi
+  - text:
+      original: 後進於禮樂 君子也
+      japanese: 後進の礼楽は、君子なり。
+    speaker: kongzi
+  - text:
+      original: 如用之 則吾從先進
+      japanese: 如し之を用うれば、則ち吾は先進に従わん。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

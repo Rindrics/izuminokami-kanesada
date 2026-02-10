@@ -1,0 +1,20 @@
+segments:
+  - text:
+      original: 子謂南容
+      japanese: 子、南容を謂いて、
+    speaker: null
+  - text:
+      original: 邦有道不廢
+      japanese: 邦に道有れば廃れず、
+    speaker: kongzi
+  - text:
+      original: 邦無道免於刑戮
+      japanese: 邦に道無ければ刑戮を免る。
+    speaker: kongzi
+  - text:
+      original: 以其兄之子妻之
+      japanese: 其の兄の子を以て之に妻す。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

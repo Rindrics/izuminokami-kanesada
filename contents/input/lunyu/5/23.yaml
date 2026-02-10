@@ -1,0 +1,16 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 伯夷叔齊不念舊惡
+      japanese: 伯夷叔齊は旧悪を念わず。
+    speaker: kongzi
+  - text:
+      original: 怨是用希
+      japanese: 怨み是を用いて希なり。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

@@ -1,0 +1,16 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 放於利而行
+      japanese: 利に放りて行えば、
+    speaker: kongzi
+  - text:
+      original: 多怨
+      japanese: 怨み多し。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

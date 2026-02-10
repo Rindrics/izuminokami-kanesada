@@ -1,0 +1,20 @@
+segments:
+  - text:
+      original: 子謂公冶長
+      japanese: 子、公冶長を謂いて、
+    speaker: null
+  - text:
+      original: 可-妻也
+      japanese: 妻（めと）るべき者なり。
+    speaker: kongzi
+  - text:
+      original: 雖在縲紲之中 非其罪也
+      japanese: 縲絏（れいせつ）の中に在りと雖も、其の罪に非ざるなり。
+    speaker: kongzi
+  - text:
+      original: 以其子妻之
+      japanese: 其の子を以て之に妻す。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

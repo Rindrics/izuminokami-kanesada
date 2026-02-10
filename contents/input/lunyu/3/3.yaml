@@ -1,0 +1,16 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 人而不-仁 如禮何
+      japanese: 人にして不仁ならば、礼を如何せん。
+    speaker: kongzi
+  - text:
+      original: 人而不-仁 如樂何
+      japanese: 人にして不仁ならば、楽を如何せん、と。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

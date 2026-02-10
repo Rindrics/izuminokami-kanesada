@@ -1,0 +1,20 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 人之過也
+      japanese: 人の過つや、
+    speaker: kongzi
+  - text:
+      original: 各於其黨
+      japanese: 各其の党に於てなり。
+    speaker: kongzi
+  - text:
+      original: 觀過斯知仁矣
+      japanese: 過ちを観れば、斯に仁を知る。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

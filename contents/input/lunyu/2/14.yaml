@@ -1,0 +1,12 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 君子周而不-比 小人比而不-周
+      japanese: 君子は周して比せず、小人は比して周せず、と。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

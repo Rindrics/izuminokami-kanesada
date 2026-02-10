@@ -1,0 +1,24 @@
+segments:
+  - text:
+      original: 有子曰
+      japanese: 有子曰く、
+    speaker: null
+  - text:
+      original: 禮之用 和為貴
+      japanese: 礼の用は、和を貴しとす。
+    speaker: youzi
+  - text:
+      original: 先王之道 斯為美
+      japanese: 先王の道、斯れを美とす。
+    speaker: youzi
+  - text:
+      original: 小大由之
+      japanese: 小大之に由る。
+    speaker: youzi
+  - text:
+      original: 有所不行 知和而和 不以禮節之 亦不-可-行也
+      japanese: 行う所有らざるも、和を知りて和すれども、礼を以て之を節せざれば、亦た行う可からざるなり。
+    speaker: youzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

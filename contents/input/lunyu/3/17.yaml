@@ -1,0 +1,16 @@
+segments:
+  - text:
+      original: 子貢欲去告朔之餼羊
+      japanese: 子貢、告朔の餼羊を去らんと欲す。
+    speaker: null
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 賜也 爾愛其羊 我愛其禮
+      japanese: 賜や、爾其の羊を愛す、我其の礼を愛す、と。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

@@ -1,0 +1,16 @@
+segments:
+  - text:
+      original: 季氏將伐顓臾
+      japanese: 季氏、将に顓臾を伐たんとす。
+    speaker: null
+  - text:
+      original: 冉有季路見於孔子曰
+      japanese: 冉有・季路、孔子に見えて曰く、
+    speaker: null
+  - text:
+      original: 季氏將有事於顓臾
+      japanese: 季氏、将に顓臾に事有らんとす、と。
+    speaker: ranyou
+mentioned: []
+primer: true
+pinyin_reviewed: false

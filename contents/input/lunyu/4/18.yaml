@@ -1,0 +1,24 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 事父母幾諫
+      japanese: 父母に事うるに幾諫す。
+    speaker: kongzi
+  - text:
+      original: 見志不從
+      japanese: 志の従わざるを見ては、
+    speaker: kongzi
+  - text:
+      original: 又敬不違
+      japanese: 又敬して違わず。
+    speaker: kongzi
+  - text:
+      original: 勞而不怨
+      japanese: 労して怨まず。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

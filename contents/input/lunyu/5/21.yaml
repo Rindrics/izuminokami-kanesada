@@ -1,0 +1,28 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 甯武子
+      japanese: 甯武子は、
+    speaker: kongzi
+  - text:
+      original: 邦有道則知
+      japanese: 邦に道有れば則ち知、
+    speaker: kongzi
+  - text:
+      original: 邦無道則愚
+      japanese: 邦に道無ければ則ち愚。
+    speaker: kongzi
+  - text:
+      original: 其知可及也
+      japanese: 其の知は及ぶべし。
+    speaker: kongzi
+  - text:
+      original: 其愚不可及也
+      japanese: 其の愚は及ぶべからず。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

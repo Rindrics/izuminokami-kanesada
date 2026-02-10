@@ -1,0 +1,36 @@
+segments:
+  - text:
+      original: 或曰
+      japanese: 或る人曰く、
+    speaker: null
+  - text:
+      original: 雍也仁而不佞
+      japanese: 雍や仁にして佞ならず、と。
+    speaker: null
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 焉用佞
+      japanese: 焉んぞ佞を用いん。
+    speaker: kongzi
+  - text:
+      original: 禦人以口給
+      japanese: 人を禦うに口給を以てし、
+    speaker: kongzi
+  - text:
+      original: 屢憎於人
+      japanese: 屡人に憎まる。
+    speaker: kongzi
+  - text:
+      original: 不知其仁
+      japanese: 其の仁を知らず。
+    speaker: kongzi
+  - text:
+      original: 焉用佞
+      japanese: 焉んぞ佞を用いん。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

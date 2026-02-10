@@ -1,0 +1,20 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 十室之邑
+      japanese: 十室の邑、
+    speaker: kongzi
+  - text:
+      original: 必有忠信如丘者焉
+      japanese: 必ず忠信丘の如き者有らん。
+    speaker: kongzi
+  - text:
+      original: 不如丘之好學也
+      japanese: 丘の学を好むに如かざるなり。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

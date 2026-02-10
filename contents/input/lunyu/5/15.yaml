@@ -1,0 +1,28 @@
+segments:
+  - text:
+      original: 子貢問曰
+      japanese: 子貢問うて曰く、
+    speaker: null
+  - text:
+      original: 孔文子何以謂之文也
+      japanese: 孔文子何を以て之を文と謂うや、と。
+    speaker: zigong
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 敏而好學
+      japanese: 敏にして学を好み、
+    speaker: kongzi
+  - text:
+      original: 不恥下問
+      japanese: 下問を恥じず。
+    speaker: kongzi
+  - text:
+      original: 是以謂之文也
+      japanese: 是を以て之を文と謂うなり。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

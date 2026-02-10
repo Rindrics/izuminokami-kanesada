@@ -1,0 +1,16 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 君子欲訥於言
+      japanese: 君子は言に訥なるを欲し、
+    speaker: kongzi
+  - text:
+      original: 而敏於行
+      japanese: 而して行に敏なるを欲す。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

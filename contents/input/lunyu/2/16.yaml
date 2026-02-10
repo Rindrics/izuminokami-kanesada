@@ -1,0 +1,12 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 攻乎異端 斯害也已
+      japanese: 異端を攻むるは、斯れ害のみ、と。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

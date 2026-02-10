@@ -1,0 +1,44 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 參乎
+      japanese: 参よ、
+    speaker: kongzi
+  - text:
+      original: 吾道一以貫之
+      japanese: 吾が道は一以て之を貫く。
+    speaker: kongzi
+  - text:
+      original: 曾子曰唯
+      japanese: 曾子曰く、唯と。
+    speaker: zengzi
+  - text:
+      original: 子出
+      japanese: 子出づ。
+    speaker: null
+  - text:
+      original: 門人問曰
+      japanese: 門人問うて曰く、
+    speaker: null
+  - text:
+      original: 何謂也
+      japanese: 何の謂いぞや、と。
+    speaker: null
+  - text:
+      original: 曾子曰
+      japanese: 曾子曰く、
+    speaker: null
+  - text:
+      original: 夫子之道
+      japanese: 夫子の道は、
+    speaker: zengzi
+  - text:
+      original: 忠恕而已矣
+      japanese: 忠恕のみなり。
+    speaker: zengzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

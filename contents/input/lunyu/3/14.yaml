@@ -1,0 +1,16 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 周監於二代 郁郁乎文哉
+      japanese: 周は二代に監（かんが）みて、郁郁（いくいく）たるかな文や。
+    speaker: kongzi
+  - text:
+      original: 吾從周
+      japanese: 吾は周に従う、と。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

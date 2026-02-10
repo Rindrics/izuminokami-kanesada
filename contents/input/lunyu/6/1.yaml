@@ -1,0 +1,12 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 雍也可-使南面
+      japanese: 雍や、南面を使（し）ふべし。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

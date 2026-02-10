@@ -1,0 +1,16 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 晏平仲善與人交
+      japanese: 晏平仲は人と交わるに善し。
+    speaker: kongzi
+  - text:
+      original: 久而敬之
+      japanese: 久しくして之を敬す。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

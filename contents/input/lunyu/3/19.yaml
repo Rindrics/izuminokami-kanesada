@@ -1,0 +1,20 @@
+segments:
+  - text:
+      original: 定公問
+      japanese: 定公問う、
+    speaker: null
+  - text:
+      original: 君使臣 臣事君 如之何
+      japanese: 君臣を使い、臣君に事うる、之を如何にせん、と。
+    speaker: dinggong
+  - text:
+      original: 孔子對曰
+      japanese: 孔子対えて曰く、
+    speaker: null
+  - text:
+      original: 君使臣以禮 臣事君以忠
+      japanese: 君臣を使うに礼を以てし、臣君に事うるに忠を以てす、と。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

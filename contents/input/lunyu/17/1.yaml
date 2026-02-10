@@ -1,0 +1,72 @@
+segments:
+  - text:
+      original: 陽貨欲見孔子
+      japanese: 陽貨、孔子を見んと欲す。
+    speaker: null
+  - text:
+      original: 孔子不-見
+      japanese: 孔子見えず。
+    speaker: null
+  - text:
+      original: 歸孔子豚
+      japanese: 孔子に豚を帰す。
+    speaker: null
+  - text:
+      original: 孔子時其亡也 而往拜之
+      japanese: 孔子、其の亡きときを時（つかまえ）て、往きて之に拝す。
+    speaker: null
+  - text:
+      original: 遇諸塗
+      japanese: 諸（これ）を塗（みち）に遇う。
+    speaker: null
+  - text:
+      original: 謂孔子曰
+      japanese: 孔子に謂いて曰く、
+    speaker: null
+  - text:
+      original: 來 予與爾言
+      japanese: 来れ、予爾（よじ）と言わん、と。
+    speaker: yanghuo
+  - text:
+      original: 曰
+      japanese: 曰く、
+    speaker: null
+  - text:
+      original: 懷其寶而迷其邦 可-謂仁乎
+      japanese: 其の宝を懐きて其の邦を迷わす、仁と謂う可きか、と。
+    speaker: yanghuo
+  - text:
+      original: 曰
+      japanese: 曰く、
+    speaker: null
+  - text:
+      original: 不-可
+      japanese: 不可、と。
+    speaker: kongzi
+  - text:
+      original: 好從事而亟失時 可-謂知乎
+      japanese: 従事を好みて亟（すみやか）に時を失う、知と謂う可きか、と。
+    speaker: yanghuo
+  - text:
+      original: 曰
+      japanese: 曰く、
+    speaker: null
+  - text:
+      original: 不-可
+      japanese: 不可、と。
+    speaker: kongzi
+  - text:
+      original: 日月逝矣 歲不-我與
+      japanese: 日月逝ぎ、歳は我に与えず、と。
+    speaker: yanghuo
+  - text:
+      original: 孔子曰
+      japanese: 孔子曰く、
+    speaker: null
+  - text:
+      original: 諾 吾將仕矣
+      japanese: 諾（だく）、吾将に仕えんとす、と。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

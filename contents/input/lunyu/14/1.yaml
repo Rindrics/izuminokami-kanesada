@@ -1,0 +1,16 @@
+segments:
+  - text:
+      original: 憲問恥
+      japanese: 憲、恥を問う。
+    speaker: null
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 邦有道穀 邦無道穀 恥也
+      japanese: 邦道有れば穀し、邦道無ければ穀す、恥なり。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

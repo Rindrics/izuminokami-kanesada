@@ -1,0 +1,12 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 禘自既灌而往者 吾不-欲觀之矣
+      japanese: 禘（てい）は既に灌（かん）して往くより、吾観ることを欲せず、と。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

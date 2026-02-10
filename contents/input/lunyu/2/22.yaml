@@ -1,0 +1,20 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 人而無信 不-知其可也
+      japanese: 人にして信無ければ、其の可なることを知らず。
+    speaker: kongzi
+  - text:
+      original: 大車無輗 小車無軏
+      japanese: 大車輗（げい）無く、小車軏（げつ）無く、
+    speaker: kongzi
+  - text:
+      original: 其何以行之哉
+      japanese: 其れ何を以て之を行わんや、と。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

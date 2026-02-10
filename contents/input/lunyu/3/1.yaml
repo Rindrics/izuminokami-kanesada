@@ -1,0 +1,16 @@
+segments:
+  - text:
+      original: 孔子謂季氏
+      japanese: 孔子、季氏を謂いて、
+    speaker: null
+  - text:
+      original: 八佾舞於庭
+      japanese: 八佾庭に舞う、
+    speaker: kongzi
+  - text:
+      original: 是可-忍也 孰不-可-忍也
+      japanese: 是れ忍ぶべきか、孰れ忍ぶべからざるか、と。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

@@ -1,0 +1,20 @@
+segments:
+  - text:
+      original: 子謂子賤
+      japanese: 子、子賤を謂いて、
+    speaker: null
+  - text:
+      original: 君子哉若人
+      japanese: 君子なるかな若人。
+    speaker: kongzi
+  - text:
+      original: 魯無君子者
+      japanese: 魯に君子者無くんば、
+    speaker: kongzi
+  - text:
+      original: 斯焉取斯
+      japanese: 斯に焉くんぞ斯を取らん。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false
