@@ -5,11 +5,11 @@ segments:
     speaker: null
   - text:
       original: 里仁為美
-      japanese: 仁なるところに里（お）れば美を為さん。
+      japanese: 仁なるところに里（お）れば美（び）を為さん。
     speaker: kongzi
   - text:
       original: 擇不-處仁 焉得知
-      japanese: 択んで仁に処らざれば、焉んぞ知たるを得ん。
+      japanese: 択びて仁に処らざれば、焉んぞ知（ち）たるを得ん。
     speaker: kongzi
 mentioned: []
 pinyin_reviewed: true

@@ -1,4 +1,27 @@
-segments: []
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 飯疏食 飲水
+      japanese: 疏食を飯らい、水を飲み、
+    speaker: kongzi
+  - text:
+      original: 曲肱而枕之
+      japanese: 肱を曲げて之を枕とす。
+    speaker: kongzi
+  - text:
+      original: 樂亦在其中矣
+      japanese: 樂しみ亦た其の中に在り。
+    speaker: kongzi
+  - text:
+      original: 不義而富且貴
+      japanese: 不義にして富み且つ貴きは、
+    speaker: kongzi
+  - text:
+      original: 於我如浮雲
+      japanese: 我に於いては浮雲の如（ごと）し。
+    speaker: kongzi
 mentioned: []
-primer: true
-pinyin_reviewed: false
+pinyin_reviewed: true

@@ -9,12 +9,11 @@ segments:
     speaker: kongzi
   - text:
       original: 吾未見能見其過
-      japanese: 吾未だ其の過を見て、
+      japanese: 吾未だ其の過ちを見て、
     speaker: kongzi
   - text:
       original: 而內自訟者也
-      japanese: 内に自ら訟うる者を見ず。
+      japanese: 内（うち）に自ら訟むる者を見ざるなり。
     speaker: kongzi
 mentioned: []
-primer: true
-pinyin_reviewed: false
+pinyin_reviewed: true

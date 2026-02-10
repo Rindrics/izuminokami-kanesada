@@ -5,16 +5,15 @@ segments:
     speaker: null
   - text:
       original: 太伯其可-謂至德也已矣
-      japanese: 太伯、其れ至德と謂う可し。
+      japanese: 太伯は其れ至德（しとく）と謂う可きのみ。
     speaker: kongzi
   - text:
       original: 三以天下讓
-      japanese: 三たび天下を以て譲る、
+      japanese: 三たび天下を以て譲（ゆず）る。
     speaker: kongzi
   - text:
       original: 民無得而稱焉
-      japanese: 民得て称する無し。
+      japanese: 民得て称うる無し。
     speaker: kongzi
 mentioned: []
-primer: true
-pinyin_reviewed: false
+pinyin_reviewed: true

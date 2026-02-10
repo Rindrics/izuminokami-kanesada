@@ -1,4 +1,11 @@
-segments: []
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 知者不惑 仁者不憂 勇者不懼
+      japanese: 知者（ちしゃ）は惑わず、仁者（じんしゃ）は憂えず、勇者（ゆうしゃ）は懼（おそ）れず。
+    speaker: kongzi
 mentioned: []
-primer: true
-pinyin_reviewed: false
+pinyin_reviewed: true

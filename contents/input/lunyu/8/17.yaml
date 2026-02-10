@@ -1,4 +1,15 @@
-segments: []
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 學如不及
+      japanese: 学（がく）は及ばざるが如（ごと）くせよ。
+    speaker: kongzi
+  - text:
+      original: 猶恐失之
+      japanese: 猶之を失わんことを恐（おそ）れよ。
+    speaker: kongzi
 mentioned: []
-primer: true
-pinyin_reviewed: false
+pinyin_reviewed: true

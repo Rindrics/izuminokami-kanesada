@@ -1,4 +1,15 @@
-segments: []
-mentioned: []
-primer: true
-pinyin_reviewed: false
+segments:
+  - text:
+      original: 升車 必正立執綏
+      japanese: 車に升（のぼ）れば、必ず正しく立ちて綏を執る。
+    speaker: null
+  - text:
+      original: 車中
+      japanese: 車中には、
+    speaker: null
+  - text:
+      original: 不內顧 不疾言 不親指
+      japanese: 内（うち）を顧みず、疾く言（ものい）わず、親（みずか）らは指（ゆびさ）さず。
+    speaker: null
+mentioned: [kongzi]
+pinyin_reviewed: true

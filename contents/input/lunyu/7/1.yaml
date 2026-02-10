@@ -5,7 +5,7 @@ segments:
     speaker: null
   - text:
       original: 述而不-作
-      japanese: 述べて作らず、
+      japanese: 述べて作（つく）らず、
     speaker: kongzi
   - text:
       original: 信而好古
@@ -13,8 +13,7 @@ segments:
     speaker: kongzi
   - text:
       original: 竊比於我老彭
-      japanese: 窃かに我が老彭に比す。
+      japanese: 窃かに我を老彭に比（なぞら）う。
     speaker: kongzi
 mentioned: []
-primer: true
-pinyin_reviewed: false
+pinyin_reviewed: true
