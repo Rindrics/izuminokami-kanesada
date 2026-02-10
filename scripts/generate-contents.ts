@@ -65,6 +65,7 @@ export interface OutputContent {
     speakers: string[];
     mentioned: string[];
   };
+  primer?: boolean;
 }
 
 interface InputSection {
@@ -315,6 +316,7 @@ function deriveContent(
   bookId: string,
   sectionId: string,
   chapterId: string,
+  primer?: boolean,
 ): OutputContent {
   const contentId = `${bookId}/${sectionId}/${chapterId}`;
   const sectionName = getSectionName(bookId, sectionId);
@@ -366,6 +368,7 @@ function deriveContent(
       speakers,
       mentioned,
     },
+    ...(primer ? { primer } : {}),
   };
 }
 
@@ -1183,7 +1186,7 @@ export const stats: Stats = ${statsObjectStr};
 `;
 }
 
-function main(): void {
+function main(primerOnly: boolean): void {
   const inputDir = path.join(process.cwd(), 'contents/input');
   const outputDir = path.join(process.cwd(), 'src/generated');
   const contentsOutputDir = path.join(outputDir, 'contents');
@@ -1223,10 +1226,14 @@ function main(): void {
         const chapterId = file.replace('.yaml', '');
         const filePath = path.join(sectionDir, file);
 
-        // Check if this is a primer content (skip generation)
+        // Check if this is a primer content
         const yamlContent = fs.readFileSync(filePath, 'utf-8');
         const parsedYaml = yaml.load(yamlContent) as Record<string, unknown>;
-        if (parsedYaml.primer === true) {
+        const isPrimer = parsedYaml.primer === true;
+        if (primerOnly && !isPrimer) {
+          continue;
+        }
+        if (!primerOnly && isPrimer) {
           console.log(`Skipping primer: ${bookId}/${sectionId}/${chapterId}`);
           continue;
         }
@@ -1236,7 +1243,13 @@ function main(): void {
         console.log(`Processing: ${bookId}/${sectionId}/${chapterId}`);
 
         const input = parseInputFile(filePath);
-        const output = deriveContent(input, bookId, sectionId, chapterId);
+        const output = deriveContent(
+          input,
+          bookId,
+          sectionId,
+          chapterId,
+          isPrimer || undefined,
+        );
 
         if (!contentsByBook.has(bookId)) {
           contentsByBook.set(bookId, []);
@@ -1355,8 +1368,9 @@ export function getAdjacentContentIds(
   console.log('\n=== Generation Complete ===');
 }
 
-// Check for --watch flag
+// Check for --watch and --primer flags
 const isWatchMode = process.argv.includes('--watch');
+const isPrimerMode = process.argv.includes('--primer');
 
 if (isWatchMode) {
   const watchPaths = [
@@ -1373,7 +1387,7 @@ if (isWatchMode) {
   console.log('Press Ctrl+C to stop.\n');
 
   // Initial generation
-  main();
+  main(isPrimerMode);
 
   // Watch for changes
   const watcher = watch(watchPaths, {
@@ -1393,7 +1407,7 @@ if (isWatchMode) {
     .on('change', (filePath) => {
       console.log(`\n[change] ${filePath}`);
       try {
-        main();
+        main(isPrimerMode);
       } catch (error) {
         console.error('Generation failed:', error);
       }
@@ -1401,7 +1415,7 @@ if (isWatchMode) {
     .on('add', (filePath) => {
       console.log(`\n[add] ${filePath}`);
       try {
-        main();
+        main(isPrimerMode);
       } catch (error) {
         console.error('Generation failed:', error);
       }
@@ -1409,11 +1423,11 @@ if (isWatchMode) {
     .on('unlink', (filePath) => {
       console.log(`\n[delete] ${filePath}`);
       try {
-        main();
+        main(isPrimerMode);
       } catch (error) {
         console.error('Generation failed:', error);
       }
     });
 } else {
-  main();
+  main(isPrimerMode);
 }

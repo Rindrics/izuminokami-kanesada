@@ -62,4 +62,5 @@ export interface Content {
     mentioned: string[];
   };
   content_hanzi?: ContentHanzi[]; // Override hanzi readings in white text
+  primer?: boolean;
 }
