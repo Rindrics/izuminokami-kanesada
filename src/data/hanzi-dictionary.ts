@@ -4263,6 +4263,244 @@ export const hanziDictionary: HanziEntry[] = [
     ],
     is_common: true,
   },
+  {
+    id: '季',
+    meanings: [
+      {
+        id: '季-jì',
+        onyomi: 'キ',
+        pinyin: 'jì',
+        tone: 4,
+        meaning_ja: '季節',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '氏',
+    meanings: [
+      {
+        id: '氏-shì',
+        onyomi: 'シ',
+        pinyin: 'shì',
+        tone: 4,
+        meaning_ja: '氏',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '八',
+    meanings: [
+      {
+        id: '八-bā',
+        onyomi: 'ハチ',
+        pinyin: 'bā',
+        tone: 1,
+        meaning_ja: '八',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '佾',
+    meanings: [
+      {
+        id: '佾-yì',
+        onyomi: 'イツ',
+        pinyin: 'yì',
+        tone: 4,
+        meaning_ja: '佾',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '舞',
+    meanings: [
+      {
+        id: '舞-wǔ',
+        onyomi: 'ブ',
+        pinyin: 'wǔ',
+        tone: 3,
+        meaning_ja: '舞う',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '庭',
+    meanings: [
+      {
+        id: '庭-tíng',
+        onyomi: 'テイ',
+        pinyin: 'tíng',
+        tone: 2,
+        meaning_ja: '庭',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '忍',
+    meanings: [
+      {
+        id: '忍-rěn',
+        onyomi: 'ニン',
+        pinyin: 'rěn',
+        tone: 3,
+        meaning_ja: '忍ぶ',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '孰',
+    meanings: [
+      {
+        id: '孰-shú',
+        onyomi: 'ジュク',
+        pinyin: 'shú',
+        tone: 2,
+        meaning_ja: '孰れ',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '美',
+    meanings: [
+      {
+        id: '美-měi',
+        onyomi: 'ビ',
+        pinyin: 'měi',
+        tone: 3,
+        meaning_ja: '美しい',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '擇',
+    meanings: [
+      {
+        id: '擇-zé',
+        onyomi: 'タク',
+        pinyin: 'zé',
+        tone: 2,
+        meaning_ja: '選ぶ',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '處',
+    meanings: [
+      {
+        id: '處-chǔ',
+        onyomi: 'ショ',
+        pinyin: 'chǔ',
+        tone: 3,
+        meaning_ja: '処する',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '各',
+    meanings: [
+      {
+        id: '各-gè',
+        onyomi: 'カク',
+        pinyin: 'gè',
+        tone: 4,
+        meaning_ja: '各',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '黨',
+    meanings: [
+      {
+        id: '黨-dǎng',
+        onyomi: 'トウ',
+        pinyin: 'dǎng',
+        tone: 3,
+        meaning_ja: '党',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '朝',
+    meanings: [
+      {
+        id: '朝-zhāo',
+        onyomi: 'チョウ',
+        pinyin: 'zhāo',
+        tone: 1,
+        meaning_ja: '朝',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '夕',
+    meanings: [
+      {
+        id: '夕-xī',
+        onyomi: 'セキ',
+        pinyin: 'xī',
+        tone: 1,
+        meaning_ja: '夕',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '放',
+    meanings: [
+      {
+        id: '放-fàng',
+        onyomi: 'ホウ',
+        pinyin: 'fàng',
+        tone: 4,
+        meaning_ja: '放る',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
+  {
+    id: '怨',
+    meanings: [
+      {
+        id: '怨-yuàn',
+        onyomi: 'エン',
+        pinyin: 'yuàn',
+        tone: 4,
+        meaning_ja: '怨み',
+        is_default: true,
+      },
+    ],
+    is_common: true,
+  },
 ];
 
 const hanziMap = new Map(hanziDictionary.map((e) => [e.id, e]));

@@ -9,12 +9,11 @@ segments:
     speaker: kongzi
   - text:
       original: 各於其黨
-      japanese: 各其の党に於てなり。
+      japanese: 各其の党に於てす。
     speaker: kongzi
   - text:
       original: 觀過斯知仁矣
-      japanese: 過ちを観れば、斯に仁を知る。
+      japanese: 過つを観れば、斯（すなわ）ち仁を知る。
     speaker: kongzi
 mentioned: []
-primer: true
-pinyin_reviewed: false
+pinyin_reviewed: true

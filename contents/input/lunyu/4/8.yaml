@@ -9,8 +9,7 @@ segments:
     speaker: kongzi
   - text:
       original: 夕死可矣
-      japanese: 夕に死すとも可なり。
+      japanese: 夕べに死すとも可なり。
     speaker: kongzi
 mentioned: []
-primer: true
-pinyin_reviewed: false
+pinyin_reviewed: true

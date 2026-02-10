@@ -1677,6 +1677,101 @@ export const kunyomiDictionary: KunyomiEntry[] = [
     text: '従',
     readings: [{ id: '従-したが', ruby: 'したが', is_default: true }],
   },
+  {
+    id: '如何',
+    text: '如何',
+    readings: [{ id: '如何-いかん', ruby: 'いかん', is_default: true }],
+  },
+  {
+    id: '季',
+    text: '季',
+    readings: [{ id: '季-き', ruby: 'き', is_default: true }],
+  },
+  {
+    id: '氏',
+    text: '氏',
+    readings: [{ id: '氏-し', ruby: 'し', is_default: true }],
+  },
+  {
+    id: '八',
+    text: '八',
+    readings: [{ id: '八-はち', ruby: 'はち', is_default: true }],
+  },
+  {
+    id: '佾',
+    text: '佾',
+    readings: [{ id: '佾-いつ', ruby: 'いつ', is_default: true }],
+  },
+  {
+    id: '舞',
+    text: '舞',
+    readings: [{ id: '舞-ま', ruby: 'ま', is_default: true }],
+  },
+  {
+    id: '庭',
+    text: '庭',
+    readings: [{ id: '庭-にわ', ruby: 'にわ', is_default: true }],
+  },
+  {
+    id: '忍',
+    text: '忍',
+    readings: [{ id: '忍-しの', ruby: 'しの', is_default: true }],
+  },
+  {
+    id: '孰',
+    text: '孰',
+    readings: [{ id: '孰-いず', ruby: 'いず', is_default: true }],
+  },
+  {
+    id: '美',
+    text: '美',
+    readings: [{ id: '美-うつく', ruby: 'うつく', is_default: true }],
+  },
+  {
+    id: '択',
+    text: '択',
+    readings: [{ id: '択-えら', ruby: 'えら', is_default: true }],
+  },
+  {
+    id: '処',
+    text: '処',
+    readings: [{ id: '処-お', ruby: 'お', is_default: true }],
+  },
+  {
+    id: '各',
+    text: '各',
+    readings: [{ id: '各-おのおの', ruby: 'おのおの', is_default: true }],
+  },
+  {
+    id: '党',
+    text: '党',
+    readings: [{ id: '党-とう', ruby: 'とう', is_default: true }],
+  },
+  {
+    id: '於',
+    text: '於',
+    readings: [{ id: '於-お', ruby: 'お', is_default: true }],
+  },
+  {
+    id: '朝',
+    text: '朝',
+    readings: [{ id: '朝-あさ', ruby: 'あさ', is_default: true }],
+  },
+  {
+    id: '夕',
+    text: '夕',
+    readings: [{ id: '夕-ゆう', ruby: 'ゆう', is_default: true }],
+  },
+  {
+    id: '放',
+    text: '放',
+    readings: [{ id: '放-ほう', ruby: 'ほう', is_default: true }],
+  },
+  {
+    id: '怨',
+    text: '怨',
+    readings: [{ id: '怨-うら', ruby: 'うら', is_default: true }],
+  },
 ];
 
 export function getKunyomiEntry(text: string): KunyomiEntry | undefined {
