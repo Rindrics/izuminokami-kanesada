@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
+import { AddToCollectionButton } from '@/components/AddToCollectionButton';
 import { FavoriteButton } from '@/components/FavoriteButton';
 import { KeyboardNavigation } from '@/components/KeyboardNavigation';
 import { ListWithFavoriteSidebar } from '@/components/ListWithFavoriteSidebar';
@@ -77,9 +78,17 @@ export default async function SectionPage({ params }: Props) {
             {book.name}
           </Link>
         </nav>
-        <h1 className="mb-4 text-3xl font-bold text-black dark:text-white">
-          {section.name}
-        </h1>
+        <div className="flex items-center gap-2">
+          <h1 className="text-3xl font-bold text-black dark:text-white">
+            {section.name}
+          </h1>
+          <Suspense fallback={null}>
+            <AddToCollectionButton
+              contentId={`${book.id}/${section.id}`}
+              contentType="section"
+            />
+          </Suspense>
+        </div>
         <nav className="flex items-center justify-between gap-1 border-t border-zinc-200 pt-2 dark:border-zinc-800">
           {prevUrl ? (
             <Link
@@ -145,9 +154,15 @@ export default async function SectionPage({ params }: Props) {
                         {previewText}
                       </span>
                     </Link>
-                    <div className="shrink-0">
+                    <div className="flex shrink-0 items-center gap-1">
                       <Suspense fallback={null}>
                         <FavoriteButton contentId={contentId} />
+                      </Suspense>
+                      <Suspense fallback={null}>
+                        <AddToCollectionButton
+                          contentId={contentId}
+                          contentType="chapter"
+                        />
                       </Suspense>
                     </div>
                   </div>
