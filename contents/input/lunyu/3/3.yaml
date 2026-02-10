@@ -9,8 +9,7 @@ segments:
     speaker: kongzi
   - text:
       original: 人而不-仁 如樂何
-      japanese: 人にして不仁ならば、楽を如何せん、と。
+      japanese: 人にして不仁ならば、楽（がく）を如何せ ん。
     speaker: kongzi
 mentioned: []
-primer: true
-pinyin_reviewed: false
+pinyin_reviewed: true
