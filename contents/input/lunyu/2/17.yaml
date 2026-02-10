@@ -5,12 +5,15 @@ segments:
     speaker: null
   - text:
       original: 由 誨女知之乎
-      japanese: 由や、女（なんじ）に之を知ることを誨えんか、と。
+      japanese: 由や、女に之を知るを誨えんか。
     speaker: kongzi
   - text:
-      original: 知之為知之 不-知為不-知 是知也
-      japanese: 之を知るを之を知ると為し、知らざるを知らずと為す、是れ知るなり、と。
+      original: 知之為知之 不-知為不-知
+      japanese: 之を知るを之を知ると為、知らざるを知らずと為す。
+    speaker: kongzi
+  - text:
+      original: 是知也
+      japanese: 是れ知るなり。
     speaker: kongzi
 mentioned: []
-primer: true
-pinyin_reviewed: false
+pinyin_reviewed: true

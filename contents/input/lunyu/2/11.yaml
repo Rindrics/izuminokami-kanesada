@@ -5,12 +5,11 @@ segments:
     speaker: null
   - text:
       original: 溫故而知新
-      japanese: 故きを温めて新しきを知る、
+      japanese: 故（ふる）きを温（あたた）めて新しきを知る、
     speaker: kongzi
   - text:
       original: 可以為師矣
-      japanese: 以て師と為る可し、と。
+      japanese: 以て師為（た）る可し、と。
     speaker: kongzi
 mentioned: []
-primer: true
-pinyin_reviewed: false
+pinyin_reviewed: true

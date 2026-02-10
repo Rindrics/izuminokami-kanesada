@@ -5,11 +5,11 @@ segments:
     speaker: null
   - text:
       original: 吾十有五而志於學
-      japanese: 吾十有五にして学に志す。
+      japanese: 吾十有（ゆう）五にして学（がく）に志（こころざ）す。
     speaker: kongzi
   - text:
       original: 三十而立
-      japanese: 三十にして立つ。
+      japanese: 三（さん）十にして立つ。
     speaker: kongzi
   - text:
       original: 四十而不-惑
@@ -21,12 +21,11 @@ segments:
     speaker: kongzi
   - text:
       original: 六十而耳順
-      japanese: 六十にして耳順（したが）う。
+      japanese: 六（ろく）十にして耳順（したが）う。
     speaker: kongzi
   - text:
       original: 七十而從心所欲 不-踰矩
       japanese: 七十にして心の欲する所に従いて矩（のり）を踰（こ）えず。
     speaker: kongzi
 mentioned: []
-primer: true
 pinyin_reviewed: false
