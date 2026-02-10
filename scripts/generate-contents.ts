@@ -376,7 +376,11 @@ function generateContentTypeScriptFile(
   bookId: string,
   contents: OutputContent[],
 ): string {
-  const contentsObjectStr = inspect(contents, { depth: null, compact: false });
+  const contentsObjectStr = inspect(contents, {
+    depth: null,
+    compact: false,
+    maxArrayLength: null,
+  });
 
   return `import type { Content } from '@/types/content';
 
