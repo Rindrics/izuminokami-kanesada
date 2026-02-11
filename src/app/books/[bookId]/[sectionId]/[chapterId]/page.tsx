@@ -110,7 +110,7 @@ export default async function ContentPage({ params }: Props) {
   return (
     <div className="bg-zinc-50 dark:bg-black">
       <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
-        <header className="sticky top-14 z-10 mb-8 bg-zinc-50 py-4 dark:bg-black">
+        <header className="sticky top-12 z-10 mb-8 bg-zinc-50 py-4 dark:bg-black">
           <nav className="mb-4 text-sm text-zinc-500 dark:text-zinc-400">
             <Link href="/" className="hover:underline">
               トップ

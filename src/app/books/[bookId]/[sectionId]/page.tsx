@@ -67,7 +67,7 @@ export default async function SectionPage({ params }: Props) {
 
   return (
     <PageWithSidebar showSidebar={false}>
-      <header className="sticky top-14 z-10 mb-8 bg-zinc-50 py-4 dark:bg-black">
+      <header className="sticky top-12 z-10 mb-8 bg-zinc-50 py-4 dark:bg-black">
         <nav className="mb-4 text-sm text-zinc-500 dark:text-zinc-400">
           <Link href="/" className="hover:underline">
             トップ
