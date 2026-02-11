@@ -5,10 +5,14 @@ import {
   getDoc,
   getDocs,
   increment,
+  limit,
+  query,
   runTransaction,
   serverTimestamp,
   setDoc,
+  startAfter,
   updateDoc,
+  writeBatch,
 } from 'firebase/firestore';
 import type {
   CollectionContent,
@@ -101,7 +105,8 @@ export async function deleteCollection(
 
   const wasPublic = collectionDoc.data().isPublic;
 
-  return runTransaction(firestore, async (transaction) => {
+  // トランザクション実行
+  await runTransaction(firestore, async (transaction) => {
     // コンテンツを全て削除
     const contentsRef = collection(
       firestore,
@@ -132,6 +137,40 @@ export async function deleteCollection(
       transaction.delete(publicRef);
     }
   });
+
+  // 削除後のクリーンアップパス（トランザクション中に追加された orphaned ドキュメント削除）
+  const contentsRef = collection(
+    firestore,
+    'collections',
+    userId,
+    'items',
+    collectionId,
+    'contents',
+  );
+  await cleanupOrphanedContents(firestore, contentsRef);
+}
+
+async function cleanupOrphanedContents(
+  firestore: typeof db,
+  contentsRef: ReturnType<typeof collection>,
+): Promise<void> {
+  let queryObj = query(contentsRef, limit(100));
+
+  while (true) {
+    const snapshot = await getDocs(queryObj);
+    if (snapshot.empty) break;
+
+    const batch = writeBatch(firestore!);
+    for (const doc of snapshot.docs) {
+      batch.delete(doc.ref);
+    }
+    await batch.commit();
+
+    // ページネーション: 最後のドキュメントから次へ
+    if (snapshot.docs.length < 100) break;
+    const lastDoc = snapshot.docs[snapshot.docs.length - 1];
+    queryObj = query(contentsRef, startAfter(lastDoc), limit(100));
+  }
 }
 
 /**
