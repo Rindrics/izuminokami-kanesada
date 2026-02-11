@@ -67,7 +67,7 @@ export default async function SectionPage({ params }: Props) {
 
   return (
     <PageWithSidebar showSidebar={false}>
-      <header className="sticky top-14 z-10 mb-8 bg-zinc-50 py-4 dark:bg-black">
+      <header className="sticky top-12 z-10 mb-8 bg-zinc-50 py-4 dark:bg-black">
         <nav className="mb-4 text-sm text-zinc-500 dark:text-zinc-400">
           <Link href="/" className="hover:underline">
             トップ
@@ -77,17 +77,47 @@ export default async function SectionPage({ params }: Props) {
             {book.name}
           </Link>
         </nav>
-        <h1 className="text-3xl font-bold text-black dark:text-white">
+        <h1 className="mb-4 text-3xl font-bold text-black dark:text-white">
           {section.name}
         </h1>
+        <nav className="flex items-center justify-between gap-1 border-t border-zinc-200 pt-2 dark:border-zinc-800">
+          {prevUrl ? (
+            <Link
+              href={prevUrl}
+              className="group relative flex items-center gap-1.5 rounded px-2 py-1 text-sm text-zinc-700 transition hover:bg-zinc-200 dark:text-zinc-300 dark:hover:bg-zinc-700"
+            >
+              <span>←</span>
+              <span>{prevLabel ?? '前の編'}</span>
+              <span className="pointer-events-none absolute top-full left-1/2 -translate-x-1/2 mt-1 whitespace-nowrap rounded bg-zinc-800 px-2 py-1 text-xs text-white opacity-0 transition-opacity delay-100 group-hover:opacity-100 dark:bg-zinc-200 dark:text-black">
+                ショートカット: p
+              </span>
+            </Link>
+          ) : (
+            <div />
+          )}
+          {nextUrl ? (
+            <Link
+              href={nextUrl}
+              className="group relative flex items-center gap-1.5 rounded px-2 py-1 text-sm text-zinc-700 transition hover:bg-zinc-200 dark:text-zinc-300 dark:hover:bg-zinc-700"
+            >
+              <span>{nextLabel ?? '次の編'}</span>
+              <span>→</span>
+              <span className="pointer-events-none absolute top-full left-1/2 -translate-x-1/2 mt-1 whitespace-nowrap rounded bg-zinc-800 px-2 py-1 text-xs text-white opacity-0 transition-opacity delay-100 group-hover:opacity-100 dark:bg-zinc-200 dark:text-black">
+                ショートカット: n
+              </span>
+            </Link>
+          ) : (
+            <div />
+          )}
+        </nav>
+        <KeyboardNavigation
+          prevUrl={prevUrl}
+          nextUrl={nextUrl}
+          prevLabel={prevLabel}
+          nextLabel={nextLabel}
+          renderUI={false}
+        />
       </header>
-
-      <KeyboardNavigation
-        prevUrl={prevUrl}
-        nextUrl={nextUrl}
-        prevLabel={prevLabel}
-        nextLabel={nextLabel}
-      />
 
       <section>
         <h2 className="mb-4 text-lg font-medium text-zinc-600 dark:text-zinc-400">
