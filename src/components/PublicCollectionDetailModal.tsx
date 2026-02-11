@@ -2,49 +2,9 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { getBookById, getSectionById } from '@/generated/books';
-import { getContentById } from '@/generated/contents';
 import { getPublicCollectionWithContents } from '@/lib/collections';
+import { getContentDisplayInfo } from '@/lib/contentDisplay';
 import type { CollectionWithContents } from '@/types/collection';
-
-function getPreviewText(contentId: string, maxLength = 30): string {
-  const content = getContentById(contentId);
-  if (!content || content.segments.length === 0) {
-    return '';
-  }
-  const text = content.segments.map((s) => s.text.original).join('');
-  if (text.length <= maxLength) {
-    return text;
-  }
-  return `${text.slice(0, maxLength)}…`;
-}
-
-function getContentDisplayInfo(contentId: string) {
-  const parts = contentId.split('/');
-  const bookId = parts[0];
-  const sectionId = parts[1];
-  const chapterId = parts[2];
-
-  const book = getBookById(bookId);
-  const section = getSectionById(bookId, sectionId);
-
-  if (chapterId) {
-    const content = getContentById(contentId);
-    return {
-      type: 'chapter' as const,
-      title: `${book?.name || bookId} ${section?.name || sectionId} ${content?.chapter || chapterId}`,
-      preview: getPreviewText(contentId),
-      href: `/books/${contentId}`,
-    };
-  } else {
-    return {
-      type: 'section' as const,
-      title: `${book?.name || bookId} ${section?.name || sectionId}`,
-      preview: section ? `${section.totalChapters}章` : '',
-      href: `/books/${bookId}/${sectionId}`,
-    };
-  }
-}
 
 interface Props {
   collectionId: string;
