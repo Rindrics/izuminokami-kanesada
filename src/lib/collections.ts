@@ -455,12 +455,12 @@ export async function getCollectionsForContent(
 
   try {
     const collections = await getCollections(userId);
-    const result: ContentCollectionInfo[] = [];
     const encodedId = encodeContentId(contentId);
 
-    for (const col of collections) {
+    // Parallelize all getDoc calls using Promise.all
+    const getDocPromises = collections.map((col) => {
       const contentRef = doc(
-        db,
+        db!,
         'collections',
         userId,
         'items',
@@ -468,17 +468,19 @@ export async function getCollectionsForContent(
         'contents',
         encodedId,
       );
-      const contentDoc = await getDoc(contentRef);
+      return getDoc(contentRef).then((contentDoc) => ({
+        col,
+        exists: contentDoc.exists(),
+      }));
+    });
 
-      if (contentDoc.exists()) {
-        result.push({
-          collectionId: col.id,
-          collectionName: col.name,
-        });
-      }
-    }
-
-    return result;
+    const results = await Promise.all(getDocPromises);
+    return results
+      .filter((r) => r.exists)
+      .map((r) => ({
+        collectionId: r.col.id,
+        collectionName: r.col.name,
+      }));
   } catch (error) {
     console.error('[getCollectionsForContent] Error:', error);
     return [];
