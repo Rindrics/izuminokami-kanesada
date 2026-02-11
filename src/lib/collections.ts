@@ -583,7 +583,17 @@ export async function getPublicCollectionWithContents(
     const userId = publicData.userId;
 
     // 実際のコレクションデータを取得
-    return getCollectionWithContents(userId, collectionId);
+    const collection = await getCollectionWithContents(userId, collectionId);
+
+    // isPublic フラグを検証（インデックスと実データの一貫性確認）
+    if (!collection || !collection.isPublic) {
+      console.warn(
+        `[getPublicCollectionWithContents] Collection ${collectionId} is not public or not found`,
+      );
+      return null;
+    }
+
+    return collection;
   } catch (error) {
     console.error('[getPublicCollectionWithContents] Error:', error);
     return null;
