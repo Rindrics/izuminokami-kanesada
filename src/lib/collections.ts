@@ -1,6 +1,5 @@
 import {
   collection,
-  deleteDoc,
   doc,
   getDoc,
   getDocs,
@@ -11,7 +10,6 @@ import {
   serverTimestamp,
   setDoc,
   startAfter,
-  updateDoc,
   writeBatch,
 } from 'firebase/firestore';
 import type {
@@ -197,33 +195,52 @@ export async function updateCollection(
     'items',
     collectionId,
   );
-  const collectionDoc = await getDoc(collectionRef);
+  const publicRef = doc(firestore, 'publicCollections', collectionId);
 
-  if (!collectionDoc.exists()) {
-    throw new Error('コレクションが見つかりません');
-  }
+  await runTransaction(firestore, async (transaction) => {
+    // Read the current document state
+    const collectionDoc = await transaction.get(collectionRef);
 
-  const currentData = collectionDoc.data();
-  const wasPublic = currentData.isPublic;
-  const willBePublic = updates.isPublic ?? wasPublic;
+    if (!collectionDoc.exists()) {
+      throw new Error('コレクションが見つかりません');
+    }
 
-  await updateDoc(collectionRef, {
-    ...updates,
-    updatedAt: serverTimestamp(),
+    const currentData = collectionDoc.data();
+    const wasPublic = currentData.isPublic || false;
+    const willBePublic = updates.isPublic ?? wasPublic;
+
+    // Update the collection document
+    transaction.update(collectionRef, {
+      ...updates,
+      updatedAt: serverTimestamp(),
+    });
+
+    // Handle public collection index mutations atomically
+    if (willBePublic && !wasPublic) {
+      // 非公開→公開: インデックスに追加
+      transaction.set(publicRef, {
+        userId,
+        name: updates.name ?? currentData.name,
+        description: updates.description ?? currentData.description ?? null,
+        contentCount: currentData.contentCount ?? 0,
+        createdAt: currentData.createdAt,
+        updatedAt: serverTimestamp(),
+      });
+    } else if (!willBePublic && wasPublic) {
+      // 公開→非公開: インデックスから削除
+      transaction.delete(publicRef);
+    } else if (willBePublic) {
+      // 公開のまま更新: インデックスも更新
+      transaction.update(publicRef, {
+        name: updates.name ?? currentData.name,
+        description:
+          updates.description !== undefined
+            ? (updates.description ?? null)
+            : (currentData.description ?? null),
+        updatedAt: serverTimestamp(),
+      });
+    }
   });
-
-  // 公開状態の変更に応じてインデックスを更新
-  if (willBePublic && !wasPublic) {
-    // 非公開→公開: インデックスに追加
-    await syncPublicCollectionIndex(userId, collectionId);
-  } else if (!willBePublic && wasPublic) {
-    // 公開→非公開: インデックスから削除
-    const publicRef = doc(firestore, 'publicCollections', collectionId);
-    await deleteDoc(publicRef);
-  } else if (willBePublic) {
-    // 公開のまま更新: インデックスも更新
-    await syncPublicCollectionIndex(userId, collectionId);
-  }
 }
 
 /**
