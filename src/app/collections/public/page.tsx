@@ -4,10 +4,12 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { PageWithSidebar } from '@/components/PageWithSidebar';
 import { PublicCollectionDetailModal } from '@/components/PublicCollectionDetailModal';
+import { useAuth } from '@/contexts/AuthContext';
 import { getPublicCollections } from '@/lib/collections';
 import type { PublicCollection } from '@/types/collection';
 
 export default function PublicCollectionsPage() {
+  const { user } = useAuth();
   const [collections, setCollections] = useState<PublicCollection[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [viewingId, setViewingId] = useState<string | null>(null);
@@ -43,10 +45,21 @@ export default function PublicCollectionsPage() {
   return (
     <PageWithSidebar maxWidth="4xl" showSidebar={false}>
       <nav className="mb-4 text-sm text-zinc-500">
-        <Link href="/collections" className="hover:underline">
-          マイコレクション
-        </Link>
-        <span className="mx-2">&gt;</span>
+        {user ? (
+          <>
+            <Link href="/collections" className="hover:underline">
+              マイコレクション
+            </Link>
+            <span className="mx-2">&gt;</span>
+          </>
+        ) : (
+          <>
+            <Link href="/" className="hover:underline">
+              トップ
+            </Link>
+            <span className="mx-2">&gt;</span>
+          </>
+        )}
         <span className="text-zinc-700 dark:text-zinc-300">
           公開コレクション
         </span>
