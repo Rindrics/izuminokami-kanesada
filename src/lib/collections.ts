@@ -350,7 +350,7 @@ export async function getCollectionWithContents(
       createdAt: data.createdAt,
       updatedAt: data.updatedAt,
       contents: contents.sort(
-        (a, b) => b.addedAt.toMillis() - a.addedAt.toMillis(),
+        (a, b) => (b.addedAt?.toMillis() ?? 0) - (a.addedAt?.toMillis() ?? 0),
       ),
     };
   } catch (error) {
@@ -552,7 +552,10 @@ export async function getPublicCollections(): Promise<PublicCollection[]> {
         createdAt: d.data().createdAt,
         updatedAt: d.data().updatedAt,
       }))
-      .sort((a, b) => b.updatedAt.toMillis() - a.updatedAt.toMillis());
+      .sort(
+        (a, b) =>
+          (b.updatedAt?.toMillis() ?? 0) - (a.updatedAt?.toMillis() ?? 0),
+      );
   } catch (error) {
     console.error('[getPublicCollections] Error:', error);
     return [];
