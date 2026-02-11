@@ -1,4 +1,31 @@
-segments: []
-mentioned: []
-primer: true
-pinyin_reviewed: false
+segments:
+  - text:
+      original: 季康子問政於孔子曰
+      japanese: 季康子、孔子に政を問うて曰く、
+    speaker: null
+  - text:
+      original: 如殺無道以就有道 何如
+      japanese: 如（も）し無道を殺して、以て有道を就（な）さば、何如、と。
+    speaker: jikangzi
+  - text:
+      original: 孔子對曰
+      japanese: 孔子対えて曰く、
+    speaker: null
+  - text:
+      original: 子為政 焉用殺
+      japanese: 子 政を為すに、焉んぞ殺（さつ）を用（もち）いん。
+    speaker: kongzi
+  - text:
+      original: 子欲善而民善矣
+      japanese: 子 善を欲すれば、民 善なり。
+    speaker: kongzi
+  - text:
+      original: 君子之德風 小人之德草
+      japanese: 君子の德は風なり。小人の德は草なり。
+    speaker: kongzi
+  - text:
+      original: 草上之風必偃
+      japanese: 草 之に風を上（くわ）うれば、必ず偃す。
+    speaker: kongzi
+mentioned: [kongzi, jikangzi]
+pinyin_reviewed: true

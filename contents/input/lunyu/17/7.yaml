@@ -1,4 +1,46 @@
-segments: []
-mentioned: []
-primer: true
-pinyin_reviewed: false
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く
+    speaker: null
+  - text:
+      original: 由也 女聞六言六蔽矣乎
+      japanese: 由や 女 六言・六蔽を聞けるか。
+    speaker: kongzi
+  - text:
+      original: 對曰
+      japanese: 對えて曰く
+    speaker: null
+  - text:
+      original: 未也
+      japanese: 未だし、と。
+    speaker: zilu
+  - text:
+      original: 居 吾語女
+      japanese: 居れ。吾女に語らん。
+    speaker: kongzi
+  - text:
+      original: 好仁不-好學 其蔽也愚
+      japanese: 仁を好みて学（がく）を好まざれば、其の蔽や愚。
+    speaker: kongzi
+  - text:
+      original: 好知不-好學 其蔽也蕩
+      japanese: 知（ち）を好みて学（がく）を好まざれば、其の蔽や蕩。
+    speaker: kongzi
+  - text:
+      original: 好信不-好學 其蔽也賊
+      japanese: 信を好みて学（がく）を好まざれば、其の蔽や賊。
+    speaker: kongzi
+  - text:
+      original: 好直不-好學 其蔽也絞
+      japanese: 直を好みて学（がく）を好まざれば、其の蔽や絞。
+    speaker: kongzi
+  - text:
+      original: 好勇不-好學 其蔽也亂
+      japanese: 勇を好みて学（がく）を好まざれば、其の蔽や乱。
+    speaker: kongzi
+  - text:
+      original: 好剛不-好學 其蔽也狂
+      japanese: 剛を好みて学（がく）を好まざれば、其の蔽や狂。
+    speaker: kongzi
+pinyin_reviewed: true

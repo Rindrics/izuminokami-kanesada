@@ -1,4 +1,20 @@
-segments: []
-mentioned: []
-primer: true
-pinyin_reviewed: false
+segments:
+  - text:
+      original: 孔子曰
+      japanese: 孔子曰く、
+    speaker: null
+  - text:
+      original: 不知命 無以為君子也
+      japanese: 命を知らざれば、以て君子と為すこと無し。
+    speaker: kongzi
+  - text:
+      original: 不知禮 無以立也
+      japanese: 禮を知らざれば、以て立つこと無し。
+    speaker: kongzi
+  - text:
+      original: 不知言 無以知人也
+      japanese: 言を知らざれば、以て人を知ること無し。
+    speaker: kongzi
+mentioned:
+  - kongzi
+pinyin_reviewed: true

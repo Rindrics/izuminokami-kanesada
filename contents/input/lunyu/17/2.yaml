@@ -1,4 +1,20 @@
-segments: []
-mentioned: []
-primer: true
-pinyin_reviewed: false
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 性相近也 習相遠也
+      japanese: 性は相（あい）近し。習い相（あい）遠し。
+    speaker: kongzi
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 唯上知与下愚不移
+      japanese: 唯上知と下愚とは移らず。
+    speaker: kongzi
+mentioned:
+  - kongzi
+pinyin_reviewed: true

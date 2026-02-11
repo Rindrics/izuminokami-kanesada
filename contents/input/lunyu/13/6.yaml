@@ -1,4 +1,16 @@
-segments: []
-mentioned: []
-primer: true
-pinyin_reviewed: false
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 其身正 不令而行
+      japanese: 其の身正しければ、令せずとも行わる。
+    speaker: kongzi
+  - text:
+      original: 其身不正 雖令不從
+      japanese: 其の身正しからざれば、令すと雖も従わず。
+    speaker: kongzi
+mentioned: [kongzi]
+primer: false
+pinyin_reviewed: true

@@ -62,7 +62,7 @@ export const kunyomiDictionary: KunyomiEntry[] = [
   {
     id: '方',
     text: '方',
-    readings: [{ id: '方-ぽう', ruby: 'ほう', is_default: true }],
+    readings: [{ id: '方-まさ', ruby: 'まさ', is_default: true }],
   },
   {
     id: '遠方',
@@ -612,6 +612,11 @@ export const kunyomiDictionary: KunyomiEntry[] = [
     readings: [{ id: '至-いた', ruby: 'いた', is_default: true }],
   },
   {
+    id: '至德',
+    text: '至德',
+    readings: [{ id: '至德-しとく', ruby: 'しとく', is_default: true }],
+  },
+  {
     id: '政',
     text: '政',
     readings: [{ id: '政-まつりごと', ruby: 'まつりごと', is_default: true }],
@@ -894,7 +899,7 @@ export const kunyomiDictionary: KunyomiEntry[] = [
   {
     id: '視',
     text: '視',
-    readings: [{ id: '視-みる', ruby: 'みる', is_default: true }],
+    readings: [{ id: '視-み', ruby: 'み', is_default: true }],
   },
   {
     id: '聽',
@@ -975,6 +980,11 @@ export const kunyomiDictionary: KunyomiEntry[] = [
     id: '大学',
     text: '大学',
     readings: [{ id: '大学-だいがく', ruby: 'だいがく', is_default: true }],
+  },
+  {
+    id: '大事',
+    text: '大事',
+    readings: [{ id: '大事-だいじ', ruby: 'だいじ', is_default: true }],
   },
   {
     id: '后',
@@ -1082,6 +1092,31 @@ export const kunyomiDictionary: KunyomiEntry[] = [
     readings: [{ id: '教-きょう', ruby: 'きょう', is_default: true }],
   },
   {
+    id: '多聞',
+    text: '多聞',
+    readings: [{ id: '多聞-たぶん', ruby: 'たぶん', is_default: true }],
+  },
+  {
+    id: '善柔',
+    text: '善柔',
+    readings: [{ id: '善柔-ぜんじゅう', ruby: 'ぜんじゅう', is_default: true }],
+  },
+  {
+    id: '三樂',
+    text: '三樂',
+    readings: [{ id: '三樂-さんらく', ruby: 'さんらく', is_default: true }],
+  },
+  {
+    id: '賢友',
+    text: '賢友',
+    readings: [{ id: '賢友-けんゆう', ruby: 'けんゆう', is_default: true }],
+  },
+  {
+    id: '禮樂',
+    text: '禮樂',
+    readings: [{ id: '禮樂-れいがく', ruby: 'れいがく', is_default: true }],
+  },
+  {
     id: '須臾',
     text: '須臾',
     readings: [{ id: '須臾-しゅゆ', ruby: 'しゅゆ', is_default: true }],
@@ -1100,6 +1135,11 @@ export const kunyomiDictionary: KunyomiEntry[] = [
     id: '睹',
     text: '睹',
     readings: [{ id: '睹-み', ruby: 'み', is_default: true }],
+  },
+  {
+    id: '戒',
+    text: '戒',
+    readings: [{ id: '戒-いまし', ruby: 'いまし', is_default: true }],
   },
   {
     id: '戒慎',
@@ -1318,14 +1358,14 @@ export const kunyomiDictionary: KunyomiEntry[] = [
     ],
   },
   {
-    id: '果',
-    text: '果',
-    readings: [{ id: '果-か', ruby: 'か', is_default: true }],
-  },
-  {
     id: '敢',
     text: '敢',
-    readings: [{ id: '敢-かん', ruby: 'かん', is_default: true }],
+    readings: [{ id: '敢-あ', ruby: 'あ', is_default: true }],
+  },
+  {
+    id: '果敢',
+    text: '果敢',
+    readings: [{ id: '果敢-かかん', ruby: 'かかん', is_default: true }],
   },
   {
     id: '窒',
@@ -1530,12 +1570,12 @@ export const kunyomiDictionary: KunyomiEntry[] = [
   {
     id: '荏',
     text: '荏',
-    readings: [{ id: '荏-じん', ruby: 'じん', is_default: true }],
+    readings: [{ id: '荏-やわ', ruby: 'やわ', is_default: true }],
   },
   {
     id: '小',
     text: '小',
-    readings: [{ id: '小-しょう', ruby: 'しょう', is_default: true }],
+    readings: [{ id: '小-ちい', ruby: 'ちい', is_default: true }],
   },
   {
     id: '小人',
@@ -1550,7 +1590,7 @@ export const kunyomiDictionary: KunyomiEntry[] = [
   {
     id: '穿',
     text: '穿',
-    readings: [{ id: '穿-うがつ', ruby: 'うがつ', is_default: true }],
+    readings: [{ id: '穿-せん', ruby: 'せん', is_default: true }],
   },
   {
     id: '窬',
@@ -1560,7 +1600,7 @@ export const kunyomiDictionary: KunyomiEntry[] = [
   {
     id: '盗',
     text: '盗',
-    readings: [{ id: '盗-ぬすむ', ruby: 'ぬすむ', is_default: true }],
+    readings: [{ id: '盗-とう', ruby: 'とう', is_default: true }],
   },
   {
     id: '労',
@@ -1781,6 +1821,11 @@ export const kunyomiDictionary: KunyomiEntry[] = [
     id: '怨',
     text: '怨',
     readings: [{ id: '怨-うら', ruby: 'うら', is_default: true }],
+  },
+  {
+    id: '公',
+    text: '公',
+    readings: [{ id: '公-こう', ruby: 'こう', is_default: true }],
   },
   {
     id: '公冶長',
@@ -2065,6 +2110,16 @@ export const kunyomiDictionary: KunyomiEntry[] = [
     readings: [{ id: '疏食-そし', ruby: 'そし', is_default: true }],
   },
   {
+    id: '食',
+    text: '食',
+    readings: [{ id: '食-しょく', ruby: 'しょく', is_default: true }],
+  },
+  {
+    id: '水火',
+    text: '水火',
+    readings: [{ id: '水火-すいか', ruby: 'すいか', is_default: true }],
+  },
+  {
     id: '飯',
     text: '飯',
     readings: [{ id: '飯-く', ruby: 'く', is_default: true }],
@@ -2203,6 +2258,891 @@ export const kunyomiDictionary: KunyomiEntry[] = [
     id: '樂',
     text: '樂',
     readings: [{ id: '樂-たの', ruby: 'たの', is_default: true }],
+  },
+  {
+    id: '子路',
+    text: '子路',
+    readings: [{ id: '子路-しろ', ruby: 'しろ', is_default: true }],
+  },
+  {
+    id: '子羔',
+    text: '子羔',
+    readings: [{ id: '子羔-しこう', ruby: 'しこう', is_default: true }],
+  },
+  {
+    id: '費',
+    text: '費',
+    readings: [{ id: '費-ひ', ruby: 'ひ', is_default: true }],
+  },
+  {
+    id: '宰',
+    text: '宰',
+    readings: [{ id: '宰-さい', ruby: 'さい', is_default: true }],
+  },
+  {
+    id: '賊',
+    text: '賊',
+    readings: [{ id: '賊-そこな', ruby: 'そこな', is_default: true }],
+  },
+  {
+    id: '社',
+    text: '社',
+    readings: [{ id: '社-しゃ', ruby: 'しゃ', is_default: true }],
+  },
+  {
+    id: '稷',
+    text: '稷',
+    readings: [{ id: '稷-しょく', ruby: 'しょく', is_default: true }],
+  },
+  {
+    id: '読',
+    text: '読',
+    readings: [{ id: '読-よ', ruby: 'よ', is_default: true }],
+  },
+  {
+    id: '書',
+    text: '書',
+    readings: [{ id: '書-しょ', ruby: 'しょ', is_default: true }],
+  },
+  {
+    id: '佞',
+    text: '佞',
+    readings: [{ id: '佞-ねい', ruby: 'ねい', is_default: true }],
+  },
+  {
+    id: '佞者',
+    text: '佞者',
+    readings: [{ id: '佞者-ねいじゃ', ruby: 'ねいじゃ', is_default: true }],
+  },
+  {
+    id: '進',
+    text: '進',
+    readings: [{ id: '進-しん', ruby: 'しん', is_default: true }],
+  },
+  {
+    id: '野人',
+    text: '野人',
+    readings: [{ id: '野人-やじん', ruby: 'やじん', is_default: true }],
+  },
+  {
+    id: '仲弓',
+    text: '仲弓',
+    readings: [
+      { id: '仲弓-ちゅうきゅう', ruby: 'ちゅうきゅう', is_default: true },
+    ],
+  },
+  {
+    id: '何如',
+    text: '何如',
+    readings: [{ id: '何如-いかん', ruby: 'いかん', is_default: true }],
+  },
+  {
+    id: '門',
+    text: '門',
+    readings: [{ id: '門-もん', ruby: 'もん', is_default: true }],
+  },
+  {
+    id: '賓',
+    text: '賓',
+    readings: [{ id: '賓-ひん', ruby: 'ひん', is_default: true }],
+  },
+  {
+    id: '承',
+    text: '承',
+    readings: [{ id: '承-う', ruby: 'う', is_default: true }],
+  },
+  {
+    id: '施',
+    text: '施',
+    readings: [{ id: '施-ほどこ', ruby: 'ほどこ', is_default: true }],
+  },
+  {
+    id: '崇',
+    text: '崇',
+    readings: [{ id: '崇-たか', ruby: 'たか', is_default: true }],
+  },
+  {
+    id: '徳',
+    text: '徳',
+    readings: [{ id: '徳-とく', ruby: 'とく', is_default: true }],
+  },
+  {
+    id: '辟',
+    text: '辟',
+    readings: [{ id: '辟-へき', ruby: 'へき', is_default: true }],
+  },
+  {
+    id: '徙',
+    text: '徙',
+    readings: [{ id: '徙-うつ', ruby: 'うつ', is_default: true }],
+  },
+  {
+    id: '既',
+    text: '既',
+    readings: [{ id: '既-すで', ruby: 'すで', is_default: true }],
+  },
+  {
+    id: '弁',
+    text: '弁',
+    readings: [{ id: '弁-べん', ruby: 'べん', is_default: true }],
+  },
+  {
+    id: '先',
+    text: '先',
+    readings: [{ id: '先-さき', ruby: 'さき', is_default: true }],
+  },
+  {
+    id: '又',
+    text: '又',
+    readings: [{ id: '又-また', ruby: 'また', is_default: true }],
+  },
+  {
+    id: '一朝',
+    text: '一朝',
+    readings: [{ id: '一朝-いっちょう', ruby: 'いっちょう', is_default: true }],
+  },
+  {
+    id: '倦',
+    text: '倦',
+    readings: [{ id: '倦-う', ruby: 'う', is_default: true }],
+  },
+  {
+    id: '季康子',
+    text: '季康子',
+    readings: [{ id: '季康子-きこうし', ruby: 'きこうし', is_default: true }],
+  },
+  {
+    id: '殺',
+    text: '殺',
+    readings: [{ id: '殺-ころ', ruby: 'ころ', is_default: true }],
+  },
+  {
+    id: '就',
+    text: '就',
+    readings: [{ id: '就-つ', ruby: 'つ', is_default: true }],
+  },
+  {
+    id: '風',
+    text: '風',
+    readings: [{ id: '風-かぜ', ruby: 'かぜ', is_default: true }],
+  },
+  {
+    id: '草',
+    text: '草',
+    readings: [{ id: '草-くさ', ruby: 'くさ', is_default: true }],
+  },
+  {
+    id: '偃',
+    text: '偃',
+    readings: [{ id: '偃-ふ', ruby: 'ふ', is_default: true }],
+  },
+  {
+    id: '対',
+    text: '対',
+    readings: [{ id: '対-こた', ruby: 'こた', is_default: true }],
+  },
+  {
+    id: '樊遅',
+    text: '樊遅',
+    readings: [{ id: '樊遅-はんち', ruby: 'はんち', is_default: true }],
+  },
+  {
+    id: '従',
+    text: '従',
+    readings: [{ id: '従-したが', ruby: 'したが', is_default: true }],
+  },
+  {
+    id: '遊',
+    text: '遊',
+    readings: [{ id: '遊-あそ', ruby: 'あそ', is_default: true }],
+  },
+  {
+    id: '舞雩',
+    text: '舞雩',
+    readings: [{ id: '舞雩-ぶう', ruby: 'ぶう', is_default: true }],
+  },
+  {
+    id: '慝',
+    text: '慝',
+    readings: [{ id: '慝-とく', ruby: 'とく', is_default: true }],
+  },
+  {
+    id: '辨',
+    text: '辨',
+    readings: [{ id: '辨-べん', ruby: 'べん', is_default: true }],
+  },
+  {
+    id: '攻',
+    text: '攻',
+    readings: [{ id: '攻-せ', ruby: 'せ', is_default: true }],
+  },
+  {
+    id: '忿',
+    text: '忿',
+    readings: [{ id: '忿-いか', ruby: 'いか', is_default: true }],
+  },
+  {
+    id: '忘',
+    text: '忘',
+    readings: [{ id: '忘-わす', ruby: 'わす', is_default: true }],
+  },
+  {
+    id: '会',
+    text: '会',
+    readings: [{ id: '会-あ', ruby: 'あ', is_default: true }],
+  },
+  {
+    id: '輔',
+    text: '輔',
+    readings: [{ id: '輔-たす', ruby: 'たす', is_default: true }],
+  },
+  {
+    id: '無道',
+    text: '無道',
+    readings: [{ id: '無道-むどう', ruby: 'むどう', is_default: true }],
+  },
+  {
+    id: '有道',
+    text: '有道',
+    readings: [{ id: '無道-ゆうどう', ruby: 'ゆうどう', is_default: true }],
+  },
+  {
+    id: '雩',
+    text: '雩',
+    readings: [{ id: '雩-う', ruby: 'う', is_default: true }],
+  },
+  {
+    id: '雖',
+    text: '雖',
+    readings: [{ id: '雖-いえど', ruby: 'いえど', is_default: true }],
+  },
+  {
+    id: '敏',
+    text: '敏',
+    readings: [{ id: '敏-びん', ruby: 'びん', is_default: true }],
+  },
+  {
+    id: '請',
+    text: '請',
+    readings: [{ id: '請-こ', ruby: 'こ', is_default: true }],
+  },
+  {
+    id: '事',
+    text: '事',
+    readings: [{ id: '事-つか', ruby: 'つか', is_default: true }],
+  },
+  {
+    id: '斯',
+    text: '斯',
+    readings: [{ id: '斯-これ', ruby: 'これ', is_default: true }],
+  },
+  {
+    id: '語',
+    text: '語',
+    readings: [{ id: '語-ご', ruby: 'ご', is_default: true }],
+  },
+  {
+    id: '莒父',
+    text: '莒父',
+    readings: [{ id: '莒父-きょほ', ruby: 'きょほ', is_default: true }],
+  },
+  {
+    id: '速',
+    text: '速',
+    readings: [{ id: '速-はや', ruby: 'はや', is_default: true }],
+  },
+  {
+    id: '達',
+    text: '達',
+    readings: [{ id: '達-たっ', ruby: 'たっ', is_default: true }],
+  },
+  {
+    id: '成',
+    text: '成',
+    readings: [{ id: '成-な', ruby: 'な', is_default: true }],
+  },
+  {
+    id: '夷',
+    text: '夷',
+    readings: [{ id: '夷-い', ruby: 'い', is_default: true }],
+  },
+  {
+    id: '狄',
+    text: '狄',
+    readings: [{ id: '狄-てき', ruby: 'てき', is_default: true }],
+  },
+  {
+    id: '棄',
+    text: '棄',
+    readings: [{ id: '棄-す', ruby: 'す', is_default: true }],
+  },
+  {
+    id: '和',
+    text: '和',
+    readings: [{ id: '和-わ', ruby: 'わ', is_default: true }],
+  },
+  {
+    id: '同',
+    text: '同',
+    readings: [{ id: '同-どう', ruby: 'どう', is_default: true }],
+  },
+  {
+    id: '毅',
+    text: '毅',
+    readings: [{ id: '毅-き', ruby: 'き', is_default: true }],
+  },
+  {
+    id: '木',
+    text: '木',
+    readings: [{ id: '木-ぼく', ruby: 'ぼく', is_default: true }],
+  },
+  {
+    id: '訥',
+    text: '訥',
+    readings: [{ id: '訥-とつ', ruby: 'とつ', is_default: true }],
+  },
+  {
+    id: '益',
+    text: '益',
+    readings: [{ id: '益-えき', ruby: 'えき', is_default: true }],
+  },
+  {
+    id: '憲',
+    text: '憲',
+    readings: [{ id: '憲-けん', ruby: 'けん', is_default: true }],
+  },
+  {
+    id: '穀',
+    text: '穀',
+    readings: [{ id: '穀-こく', ruby: 'こく', is_default: true }],
+  },
+  {
+    id: '克伐怨欲',
+    text: '克伐怨欲',
+    readings: [
+      {
+        id: '克伐怨欲-こくばつえんよく',
+        ruby: 'こくばつえんよく',
+        is_default: true,
+      },
+    ],
+  },
+  {
+    id: '管仲',
+    text: '管仲',
+    readings: [{ id: '管仲-かんちゅう', ruby: 'かんちゅう', is_default: true }],
+  },
+  {
+    id: '仁者',
+    text: '仁者',
+    readings: [{ id: '仁者-じんしゃ', ruby: 'じんしゃ', is_default: true }],
+  },
+  {
+    id: '桓',
+    text: '桓',
+    readings: [{ id: '桓-かん', ruby: 'かん', is_default: true }],
+  },
+  {
+    id: '糾',
+    text: '糾',
+    readings: [{ id: '糾-きゅう', ruby: 'きゅう', is_default: true }],
+  },
+  {
+    id: '相',
+    text: '相',
+    readings: [{ id: '相-たす', ruby: 'たす', is_default: true }],
+  },
+  {
+    id: '霸',
+    text: '霸',
+    readings: [{ id: '霸-は', ruby: 'は', is_default: true }],
+  },
+  {
+    id: '侯',
+    text: '侯',
+    readings: [{ id: '侯-こう', ruby: 'こう', is_default: true }],
+  },
+  {
+    id: '一匡',
+    text: '一匡',
+    readings: [{ id: '一匡-いっきょう', ruby: 'いっきょう', is_default: true }],
+  },
+  {
+    id: '到',
+    text: '到',
+    readings: [{ id: '到-いた', ruby: 'いた', is_default: true }],
+  },
+  {
+    id: '今',
+    text: '今',
+    readings: [{ id: '今-いま', ruby: 'いま', is_default: true }],
+  },
+  {
+    id: '受',
+    text: '受',
+    readings: [{ id: '受-う', ruby: 'う', is_default: true }],
+  },
+  {
+    id: '被',
+    text: '被',
+    readings: [{ id: '被-こうむ', ruby: 'こうむ', is_default: true }],
+  },
+  {
+    id: '髪',
+    text: '髪',
+    readings: [{ id: '髪-かみ', ruby: 'かみ', is_default: true }],
+  },
+  {
+    id: '左',
+    text: '左',
+    readings: [{ id: '左-ひだり', ruby: 'ひだり', is_default: true }],
+  },
+  {
+    id: '衽',
+    text: '衽',
+    readings: [{ id: '衽-じん', ruby: 'じん', is_default: true }],
+  },
+  {
+    id: '豈',
+    text: '豈',
+    readings: [{ id: '豈-あに', ruby: 'あに', is_default: true }],
+  },
+  {
+    id: '匹夫匹婦',
+    text: '匹夫匹婦',
+    readings: [
+      { id: '匹夫匹婦-ひっぷひっぷ', ruby: 'ひっぷひっぷ', is_default: true },
+    ],
+  },
+  {
+    id: '諒',
+    text: '諒',
+    readings: [{ id: '諒-りょう', ruby: 'りょう', is_default: true }],
+  },
+  {
+    id: '経',
+    text: '経',
+    readings: [{ id: '経-へ', ruby: 'へ', is_default: true }],
+  },
+  {
+    id: '溝瀆',
+    text: '溝瀆',
+    readings: [{ id: '溝瀆-こうとく', ruby: 'こうとく', is_default: true }],
+  },
+  {
+    id: '怍',
+    text: '怍',
+    readings: [{ id: '怍-は', ruby: 'は', is_default: true }],
+  },
+  {
+    id: '難',
+    text: '難',
+    readings: [{ id: '難-かた', ruby: 'かた', is_default: true }],
+  },
+  {
+    id: '学者',
+    text: '学者',
+    readings: [{ id: '学者-がくしゃ', ruby: 'がくしゃ', is_default: true }],
+  },
+  {
+    id: '賢者',
+    text: '賢者',
+    readings: [{ id: '賢者-けんじゃ', ruby: 'けんじゃ', is_default: true }],
+  },
+  {
+    id: '世',
+    text: '世',
+    readings: [{ id: '世-よ', ruby: 'よ', is_default: true }],
+  },
+  {
+    id: '次',
+    text: '次',
+    readings: [{ id: '次-つぎ', ruby: 'つぎ', is_default: true }],
+  },
+  {
+    id: '地',
+    text: '地',
+    readings: [{ id: '地-ち', ruby: 'ち', is_default: true }],
+  },
+  {
+    id: '衛',
+    text: '衛',
+    readings: [{ id: '衛-えい', ruby: 'えい', is_default: true }],
+  },
+  {
+    id: '靈',
+    text: '靈',
+    readings: [{ id: '靈-れい', ruby: 'れい', is_default: true }],
+  },
+  {
+    id: '陳',
+    text: '陳',
+    readings: [{ id: '陳-じん', ruby: 'じん', is_default: true }],
+  },
+  {
+    id: '俎',
+    text: '俎',
+    readings: [{ id: '俎-そ', ruby: 'そ', is_default: true }],
+  },
+  {
+    id: '豆',
+    text: '豆',
+    readings: [{ id: '豆-とう', ruby: 'とう', is_default: true }],
+  },
+  {
+    id: '軍',
+    text: '軍',
+    readings: [{ id: '軍-ぐん', ruby: 'ぐん', is_default: true }],
+  },
+  {
+    id: '功',
+    text: '功',
+    readings: [{ id: '功-こう', ruby: 'こう', is_default: true }],
+  },
+  {
+    id: '恵',
+    text: '恵',
+    readings: [{ id: '恵-けい', ruby: 'けい', is_default: true }],
+  },
+  {
+    id: '志士',
+    text: '志士',
+    readings: [{ id: '志士-しし', ruby: 'しし', is_default: true }],
+  },
+  {
+    id: '仁人',
+    text: '仁人',
+    readings: [{ id: '仁人-じんじん', ruby: 'じんじん', is_default: true }],
+  },
+  {
+    id: '遠慮',
+    text: '遠慮',
+    readings: [{ id: '遠慮-えんりょ', ruby: 'えんりょ', is_default: true }],
+  },
+  {
+    id: '近憂',
+    text: '近憂',
+    readings: [{ id: '近憂-きんゆう', ruby: 'きんゆう', is_default: true }],
+  },
+  {
+    id: '旅',
+    text: '旅',
+    readings: [{ id: '旅-りょ', ruby: 'りょ', is_default: true }],
+  },
+  {
+    id: '遂',
+    text: '遂',
+    readings: [{ id: '遂-つい', ruby: 'つい', is_default: true }],
+  },
+  {
+    id: '病',
+    text: '病',
+    readings: [{ id: '病-や', ruby: 'や', is_default: true }],
+  },
+  {
+    id: '名',
+    text: '名',
+    readings: [{ id: '名-な', ruby: 'な', is_default: true }],
+  },
+  {
+    id: '矜',
+    text: '矜',
+    readings: [{ id: '矜-きょう', ruby: 'きょう', is_default: true }],
+  },
+  {
+    id: '争',
+    text: '争',
+    readings: [{ id: '争-あらそ', ruby: 'あらそ', is_default: true }],
+  },
+  {
+    id: '羣',
+    text: '羣',
+    readings: [{ id: '羣-ぐん', ruby: 'ぐん', is_default: true }],
+  },
+  {
+    id: '察',
+    text: '察',
+    readings: [{ id: '察-さっ', ruby: 'さっ', is_default: true }],
+  },
+  {
+    id: '耕',
+    text: '耕',
+    readings: [{ id: '耕-たがや', ruby: 'たがや', is_default: true }],
+  },
+  {
+    id: '餒',
+    text: '餒',
+    readings: [{ id: '餒-たい', ruby: 'たい', is_default: true }],
+  },
+  {
+    id: '禄',
+    text: '禄',
+    readings: [{ id: '禄-ろく', ruby: 'ろく', is_default: true }],
+  },
+  {
+    id: '貧',
+    text: '貧',
+    readings: [{ id: '貧-ひん', ruby: 'ひん', is_default: true }],
+  },
+  {
+    id: '守',
+    text: '守',
+    readings: [{ id: '守-まも', ruby: 'まも', is_default: true }],
+  },
+  {
+    id: '莊',
+    text: '莊',
+    readings: [{ id: '莊-そう', ruby: 'そう', is_default: true }],
+  },
+  {
+    id: '涖',
+    text: '涖',
+    readings: [{ id: '涖-のぞ', ruby: 'のぞ', is_default: true }],
+  },
+  {
+    id: '甚',
+    text: '甚',
+    readings: [{ id: '甚-はなは', ruby: 'はなは', is_default: true }],
+  },
+  {
+    id: '火',
+    text: '火',
+    readings: [{ id: '火-ひ', ruby: 'ひ', is_default: true }],
+  },
+  {
+    id: '蹈',
+    text: '蹈',
+    readings: [{ id: '蹈-ふ', ruby: 'ふ', is_default: true }],
+  },
+  {
+    id: '類',
+    text: '類',
+    readings: [{ id: '類-るい', ruby: 'るい', is_default: true }],
+  },
+  {
+    id: '辞',
+    text: '辞',
+    readings: [{ id: '辞-じ', ruby: 'じ', is_default: true }],
+  },
+  {
+    id: '損',
+    text: '損',
+    readings: [{ id: '損-そこ', ruby: 'そこ', is_default: true }],
+  },
+  {
+    id: '柔',
+    text: '柔',
+    readings: [{ id: '柔-やわ', ruby: 'やわ', is_default: true }],
+  },
+  {
+    id: '驕樂',
+    text: '驕樂',
+    readings: [{ id: '驕樂-きょうらく', ruby: 'きょうらく', is_default: true }],
+  },
+  {
+    id: '顔色',
+    text: '顔色',
+    readings: [{ id: '顔色-がんしょく', ruby: 'がんしょく', is_default: true }],
+  },
+  {
+    id: '血気',
+    text: '血気',
+    readings: [{ id: '血気-けっき', ruby: 'けっき', is_default: true }],
+  },
+  {
+    id: '佚遊',
+    text: '佚遊',
+    readings: [{ id: '佚遊-いつゆう', ruby: 'いつゆう', is_default: true }],
+  },
+  {
+    id: '宴樂',
+    text: '宴樂',
+    readings: [{ id: '宴樂-えんらく', ruby: 'えんらく', is_default: true }],
+  },
+  {
+    id: '宴',
+    text: '宴',
+    readings: [{ id: '宴-うたげ', ruby: 'うたげ', is_default: true }],
+  },
+  {
+    id: '侍',
+    text: '侍',
+    readings: [{ id: '侍-はべ', ruby: 'はべ', is_default: true }],
+  },
+  {
+    id: '愆',
+    text: '愆',
+    readings: [{ id: '愆-けん', ruby: 'けん', is_default: true }],
+  },
+  {
+    id: '躁',
+    text: '躁',
+    readings: [{ id: '躁-そう', ruby: 'そう', is_default: true }],
+  },
+  {
+    id: '瞽',
+    text: '瞽',
+    readings: [{ id: '瞽-こ', ruby: 'こ', is_default: true }],
+  },
+  {
+    id: '少',
+    text: '少',
+    readings: [{ id: '少-すく', ruby: 'すく', is_default: true }],
+  },
+  {
+    id: '血',
+    text: '血',
+    readings: [{ id: '血-ち', ruby: 'ち', is_default: true }],
+  },
+  {
+    id: '気',
+    text: '気',
+    readings: [{ id: '気-き', ruby: 'き', is_default: true }],
+  },
+  {
+    id: '壯',
+    text: '壯',
+    readings: [{ id: '壯-そう', ruby: 'そう', is_default: true }],
+  },
+  {
+    id: '鬭',
+    text: '鬭',
+    readings: [{ id: '鬥-たたか', ruby: 'たたか', is_default: true }],
+  },
+  {
+    id: '老',
+    text: '老',
+    readings: [{ id: '老-ろう', ruby: 'ろう', is_default: true }],
+  },
+  {
+    id: '衰',
+    text: '衰',
+    readings: [{ id: '衰-おとろ', ruby: 'おとろ', is_default: true }],
+  },
+  {
+    id: '畏',
+    text: '畏',
+    readings: [{ id: '畏-おそ', ruby: 'おそ', is_default: true }],
+  },
+  {
+    id: '大人',
+    text: '大人',
+    readings: [{ id: '大人-たいじん', ruby: 'たいじん', is_default: true }],
+  },
+  {
+    id: '聖人',
+    text: '聖人',
+    readings: [{ id: '聖人-せいじん', ruby: 'せいじん', is_default: true }],
+  },
+  {
+    id: '狎',
+    text: '狎',
+    readings: [{ id: '狎-な', ruby: 'な', is_default: true }],
+  },
+  {
+    id: '侮',
+    text: '侮',
+    readings: [{ id: '侮-あなど', ruby: 'あなど', is_default: true }],
+  },
+  {
+    id: '困',
+    text: '困',
+    readings: [{ id: '困-くる', ruby: 'くる', is_default: true }],
+  },
+  {
+    id: '九',
+    text: '九',
+    readings: [{ id: '九-きゅう', ruby: 'きゅう', is_default: true }],
+  },
+  {
+    id: '聰',
+    text: '聰',
+    readings: [{ id: '聰-そう', ruby: 'そう', is_default: true }],
+  },
+  {
+    id: '溫',
+    text: '溫',
+    readings: [{ id: '溫-おん', ruby: 'おん', is_default: true }],
+  },
+  {
+    id: '貌',
+    text: '貌',
+    readings: [{ id: '貌-ぼう', ruby: 'ぼう', is_default: true }],
+  },
+  {
+    id: '疑',
+    text: '疑',
+    readings: [{ id: '疑-ぎ', ruby: 'ぎ', is_default: true }],
+  },
+  {
+    id: '探',
+    text: '探',
+    readings: [{ id: '探-さぐ', ruby: 'さぐ', is_default: true }],
+  },
+  {
+    id: '湯',
+    text: '湯',
+    readings: [{ id: '湯-とう', ruby: 'とう', is_default: true }],
+  },
+  {
+    id: '隱',
+    text: '隱',
+    readings: [{ id: '隱-いん', ruby: 'いん', is_default: true }],
+  },
+  {
+    id: '害',
+    text: '害',
+    readings: [{ id: '害-がい', ruby: 'がい', is_default: true }],
+  },
+  {
+    id: '躬',
+    text: '躬',
+    readings: [{ id: '躬-み', ruby: 'み', is_default: true }],
+  },
+  {
+    id: '薄',
+    text: '薄',
+    readings: [{ id: '薄-うす', ruby: 'うす', is_default: true }],
+  },
+  {
+    id: '責',
+    text: '責',
+    readings: [{ id: '責-せ', ruby: 'せ', is_default: true }],
+  },
+  {
+    id: '隠居',
+    text: '隠居',
+    readings: [{ id: '隠居-いんきょ', ruby: 'いんきょ', is_default: true }],
+  },
+  {
+    id: '隠居',
+    text: '隠居',
+    readings: [{ id: '隠居-いんきょ', ruby: 'いんきょ', is_default: true }],
+  },
+  {
+    id: '上知',
+    text: '上知',
+    readings: [{ id: '上知-じょうち', ruby: 'じょうち', is_default: true }],
+  },
+  {
+    id: '下愚',
+    text: '下愚',
+    readings: [{ id: '下愚-かぐ', ruby: 'かぐ', is_default: true }],
+  },
+  {
+    id: '移',
+    text: '移',
+    readings: [{ id: '移-うつ', ruby: 'うつ', is_default: true }],
+  },
+  {
+    id: '寛',
+    text: '寛',
+    readings: [{ id: '寛-かん', ruby: 'かん', is_default: true }],
+  },
+  {
+    id: '任',
+    text: '任',
+    readings: [{ id: '任-まか', ruby: 'まか', is_default: true }],
   },
 ];
 

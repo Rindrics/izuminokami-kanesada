@@ -1,4 +1,15 @@
-segments: []
-mentioned: []
-primer: true
-pinyin_reviewed: false
+segments:
+  - text:
+      original: 子張問政
+      japanese: 子張 政を問う。
+    speaker: null
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 居之無倦 行之以忠
+      japanese: 之に居りて倦むこと無く、之を行うに忠を以てす、と。
+    speaker: kongzi
+mentioned: [kongzi]
+pinyin_reviewed: true

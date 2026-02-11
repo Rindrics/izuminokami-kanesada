@@ -1,4 +1,33 @@
-segments: []
-mentioned: []
-primer: true
-pinyin_reviewed: false
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 知及之 仁不能守之
+      japanese: 知（ち） 之に及ぶも、仁 之を守る能（あた）わざれば、
+    speaker: kongzi
+  - text:
+      original: 雖得之 必失之
+      japanese: 之を得（う）と雖も、必ず之を失う。
+    speaker: kongzi
+  - text:
+      original: 知及之 仁能守之
+      japanese: 知 之（これ）に及び、仁 能く之を守るも、
+    speaker: kongzi
+  - text:
+      original: 不莊以涖之 則民不敬
+      japanese: 莊以て之に涖まざれば、則ち民 敬せず。
+    speaker: kongzi
+  - text:
+      original: 知及之 仁能守之 莊以涖之
+      japanese: 知 之（これ）に及び、仁 能く之を守り、莊以て之に涖めども、
+    speaker: kongzi
+  - text:
+      original: 動之不以禮 未善也
+      japanese: 之を動かすに禮を以てせざれば、未だ善（よ）からざるなり。
+    speaker: kongzi
+mentioned:
+  - kongzi
+primer: false
+pinyin_reviewed: true

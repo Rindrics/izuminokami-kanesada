@@ -5,11 +5,11 @@ segments:
     speaker: null
   - text:
       original: 色厲而内荏
-      japanese: 色厲しくして内荏らか。
+      japanese: 色（いろ）厲（はげ）しくして内（うち）荏らか。
     speaker: kongzi
   - text:
       original: 譬諸小人 其猶穿窬之盜也與
-      japanese: 諸を小人に譬うれば、其れ猶 穿窬の盗のごときか。
+      japanese: 諸れを小人に譬うれば、其れ猶 穿窬の盗のごときか。
     speaker: kongzi
     hanzi_overrides:
       - char: 與

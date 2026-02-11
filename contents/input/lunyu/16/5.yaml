@@ -1,4 +1,21 @@
-segments: []
-mentioned: []
-primer: true
-pinyin_reviewed: false
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 益者三樂 損者三樂
+      japanese: 益する者の三樂あり。損なう者の三樂あり。
+    speaker: kongzi
+  - text:
+      original: 樂節禮樂 樂道人之善 樂多賢友 益矣
+      japanese: 禮樂を節するを樂しみ、人の善を道（い）うを樂しみ、賢友多きを樂しむは、益するなり。
+    speaker: kongzi
+  - text:
+      original: 樂驕樂 樂佚遊 樂宴樂 損矣
+      japanese: 驕樂を樂しみ、佚遊を樂しみ、宴樂を樂しむは、損なうなり。
+    speaker: kongzi
+mentioned:
+  - kongzi
+primer: false
+pinyin_reviewed: true

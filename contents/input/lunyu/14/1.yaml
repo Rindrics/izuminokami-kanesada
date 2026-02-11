@@ -9,8 +9,20 @@ segments:
     speaker: null
   - text:
       original: 邦有道穀 邦無道穀 恥也
-      japanese: 邦道有れば穀し、邦道無ければ穀す、恥なり。
+      japanese: 邦に道有れば穀す。邦に道無くして穀するは、恥なり。
     speaker: kongzi
-mentioned: []
-primer: true
-pinyin_reviewed: false
+  - text:
+      original: 克伐怨欲不行焉 可以為仁矣
+      japanese: 克伐怨欲行われざる、以て仁と為す可きか、と。
+    speaker: xiaozhong
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 可以為難矣 仁則吾不知也
+      japanese: 以て難しと為す可し。仁は則ち吾知らざるなり、と。
+    speaker: null
+mentioned: [kongzi]
+primer: false
+pinyin_reviewed: true

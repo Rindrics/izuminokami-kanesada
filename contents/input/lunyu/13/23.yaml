@@ -1,4 +1,16 @@
-segments: []
-mentioned: []
-primer: true
-pinyin_reviewed: false
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 君子和而不同
+      japanese: 君子は和して同ぜず、
+    speaker: kongzi
+  - text:
+      original: 小人同而不和
+      japanese: 小人は同じて和せず。
+    speaker: kongzi
+mentioned: [kongzi]
+primer: false
+pinyin_reviewed: true

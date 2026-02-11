@@ -1,4 +1,25 @@
-segments: []
-mentioned: []
-primer: true
-pinyin_reviewed: false
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 侍於君子 有三愆
+      japanese: 君子に侍（じ）するに、三（さん）愆あり。
+    speaker: kongzi
+  - text:
+      original: 言未及之而言 謂之躁
+      japanese: 言（げん）未だ之に及ばざるして言う、之を躁と謂う。
+    speaker: kongzi
+  - text:
+      original: 言及之而不言 謂之隱
+      japanese: 言（げん）之に及んで言わず、之を隱と謂う。
+    speaker: kongzi
+  - text:
+      original: 未見顏色而言 謂之瞽
+      japanese: 未だ顔色を見ずして言う、之を瞽と謂う。
+    speaker: kongzi
+mentioned:
+  - kongzi
+primer: false
+pinyin_reviewed: true

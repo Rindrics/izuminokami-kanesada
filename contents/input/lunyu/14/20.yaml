@@ -1,4 +1,12 @@
-segments: []
-mentioned: []
-primer: true
-pinyin_reviewed: false
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 其言之不怍 則為之也難
+      japanese: 其の之を言いて怍（は）じざれは、則ち之を為すや難し。
+    speaker: kongzi
+mentioned: [kongzi]
+primer: false
+pinyin_reviewed: true

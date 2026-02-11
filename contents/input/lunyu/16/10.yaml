@@ -1,4 +1,25 @@
-segments: []
-mentioned: []
-primer: true
-pinyin_reviewed: false
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 君子有九思
+      japanese: 君子に九思（し）あり。
+    speaker: kongzi
+  - text:
+      original: 視思明 聽思聰 色思溫
+      japanese: 視（し）には明を思い、聽（ちょう）には聰を思い、色（しき）には溫を思い、
+    speaker: kongzi
+  - text:
+      original: 貌思恭 言思忠 事思敬
+      japanese: 貌には恭を思い、言（げん）には忠を思い、事（じ）には敬を思い、
+    speaker: kongzi
+  - text:
+      original: 疑思問 忿思難 見得思義
+      japanese: 疑（ぎ）には問（もん）を思い、忿（ふん）には難（なん）を思い、得（とく）を見ては義（ぎ）を思う。
+    speaker: kongzi
+mentioned:
+  - kongzi
+primer: false
+pinyin_reviewed: true

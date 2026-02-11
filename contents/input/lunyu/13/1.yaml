@@ -9,11 +9,11 @@ segments:
     speaker: null
   - text:
       original: 先之勞之
-      japanese: 先んじて之を労せよ。
+      japanese: 之に先んじ、之を労す、と。
     speaker: kongzi
   - text:
       original: 請益
-      japanese: 益を請う。
+      japanese: 益（ま）さんことを請う。
     speaker: zilu
   - text:
       original: 曰
@@ -21,8 +21,7 @@ segments:
     speaker: null
   - text:
       original: 無倦
-      japanese: 倦むこと無かれ、と。
+      japanese: 倦む無かれ、と。
     speaker: kongzi
 mentioned: []
-primer: true
-pinyin_reviewed: false
+pinyin_reviewed: true

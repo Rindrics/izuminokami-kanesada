@@ -1,4 +1,21 @@
-segments: []
-mentioned: []
-primer: true
-pinyin_reviewed: false
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 益者三友 損者三友
+      japanese: 益する者の三友あり。損なう者の三友あり。
+    speaker: kongzi
+  - text:
+      original: 友直 友諒 友多聞 益矣
+      japanese: 直なるを友とし、諒なるを友とし、多聞なるを友とするは、益なり。
+    speaker: kongzi
+  - text:
+      original: 友便辟 友善柔 友便佞 損矣
+      japanese: 便辟なるを友とし、善柔なるを友とし、便佞なるを友とするは、損なり。
+    speaker: kongzi
+mentioned:
+  - kongzi
+primer: false
+pinyin_reviewed: true

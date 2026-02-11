@@ -1,4 +1,25 @@
-segments: []
-mentioned: []
-primer: true
-pinyin_reviewed: false
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 君子 謀道不謀食
+      japanese: 君子は道を謀りて、食を謀らず。
+    speaker: kongzi
+  - text:
+      original: 耕也 餒在其中矣
+      japanese: 耕せど、餒 其の中に在るあり。
+    speaker: kongzi
+  - text:
+      original: 學也 祿在其中矣
+      japanese: 学べば、禄其の中に在り。
+    speaker: kongzi
+  - text:
+      original: 君子 憂道不憂貧
+      japanese: 君子は道を憂え、貧を憂えず。
+    speaker: kongzi
+mentioned:
+  - kongzi
+primer: false
+pinyin_reviewed: true

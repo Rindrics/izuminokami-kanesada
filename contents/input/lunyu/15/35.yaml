@@ -1,4 +1,21 @@
-segments: []
-mentioned: []
-primer: true
-pinyin_reviewed: false
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 民之於仁也 甚於水火
+      japanese: 民の仁に於けるや、水火よりも甚だし。
+    speaker: kongzi
+  - text:
+      original: 水火吾見蹈而死者矣
+      japanese: 水火は、吾 蹈みて死する者を見る。
+    speaker: kongzi
+  - text:
+      original: 未見蹈仁而死者也
+      japanese: 未だ仁を蹈みて死する者を見ざるなり。
+    speaker: kongzi
+mentioned:
+  - kongzi
+primer: false
+pinyin_reviewed: true

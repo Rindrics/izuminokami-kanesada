@@ -1,4 +1,12 @@
-segments: []
-mentioned: []
-primer: true
-pinyin_reviewed: false
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 君子矜而不爭 羣而不黨
+      japanese: 君子は矜なるるも争わず。羣すれど党せず。
+    speaker: kongzi
+mentioned:
+  - kongzi
+pinyin_reviewed: true

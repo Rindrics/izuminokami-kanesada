@@ -1,4 +1,34 @@
-segments: []
-mentioned: []
-primer: true
-pinyin_reviewed: false
+segments:
+  - text:
+      original: 仲弓問仁
+      japanese: 仲弓、仁を問う。
+    speaker: null
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 出門如見大賓 使民如承大祭
+      japanese: 門を出でては大（たい）賓を見るが如くし、民を使うには大（たい）祭（さい）を承くるが如（ごと）くす。
+    speaker: kongzi
+  - text:
+      original: 己所不欲 勿施於人
+      japanese: 己の欲せざる所、人に施すこと勿かれ。
+    speaker: kongzi
+  - text:
+      original: 在邦無怨 在家無怨
+      japanese: 邦に在りては怨み無く、家に在りても怨み無し、と。
+    speaker: kongzi
+  - text:
+      original: 仲弓曰
+      japanese: 仲弓曰く、
+    speaker: null
+  - text:
+      original: 雍雖不敏 請事斯語矣
+      japanese: 雍 不敏と雖も、請う 斯（こ）の語（ご）を事とせん、と。
+    speaker: zhonggong
+mentioned:
+  - kongzi
+  - zhonggong
+primer: false
+pinyin_reviewed: true

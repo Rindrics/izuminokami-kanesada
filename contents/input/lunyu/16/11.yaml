@@ -1,4 +1,24 @@
-segments: []
-mentioned: []
-primer: true
-pinyin_reviewed: false
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 見善如不及 見不善如探湯
+      japanese: 善を見ては、及ばざるが如くし、不善を見れば、湯を探るが如（ごこ）くす、とあり。
+    speaker: kongzi
+  - text:
+      original: 吾見其人矣 吾聞其語矣
+      japanese: 吾 其の人を見、吾 其の語（ご）を聞けり。
+    speaker: kongzi
+  - text:
+      original: 隱居以求其志 行義以達其道
+      japanese: 隠居して以て其の志を求め、義を行いて以て其の道を達す。
+    speaker: kongzi
+  - text:
+      original: 吾聞其語矣 未見其人也
+      japanese: 吾 其の語を聞けども、未だ其の人を見ず。
+    speaker: kongzi
+mentioned:
+  - kongzi
+pinyin_reviewed: true

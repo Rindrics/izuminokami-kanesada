@@ -1,4 +1,16 @@
-segments: []
-mentioned: []
-primer: true
-pinyin_reviewed: false
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 愛之能勿勞乎
+      japanese: 之を愛して能く労せしむること勿からんや。
+    speaker: kongzi
+  - text:
+      original: 忠焉能勿誨乎
+      japanese: 忠にして能く誨うること勿からんや。
+    speaker: kongzi
+mentioned: [kongzi]
+primer: false
+pinyin_reviewed: true

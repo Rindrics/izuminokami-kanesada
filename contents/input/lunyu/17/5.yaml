@@ -1,4 +1,43 @@
-segments: []
+segments:
+  - text:
+      original: 子張問仁於孔子
+      japanese: 子張 仁を孔子に問う。
+    speaker: null
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 能行五者於天下為仁矣
+      japanese: 能く五者（しゃ）を天下に行うを、仁と為す。
+    speaker: kongzi
+  - text:
+      original: 曰
+      japanese: 曰く、
+    speaker: null
+  - text:
+      original: 恭寬信敏惠
+      japanese: 恭・寛・信・敏・恵。
+    speaker: kongzi
+  - text:
+      original: 恭則不侮
+      japanese: 恭なれば則ち侮られず。
+    speaker: kongzi
+  - text:
+      original: 寬則得衆
+      japanese: 寛なれば則ち衆を得（う）。
+    speaker: kongzi
+  - text:
+      original: 信則人任焉
+      japanese: 信なれば則ち人 任ず。
+    speaker: kongzi
+  - text:
+      original: 敏則有功
+      japanese: 敏なれば則ち功有り。
+    speaker: kongzi
+  - text:
+      original: 惠則足以使人
+      japanese: 恵なれば則ち以て人を使うに足る、と。
+    speaker: kongzi
 mentioned: []
-primer: true
 pinyin_reviewed: false

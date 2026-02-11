@@ -1,4 +1,35 @@
-segments: []
-mentioned: []
-primer: true
-pinyin_reviewed: false
+segments:
+  - text:
+      original: 子路使子羔爲費宰
+      japanese: 子路、子羔をして費の宰と為ら使（し）む。
+    speaker: null
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 賊夫人之子
+      japanese: 夫（か）の人の子を賊（そこな）わん、と。
+    speaker: kongzi
+  - text:
+      original: 子路曰
+      japanese: 子路曰く、
+    speaker: null
+  - text:
+      original: 有民人焉 有社稷焉
+      japanese: 民・人あり、社・稷あり。
+    speaker: zilu
+  - text:
+      original: 何必讀書 然後為學
+      japanese: 何ぞ必ずしも書を読みて、然る後に学びたりと為さん、と。
+    speaker: zilu
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 是故惡夫佞者
+      japanese: 是の故に夫（か）の佞者を悪む、と。
+    speaker: kongzi
+mentioned: [kongzi, zilu]
+pinyin_reviewed: true

@@ -15,10 +15,5 @@ segments:
       original: 軍旅之事 未之學也
       japanese: 軍旅の事は、未だ之を学ばざるなり。
     speaker: kongzi
-  - text:
-      original: 明日遂行
-      japanese: 明日遂に行く。
-    speaker: kongzi
 mentioned: []
-primer: true
-pinyin_reviewed: false
+pinyin_reviewed: true

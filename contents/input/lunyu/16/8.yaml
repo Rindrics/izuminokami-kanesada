@@ -1,4 +1,21 @@
-segments: []
-mentioned: []
-primer: true
-pinyin_reviewed: false
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 君子有三畏
+      japanese: 君子に三（さん）畏（い）あり。
+    speaker: kongzi
+  - text:
+      original: 畏天命 畏大人 畏聖人之言
+      japanese: 天命を畏れ、大人を畏れ、聖人の言（げん）を畏る。
+    speaker: kongzi
+  - text:
+      original: 小人不知天命而不畏也 狎大人 侮聖人之言
+      japanese: 小人は天命を知らざれば、畏れず、大人に狎（な）れ、聖人の言（げん）を侮る。
+    speaker: kongzi
+mentioned:
+  - kongzi
+primer: false
+pinyin_reviewed: true

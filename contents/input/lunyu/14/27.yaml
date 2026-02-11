@@ -1,4 +1,12 @@
-segments: []
-mentioned: []
-primer: true
-pinyin_reviewed: false
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 君子恥其言過其行
+      japanese: 君子は其の言（げん）の其の行いに過（す）ぐるを恥（は）ず。
+    speaker: kongzi
+mentioned: [kongzi]
+primer: false
+pinyin_reviewed: true

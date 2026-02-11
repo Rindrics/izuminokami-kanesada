@@ -78,3 +78,30 @@
   courtesy: 子張
   given: 師
   birthYear: -503
+
+- id: jikangzi
+  name: 季康子
+  family: 季
+  given: 肥
+  birthYear: -500
+
+- id: fanchi
+  name: 樊遅
+  family: 樊
+  courtesy: 子遅
+  given: 須
+  birthYear: -515
+
+- id: zhonggong
+  name: 仲弓
+  family: 冉
+  courtesy: 仲弓
+  given: 雍
+  birthYear: -522
+
+- id: xiaozhong
+  name: 原憲
+  family: 原
+  courtesy: 子思
+  given: 憲
+  birthYear: -515
