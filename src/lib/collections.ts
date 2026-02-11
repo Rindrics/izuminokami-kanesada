@@ -70,6 +70,7 @@ export async function createCollection(
       name,
       description: description || null,
       isPublic,
+      contentCount: 0,
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
     });
@@ -288,30 +289,19 @@ export async function getCollections(
     for (const docSnap of snapshot.docs) {
       const data = docSnap.data();
 
-      // コンテンツ数を取得
-      const contentsRef = collection(
-        db,
-        'collections',
-        userId,
-        'items',
-        docSnap.id,
-        'contents',
-      );
-      const contentsSnapshot = await getDocs(contentsRef);
-
       summaries.push({
         id: docSnap.id,
         name: data.name,
         description: data.description || undefined,
         isPublic: data.isPublic || false,
-        contentCount: contentsSnapshot.size,
+        contentCount: data.contentCount ?? 0,
         createdAt: data.createdAt,
         updatedAt: data.updatedAt,
       });
     }
 
     return summaries.sort(
-      (a, b) => b.updatedAt.toMillis() - a.updatedAt.toMillis(),
+      (a, b) => (b.updatedAt?.toMillis() ?? 0) - (a.updatedAt?.toMillis() ?? 0),
     );
   } catch (error) {
     console.error('[getCollections] Error:', error);
@@ -397,12 +387,13 @@ export async function addContentToCollection(
     addedAt: serverTimestamp(),
   });
 
-  // コレクションの更新日時を更新
+  // コレクションのコンテンツ数と更新日時を更新
   const collectionRef = doc(db, 'collections', userId, 'items', collectionId);
   const collectionDoc = await getDoc(collectionRef);
 
   if (collectionDoc.exists()) {
     await updateDoc(collectionRef, {
+      contentCount: increment(1),
       updatedAt: serverTimestamp(),
     });
 
@@ -436,12 +427,13 @@ export async function removeContentFromCollection(
 
   await deleteDoc(contentRef);
 
-  // コレクションの更新日時を更新
+  // コレクションのコンテンツ数と更新日時を更新
   const collectionRef = doc(db, 'collections', userId, 'items', collectionId);
   const collectionDoc = await getDoc(collectionRef);
 
   if (collectionDoc.exists()) {
     await updateDoc(collectionRef, {
+      contentCount: increment(-1),
       updatedAt: serverTimestamp(),
     });
 

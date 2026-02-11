@@ -23,6 +23,7 @@ export interface Collection {
   name: string;
   description?: string;
   isPublic: boolean;
+  contentCount?: number;
   createdAt: Timestamp;
   updatedAt: Timestamp;
 }
