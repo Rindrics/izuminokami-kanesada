@@ -250,23 +250,12 @@ async function syncPublicCollectionIndex(
 
   const data = collectionDoc.data();
 
-  // コンテンツ数を取得
-  const contentsRef = collection(
-    firestore,
-    'collections',
-    userId,
-    'items',
-    collectionId,
-    'contents',
-  );
-  const contentsSnapshot = await getDocs(contentsRef);
-
   const publicRef = doc(firestore, 'publicCollections', collectionId);
   await setDoc(publicRef, {
     userId,
     name: data.name,
     description: data.description || null,
-    contentCount: contentsSnapshot.size,
+    contentCount: data.contentCount ?? 0,
     createdAt: data.createdAt,
     updatedAt: serverTimestamp(),
   });
