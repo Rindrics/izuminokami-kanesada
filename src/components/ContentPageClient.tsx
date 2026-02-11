@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { recordAccess } from '@/lib/access-history';
+import { AddToCollectionButton } from './AddToCollectionButton';
 import { FavoriteButton } from './FavoriteButton';
 
 interface Props {
@@ -29,5 +30,10 @@ export function ContentPageClient({ contentId }: Props) {
     });
   }, [user, contentId, loading]);
 
-  return <FavoriteButton contentId={contentId} />;
+  return (
+    <div className="flex items-center gap-1">
+      <FavoriteButton contentId={contentId} />
+      <AddToCollectionButton contentId={contentId} contentType="chapter" />
+    </div>
+  );
 }
