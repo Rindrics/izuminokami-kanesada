@@ -32,6 +32,7 @@ export function AddToCollectionModal({
   const [isLoading, setIsLoading] = useState(true);
   const [isCreating, setIsCreating] = useState(false);
   const [togglingId, setTogglingId] = useState<string | null>(null);
+  const [toggleError, setToggleError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!user) return;
@@ -61,6 +62,7 @@ export function AddToCollectionModal({
     if (!user || togglingId) return;
 
     setTogglingId(collectionId);
+    setToggleError(null);
 
     try {
       if (isIncluded) {
@@ -89,6 +91,11 @@ export function AddToCollectionModal({
       window.dispatchEvent(new CustomEvent('collections-changed'));
     } catch (error) {
       console.error('Failed to toggle collection:', error);
+      setToggleError(
+        isIncluded
+          ? 'コレクションから削除に失敗しました'
+          : 'コレクションに追加に失敗しました',
+      );
     } finally {
       setTogglingId(null);
     }
@@ -96,6 +103,7 @@ export function AddToCollectionModal({
 
   const handleCollectionCreated = async (newCollectionId: string) => {
     setIsCreating(false);
+    setToggleError(null);
     if (!user) return;
 
     // コレクション一覧を再読み込み
@@ -123,6 +131,7 @@ export function AddToCollectionModal({
       window.dispatchEvent(new CustomEvent('collections-changed'));
     } catch (error) {
       console.error('Failed to add content to new collection:', error);
+      setToggleError('新しいコレクションにコンテンツを追加できませんでした');
     }
   };
 
@@ -140,6 +149,11 @@ export function AddToCollectionModal({
           <div className="py-8 text-center text-zinc-500">読み込み中...</div>
         ) : (
           <>
+            {toggleError && (
+              <div className="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-700 dark:bg-red-900/20 dark:text-red-400">
+                {toggleError}
+              </div>
+            )}
             {collections.length === 0 ? (
               <div className="mb-4 text-zinc-500">コレクションがありません</div>
             ) : (
