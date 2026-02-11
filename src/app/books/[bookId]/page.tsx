@@ -75,14 +75,14 @@ export default async function BookPage({ params }: Props) {
         <h1 className="mb-4 text-3xl font-bold text-black dark:text-white">
           {book.name}
         </h1>
-        <nav className="mb-8 flex items-center justify-between gap-2 border-t border-zinc-200 pt-4 dark:border-zinc-800">
+        <nav className="flex items-center justify-between gap-1 border-t border-zinc-200 pt-2 dark:border-zinc-800">
           {prevUrl ? (
             <Link
               href={prevUrl}
-              className="group relative flex items-center gap-2 rounded-lg px-4 py-2 text-zinc-700 transition hover:bg-zinc-200 dark:text-zinc-300 dark:hover:bg-zinc-700"
+              className="group relative flex items-center gap-1.5 rounded px-2 py-1 text-sm text-zinc-700 transition hover:bg-zinc-200 dark:text-zinc-300 dark:hover:bg-zinc-700"
             >
               <span>←</span>
-              <span className="text-sm">{prevLabel ?? '前の経書'}</span>
+              <span>{prevLabel ?? '前の経書'}</span>
               <span className="pointer-events-none absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-zinc-800 px-2 py-1 text-xs text-white opacity-0 transition-opacity delay-100 group-hover:opacity-100 dark:bg-zinc-200 dark:text-black">
                 ショートカット: p
               </span>
@@ -93,9 +93,9 @@ export default async function BookPage({ params }: Props) {
           {nextUrl ? (
             <Link
               href={nextUrl}
-              className="group relative flex items-center gap-2 rounded-lg px-4 py-2 text-zinc-700 transition hover:bg-zinc-200 dark:text-zinc-300 dark:hover:bg-zinc-700"
+              className="group relative flex items-center gap-1.5 rounded px-2 py-1 text-sm text-zinc-700 transition hover:bg-zinc-200 dark:text-zinc-300 dark:hover:bg-zinc-700"
             >
-              <span className="text-sm">{nextLabel ?? '次の経書'}</span>
+              <span>{nextLabel ?? '次の経書'}</span>
               <span>→</span>
               <span className="pointer-events-none absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-zinc-800 px-2 py-1 text-xs text-white opacity-0 transition-opacity delay-100 group-hover:opacity-100 dark:bg-zinc-200 dark:text-black">
                 ショートカット: n
