@@ -369,27 +369,39 @@ export async function addContentToCollection(
     'contents',
     encodedId,
   );
+  const collectionRef = doc(db, 'collections', userId, 'items', collectionId);
 
-  await setDoc(contentRef, {
-    contentId,
-    contentType,
-    addedAt: serverTimestamp(),
+  let isPublic = false;
+
+  await runTransaction(db, async (transaction) => {
+    // Read content document to check if it exists
+    const contentDoc = await transaction.get(contentRef);
+    const collectionDoc = await transaction.get(collectionRef);
+
+    if (!collectionDoc.exists()) {
+      throw new Error('Collection does not exist');
+    }
+
+    isPublic = collectionDoc.data().isPublic || false;
+
+    // Only write content and increment count if content doesn't exist
+    if (!contentDoc.exists()) {
+      transaction.set(contentRef, {
+        contentId,
+        contentType,
+        addedAt: serverTimestamp(),
+      });
+
+      transaction.update(collectionRef, {
+        contentCount: increment(1),
+        updatedAt: serverTimestamp(),
+      });
+    }
   });
 
-  // コレクションのコンテンツ数と更新日時を更新
-  const collectionRef = doc(db, 'collections', userId, 'items', collectionId);
-  const collectionDoc = await getDoc(collectionRef);
-
-  if (collectionDoc.exists()) {
-    await updateDoc(collectionRef, {
-      contentCount: increment(1),
-      updatedAt: serverTimestamp(),
-    });
-
-    // 公開コレクションの場合、インデックスも更新
-    if (collectionDoc.data().isPublic) {
-      await syncPublicCollectionIndex(userId, collectionId);
-    }
+  // Update public collection index after successful transaction
+  if (isPublic) {
+    await syncPublicCollectionIndex(userId, collectionId);
   }
 }
 
@@ -413,23 +425,35 @@ export async function removeContentFromCollection(
     'contents',
     encodedId,
   );
-
-  await deleteDoc(contentRef);
-
-  // コレクションのコンテンツ数と更新日時を更新
   const collectionRef = doc(db, 'collections', userId, 'items', collectionId);
-  const collectionDoc = await getDoc(collectionRef);
 
-  if (collectionDoc.exists()) {
-    await updateDoc(collectionRef, {
-      contentCount: increment(-1),
-      updatedAt: serverTimestamp(),
-    });
+  let isPublic = false;
 
-    // 公開コレクションの場合、インデックスも更新
-    if (collectionDoc.data().isPublic) {
-      await syncPublicCollectionIndex(userId, collectionId);
+  await runTransaction(db, async (transaction) => {
+    // Read documents to check existence
+    const contentDoc = await transaction.get(contentRef);
+    const collectionDoc = await transaction.get(collectionRef);
+
+    if (!collectionDoc.exists()) {
+      throw new Error('Collection does not exist');
     }
+
+    isPublic = collectionDoc.data().isPublic || false;
+
+    // Only delete content and decrement count if content exists
+    if (contentDoc.exists()) {
+      transaction.delete(contentRef);
+
+      transaction.update(collectionRef, {
+        contentCount: increment(-1),
+        updatedAt: serverTimestamp(),
+      });
+    }
+  });
+
+  // Update public collection index after successful transaction
+  if (isPublic) {
+    await syncPublicCollectionIndex(userId, collectionId);
   }
 }
 
