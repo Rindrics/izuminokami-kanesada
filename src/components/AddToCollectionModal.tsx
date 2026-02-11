@@ -106,12 +106,12 @@ export function AddToCollectionModal({
     setToggleError(null);
     if (!user) return;
 
-    // コレクション一覧を再読み込み
-    const cols = await getCollections(user.uid);
-    setCollections(cols);
-
-    // 新しいコレクションにコンテンツを追加
     try {
+      // コレクション一覧を再読み込み
+      const cols = await getCollections(user.uid);
+      setCollections(cols);
+
+      // 新しいコレクションにコンテンツを追加
       await addContentToCollection(
         user.uid,
         newCollectionId,
@@ -130,8 +130,12 @@ export function AddToCollectionModal({
       }
       window.dispatchEvent(new CustomEvent('collections-changed'));
     } catch (error) {
-      console.error('Failed to add content to new collection:', error);
-      setToggleError('新しいコレクションにコンテンツを追加できませんでした');
+      console.error(
+        'Failed to create and add content to new collection:',
+        error,
+      );
+      setToggleError('コレクション処理に失敗しました');
+      setIsCreating(false);
     }
   };
 
