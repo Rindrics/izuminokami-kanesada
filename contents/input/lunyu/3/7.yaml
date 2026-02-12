@@ -1,0 +1,24 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 君子無所爭
+      japanese: 君子は争う所無し。
+    speaker: kongzi
+  - text:
+      original: 必也射乎
+      japanese: 必ずや射か。
+    speaker: kongzi
+  - text:
+      original: 揖讓而升 下而飲
+      japanese: 揖譲して升り、下りて飲む。
+    speaker: kongzi
+  - text:
+      original: 其爭也君子
+      japanese: 其の争いや君子なり、と。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

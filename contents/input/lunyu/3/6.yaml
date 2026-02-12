@@ -1,0 +1,28 @@
+segments:
+  - text:
+      original: 季氏旅於泰山
+      japanese: 季氏、泰山に旅（りょ）す。
+    speaker: null
+  - text:
+      original: 子謂冉有曰
+      japanese: 子、冉有に謂いて曰く、
+    speaker: null
+  - text:
+      original: 女弗能救與
+      japanese: 女（なんじ）救う能わざるか、と。
+    speaker: kongzi
+  - text:
+      original: 對曰 不-能
+      japanese: 対えて曰く、能わず、と。
+    speaker: ranyou
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 嗚呼 曾謂泰山不-如林放乎
+      japanese: 嗚呼（ああ）、曾（かつ）て泰山は林放に如かざるかと謂わんや、と。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

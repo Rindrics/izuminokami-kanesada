@@ -1,0 +1,24 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 君子懷德
+      japanese: 君子は徳を懐き、
+    speaker: kongzi
+  - text:
+      original: 小人懷土
+      japanese: 小人は土を懐く。
+    speaker: kongzi
+  - text:
+      original: 君子懷刑
+      japanese: 君子は刑を懐き、
+    speaker: kongzi
+  - text:
+      original: 小人懷惠
+      japanese: 小人は恵を懐く。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

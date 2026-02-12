@@ -1,0 +1,16 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 唯仁者能好人
+      japanese: 唯仁者のみ能く人を好み、
+    speaker: kongzi
+  - text:
+      original: 能惡人
+      japanese: 能く人を悪む。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

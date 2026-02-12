@@ -1,0 +1,12 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 以約失之者鮮矣
+      japanese: 約を以て之を失う者は鮮し。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

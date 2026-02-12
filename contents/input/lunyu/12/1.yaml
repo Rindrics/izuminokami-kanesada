@@ -9,15 +9,15 @@ segments:
     speaker: null
   - text:
       original: 克己復禮為仁
-      japanese: 己に克ち禮に復するを仁と為す。
+      japanese: 己に克ちて禮に復するを、仁と為す。
     speaker: kongzi
   - text:
       original: 一日克己復禮 天下歸仁焉
-      japanese: 一日己に克ち禮に復すれば、天下仁に歸す。
+      japanese: 一日己に克ちて禮に復すれば、天下仁に歸す。
     speaker: kongzi
   - text:
       original: 為仁由己 而由人乎哉
-      japanese: 仁を為すは己に由（よ）る、人に由（よ）らんや。
+      japanese: 仁を為すは己に由（よ）る、人に由（よ）らんや、と。
     speaker: kongzi
   - text:
       original: 顏淵曰
@@ -25,7 +25,7 @@ segments:
     speaker: null
   - text:
       original: 請問其目
-      japanese: 其の目を請い問う。
+      japanese: 其の目を請い問わん、と。
     speaker: yanyuan
   - text:
       original: 子曰
@@ -33,7 +33,7 @@ segments:
     speaker: null
   - text:
       original: 非禮勿視 非禮勿聽 非禮勿言 非禮勿動
-      japanese: 禮に非ざれば視ること勿かれ、禮に非ざれば聽くこと勿かれ、禮に非ざれば言うこと勿かれ、禮に非ざれば動くこと勿かれ。
+      japanese: 非（ひ）禮 視ること勿かれ、非（ひ）禮 聽くこと勿かれ、非（ひ）禮 言うこと勿かれ、非（ひ）禮 動くこと勿かれ、と。
     speaker: kongzi
   - text:
       original: 顏淵曰
@@ -41,6 +41,6 @@ segments:
     speaker: null
   - text:
       original: 回雖不敏 請事斯語矣
-      japanese: 回不敏なりと雖も、請う斯の語（ご）を事とせん。
+      japanese: 回 不敏と雖も、請う斯の語（ご）を事とせん。
     speaker: yanyuan
 pinyin_reviewed: true

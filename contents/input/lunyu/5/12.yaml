@@ -1,0 +1,28 @@
+segments:
+  - text:
+      original: 子貢曰
+      japanese: 子貢曰く、
+    speaker: null
+  - text:
+      original: 我不欲人之加諸我也
+      japanese: 我は人の諸を我に加うるを欲せず。
+    speaker: zigong
+  - text:
+      original: 吾亦欲無加諸人
+      japanese: 吾も亦た諸を人に加うる無きを欲す。
+    speaker: zigong
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 賜也
+      japanese: 賜や、
+    speaker: kongzi
+  - text:
+      original: 非爾所及也
+      japanese: 爾の及ぶ所に非ざるなり。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

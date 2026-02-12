@@ -1,0 +1,20 @@
+segments:
+  - text:
+      original: 樊遅問仁
+      japanese: 樊遅、仁を問う。
+    speaker: null
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 居處恭 執事敬 與人忠
+      japanese: 処（ところ）に居りては恭、事を執りては敬、人に与（くみ）しては忠、
+    speaker: kongzi
+  - text:
+      original: 雖之夷狄 不可棄也
+      japanese: 夷狄に之（ゆ）くと雖も、棄つ可からざるなり、と。
+    speaker: kongzi
+mentioned: [kongzi, fanchi]
+primer: false
+pinyin_reviewed: true

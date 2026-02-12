@@ -1,0 +1,15 @@
+segments:
+  - text:
+      original: 曾子曰
+      japanese: 曾子曰く、
+    speaker: null
+  - text:
+      original: 君子以文會友
+      japanese: 君子は文を以て友を会（かい）し、
+    speaker: zengzi
+  - text:
+      original: 以友輔仁
+      japanese: 友を以て仁を輔（たす）く。
+    speaker: zengzi
+mentioned: [zengzi]
+pinyin_reviewed: true

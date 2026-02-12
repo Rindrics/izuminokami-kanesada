@@ -1,0 +1,24 @@
+segments:
+  - text:
+      original: 子在陳曰
+      japanese: 子陳に在りて曰く、
+    speaker: null
+  - text:
+      original: 歸與歸與
+      japanese: 帰らんか帰らんか。
+    speaker: kongzi
+  - text:
+      original: 吾黨之小子狂簡
+      japanese: 吾が党の小子は狂簡、
+    speaker: kongzi
+  - text:
+      original: 斐然成章
+      japanese: 斐然として章を成す。
+    speaker: kongzi
+  - text:
+      original: 不知所以裁之
+      japanese: 所以に之を裁するを知らず。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

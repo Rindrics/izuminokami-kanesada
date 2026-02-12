@@ -1,0 +1,20 @@
+segments:
+  - text:
+      original: 子夏為莒父宰 問政
+      japanese: 子夏、莒父の宰と為り、政を問う。
+    speaker: null
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 無欲速 無見小利
+      japanese: 速（すみ）やかならんことを欲すること無かれ。小利を見ること無かれ。
+    speaker: kongzi
+  - text:
+      original: 欲速則不達 見小利則大事不成
+      japanese: 速（すみ）やかならんと欲すれば則ち達せず。小利を見れば、則ち大事成らず、と。
+    speaker: kongzi
+mentioned: [kongzi, zixia]
+primer: false
+pinyin_reviewed: true

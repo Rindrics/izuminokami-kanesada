@@ -1,0 +1,16 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 古者言之不出
+      japanese: 古き者は言の出さざるは、
+    speaker: kongzi
+  - text:
+      original: 恥躬之不逮也
+      japanese: 躬の逮わざるを恥ずるなり。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

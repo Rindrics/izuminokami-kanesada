@@ -1,0 +1,16 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 古之學者為己
+      japanese: 古の学者は己の為（ため）にす。
+    speaker: kongzi
+  - text:
+      original: 今之學者為人
+      japanese: 今の学者は人の為（ため）にす。
+    speaker: kongzi
+mentioned: [kongzi]
+primer: false
+pinyin_reviewed: true

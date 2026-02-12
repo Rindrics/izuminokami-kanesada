@@ -1,0 +1,24 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 君子之於天下也
+      japanese: 君子の天下に於けるや、
+    speaker: kongzi
+  - text:
+      original: 無適也
+      japanese: 適すること無く、
+    speaker: kongzi
+  - text:
+      original: 無莫也
+      japanese: 莫すること無し。
+    speaker: kongzi
+  - text:
+      original: 義之與比
+      japanese: 義之と比す。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

@@ -1,0 +1,24 @@
+segments:
+  - text:
+      original: 林放問禮之本
+      japanese: 林放、礼の本を問う。
+    speaker: null
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 大哉問
+      japanese: 大なるかな問や。
+    speaker: kongzi
+  - text:
+      original: 禮 與其奢也 寧儉
+      japanese: 礼は其の奢らん與（よ）りは寧（むし）ろ儉せよ、
+    speaker: kongzi
+  - text:
+      original: 喪 與其易也 寧戚
+      japanese: 喪は其の易（そなは）らん與りは寧ろ戚（いた）めよ、と。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

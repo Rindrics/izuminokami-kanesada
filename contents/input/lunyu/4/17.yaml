@@ -1,0 +1,16 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 見賢思齊焉
+      japanese: 賢を見ては斉しからんことを思う。
+    speaker: kongzi
+  - text:
+      original: 見不賢而內自省也
+      japanese: 不賢を見ては内に自ら省みるなり。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

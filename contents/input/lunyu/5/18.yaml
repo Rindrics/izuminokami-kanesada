@@ -1,0 +1,20 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 臧文仲居蔡
+      japanese: 臧文仲は蔡に居る。
+    speaker: kongzi
+  - text:
+      original: 山節藻梲
+      japanese: 山節藻梲、
+    speaker: kongzi
+  - text:
+      original: 何如其知也
+      japanese: 何如、其の知や。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

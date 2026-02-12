@@ -1,0 +1,25 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 君子有三戒
+      japanese: 君子に三（さん）戒（かい）あり。
+    speaker: kongzi
+  - text:
+      original: 少之時 血氣未定 戒之在色
+      japanese: 少（わか）き時は、血気未だ定まらず。之を戒むるは色（いろ）に在り。
+    speaker: kongzi
+  - text:
+      original: 及其壯也 血氣方剛 戒之在鬥鬭
+      japanese: 其の壯なるに及びては、血気方に剛（つよ）し。之を戒むるは鬭いに在り。
+    speaker: kongzi
+  - text:
+      original: 及其老也 血氣既衰 戒之在得
+      japanese: 其の老なるに及びては、血気既に衰う。之を戒むるは得（とく）に在り。
+    speaker: kongzi
+mentioned:
+  - kongzi
+primer: false
+pinyin_reviewed: true

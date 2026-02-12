@@ -1,0 +1,13 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 過而不改 是謂過矣
+      japanese: 過ちて改めざる、是れを過ちと謂う。
+    speaker: kongzi
+mentioned:
+  - kongzi
+primer: false
+pinyin_reviewed: true

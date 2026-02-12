@@ -1,0 +1,48 @@
+segments:
+  - text:
+      original: 子貢曰
+      japanese: 子貢曰く、
+    speaker: null
+  - text:
+      original: 貧而無諂 富而無驕 何如
+      japanese: 貧にして諂うこと無く、富みて驕ること無きは、何如（いかん）、と。
+    speaker: zigong
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 可也
+      japanese: 可なり。
+    speaker: kongzi
+  - text:
+      original: 未若貧而樂 富而好禮者也
+      japanese: 貧にして楽しみ、富みて礼を好む者に若かず。
+    speaker: kongzi
+  - text:
+      original: 子貢曰
+      japanese: 子貢曰く、
+    speaker: null
+  - text:
+      original: 詩云 如切如磋 如琢如磨
+      japanese: 詩に云う、切るが如く磋（みが）くが如く、琢（う）つが如く磨くが如し、と。
+    speaker: zigong
+  - text:
+      original: 其斯之謂與
+      japanese: 其れ斯れを之れ謂うか、と。
+    speaker: zigong
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 賜也 始可-與言詩已矣
+      japanese: 賜や、始めて詩を言うに与（あずか）る可し。
+    speaker: kongzi
+  - text:
+      original: 告諸往而知來者
+      japanese: 往を告げて来者を知る、と。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

@@ -1,0 +1,24 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 父母之年
+      japanese: 父母の年は、
+    speaker: kongzi
+  - text:
+      original: 不可不知也
+      japanese: 知らざるべからざるなり。
+    speaker: kongzi
+  - text:
+      original: 一則以喜
+      japanese: 一たびは以て喜び、
+    speaker: kongzi
+  - text:
+      original: 一則以懼
+      japanese: 一たびは以て懼る。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

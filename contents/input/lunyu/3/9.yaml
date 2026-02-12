@@ -1,0 +1,32 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 夏禮 吾能言之
+      japanese: 夏の礼、吾能く之を言う。
+    speaker: kongzi
+  - text:
+      original: 杞不-足徵也
+      japanese: 杞は徴するに足らず。
+    speaker: kongzi
+  - text:
+      original: 殷禮 吾能言之
+      japanese: 殷の礼、吾能く之を言う。
+    speaker: kongzi
+  - text:
+      original: 宋不-足徵也
+      japanese: 宋は徴するに足らず。
+    speaker: kongzi
+  - text:
+      original: 文獻不-足故也
+      japanese: 文献足らざる故なり。
+    speaker: kongzi
+  - text:
+      original: 足 則吾能徵之矣
+      japanese: 足らば、則ち吾能く之を徴せん、と。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

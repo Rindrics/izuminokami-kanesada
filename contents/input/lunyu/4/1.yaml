@@ -1,0 +1,15 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 里仁為美
+      japanese: 仁なるところに里（お）れば美（び）を為さん。
+    speaker: kongzi
+  - text:
+      original: 擇不-處仁 焉得知
+      japanese: 択びて仁に処らざれば、焉んぞ知（ち）たるを得ん。
+    speaker: kongzi
+mentioned: []
+pinyin_reviewed: true

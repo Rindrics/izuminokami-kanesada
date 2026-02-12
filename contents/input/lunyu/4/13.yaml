@@ -1,0 +1,24 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 能以禮讓為國乎
+      japanese: 能く礼譲を以て国を為すか、
+    speaker: kongzi
+  - text:
+      original: 何有
+      japanese: 何か有らん。
+    speaker: kongzi
+  - text:
+      original: 不能以禮讓為國
+      japanese: 能く礼譲を以て国を為さずんば、
+    speaker: kongzi
+  - text:
+      original: 如禮何
+      japanese: 礼を如何にせん。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

@@ -1,0 +1,13 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 躬自厚而薄責於人 則遠怨矣
+      japanese: 躬自ら厚くして、薄く人を責むれば、則ち怨みに遠ざかる。
+    speaker: kongzi
+mentioned:
+  - kongzi
+primer: false
+pinyin_reviewed: true

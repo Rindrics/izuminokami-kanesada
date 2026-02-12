@@ -1,0 +1,19 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 述而不-作
+      japanese: 述べて作（つく）らず、
+    speaker: kongzi
+  - text:
+      original: 信而好古
+      japanese: 信じて古を好む。
+    speaker: kongzi
+  - text:
+      original: 竊比於我老彭
+      japanese: 窃かに我を老彭に比（なぞら）う。
+    speaker: kongzi
+mentioned: []
+pinyin_reviewed: true

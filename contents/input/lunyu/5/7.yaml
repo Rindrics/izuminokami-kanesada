@@ -1,0 +1,36 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 道不行
+      japanese: 道行われず、
+    speaker: kongzi
+  - text:
+      original: 乘桴浮於海
+      japanese: 桴に乗りて海に浮かばん。
+    speaker: kongzi
+  - text:
+      original: 從我者其由與
+      japanese: 我に従う者は其れ由なるか、と。
+    speaker: kongzi
+  - text:
+      original: 子路聞之喜
+      japanese: 子路之を聞きて喜ぶ。
+    speaker: null
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 由也好勇過我
+      japanese: 由や勇を好むこと我に過ぐ。
+    speaker: kongzi
+  - text:
+      original: 無所取材
+      japanese: 取る所の材無し。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

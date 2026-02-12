@@ -1,0 +1,31 @@
+segments:
+  - text:
+      original: 孔子於郷党
+      japanese: 孔子、郷党に於いては、
+    speaker: null
+  - text:
+      original: 恂恂如也 似不-能言者
+      japanese: 恂恂如（じょ）たり。言（ものい）う能（あた）はざる者に似たり。
+    speaker: null
+  - text:
+      original: 其在宗廟朝廷
+      japanese: 其の宗廟・朝廷に在りては、
+    speaker: null
+  - text:
+      original: 便便言 唯謹爾
+      japanese: 便便として言（ものい）う、唯だ謹むのみ。
+    speaker: null
+  - text:
+      original: 朝與下大夫言 侃侃如也
+      japanese: 朝（ちょう）にて下（か）大夫と言（ものい）えば、侃侃如（じょ）たり。
+    speaker: null
+  - text:
+      original: 與上大夫言 誾誾如也
+      japanese: 上（じょう）大夫と言（ものい）えば、誾誾如（じょ）たり。
+    speaker: null
+  - text:
+      original: 君在 踧踖如也 与与如也
+      japanese: 君在（いま）せば、踧踖如（じょ）たり、与（よ）与（よ）如（じょ）たり。
+    speaker: null
+mentioned: [kongzi]
+pinyin_reviewed: true

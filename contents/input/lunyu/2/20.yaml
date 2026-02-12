@@ -1,0 +1,28 @@
+segments:
+  - text:
+      original: 季康子問
+      japanese: 季康子問う、
+    speaker: null
+  - text:
+      original: 使民敬忠以勸 如之何
+      japanese: 民をして敬忠を以て勧めしむるには、之を如何にせん、と。
+    speaker: jikangzi
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 臨之以莊 則敬
+      japanese: 之に臨むに莊を以てすれば、則ち敬す。
+    speaker: kongzi
+  - text:
+      original: 孝慈 則忠
+      japanese: 孝慈なれば、則ち忠なり。
+    speaker: kongzi
+  - text:
+      original: 舉善而教不-能 則勸
+      japanese: 善を挙げて能わざるを教うれば、則ち勧む、と。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

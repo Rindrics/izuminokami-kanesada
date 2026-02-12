@@ -1,0 +1,13 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 人無遠慮 必有近憂
+      japanese: 人遠慮無ければ、必ず近憂有り。
+    speaker: kongzi
+mentioned:
+  - kongzi
+primer: false
+pinyin_reviewed: true

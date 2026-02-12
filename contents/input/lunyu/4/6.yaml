@@ -1,0 +1,28 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 我未見好仁者
+      japanese: 我未だ仁を好む者を見ず、
+    speaker: kongzi
+  - text:
+      original: 惡不仁者
+      japanese: 不仁を悪む者を見ず。
+    speaker: kongzi
+  - text:
+      original: 好仁者無以尚之
+      japanese: 仁を好む者は以て尚ぶべきもの無し。
+    speaker: kongzi
+  - text:
+      original: 惡不仁者其為仁矣
+      japanese: 不仁を悪む者は其の仁を為すや、
+    speaker: kongzi
+  - text:
+      original: 不使不仁者加乎其身
+      japanese: 不仁者をして其の身に加わらしめず。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

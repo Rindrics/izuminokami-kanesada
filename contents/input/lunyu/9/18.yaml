@@ -1,0 +1,11 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 我未見 好德如好色者也
+      japanese: 我未だ徳を好むこと 色（いろ）を好むが如（ごと）き者を見ざるなり。
+    speaker: kongzi
+mentioned: []
+pinyin_reviewed: true

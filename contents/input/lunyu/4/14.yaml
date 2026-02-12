@@ -1,0 +1,24 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 不患無位
+      japanese: 位無きを患えず、
+    speaker: kongzi
+  - text:
+      original: 患所以立
+      japanese: 立つ所以を患う。
+    speaker: kongzi
+  - text:
+      original: 不患莫已知
+      japanese: 己を知る莫きを患えず、
+    speaker: kongzi
+  - text:
+      original: 求為可知也
+      japanese: 知らるべきを求むるなり。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

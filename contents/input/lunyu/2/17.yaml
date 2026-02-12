@@ -1,0 +1,19 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 由 誨女知之乎
+      japanese: 由や、女に之を知るを誨えんか。
+    speaker: kongzi
+  - text:
+      original: 知之為知之 不-知為不-知
+      japanese: 之を知るを之を知ると為し、知らざるを知らずと為す。
+    speaker: kongzi
+  - text:
+      original: 是知也
+      japanese: 是れ知るなり。
+    speaker: kongzi
+mentioned: []
+pinyin_reviewed: true

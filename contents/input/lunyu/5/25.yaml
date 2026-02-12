@@ -1,0 +1,32 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 巧言令色足恭
+      japanese: 巧言令色足恭、
+    speaker: kongzi
+  - text:
+      original: 左丘明恥之
+      japanese: 左丘明之を恥ず。
+    speaker: kongzi
+  - text:
+      original: 丘亦恥之
+      japanese: 丘も亦た之を恥ず。
+    speaker: kongzi
+  - text:
+      original: 匿怨而友其人
+      japanese: 怨みを匿して其の人を友とし、
+    speaker: kongzi
+  - text:
+      original: 左丘明恥之
+      japanese: 左丘明之を恥ず。
+    speaker: kongzi
+  - text:
+      original: 丘亦恥之
+      japanese: 丘も亦た之を恥ず。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

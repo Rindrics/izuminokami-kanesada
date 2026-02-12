@@ -1,0 +1,16 @@
+segments:
+  - text:
+      original: 孟武伯問孝
+      japanese: 孟武伯、孝を問う。
+    speaker: null
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 父母唯其疾之憂
+      japanese: 父母は唯其の疾を之れ憂う、と。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

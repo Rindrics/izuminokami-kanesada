@@ -1,0 +1,40 @@
+segments:
+  - text:
+      original: 孟懿子問孝
+      japanese: 孟懿子、孝を問う。
+    speaker: null
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 無違
+      japanese: 違うこと無かれ、と。
+    speaker: kongzi
+  - text:
+      original: 樊遲御 子告之曰
+      japanese: 樊遲御（はんちぎょ）たり、子之に告げて曰く、
+    speaker: null
+  - text:
+      original: 孟孫問孝於我 我對曰無違
+      japanese: 孟孫、孝を我に問う、我対えて曰く違うこと無し、と。
+    speaker: kongzi
+  - text:
+      original: 樊遲曰
+      japanese: 樊遲曰く、
+    speaker: null
+  - text:
+      original: 何謂也
+      japanese: 何を謂うか、と。
+    speaker: fanchi
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 生事之以禮 死葬之以禮 祭之以禮
+      japanese: 生けるには之を事うるに禮を以てし、死するには之を葬るに禮を以てし、之を祭るに禮を以てす、と。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

@@ -1,0 +1,11 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 歳寒 然后知松柏之後凋也
+      japanese: 歳（とし）寒くして、然る後に松柏の後（おく）れて凋むを知る。
+    speaker: kongzi
+mentioned: []
+pinyin_reviewed: true

@@ -1,0 +1,15 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 朝聞道
+      japanese: 朝に道を聞かば、
+    speaker: kongzi
+  - text:
+      original: 夕死可矣
+      japanese: 夕べに死すとも可（か）なり。
+    speaker: kongzi
+mentioned: []
+pinyin_reviewed: true

@@ -1,0 +1,15 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 道之以政 齊之以刑 民免而無恥
+      japanese: 之を道（みちび）くに政を以てし、之を齊うるに刑を以てすれば、民免れて恥無し。
+    speaker: kongzi
+  - text:
+      original: 道之以德 齊之以禮 有恥且格
+      japanese: 之を道くに德を以てし、之を齊うるに禮を以てすれば、恥有りて且つ格し。
+    speaker: kongzi
+mentioned: []
+pinyin_reviewed: true

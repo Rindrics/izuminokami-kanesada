@@ -1,0 +1,48 @@
+segments:
+  - text:
+      original: 宰予晝寢
+      japanese: 宰予昼寝す。
+    speaker: null
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 朽木不可雕也
+      japanese: 朽木は雕るべからず。
+    speaker: kongzi
+  - text:
+      original: 糞土之牆不可杇也
+      japanese: 糞土の牆は杇るべからず。
+    speaker: kongzi
+  - text:
+      original: 於予與何誅
+      japanese: 予に於いては何を誅せん。
+    speaker: kongzi
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 始吾於人也
+      japanese: 始め吾人の於けるや、
+    speaker: kongzi
+  - text:
+      original: 聽其言而信其行
+      japanese: 其の言を聴きて其の行を信ず。
+    speaker: kongzi
+  - text:
+      original: 今吾於人也
+      japanese: 今吾人の於けるや、
+    speaker: kongzi
+  - text:
+      original: 聽其言而觀其行
+      japanese: 其の言を聴きて其の行を観る。
+    speaker: kongzi
+  - text:
+      original: 於予與改是
+      japanese: 予に於いて是を改む。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

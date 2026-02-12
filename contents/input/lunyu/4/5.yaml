@@ -1,0 +1,40 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 富與貴是人之所欲也
+      japanese: 富と貴は是れ人の所欲なり。
+    speaker: kongzi
+  - text:
+      original: 不以其道得之不處也
+      japanese: 其の道を以てして之を得ざれば、処らざるなり。
+    speaker: kongzi
+  - text:
+      original: 貧與賤是人之所惡也
+      japanese: 貧と賤は是れ人の所悪なり。
+    speaker: kongzi
+  - text:
+      original: 不以其道得之不去也
+      japanese: 其の道を以てして之を去る能わざれば、去らざるなり。
+    speaker: kongzi
+  - text:
+      original: 君子去仁惡乎成名
+      japanese: 君子仁を去らば、悪くんぞ名を成さん。
+    speaker: kongzi
+  - text:
+      original: 君子無終食之間違仁
+      japanese: 君子終食の間といえども仁に違わず。
+    speaker: kongzi
+  - text:
+      original: 造次必於是
+      japanese: 造次必ず是に於て、
+    speaker: kongzi
+  - text:
+      original: 顛沛必於是
+      japanese: 顛沛必ず是に於てなり。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

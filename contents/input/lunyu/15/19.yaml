@@ -1,0 +1,13 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 君子病無能焉 不病人之不己知也
+      japanese: 君子は能くする無きを病む。人の己を知らざるを病まず。
+    speaker: kongzi
+mentioned:
+  - kongzi
+primer: false
+pinyin_reviewed: true

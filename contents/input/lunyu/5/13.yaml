@@ -1,0 +1,24 @@
+segments:
+  - text:
+      original: 子貢曰
+      japanese: 子貢曰く、
+    speaker: null
+  - text:
+      original: 夫子之文章
+      japanese: 夫子の文章は、
+    speaker: zigong
+  - text:
+      original: 可得而聞也
+      japanese: 得て聞くべし。
+    speaker: zigong
+  - text:
+      original: 夫子之言性與天道
+      japanese: 夫子の性と天道とを言うは、
+    speaker: zigong
+  - text:
+      original: 不可得而聞也
+      japanese: 得て聞くべからず。
+    speaker: zigong
+mentioned: []
+primer: true
+pinyin_reviewed: false

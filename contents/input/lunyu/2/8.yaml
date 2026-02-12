@@ -1,0 +1,28 @@
+segments:
+  - text:
+      original: 子夏問孝
+      japanese: 子夏、孝を問う。
+    speaker: null
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 色難
+      japanese: 色難（いろがた）し。
+    speaker: kongzi
+  - text:
+      original: 有事 弟子服其勞
+      japanese: 事有れば、弟子其の労を服す。
+    speaker: kongzi
+  - text:
+      original: 有酒食 先生饌
+      japanese: 酒食有れば、先生饌（せん）す。
+    speaker: kongzi
+  - text:
+      original: 曾是以為孝乎
+      japanese: 曾（かつ）て是を以て孝と為さんや、と。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

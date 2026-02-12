@@ -1,0 +1,13 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 志士仁人 無求生以害仁 有殺身以成仁
+      japanese: 志士・仁人は、生（せい）を求めて以て仁を害（そこ）なう無く、身を殺して以て仁を成す有り。
+    speaker: kongzi
+mentioned:
+  - kongzi
+primer: false
+pinyin_reviewed: true

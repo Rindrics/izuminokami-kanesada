@@ -1,0 +1,36 @@
+segments:
+  - text:
+      original: 子貢曰
+      japanese: 子貢曰く、
+    speaker: null
+  - text:
+      original: 管仲非仁者與
+      japanese: 管仲は仁者に非ざらん。
+    speaker: zigong
+  - text:
+      original: 桓公殺公子糾 不能死 又相之
+      japanese: 桓公は公子糾を殺せるに、死する能（あた）わず、又之を相（たす）けり、と。
+    speaker: zigong
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 管仲相桓公 霸諸侯 一匡天下
+      japanese: 管仲 桓公を相け、諸侯に霸たらしめ、天下を一匡す。
+    speaker: kongzi
+  - text:
+      original: 民到于今受其賜
+      japanese: 民 今に到るまで、其の賜（たまもの）を受く。
+    speaker: kongzi
+  - text:
+      original: 微管仲 吾其被髮左衽矣
+      japanese: 管仲微（な）かりせば、吾其れ髪を被り衽を左にせん。
+    speaker: kongzi
+  - text:
+      original: 豈若匹夫匹婦之為諒也 自經於溝瀆而莫之知也
+      japanese: 豈に匹夫匹婦の諒（まこと）を為して、自ら溝瀆に経（くび）れて、之を知る莫きが若（ごと）くならんや、と。
+    speaker: kongzi
+mentioned: [kongzi, zigong]
+primer: false
+pinyin_reviewed: true

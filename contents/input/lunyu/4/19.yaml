@@ -1,0 +1,16 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 父母在不遠遊
+      japanese: 父母在りては遠く遊ばず。
+    speaker: kongzi
+  - text:
+      original: 遊必有方
+      japanese: 遊ぶには必ず方あり。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

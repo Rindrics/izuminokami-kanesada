@@ -1,0 +1,16 @@
+segments:
+  - text:
+      original: 子路有聞
+      japanese: 子路聞くこと有れば、
+    speaker: null
+  - text:
+      original: 未之能行
+      japanese: 未だ之を行なうに能わざれば、
+    speaker: null
+  - text:
+      original: 唯恐有聞
+      japanese: 唯恐るるは又聞くこと有らんことを。
+    speaker: null
+mentioned: []
+primer: true
+pinyin_reviewed: false

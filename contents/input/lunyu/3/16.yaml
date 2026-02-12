@@ -1,0 +1,16 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 射不-主皮 為力不-同科
+      japanese: 射は皮を主とせず、力同じからざる科の為なり。
+    speaker: kongzi
+  - text:
+      original: 古之道也
+      japanese: 古の道なり、と。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

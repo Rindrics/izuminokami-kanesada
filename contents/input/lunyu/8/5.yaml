@@ -1,0 +1,23 @@
+segments:
+  - text:
+      original: 曾子曰
+      japanese: 曾子曰く、
+    speaker: null
+  - text:
+      original: 以能問於不能 以多問於寡
+      japanese: 能（のう）を以て不能（のう）に問い、多（た）を以て寡なきに問い、
+    speaker: zengzi
+  - text:
+      original: 有若無 實若虛
+      japanese: 有れども無きが若（ごと）くし、實てども虛なるが若（ごと）くし、
+    speaker: zengzi
+  - text:
+      original: 犯而不校
+      japanese: 犯さるるも校いず。
+    speaker: zengzi
+  - text:
+      original: 昔者吾友嘗從事於斯矣
+      japanese: 昔者、吾（わ）が友 嘗て斯（ここ）に従（じゅう）事（じ）せり。
+    speaker: zengzi
+mentioned: []
+pinyin_reviewed: true

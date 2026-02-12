@@ -1,0 +1,20 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 孰謂微生高直
+      japanese: 孰れか微生高の直なるを謂う。
+    speaker: kongzi
+  - text:
+      original: 或乞醯焉
+      japanese: 或る人醯を乞うて焉、
+    speaker: kongzi
+  - text:
+      original: 乞諸其鄰而與之
+      japanese: 諸を其の隣に乞いて之に与う。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

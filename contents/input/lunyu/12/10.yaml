@@ -1,0 +1,25 @@
+segments:
+  - text:
+      original: 子張問崇徳辨惑
+      japanese: 子張、徳を崇くし惑いを弁（わか）つを問う。
+    speaker: null
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 主忠信 徙義 崇徳也
+      japanese: 忠信を主とし、義に徙（うつ）るは、徳を崇くするなり。
+    speaker: kongzi
+  - text:
+      original: 愛之欲其生 惡之欲其死
+      japanese: 之を愛しては其の生（せい）を欲し、之を惡（にく）んでは其の死を欲す。
+    speaker: kongzi
+  - text:
+      original: 既欲其生 又欲其死 是惑也
+      japanese: 既に其の生（せい）を欲し、又其の死を欲するは、是れ惑いなり。
+    speaker: kongzi
+mentioned:
+  - kongzi
+primer: false
+pinyin_reviewed: true

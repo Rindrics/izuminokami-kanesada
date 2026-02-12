@@ -1,0 +1,20 @@
+segments:
+  - text:
+      original: 季文子三思而後行
+      japanese: 季文子三たび思いて而して後に行なう。
+    speaker: null
+  - text:
+      original: 子聞之
+      japanese: 子之を聞きて、
+    speaker: null
+  - text:
+      original: 曰
+      japanese: 曰く、
+    speaker: null
+  - text:
+      original: 再斯可矣
+      japanese: 再び斯くば可なり。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

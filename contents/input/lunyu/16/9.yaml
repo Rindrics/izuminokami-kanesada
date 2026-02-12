@@ -1,0 +1,25 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 生而知之者 上也
+      japanese: 生まれながらにして之を知る者は、上なり。
+    speaker: kongzi
+  - text:
+      original: 學而知之者 次也
+      japanese: 学びて之を知る者は、次なり。
+    speaker: kongzi
+  - text:
+      original: 困而學之 又其次也
+      japanese: 困しみて之を学ぶものは、又其の次なり。
+    speaker: kongzi
+  - text:
+      original: 困而不學 民斯為下矣
+      japanese: 困しみて学ばざる、民斯れを下（げ）と為す。
+    speaker: kongzi
+mentioned:
+  - kongzi
+primer: false
+pinyin_reviewed: true

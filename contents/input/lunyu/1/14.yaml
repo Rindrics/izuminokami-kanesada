@@ -1,0 +1,20 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 君子食無求飽 居無求安
+      japanese: 君子は食に飽きを求めず、居に安きを求めず。
+    speaker: kongzi
+  - text:
+      original: 敏於事而慎於言
+      japanese: 事に敏にして言に慎み、
+    speaker: kongzi
+  - text:
+      original: 就有道而正焉 可-謂好學也已
+      japanese: 道有るに就きて正す、好学と謂う可し。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

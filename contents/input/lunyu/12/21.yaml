@@ -1,0 +1,35 @@
+segments:
+  - text:
+      original: 樊遅従遊舞雩之下
+      japanese: 樊遅、従いて舞雩の下（もと）に遊ぶ。
+    speaker: null
+  - text:
+      original: 曰
+      japanese: 曰く、
+    speaker: null
+  - text:
+      original: 敢問崇徳修慝辨惑
+      japanese: 敢えて問う、徳を崇くし慝を修め惑いを弁ぜんことを、と。
+    speaker: fanchi
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 善哉問
+      japanese: 善（よ）いかな問いや。
+    speaker: kongzi
+  - text:
+      original: 先事後得 非崇徳與
+      japanese: 事を先にして得（う）るを後（あと）にするは、徳を崇くするに非ずや。
+    speaker: kongzi
+  - text:
+      original: 攻其惡 無攻人之惡 非修慝與
+      japanese: 其の惡（あく）を攻め、人の惡（あく）を攻むる無きは、慝を修むるに非ずや。
+    speaker: kongzi
+  - text:
+      original: 一朝之忿 忘其身以及其親 非惑與
+      japanese: 一朝の忿（いかり）に其の身を忘れて、以て其の親（おや）に及ぼすは、惑えるに非ずや。
+    speaker: kongzi
+mentioned: [kongzi, fanchi]
+pinyin_reviewed: true

@@ -1,0 +1,28 @@
+segments:
+  - text:
+      original: 王孫賈問曰
+      japanese: 王孫賈問いて曰く、
+    speaker: null
+  - text:
+      original: 與其媚於奧 寧媚於竈
+      japanese: 其の奥に媚（こび）るよりは、寧ろ竈（そう）に媚れ、と。
+    speaker: wangsunjia
+  - text:
+      original: 何謂也
+      japanese: 何を謂うか、と。
+    speaker: wangsunjia
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 不-然
+      japanese: 然らず。
+    speaker: kongzi
+  - text:
+      original: 獲罪於天 無所禱也
+      japanese: 天に罪を獲れば、祷る所無し、と。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

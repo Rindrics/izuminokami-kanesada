@@ -1,0 +1,40 @@
+segments:
+  - text:
+      original: 孟武伯問
+      japanese: 孟武伯問う、
+    speaker: null
+  - text:
+      original: 子路仁乎
+      japanese: 子路仁なるか、と。
+    speaker: null
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 不知也
+      japanese: 知らず。
+    speaker: kongzi
+  - text:
+      original: 又問
+      japanese: 又問う。
+    speaker: null
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 由也千乘之國
+      japanese: 由や千乗の国、
+    speaker: kongzi
+  - text:
+      original: 可使治其賦也
+      japanese: 治むるに其の賦を以てせしむべし。
+    speaker: kongzi
+  - text:
+      original: 不知其仁也
+      japanese: 其の仁を知らず。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

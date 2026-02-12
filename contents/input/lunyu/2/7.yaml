@@ -1,0 +1,24 @@
+segments:
+  - text:
+      original: 子游問孝
+      japanese: 子游、孝を問う。
+    speaker: null
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 今之孝者 是謂能養
+      japanese: 今の孝なる者は、是れ能く養うと謂う。
+    speaker: kongzi
+  - text:
+      original: 至於犬馬 皆能有養
+      japanese: 犬馬に至るまで、皆能く養うこと有り。
+    speaker: kongzi
+  - text:
+      original: 不-敬 何以別乎
+      japanese: 敬せざれば、何を以て別たんや、と。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

@@ -1,0 +1,24 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 不仁者不可以久處約
+      japanese: 不仁者は以て久しく約に処るべからず。
+    speaker: kongzi
+  - text:
+      original: 不可以長處樂
+      japanese: 以て長く楽に処るべからず。
+    speaker: kongzi
+  - text:
+      original: 仁者安仁
+      japanese: 仁者は仁に安んじ、
+    speaker: kongzi
+  - text:
+      original: 知者利仁
+      japanese: 知者は仁を利す。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

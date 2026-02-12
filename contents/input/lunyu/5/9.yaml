@@ -1,0 +1,40 @@
+segments:
+  - text:
+      original: 子謂子貢曰
+      japanese: 子、子貢に謂いて曰く、
+    speaker: null
+  - text:
+      original: 女與回也孰愈
+      japanese: 女と回と孰れか愈れる、と。
+    speaker: kongzi
+  - text:
+      original: 對曰
+      japanese: 対えて曰く、
+    speaker: null
+  - text:
+      original: 賜也何敢望回
+      japanese: 賜や何ぞ敢えて回を望まん。
+    speaker: zigong
+  - text:
+      original: 回也聞一以知十
+      japanese: 回や一を聞きて以て十を知る。
+    speaker: zigong
+  - text:
+      original: 賜也聞一以知二
+      japanese: 賜や一を聞きて以て二を知る。
+    speaker: zigong
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 弗如也
+      japanese: 如かざるなり。
+    speaker: kongzi
+  - text:
+      original: 吾與女弗如也
+      japanese: 吾と女とは如かざるなり。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

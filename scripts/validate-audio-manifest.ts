@@ -77,6 +77,7 @@ function readManifest(): AudioManifest {
 
 interface ContentYaml {
   segments: unknown[];
+  primer?: boolean;
 }
 
 /**
@@ -122,6 +123,18 @@ function validateAudioManifest(): boolean {
 
   for (const yamlPath of changedYamls) {
     const contentId = yamlPathToContentId(yamlPath);
+
+    // Check if this is a primer content (skip validation)
+    const fullPath = path.join(process.cwd(), yamlPath);
+    if (fs.existsSync(fullPath)) {
+      const yamlContent = fs.readFileSync(fullPath, 'utf-8');
+      const parsedYaml = yaml.load(yamlContent) as ContentYaml;
+      if (parsedYaml.primer === true) {
+        console.log(`  ⏭️  ${contentId}: Skipping primer content`);
+        continue;
+      }
+    }
+
     const entry = manifest[contentId];
     const segmentCount = getSegmentCount(yamlPath);
 

@@ -17,7 +17,7 @@ segments:
     speaker: kongzi
   - text:
       original: 惡稱人之惡者
-      japanese: 人の悪（あく）を称する者を悪む。
+      japanese: 人の悪（あく）を称（しょう）する者を悪む。
     speaker: kongzi
     hanzi_overrides:
       - char: 惡

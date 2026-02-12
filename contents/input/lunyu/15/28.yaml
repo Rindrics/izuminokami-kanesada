@@ -1,0 +1,17 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 衆惡之 必察焉
+      japanese: 衆これを惡むも、必ず察し、
+    speaker: kongzi
+  - text:
+      original: 衆好之 必察焉
+      japanese: 衆これを好むも、必ず察せよ。
+    speaker: kongzi
+mentioned:
+  - kongzi
+primer: false
+pinyin_reviewed: true

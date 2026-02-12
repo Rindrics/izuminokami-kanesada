@@ -1,0 +1,16 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 君子喻於義
+      japanese: 君子は義に喩り、
+    speaker: kongzi
+  - text:
+      original: 小人喻於利
+      japanese: 小人は利に喩る。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

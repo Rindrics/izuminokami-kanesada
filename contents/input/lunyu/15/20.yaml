@@ -1,0 +1,11 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 君子疾沒世而名不稱焉
+      japanese: 君子は世を没するまで名の称（しょう）せられざるを疾（にく）む。
+    speaker: kongzi
+mentioned: [kongzi]
+pinyin_reviewed: true

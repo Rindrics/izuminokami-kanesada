@@ -1,0 +1,19 @@
+segments:
+  - text:
+      original: 厩焚 子退朝
+      japanese: 厩焚（や）けたり。子、朝（ちょう）より退く。
+    speaker: null
+  - text:
+      original: 曰
+      japanese: 曰く、
+    speaker: null
+  - text:
+      original: 傷人乎
+      japanese: 人を傷つけたるか、と。
+    speaker: kongzi
+  - text:
+      original: 不問馬
+      japanese: 馬を問わざりき。
+    speaker: null
+mentioned: [kongzi]
+pinyin_reviewed: true

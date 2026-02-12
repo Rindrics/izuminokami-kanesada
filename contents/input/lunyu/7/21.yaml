@@ -1,0 +1,19 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 三人行 必有我師
+      japanese: 三（さん）人（にん）行（ゆ）けば、必ず我（わ）が師有り。
+    speaker: kongzi
+  - text:
+      original: 擇其善者而從之
+      japanese: 其の善なる者を擇びて、之に從い、
+    speaker: kongzi
+  - text:
+      original: 其不善者而改之
+      japanese: 其の不善なる者は之を改む。
+    speaker: kongzi
+mentioned: []
+pinyin_reviewed: true

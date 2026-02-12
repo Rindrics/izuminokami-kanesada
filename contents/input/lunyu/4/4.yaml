@@ -1,0 +1,16 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 苟志於仁矣
+      japanese: 苟くも仁に志せば、
+    speaker: kongzi
+  - text:
+      original: 無惡也
+      japanese: 悪むこと無きなり。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

@@ -1,0 +1,32 @@
+segments:
+  - text:
+      original: 哀公問社於宰我
+      japanese: 哀公、社を宰我に問う。
+    speaker: null
+  - text:
+      original: 宰我對曰
+      japanese: 宰我対えて曰く、
+    speaker: null
+  - text:
+      original: 夏后氏以松 殷人以柏 周人以栗
+      japanese: 夏后氏は松を以てし、殷人は柏を以てし、周人は栗を以てす、と。
+    speaker: zaiwo
+  - text:
+      original: 曰
+      japanese: 曰く、
+    speaker: null
+  - text:
+      original: 使民戰栗
+      japanese: 民をして戦栗せしむ、と。
+    speaker: zaiwo
+  - text:
+      original: 子聞之曰
+      japanese: 子之を聞いて曰く、
+    speaker: null
+  - text:
+      original: 成事不-說 遂事不-諫 既往不-咎
+      japanese: 成事は説かず、遂事は諫めず、既往は咎めず、と。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

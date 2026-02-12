@@ -1,0 +1,16 @@
+segments:
+  - text:
+      original: 子貢問君子
+      japanese: 子貢、君子を問う。
+    speaker: null
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 先行其言 而後從之
+      japanese: 先ず其の言を行い、而して後に之に従う、と。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

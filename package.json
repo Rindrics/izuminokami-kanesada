@@ -10,6 +10,7 @@
     "build": "next build",
     "postbuild": "(mv src/app/api/audio/_save.dev-only src/app/api/audio/save 2>/dev/null || true) && (mv src/app/api/audio/_serve.dev-only src/app/api/audio/serve 2>/dev/null || true)",
     "generate:contents": "tsx scripts/generate-contents.ts",
+    "generate:contents:primer": "tsx scripts/generate-contents.ts --primer",
     "generate:contents:watch": "tsx scripts/generate-contents.ts --watch",
     "validate:contents": "tsx scripts/validate-content-diff.ts",
     "validate:contents:all": "tsx scripts/validate-content-diff.ts --all",

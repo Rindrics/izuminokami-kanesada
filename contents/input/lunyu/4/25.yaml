@@ -1,0 +1,16 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 德不孤
+      japanese: 徳は孤ならず、
+    speaker: kongzi
+  - text:
+      original: 必有鄰
+      japanese: 必ず隣あり。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

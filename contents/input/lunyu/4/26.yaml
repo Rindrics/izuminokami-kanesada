@@ -1,0 +1,24 @@
+segments:
+  - text:
+      original: 子游曰
+      japanese: 子游曰く、
+    speaker: ziyou
+  - text:
+      original: 事君數
+      japanese: 君に事うるに数なれば、
+    speaker: ziyou
+  - text:
+      original: 斯辱矣
+      japanese: 斯に辱めらる。
+    speaker: ziyou
+  - text:
+      original: 朋友數
+      japanese: 朋友数なれば、
+    speaker: ziyou
+  - text:
+      original: 斯疏矣
+      japanese: 斯に疏まれる。
+    speaker: ziyou
+mentioned: []
+primer: true
+pinyin_reviewed: false

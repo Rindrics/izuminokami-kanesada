@@ -1,0 +1,16 @@
+segments:
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 居上不-寬 為禮不-敬 臨喪不-哀
+      japanese: 上に居りて寬からず、礼を為して敬せず、喪に臨みて哀しまず、
+    speaker: kongzi
+  - text:
+      original: 吾何以觀之哉
+      japanese: 吾何を以て之を観んや、と。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false

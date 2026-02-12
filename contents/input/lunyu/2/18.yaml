@@ -1,0 +1,24 @@
+segments:
+  - text:
+      original: 子張學干祿
+      japanese: 子張、干禄を学ぶ。
+    speaker: null
+  - text:
+      original: 子曰
+      japanese: 子曰く、
+    speaker: null
+  - text:
+      original: 多聞闕疑 慎言其餘 則寡尤
+      japanese: 多聞きて疑いを闕（か）き、其の余を慎みて言えば、則ち尤（とが）寡し。
+    speaker: kongzi
+  - text:
+      original: 多見闕殆 慎行其餘 則寡悔
+      japanese: 多く見て殆（あやう）きを闕き、其の余を慎みて行えば、則ち悔寡し。
+    speaker: kongzi
+  - text:
+      original: 言寡尤 行寡悔 祿在其中矣
+      japanese: 言尤寡く、行悔寡ければ、禄其の中に在り、と。
+    speaker: kongzi
+mentioned: []
+primer: true
+pinyin_reviewed: false
