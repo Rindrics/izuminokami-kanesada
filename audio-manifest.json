@@ -571,6 +571,98 @@
       }
     ]
   },
+  "lunyu/11/1": {
+    "segments": [
+      {
+        "index": 0,
+        "zh": {
+          "hash": "27c31ec37f72ea409e96f793a4c80c380785ec8244ea94c63d53321fea563415",
+          "uploadedAt": "2026-02-12T18:45:31.190Z"
+        }
+      },
+      {
+        "index": 1,
+        "zh": {
+          "hash": "e2e22e3acd9377ecc9c74dcd6756ba57ab25f1f7ad0e34b029f63c59093844fd",
+          "uploadedAt": "2026-02-12T18:45:31.316Z"
+        }
+      },
+      {
+        "index": 2,
+        "zh": {
+          "hash": "83cb1e3e344e8c845ca7e88b5bfe83f62fe90fd7bc473001736c6e82c440d99f",
+          "uploadedAt": "2026-02-12T18:45:31.452Z"
+        }
+      },
+      {
+        "index": 3,
+        "zh": {
+          "hash": "1f390d842fdc1ca3596d421f7a70fb71b7a37aad12a54f0c9f182a5f7074e990",
+          "uploadedAt": "2026-02-12T18:45:31.576Z"
+        }
+      }
+    ]
+  },
+  "lunyu/11/23": {
+    "segments": [
+      {
+        "index": 0,
+        "zh": {
+          "hash": "4581c2a221536a2443a64ca15c674e3d83fe68f2ec66735faadc7dc4a74a98d4",
+          "uploadedAt": "2026-02-12T18:45:36.275Z"
+        }
+      },
+      {
+        "index": 1,
+        "zh": {
+          "hash": "36144fcf9a42bbb64e2a8a64d0dccda5a5af9f1807d3f97b635773d27da2f55b",
+          "uploadedAt": "2026-02-12T18:45:36.407Z"
+        }
+      },
+      {
+        "index": 2,
+        "zh": {
+          "hash": "cc244b2df9a8c910c29c8e8cfeeb4ce2a5b458cbc7e7dfcd528a9afbddac3e14",
+          "uploadedAt": "2026-02-12T18:45:36.540Z"
+        }
+      },
+      {
+        "index": 3,
+        "zh": {
+          "hash": "cfb021aeac057d5e5f60d738d9ec7b0bc41edd33ba52462cd909cb0fe1294adc",
+          "uploadedAt": "2026-02-12T18:45:36.673Z"
+        }
+      },
+      {
+        "index": 4,
+        "zh": {
+          "hash": "69eb361a59befe45aea36da7c74d9d80020399b4de8426ab8da1be69ca47c06d",
+          "uploadedAt": "2026-02-12T18:45:36.795Z"
+        }
+      },
+      {
+        "index": 5,
+        "zh": {
+          "hash": "68315e286be36b426bb560b7fb8c2ea9a4c74d31cdde3c43d87046c574ba022d",
+          "uploadedAt": "2026-02-12T18:45:36.928Z"
+        }
+      },
+      {
+        "index": 6,
+        "zh": {
+          "hash": "27c31ec37f72ea409e96f793a4c80c380785ec8244ea94c63d53321fea563415",
+          "uploadedAt": "2026-02-12T18:45:37.053Z"
+        }
+      },
+      {
+        "index": 7,
+        "zh": {
+          "hash": "445f3cc650001325a382530b20495cead0014a0ca1c00aa2eff859ee90c8eaf1",
+          "uploadedAt": "2026-02-12T18:45:37.185Z"
+        }
+      }
+    ]
+  },
   "lunyu/12/1": {
     "segments": [
       {
@@ -655,6 +747,1315 @@
       }
     ]
   },
+  "lunyu/12/10": {
+    "segments": [
+      {
+        "index": 0,
+        "zh": {
+          "hash": "7c1662d70a80cfbb8714ea0b5c94353552b22d73ad8725736411b56510780c12",
+          "uploadedAt": "2026-02-12T18:39:09.821Z"
+        }
+      },
+      {
+        "index": 1,
+        "zh": {
+          "hash": "27c31ec37f72ea409e96f793a4c80c380785ec8244ea94c63d53321fea563415",
+          "uploadedAt": "2026-02-12T18:39:09.951Z"
+        }
+      },
+      {
+        "index": 2,
+        "zh": {
+          "hash": "344918ea9fef896451e2f9b80ffa3a30674f2f102294a9bd687a3be9b304be5a",
+          "uploadedAt": "2026-02-12T18:39:10.091Z"
+        }
+      },
+      {
+        "index": 3,
+        "zh": {
+          "hash": "76c81bff9fb66c9b797f4caa50ebe8406f5022f64e014378d86a6e3419b0b896",
+          "uploadedAt": "2026-02-12T18:39:10.216Z"
+        }
+      },
+      {
+        "index": 4,
+        "zh": {
+          "hash": "93293d192c210e7ed3fca46425e8a05887f3a64c9660f523562da9a860148ea6",
+          "uploadedAt": "2026-02-12T18:39:10.332Z"
+        }
+      }
+    ]
+  },
+  "lunyu/12/14": {
+    "segments": [
+      {
+        "index": 0,
+        "zh": {
+          "hash": "14eadeeecb972468bc66935110acc04224de0600ba3752172c062b2f84cdbf09",
+          "uploadedAt": "2026-02-12T18:33:58.063Z"
+        }
+      },
+      {
+        "index": 1,
+        "zh": {
+          "hash": "27c31ec37f72ea409e96f793a4c80c380785ec8244ea94c63d53321fea563415",
+          "uploadedAt": "2026-02-12T18:33:58.193Z"
+        }
+      },
+      {
+        "index": 2,
+        "zh": {
+          "hash": "4b2c74e3b3decc9604b3e29c6382358d9ed67557029fe8c24255fa2f9f62d6e2",
+          "uploadedAt": "2026-02-12T18:33:58.325Z"
+        }
+      }
+    ]
+  },
+  "lunyu/12/19": {
+    "segments": [
+      {
+        "index": 0,
+        "zh": {
+          "hash": "0e1c4441c88f6a354ede3a06762308b29b05bc9ab5f520108fc185787c1f6f5e",
+          "uploadedAt": "2026-02-12T18:45:41.633Z"
+        }
+      },
+      {
+        "index": 1,
+        "zh": {
+          "hash": "7938fb66b0ce7233bda73903a55f7a15691eaa8e340a4ff6bc3bce5a020bb5f4",
+          "uploadedAt": "2026-02-12T18:45:41.758Z"
+        }
+      },
+      {
+        "index": 2,
+        "zh": {
+          "hash": "16cbe55679711e4f2193856becde61fd41cc65790fcaeea9002a10fc0d1de7d2",
+          "uploadedAt": "2026-02-12T18:45:41.901Z"
+        }
+      },
+      {
+        "index": 3,
+        "zh": {
+          "hash": "63c0095761341d5c2bc3f0333b334dc52550b6cf7c28e9be65b7849248afa5c5",
+          "uploadedAt": "2026-02-12T18:45:42.027Z"
+        }
+      },
+      {
+        "index": 4,
+        "zh": {
+          "hash": "19f8748ce3155050f816eef52fc13ad4cc52e024976d782fb8c215b44f8f5725",
+          "uploadedAt": "2026-02-12T18:45:42.152Z"
+        }
+      },
+      {
+        "index": 5,
+        "zh": {
+          "hash": "fda1b26ccb5db1755724c67c39bb786ee3abb309a9c80debda0a5b076faddc78",
+          "uploadedAt": "2026-02-12T18:45:42.278Z"
+        }
+      },
+      {
+        "index": 6,
+        "zh": {
+          "hash": "8ad5219985cec9ada9206b5b6636be8cd2fd54c9c0e4ce0db260e348a69e708e",
+          "uploadedAt": "2026-02-12T18:45:42.406Z"
+        }
+      }
+    ]
+  },
+  "lunyu/12/2": {
+    "segments": [
+      {
+        "index": 0,
+        "zh": {
+          "hash": "1f83843fcfbf2ed491210c19d10fcd40471e91d8c821a4044c6e665de9119f6e",
+          "uploadedAt": "2026-02-12T18:45:18.356Z"
+        }
+      },
+      {
+        "index": 1,
+        "zh": {
+          "hash": "27c31ec37f72ea409e96f793a4c80c380785ec8244ea94c63d53321fea563415",
+          "uploadedAt": "2026-02-12T18:45:18.492Z"
+        }
+      },
+      {
+        "index": 2,
+        "zh": {
+          "hash": "c856a898be4288b0de67d3a0edf2b38b2736aef114423a57199d749fca4ed6ec",
+          "uploadedAt": "2026-02-12T18:45:18.634Z"
+        }
+      },
+      {
+        "index": 3,
+        "zh": {
+          "hash": "63a83eb45f236db418d3cdafef82721e04f3e23fc34c0d9532d041b23e8f8a52",
+          "uploadedAt": "2026-02-12T18:45:18.801Z"
+        }
+      },
+      {
+        "index": 4,
+        "zh": {
+          "hash": "804412fb49d89641aaa94b25519173393fb7c553366e0e48be94f9a84075fe5b",
+          "uploadedAt": "2026-02-12T18:45:18.945Z"
+        }
+      },
+      {
+        "index": 5,
+        "zh": {
+          "hash": "43c8e69b5c7e09cf085d626a836f7eb98f648e28e7c987901bfc86f9fc4383e0",
+          "uploadedAt": "2026-02-12T18:45:19.078Z"
+        }
+      },
+      {
+        "index": 6,
+        "zh": {
+          "hash": "59edc0cb74da9158af853238af20597fead5eb916db27a71139fadc61371a812",
+          "uploadedAt": "2026-02-12T18:45:19.206Z"
+        }
+      }
+    ]
+  },
+  "lunyu/12/21": {
+    "segments": [
+      {
+        "index": 0,
+        "zh": {
+          "hash": "a762023bcd23bd3adb3589cae7e92e16a9ca67a020c19ba6d3380cbdf086d99a",
+          "uploadedAt": "2026-02-12T18:45:47.498Z"
+        }
+      },
+      {
+        "index": 1,
+        "zh": {
+          "hash": "167b1b41cd56a06ba6a65965ca88cb3898c82414abda2cb78ab1a372f5cd62c6",
+          "uploadedAt": "2026-02-12T18:45:47.626Z"
+        }
+      },
+      {
+        "index": 2,
+        "zh": {
+          "hash": "54153fc02de51f65bcb4baf0325c9999e6c74ebd0ecd08da2b3b80a891a50253",
+          "uploadedAt": "2026-02-12T18:45:47.753Z"
+        }
+      },
+      {
+        "index": 3,
+        "zh": {
+          "hash": "27c31ec37f72ea409e96f793a4c80c380785ec8244ea94c63d53321fea563415",
+          "uploadedAt": "2026-02-12T18:45:47.869Z"
+        }
+      },
+      {
+        "index": 4,
+        "zh": {
+          "hash": "e435fc2ee080a533f4146ce1665e014c13aae513ab344ddf7c944bb8c0b7a705",
+          "uploadedAt": "2026-02-12T18:45:48.000Z"
+        }
+      },
+      {
+        "index": 5,
+        "zh": {
+          "hash": "9e4b9f046d9c2d4723ec7dda8d817770de7b4813e1c8ac5198bcb9bbfbe23641",
+          "uploadedAt": "2026-02-12T18:45:48.124Z"
+        }
+      },
+      {
+        "index": 6,
+        "zh": {
+          "hash": "31978d99591b0af3364fcf243d42c4f42b0752a5fb25892196b9af0a1821ec03",
+          "uploadedAt": "2026-02-12T18:45:48.262Z"
+        }
+      },
+      {
+        "index": 7,
+        "zh": {
+          "hash": "579bebb7d3e966b1588a4fa617bbc81cc9fa73471e6c0848a7986ef3f060236e",
+          "uploadedAt": "2026-02-12T18:45:48.388Z"
+        }
+      }
+    ]
+  },
+  "lunyu/12/24": {
+    "segments": [
+      {
+        "index": 0,
+        "zh": {
+          "hash": "5ae5ed1a64c708ae9df9252b0ab99baeb459b0b404bf623a846b198b7922f9a5",
+          "uploadedAt": "2026-02-12T18:45:51.448Z"
+        }
+      },
+      {
+        "index": 1,
+        "zh": {
+          "hash": "5b64829bc46d6867b84389cf1ee71a5880cf307a9fdc9003be191922e4095053",
+          "uploadedAt": "2026-02-12T18:45:51.577Z"
+        }
+      },
+      {
+        "index": 2,
+        "zh": {
+          "hash": "799faa15c7322f2efc26badc7d252d11f6ff2ceb3a717ddb3b30388273496386",
+          "uploadedAt": "2026-02-12T18:45:51.703Z"
+        }
+      }
+    ]
+  },
+  "lunyu/13/1": {
+    "segments": [
+      {
+        "index": 0,
+        "zh": {
+          "hash": "61152c65845b80efc1e4e84d5aa71f950c112c1d2122e1cd3efdd040eb76adce",
+          "uploadedAt": "2026-02-12T18:45:55.723Z"
+        }
+      },
+      {
+        "index": 1,
+        "zh": {
+          "hash": "36144fcf9a42bbb64e2a8a64d0dccda5a5af9f1807d3f97b635773d27da2f55b",
+          "uploadedAt": "2026-02-12T18:45:55.851Z"
+        }
+      },
+      {
+        "index": 2,
+        "zh": {
+          "hash": "f1324dd87620b7a20471c5d0856a13e0947cf6cfc1ec73f4f65d25c6a1aece4f",
+          "uploadedAt": "2026-02-12T18:45:55.974Z"
+        }
+      },
+      {
+        "index": 3,
+        "zh": {
+          "hash": "d84584eb6eb3fdd774b719f682154008ea1eac8995a7645cb984fa88843a595a",
+          "uploadedAt": "2026-02-12T18:45:56.101Z"
+        }
+      },
+      {
+        "index": 4,
+        "zh": {
+          "hash": "31a1450cb11741f4b332df7ddea14e994b8c02d5832e4e0be15cc3ba093f0bb9",
+          "uploadedAt": "2026-02-12T18:45:56.225Z"
+        }
+      },
+      {
+        "index": 5,
+        "zh": {
+          "hash": "4b59f636ed4bbd77a900d9419dc38d759d127796b2c91a3b92d4ee5bf5c6c3f7",
+          "uploadedAt": "2026-02-12T18:45:56.370Z"
+        }
+      }
+    ]
+  },
+  "lunyu/13/17": {
+    "segments": [
+      {
+        "index": 0,
+        "zh": {
+          "hash": "d0dca0a8bfe058d4986688681546e7fc4835de51e118a0b764f703db79b3d35a",
+          "uploadedAt": "2026-02-12T18:46:00.281Z"
+        }
+      },
+      {
+        "index": 1,
+        "zh": {
+          "hash": "36144fcf9a42bbb64e2a8a64d0dccda5a5af9f1807d3f97b635773d27da2f55b",
+          "uploadedAt": "2026-02-12T18:46:00.408Z"
+        }
+      },
+      {
+        "index": 2,
+        "zh": {
+          "hash": "6ace9e14ab27182772f798b2769fb735d2c8169e39e1b06f864294bc23fb0a71",
+          "uploadedAt": "2026-02-12T18:46:00.534Z"
+        }
+      },
+      {
+        "index": 3,
+        "zh": {
+          "hash": "fb6bb2687b0a47722297da98a7f2071625cb0eea076d1e7ac6a3b67dc8916da1",
+          "uploadedAt": "2026-02-12T18:46:00.662Z"
+        }
+      }
+    ]
+  },
+  "lunyu/13/19": {
+    "segments": [
+      {
+        "index": 0,
+        "zh": {
+          "hash": "5feda7d3988650eafd051898dce6b9247e09371cc787259a778a418ddd0425e1",
+          "uploadedAt": "2026-02-12T18:46:04.672Z"
+        }
+      },
+      {
+        "index": 1,
+        "zh": {
+          "hash": "36144fcf9a42bbb64e2a8a64d0dccda5a5af9f1807d3f97b635773d27da2f55b",
+          "uploadedAt": "2026-02-12T18:46:04.805Z"
+        }
+      },
+      {
+        "index": 2,
+        "zh": {
+          "hash": "15bae7f550090f58f9cb854ca8439ec5ec188f9ed54121779010f7c4b2ea3dba",
+          "uploadedAt": "2026-02-12T18:46:04.924Z"
+        }
+      },
+      {
+        "index": 3,
+        "zh": {
+          "hash": "58a964bdb9e97ba7e566eaedaf628bd2c0be828ae83c69bccfe0d754c4e8c0b3",
+          "uploadedAt": "2026-02-12T18:46:05.060Z"
+        }
+      }
+    ]
+  },
+  "lunyu/13/23": {
+    "segments": [
+      {
+        "index": 0,
+        "zh": {
+          "hash": "27c31ec37f72ea409e96f793a4c80c380785ec8244ea94c63d53321fea563415",
+          "uploadedAt": "2026-02-12T18:46:08.191Z"
+        }
+      },
+      {
+        "index": 1,
+        "zh": {
+          "hash": "d130892c2e540cb9863e769e13f0b16c14e802201413f75461e83af6d2082019",
+          "uploadedAt": "2026-02-12T18:46:08.321Z"
+        }
+      },
+      {
+        "index": 2,
+        "zh": {
+          "hash": "9da5a8d30ca0c1c6bf9247ee939326944715a3e3c47cc7b12fd0d1fafc6dcfb3",
+          "uploadedAt": "2026-02-12T18:46:08.463Z"
+        }
+      }
+    ]
+  },
+  "lunyu/13/27": {
+    "segments": [
+      {
+        "index": 0,
+        "zh": {
+          "hash": "36144fcf9a42bbb64e2a8a64d0dccda5a5af9f1807d3f97b635773d27da2f55b",
+          "uploadedAt": "2026-02-12T18:39:18.813Z"
+        }
+      },
+      {
+        "index": 1,
+        "zh": {
+          "hash": "1dad548ec5a97dbc8349b3169df1537e176391b4661fd75fed5d6cbdf5d160d2",
+          "uploadedAt": "2026-02-12T18:39:18.991Z"
+        }
+      }
+    ]
+  },
+  "lunyu/13/6": {
+    "segments": [
+      {
+        "index": 0,
+        "zh": {
+          "hash": "27c31ec37f72ea409e96f793a4c80c380785ec8244ea94c63d53321fea563415",
+          "uploadedAt": "2026-02-12T18:46:11.885Z"
+        }
+      },
+      {
+        "index": 1,
+        "zh": {
+          "hash": "98605033a0b4b716a751140eb7589f51c8c1466ee32868f8925601348a2d7fcc",
+          "uploadedAt": "2026-02-12T18:46:12.017Z"
+        }
+      },
+      {
+        "index": 2,
+        "zh": {
+          "hash": "fa74a5733dc873a69a5b19ab0be6248e88da141c6508d1e38e6b1f0cb270d44a",
+          "uploadedAt": "2026-02-12T18:46:12.148Z"
+        }
+      }
+    ]
+  },
+  "lunyu/14/1": {
+    "segments": [
+      {
+        "index": 0,
+        "zh": {
+          "hash": "4fd43ea191dc9ef94e9731642449f010d37225f62db9b4d1cdaec16c5b784494",
+          "uploadedAt": "2026-02-12T18:46:16.411Z"
+        }
+      },
+      {
+        "index": 1,
+        "zh": {
+          "hash": "27c31ec37f72ea409e96f793a4c80c380785ec8244ea94c63d53321fea563415",
+          "uploadedAt": "2026-02-12T18:46:16.539Z"
+        }
+      },
+      {
+        "index": 2,
+        "zh": {
+          "hash": "f5a3fc97eb46a0af6377bb019d0e374985eebc9d3e0bf8f6e423f0d1d3264d8b",
+          "uploadedAt": "2026-02-12T18:46:16.665Z"
+        }
+      },
+      {
+        "index": 3,
+        "zh": {
+          "hash": "e5c3547930d0cb70f13f30910c13a39a3ad2801910dbe02a9f42b763685991e2",
+          "uploadedAt": "2026-02-12T18:46:16.795Z"
+        }
+      },
+      {
+        "index": 4,
+        "zh": {
+          "hash": "36144fcf9a42bbb64e2a8a64d0dccda5a5af9f1807d3f97b635773d27da2f55b",
+          "uploadedAt": "2026-02-12T18:46:16.913Z"
+        }
+      },
+      {
+        "index": 5,
+        "zh": {
+          "hash": "e9658704a624e08485196eaf10319500fe4f5be66973c6632753e274c6ec0e4f",
+          "uploadedAt": "2026-02-12T18:46:17.047Z"
+        }
+      }
+    ]
+  },
+  "lunyu/14/17": {
+    "segments": [
+      {
+        "index": 0,
+        "zh": {
+          "hash": "e0dee051a36ac64365de20760922f9a3f9121bc7ea36f3f62696d8ca6e47079a",
+          "uploadedAt": "2026-02-12T18:46:22.397Z"
+        }
+      },
+      {
+        "index": 1,
+        "zh": {
+          "hash": "8236e86f4874237818c8e3e6f42abfb38dc34a528fb3dac5752e621ab00a071f",
+          "uploadedAt": "2026-02-12T18:46:22.514Z"
+        }
+      },
+      {
+        "index": 2,
+        "zh": {
+          "hash": "aaa826c563b20a2987781fcfe6f278535e0046b07c4f27e74aab90fe96fa7f6b",
+          "uploadedAt": "2026-02-12T18:46:22.633Z"
+        }
+      },
+      {
+        "index": 3,
+        "zh": {
+          "hash": "27c31ec37f72ea409e96f793a4c80c380785ec8244ea94c63d53321fea563415",
+          "uploadedAt": "2026-02-12T18:46:22.749Z"
+        }
+      },
+      {
+        "index": 4,
+        "zh": {
+          "hash": "75c368678aea392c14ae18846b14408f2d653159d981685e42f0db13ec376de2",
+          "uploadedAt": "2026-02-12T18:46:22.869Z"
+        }
+      },
+      {
+        "index": 5,
+        "zh": {
+          "hash": "a1a4885003c6df7b87624a22952f663ea2d8daf67fda09f69f99719759717a9a",
+          "uploadedAt": "2026-02-12T18:46:23.009Z"
+        }
+      },
+      {
+        "index": 6,
+        "zh": {
+          "hash": "56dea22ae0141afa988d91040e1017f8a24a2d8bb3e8702b1a61fdd57ab47073",
+          "uploadedAt": "2026-02-12T18:46:23.126Z"
+        }
+      },
+      {
+        "index": 7,
+        "zh": {
+          "hash": "8726d99d3f3a9b1e5d2b90030ceee4260ac4939c4cc86fe07e6e422ad1960307",
+          "uploadedAt": "2026-02-12T18:46:23.278Z"
+        }
+      }
+    ]
+  },
+  "lunyu/14/20": {
+    "segments": [
+      {
+        "index": 0,
+        "zh": {
+          "hash": "27c31ec37f72ea409e96f793a4c80c380785ec8244ea94c63d53321fea563415",
+          "uploadedAt": "2026-02-12T18:46:26.474Z"
+        }
+      },
+      {
+        "index": 1,
+        "zh": {
+          "hash": "e4da2c06e92ed42c4acb2fa51bb0df362db89e3163334e6fdbd2981873a3e810",
+          "uploadedAt": "2026-02-12T18:46:26.614Z"
+        }
+      }
+    ]
+  },
+  "lunyu/14/24": {
+    "segments": [
+      {
+        "index": 0,
+        "zh": {
+          "hash": "36144fcf9a42bbb64e2a8a64d0dccda5a5af9f1807d3f97b635773d27da2f55b",
+          "uploadedAt": "2026-02-12T20:10:24.810Z"
+        }
+      },
+      {
+        "index": 1,
+        "zh": {
+          "hash": "dd6dc869cfda2bec7577f23fc5e35503f734be737ea0449d1aa98b651fe6810e",
+          "uploadedAt": "2026-02-12T20:10:24.968Z"
+        }
+      },
+      {
+        "index": 2,
+        "zh": {
+          "hash": "cb061eea56e1883baf1220bcaf39ee59298f154717b3b12444bc4e16949b6dd1",
+          "uploadedAt": "2026-02-12T20:10:25.110Z"
+        }
+      }
+    ]
+  },
+  "lunyu/14/27": {
+    "segments": [
+      {
+        "index": 0,
+        "zh": {
+          "hash": "27c31ec37f72ea409e96f793a4c80c380785ec8244ea94c63d53321fea563415",
+          "uploadedAt": "2026-02-12T20:10:28.046Z"
+        }
+      },
+      {
+        "index": 1,
+        "zh": {
+          "hash": "6de4b448a66ada0665ec7e58c43cc0eee6bcd966a4adfb3ca0b8c28f380386ae",
+          "uploadedAt": "2026-02-12T20:10:28.189Z"
+        }
+      }
+    ]
+  },
+  "lunyu/14/37": {
+    "segments": [
+      {
+        "index": 0,
+        "zh": {
+          "hash": "27c31ec37f72ea409e96f793a4c80c380785ec8244ea94c63d53321fea563415",
+          "uploadedAt": "2026-02-12T20:10:31.731Z"
+        }
+      },
+      {
+        "index": 1,
+        "zh": {
+          "hash": "463df1284ed0a0aec447d1c91a613c74985c175b9bb864d7b0904bb72e9a7101",
+          "uploadedAt": "2026-02-12T20:10:31.892Z"
+        }
+      },
+      {
+        "index": 2,
+        "zh": {
+          "hash": "27c31ec37f72ea409e96f793a4c80c380785ec8244ea94c63d53321fea563415",
+          "uploadedAt": "2026-02-12T20:10:32.032Z"
+        }
+      },
+      {
+        "index": 3,
+        "zh": {
+          "hash": "f98340e51c67691598bf0081b774b65ab4d29ae8958afcd95c1967e90dac063e",
+          "uploadedAt": "2026-02-12T20:10:32.167Z"
+        }
+      }
+    ]
+  },
+  "lunyu/14/7": {
+    "segments": [
+      {
+        "index": 0,
+        "zh": {
+          "hash": "27c31ec37f72ea409e96f793a4c80c380785ec8244ea94c63d53321fea563415",
+          "uploadedAt": "2026-02-12T20:10:35.416Z"
+        }
+      },
+      {
+        "index": 1,
+        "zh": {
+          "hash": "980a90e0237a97ae1c1798abf199780d99c88672e7024b25247981f491ca6741",
+          "uploadedAt": "2026-02-12T20:10:35.551Z"
+        }
+      },
+      {
+        "index": 2,
+        "zh": {
+          "hash": "2639bee35fcfa8872a573892740589e921eaf775ee7e315ec778bbbb61bbaaa4",
+          "uploadedAt": "2026-02-12T20:10:35.686Z"
+        }
+      }
+    ]
+  },
+  "lunyu/15/1": {
+    "segments": [
+      {
+        "index": 0,
+        "zh": {
+          "hash": "87599e9ce2225a2fc729c5b8d8fb6924361f1c127d389b40f72ff8f2622775c7",
+          "uploadedAt": "2026-02-12T20:10:39.237Z"
+        }
+      },
+      {
+        "index": 1,
+        "zh": {
+          "hash": "d37af376785a1392c5a31463168964c728f3b09147a7455053f16a21a64c3823",
+          "uploadedAt": "2026-02-12T20:10:39.383Z"
+        }
+      },
+      {
+        "index": 2,
+        "zh": {
+          "hash": "bb6acd4f7f7d8d69ecd7ed7805bde82cb223b86b30b91a9fe1b50a9d77c8f0f5",
+          "uploadedAt": "2026-02-12T20:10:39.529Z"
+        }
+      },
+      {
+        "index": 3,
+        "zh": {
+          "hash": "90e089833f482f4259d700ef7d0c287b12608ab41918601bbb1714b4b60dd5de",
+          "uploadedAt": "2026-02-12T20:10:39.672Z"
+        }
+      }
+    ]
+  },
+  "lunyu/15/12": {
+    "segments": [
+      {
+        "index": 0,
+        "zh": {
+          "hash": "27c31ec37f72ea409e96f793a4c80c380785ec8244ea94c63d53321fea563415",
+          "uploadedAt": "2026-02-12T18:39:25.733Z"
+        }
+      },
+      {
+        "index": 1,
+        "zh": {
+          "hash": "dde773b61b7e789fb1f64c207c6475211b2c4ccbeb4ecf0e75cff2963e5af639",
+          "uploadedAt": "2026-02-12T18:39:25.860Z"
+        }
+      }
+    ]
+  },
+  "lunyu/15/15": {
+    "segments": [
+      {
+        "index": 0,
+        "zh": {
+          "hash": "36144fcf9a42bbb64e2a8a64d0dccda5a5af9f1807d3f97b635773d27da2f55b",
+          "uploadedAt": "2026-02-12T18:39:29.338Z"
+        }
+      },
+      {
+        "index": 1,
+        "zh": {
+          "hash": "27a0de8e09e1f03437817ee1cb441fadc9c5ebec26ee59f35af4f804b51dc5cc",
+          "uploadedAt": "2026-02-12T18:39:29.459Z"
+        }
+      }
+    ]
+  },
+  "lunyu/15/19": {
+    "segments": [
+      {
+        "index": 0,
+        "zh": {
+          "hash": "27c31ec37f72ea409e96f793a4c80c380785ec8244ea94c63d53321fea563415",
+          "uploadedAt": "2026-02-12T18:39:33.141Z"
+        }
+      },
+      {
+        "index": 1,
+        "zh": {
+          "hash": "0be5d0bb4193e48472ba82c3c9515d9bc002c544fce629c1214225614fabfdcb",
+          "uploadedAt": "2026-02-12T18:39:33.272Z"
+        }
+      }
+    ]
+  },
+  "lunyu/15/20": {
+    "segments": [
+      {
+        "index": 0,
+        "zh": {
+          "hash": "27c31ec37f72ea409e96f793a4c80c380785ec8244ea94c63d53321fea563415",
+          "uploadedAt": "2026-02-12T20:10:42.408Z"
+        }
+      },
+      {
+        "index": 1,
+        "zh": {
+          "hash": "c0d28acfe160be138c8b7c4138c86fb2308ca060f5409ceb6b202eb2e64cfe2f",
+          "uploadedAt": "2026-02-12T20:10:42.555Z"
+        }
+      }
+    ]
+  },
+  "lunyu/15/21": {
+    "segments": [
+      {
+        "index": 0,
+        "zh": {
+          "hash": "27c31ec37f72ea409e96f793a4c80c380785ec8244ea94c63d53321fea563415",
+          "uploadedAt": "2026-02-12T18:39:37.357Z"
+        }
+      },
+      {
+        "index": 1,
+        "zh": {
+          "hash": "fccfb1fd3eb6d323fd2c00c929fc0947ba1d152ac0b807558974f53750e6d125",
+          "uploadedAt": "2026-02-12T18:39:37.482Z"
+        }
+      }
+    ]
+  },
+  "lunyu/15/22": {
+    "segments": [
+      {
+        "index": 0,
+        "zh": {
+          "hash": "27c31ec37f72ea409e96f793a4c80c380785ec8244ea94c63d53321fea563415",
+          "uploadedAt": "2026-02-12T18:39:40.898Z"
+        }
+      },
+      {
+        "index": 1,
+        "zh": {
+          "hash": "e0d9693d9a1691f6e7cf63998c299a0275055d833599b45ae78beecb01fe1f3d",
+          "uploadedAt": "2026-02-12T18:39:41.023Z"
+        }
+      }
+    ]
+  },
+  "lunyu/15/28": {
+    "segments": [
+      {
+        "index": 0,
+        "zh": {
+          "hash": "36144fcf9a42bbb64e2a8a64d0dccda5a5af9f1807d3f97b635773d27da2f55b",
+          "uploadedAt": "2026-02-12T18:39:45.251Z"
+        }
+      },
+      {
+        "index": 1,
+        "zh": {
+          "hash": "1c4554e74b803dd872854f1d9b318be634d1c3a72ab8f8e7aaa9d1bc06b46e5d",
+          "uploadedAt": "2026-02-12T18:39:45.374Z"
+        }
+      },
+      {
+        "index": 2,
+        "zh": {
+          "hash": "7c1b5b384263155b3fe530fcb467647c50ab9dac5f063c353f792e796842c29d",
+          "uploadedAt": "2026-02-12T18:39:45.489Z"
+        }
+      }
+    ]
+  },
+  "lunyu/15/30": {
+    "segments": [
+      {
+        "index": 0,
+        "zh": {
+          "hash": "27c31ec37f72ea409e96f793a4c80c380785ec8244ea94c63d53321fea563415",
+          "uploadedAt": "2026-02-12T18:39:48.814Z"
+        }
+      },
+      {
+        "index": 1,
+        "zh": {
+          "hash": "1488d78ad77cd19d232f10dd5b4138024227c481398a8053c1a129dd02bf0d71",
+          "uploadedAt": "2026-02-12T18:39:48.942Z"
+        }
+      }
+    ]
+  },
+  "lunyu/15/32": {
+    "segments": [
+      {
+        "index": 0,
+        "zh": {
+          "hash": "36144fcf9a42bbb64e2a8a64d0dccda5a5af9f1807d3f97b635773d27da2f55b",
+          "uploadedAt": "2026-02-12T18:39:53.372Z"
+        }
+      },
+      {
+        "index": 1,
+        "zh": {
+          "hash": "c336d6473f891f901360c4ace4233630dcfd8f6245f5db0fd9f26313ba6e8b53",
+          "uploadedAt": "2026-02-12T18:39:53.497Z"
+        }
+      },
+      {
+        "index": 2,
+        "zh": {
+          "hash": "fddfd77ee38f39a11b8592146be87fd718bb7eb22a4e04ca09c9560db7f87441",
+          "uploadedAt": "2026-02-12T18:39:53.657Z"
+        }
+      },
+      {
+        "index": 3,
+        "zh": {
+          "hash": "a3cf3e203555808a75021c049687cc0ed44f62772ed1c3c1963f4c8c43093958",
+          "uploadedAt": "2026-02-12T18:39:53.784Z"
+        }
+      },
+      {
+        "index": 4,
+        "zh": {
+          "hash": "18461d5258090f6a4f97a4f1ad4c04ff34df95b0a89fb4b01900d91f86cdf2da",
+          "uploadedAt": "2026-02-12T18:39:53.926Z"
+        }
+      }
+    ]
+  },
+  "lunyu/15/33": {
+    "segments": [
+      {
+        "index": 0,
+        "zh": {
+          "hash": "27c31ec37f72ea409e96f793a4c80c380785ec8244ea94c63d53321fea563415",
+          "uploadedAt": "2026-02-12T18:39:59.086Z"
+        }
+      },
+      {
+        "index": 1,
+        "zh": {
+          "hash": "fac6e4e376c58146296ddd2b7652cfabdb21a3f0facb744811bc15c6f00ceb51",
+          "uploadedAt": "2026-02-12T18:39:59.217Z"
+        }
+      },
+      {
+        "index": 2,
+        "zh": {
+          "hash": "9374a3a061372c1e889f389fbcbfa02a45dfe488b6fdfd0070e050bc227e8206",
+          "uploadedAt": "2026-02-12T18:39:59.345Z"
+        }
+      },
+      {
+        "index": 3,
+        "zh": {
+          "hash": "4d34e2fa116f39e1b774a6c8d8b8e9859da160caa9662e0994895611ecc5cadb",
+          "uploadedAt": "2026-02-12T18:39:59.455Z"
+        }
+      },
+      {
+        "index": 4,
+        "zh": {
+          "hash": "5af12afa1fb5edee8de9c033c4aec0f2a0525a674266b5fbf6b53c8070262e0e",
+          "uploadedAt": "2026-02-12T18:39:59.587Z"
+        }
+      },
+      {
+        "index": 5,
+        "zh": {
+          "hash": "add9c8d78cc398b5167182eff2cc1fb21e1866a0b62d3d82698d09f126b447db",
+          "uploadedAt": "2026-02-12T18:39:59.720Z"
+        }
+      },
+      {
+        "index": 6,
+        "zh": {
+          "hash": "dde69f16e3f8063e7e889c0db00fc6ddc13614c8553a7d7d3372a38fb6cf3cb6",
+          "uploadedAt": "2026-02-12T18:39:59.836Z"
+        }
+      }
+    ]
+  },
+  "lunyu/15/35": {
+    "segments": [
+      {
+        "index": 0,
+        "zh": {
+          "hash": "27c31ec37f72ea409e96f793a4c80c380785ec8244ea94c63d53321fea563415",
+          "uploadedAt": "2026-02-12T18:40:04.083Z"
+        }
+      },
+      {
+        "index": 1,
+        "zh": {
+          "hash": "ad1e0195f0f04f767c6da03c63e89b6d8b500b6437a994bc9d114f15ba758e7d",
+          "uploadedAt": "2026-02-12T18:40:04.219Z"
+        }
+      },
+      {
+        "index": 2,
+        "zh": {
+          "hash": "2aca61da02e88e9dc4c5a668e8922e9b60631f8cdfb117a1966255179a3b4b0e",
+          "uploadedAt": "2026-02-12T18:40:04.355Z"
+        }
+      },
+      {
+        "index": 3,
+        "zh": {
+          "hash": "1435296351a75640e9d5520e4de449b3356034693aed6d58e0e125bc9123c1be",
+          "uploadedAt": "2026-02-12T18:40:04.493Z"
+        }
+      }
+    ]
+  },
+  "lunyu/15/39": {
+    "segments": [
+      {
+        "index": 0,
+        "zh": {
+          "hash": "27c31ec37f72ea409e96f793a4c80c380785ec8244ea94c63d53321fea563415",
+          "uploadedAt": "2026-02-12T18:40:08.567Z"
+        }
+      },
+      {
+        "index": 1,
+        "zh": {
+          "hash": "6712bb5babcaa42463b5612877e40f23d070e3c2de7833398614abae5635536e",
+          "uploadedAt": "2026-02-12T18:40:08.693Z"
+        }
+      }
+    ]
+  },
+  "lunyu/15/41": {
+    "segments": [
+      {
+        "index": 0,
+        "zh": {
+          "hash": "36144fcf9a42bbb64e2a8a64d0dccda5a5af9f1807d3f97b635773d27da2f55b",
+          "uploadedAt": "2026-02-12T18:40:12.114Z"
+        }
+      },
+      {
+        "index": 1,
+        "zh": {
+          "hash": "04e6b5a0c717c3f7d4ee41a2d7216c2386b10e6a220c27f105c89efaaaa8679e",
+          "uploadedAt": "2026-02-12T18:40:12.239Z"
+        }
+      }
+    ]
+  },
+  "lunyu/15/9": {
+    "segments": [
+      {
+        "index": 0,
+        "zh": {
+          "hash": "27c31ec37f72ea409e96f793a4c80c380785ec8244ea94c63d53321fea563415",
+          "uploadedAt": "2026-02-12T18:39:22.147Z"
+        }
+      },
+      {
+        "index": 1,
+        "zh": {
+          "hash": "a8b314e7cbcf9b865ce63d1af45622831362e148841127566e3605154c0b3a05",
+          "uploadedAt": "2026-02-12T18:39:22.264Z"
+        }
+      }
+    ]
+  },
+  "lunyu/16/10": {
+    "segments": [
+      {
+        "index": 0,
+        "zh": {
+          "hash": "27c31ec37f72ea409e96f793a4c80c380785ec8244ea94c63d53321fea563415",
+          "uploadedAt": "2026-02-12T18:40:47.111Z"
+        }
+      },
+      {
+        "index": 1,
+        "zh": {
+          "hash": "6c5b782d35ca50a5a46005e5ac9094c324e37ba7295d4a2b8c21e95f2df430ab",
+          "uploadedAt": "2026-02-12T18:40:47.236Z"
+        }
+      },
+      {
+        "index": 2,
+        "zh": {
+          "hash": "c501a2587c799897de5af642f71c0a19c1f939f507fc3c80aa7a69044e511b59",
+          "uploadedAt": "2026-02-12T18:40:47.351Z"
+        }
+      },
+      {
+        "index": 3,
+        "zh": {
+          "hash": "c1e5b849ae17bfec7a2988ca22ac5f0dcc31535e4549ad20a8bce824f671d527",
+          "uploadedAt": "2026-02-12T18:40:47.485Z"
+        }
+      },
+      {
+        "index": 4,
+        "zh": {
+          "hash": "5c6de5c02bba6658bf4a9798bec99d61da305c9d9494b46dfa20f994779432d1",
+          "uploadedAt": "2026-02-12T18:40:47.604Z"
+        }
+      }
+    ]
+  },
+  "lunyu/16/11": {
+    "segments": [
+      {
+        "index": 0,
+        "zh": {
+          "hash": "36144fcf9a42bbb64e2a8a64d0dccda5a5af9f1807d3f97b635773d27da2f55b",
+          "uploadedAt": "2026-02-12T18:40:52.321Z"
+        }
+      },
+      {
+        "index": 1,
+        "zh": {
+          "hash": "78c5524b368dcdee3286d67ccb19df69430b7bc5372b6e2872262769d34f8b83",
+          "uploadedAt": "2026-02-12T18:40:52.445Z"
+        }
+      },
+      {
+        "index": 2,
+        "zh": {
+          "hash": "4e44412238b859efba80b1a3d515cbe747e3c85990fb0b83494d6bb6401e4bb0",
+          "uploadedAt": "2026-02-12T18:40:52.567Z"
+        }
+      },
+      {
+        "index": 3,
+        "zh": {
+          "hash": "2a4bee4c1ed791812a90cc6e4c71ec4bcd3c42573f1812469a24fd959aea97d6",
+          "uploadedAt": "2026-02-12T18:40:52.693Z"
+        }
+      },
+      {
+        "index": 4,
+        "zh": {
+          "hash": "7677f0e7854e0eddc53a42b627ccda41ec6ccd83bf685125d663339949e062c4",
+          "uploadedAt": "2026-02-12T18:40:52.816Z"
+        }
+      }
+    ]
+  },
+  "lunyu/16/4": {
+    "segments": [
+      {
+        "index": 0,
+        "zh": {
+          "hash": "36144fcf9a42bbb64e2a8a64d0dccda5a5af9f1807d3f97b635773d27da2f55b",
+          "uploadedAt": "2026-02-12T18:40:16.620Z"
+        }
+      },
+      {
+        "index": 1,
+        "zh": {
+          "hash": "175e03aa3b08e5d33afd19bddf7a59aa4590e7612e0dfa635a8ea070f6593464",
+          "uploadedAt": "2026-02-12T18:40:16.734Z"
+        }
+      },
+      {
+        "index": 2,
+        "zh": {
+          "hash": "c8c6ad13760f2366ccacd9d46e1d3874362645cebe6bd057fb76450727a8d166",
+          "uploadedAt": "2026-02-12T18:40:16.858Z"
+        }
+      },
+      {
+        "index": 3,
+        "zh": {
+          "hash": "d9ef8b160d21218bf64c6f285c3948d1c95676d07533fec7fbcc28e58c651cc6",
+          "uploadedAt": "2026-02-12T18:40:16.988Z"
+        }
+      }
+    ]
+  },
+  "lunyu/16/5": {
+    "segments": [
+      {
+        "index": 0,
+        "zh": {
+          "hash": "27c31ec37f72ea409e96f793a4c80c380785ec8244ea94c63d53321fea563415",
+          "uploadedAt": "2026-02-12T18:40:21.527Z"
+        }
+      },
+      {
+        "index": 1,
+        "zh": {
+          "hash": "3e113e83ac5ec8a4cde722ad05c8d8c80a8a52909f1a7c7bf6f7a2d3a42766b6",
+          "uploadedAt": "2026-02-12T18:40:21.652Z"
+        }
+      },
+      {
+        "index": 2,
+        "zh": {
+          "hash": "4717a0dbab150b0fbf7fe50607fbcfef8b655da85f799604aaa607bb50307f3b",
+          "uploadedAt": "2026-02-12T18:40:21.777Z"
+        }
+      },
+      {
+        "index": 3,
+        "zh": {
+          "hash": "9c5844d2f2f59276fad57d1c544f5ce338958318e4de211f08b137e58fc7ba83",
+          "uploadedAt": "2026-02-12T18:40:21.898Z"
+        }
+      }
+    ]
+  },
+  "lunyu/16/6": {
+    "segments": [
+      {
+        "index": 0,
+        "zh": {
+          "hash": "27c31ec37f72ea409e96f793a4c80c380785ec8244ea94c63d53321fea563415",
+          "uploadedAt": "2026-02-12T18:40:26.286Z"
+        }
+      },
+      {
+        "index": 1,
+        "zh": {
+          "hash": "85a611d9f082300d62f3ba5cbdd0fa17863a7709eacc8447c94ee5dbffb5a8e7",
+          "uploadedAt": "2026-02-12T18:40:26.400Z"
+        }
+      },
+      {
+        "index": 2,
+        "zh": {
+          "hash": "be057c6321c8d183f03e4415061c2830dbdb9c914202f8647404aa22db435b3d",
+          "uploadedAt": "2026-02-12T18:40:26.540Z"
+        }
+      },
+      {
+        "index": 3,
+        "zh": {
+          "hash": "3658657f6435d60fb2fd423e7a3d0aceb742c529d4db4f672043e07304413f99",
+          "uploadedAt": "2026-02-12T18:40:26.676Z"
+        }
+      },
+      {
+        "index": 4,
+        "zh": {
+          "hash": "461ad0dc1978057b63da68e7ecfa7f3cccc42742b8ea1d5e2930603abe594e0f",
+          "uploadedAt": "2026-02-12T18:40:26.813Z"
+        }
+      }
+    ]
+  },
+  "lunyu/16/7": {
+    "segments": [
+      {
+        "index": 0,
+        "zh": {
+          "hash": "27c31ec37f72ea409e96f793a4c80c380785ec8244ea94c63d53321fea563415",
+          "uploadedAt": "2026-02-12T18:40:32.073Z"
+        }
+      },
+      {
+        "index": 1,
+        "zh": {
+          "hash": "24dc0094c51fa7f5da8f875a366683207cf09c82d69327ef5c572a8adcaff9ad",
+          "uploadedAt": "2026-02-12T18:40:32.192Z"
+        }
+      },
+      {
+        "index": 2,
+        "zh": {
+          "hash": "3dc7e4670e45861d286b235e111eaf79bae30ac12d0d3bc8b78a877a8853c415",
+          "uploadedAt": "2026-02-12T18:40:32.326Z"
+        }
+      },
+      {
+        "index": 3,
+        "zh": {
+          "hash": "6e4fa6d33c22c3419e61d6f15ef3d7e01c9e4254e245c293429e4fe18832b047",
+          "uploadedAt": "2026-02-12T18:40:32.449Z"
+        }
+      },
+      {
+        "index": 4,
+        "zh": {
+          "hash": "8c2583a0fbe072107912547fa2dbfa31a7e5dd061a3c6ca59120cb8f2ad51fbe",
+          "uploadedAt": "2026-02-12T18:40:32.563Z"
+        }
+      }
+    ]
+  },
+  "lunyu/16/8": {
+    "segments": [
+      {
+        "index": 0,
+        "zh": {
+          "hash": "36144fcf9a42bbb64e2a8a64d0dccda5a5af9f1807d3f97b635773d27da2f55b",
+          "uploadedAt": "2026-02-12T18:40:36.704Z"
+        }
+      },
+      {
+        "index": 1,
+        "zh": {
+          "hash": "7858fa7257bbf1127d5d9e6a5cce7d10aebf2b4b785be3e91e6896c810af9beb",
+          "uploadedAt": "2026-02-12T18:40:36.828Z"
+        }
+      },
+      {
+        "index": 2,
+        "zh": {
+          "hash": "d88937fb03c05bd28ca341a8964327a56b7bb9ed5a41875738b22d0ada1b477b",
+          "uploadedAt": "2026-02-12T18:40:36.983Z"
+        }
+      },
+      {
+        "index": 3,
+        "zh": {
+          "hash": "4a6361984c20195f4762ff296fbe09af4d341755c4b187d335af8275d1dae5f5",
+          "uploadedAt": "2026-02-12T18:40:37.110Z"
+        }
+      }
+    ]
+  },
+  "lunyu/16/9": {
+    "segments": [
+      {
+        "index": 0,
+        "zh": {
+          "hash": "27c31ec37f72ea409e96f793a4c80c380785ec8244ea94c63d53321fea563415",
+          "uploadedAt": "2026-02-12T18:40:41.662Z"
+        }
+      },
+      {
+        "index": 1,
+        "zh": {
+          "hash": "0872e901d68157926963dc66966670093f5fc65701b84fda250cdfbf03bde1ad",
+          "uploadedAt": "2026-02-12T18:40:41.778Z"
+        }
+      },
+      {
+        "index": 2,
+        "zh": {
+          "hash": "ad101fbf4dfeb061497335ff4a3c214bcc923f14c6bea816d9b29ba729829c3b",
+          "uploadedAt": "2026-02-12T18:40:41.906Z"
+        }
+      },
+      {
+        "index": 3,
+        "zh": {
+          "hash": "3237793536623fa1486ff17242a06a9e373fe03f759646f6e3ab07aabdf9a609",
+          "uploadedAt": "2026-02-12T18:40:42.029Z"
+        }
+      },
+      {
+        "index": 4,
+        "zh": {
+          "hash": "4c005f32f3ec9c22fae25a3e167a1d1f92b6158051bd593710528344564e430e",
+          "uploadedAt": "2026-02-12T18:40:42.156Z"
+        }
+      }
+    ]
+  },
   "lunyu/17/10": {
     "segments": [
       {
@@ -676,6 +2077,38 @@
         "zh": {
           "hash": "99ebdbe8b004fb81065997c53c11eb452163e23f4514f2ff7c14f41be788f424",
           "uploadedAt": "2026-02-01T10:54:00.230Z"
+        }
+      }
+    ]
+  },
+  "lunyu/17/2": {
+    "segments": [
+      {
+        "index": 0,
+        "zh": {
+          "hash": "36144fcf9a42bbb64e2a8a64d0dccda5a5af9f1807d3f97b635773d27da2f55b",
+          "uploadedAt": "2026-02-12T18:40:56.567Z"
+        }
+      },
+      {
+        "index": 1,
+        "zh": {
+          "hash": "1c94bafe71a18e65c3d5f3bb9966acc058ae2b09f58bb0dc9e2329b5ffb75a9f",
+          "uploadedAt": "2026-02-12T18:40:56.686Z"
+        }
+      },
+      {
+        "index": 2,
+        "zh": {
+          "hash": "27c31ec37f72ea409e96f793a4c80c380785ec8244ea94c63d53321fea563415",
+          "uploadedAt": "2026-02-12T18:40:56.796Z"
+        }
+      },
+      {
+        "index": 3,
+        "zh": {
+          "hash": "f0e18aa05cb77db1e59341f5f08784f70ed7647024302002d0d19550e02a1bb3",
+          "uploadedAt": "2026-02-12T18:40:56.915Z"
         }
       }
     ]
@@ -771,6 +2204,161 @@
         "zh": {
           "hash": "a2276d5e3760b60a3c728eb14c5c671483bba585d98a3998cf0469ed07045a75",
           "uploadedAt": "2026-02-01T10:55:12.247Z"
+        }
+      }
+    ]
+  },
+  "lunyu/17/5": {
+    "segments": [
+      {
+        "index": 0,
+        "zh": {
+          "hash": "a59ac4e2519bd9d0ec97f1fe481ea3b1060f27c774c39c98c933c1e975b30714",
+          "uploadedAt": "2026-02-12T18:34:08.508Z"
+        }
+      },
+      {
+        "index": 1,
+        "zh": {
+          "hash": "27c31ec37f72ea409e96f793a4c80c380785ec8244ea94c63d53321fea563415",
+          "uploadedAt": "2026-02-12T18:34:08.646Z"
+        }
+      },
+      {
+        "index": 2,
+        "zh": {
+          "hash": "0f937dc115765a14ad5ecd8e20b699ed44410fee0cb35c584afc776f3b109643",
+          "uploadedAt": "2026-02-12T18:34:08.791Z"
+        }
+      },
+      {
+        "index": 3,
+        "zh": {
+          "hash": "31a1450cb11741f4b332df7ddea14e994b8c02d5832e4e0be15cc3ba093f0bb9",
+          "uploadedAt": "2026-02-12T18:34:08.914Z"
+        }
+      },
+      {
+        "index": 4,
+        "zh": {
+          "hash": "e23f3cf94f27d25e23eea9d958176c0a86b7c2891dd423782183052f411d854d",
+          "uploadedAt": "2026-02-12T18:34:09.057Z"
+        }
+      },
+      {
+        "index": 5,
+        "zh": {
+          "hash": "dc45b158d5dc0e99d23e0f31f57a5144303ac3e17be065269a92b009e79ecf5e",
+          "uploadedAt": "2026-02-12T18:34:09.214Z"
+        }
+      },
+      {
+        "index": 6,
+        "zh": {
+          "hash": "cf3c69d4c0cd47576481db011a1a1e98c1895ed6c17b518bc1ffdab228685b42",
+          "uploadedAt": "2026-02-12T18:34:09.342Z"
+        }
+      },
+      {
+        "index": 7,
+        "zh": {
+          "hash": "b4fb92b9b94bb9e267abc084a88598345c119c1cf80ae69f7bc747816ad3c1e3",
+          "uploadedAt": "2026-02-12T18:34:09.472Z"
+        }
+      },
+      {
+        "index": 8,
+        "zh": {
+          "hash": "d98c11dfa507b4ec566aabe9bc8f6bc451f0fd1bc4eb3fe47c823e3866d325e9",
+          "uploadedAt": "2026-02-12T18:34:09.613Z"
+        }
+      },
+      {
+        "index": 9,
+        "zh": {
+          "hash": "8d8c8df088aa86d5320efd1830ad3369c1e2611936142bc417f5b302f300e728",
+          "uploadedAt": "2026-02-12T18:34:09.747Z"
+        }
+      }
+    ]
+  },
+  "lunyu/17/7": {
+    "segments": [
+      {
+        "index": 0,
+        "zh": {
+          "hash": "27c31ec37f72ea409e96f793a4c80c380785ec8244ea94c63d53321fea563415",
+          "uploadedAt": "2026-02-12T20:10:48.954Z"
+        }
+      },
+      {
+        "index": 1,
+        "zh": {
+          "hash": "23b58aa6309972801c14d55e35750ed94b215e8864976a03bcd1b359102d14e9",
+          "uploadedAt": "2026-02-12T20:10:49.093Z"
+        }
+      },
+      {
+        "index": 2,
+        "zh": {
+          "hash": "597e0657832dfb42302a96ee76106a2549a6e433924b61a78cae2cebd0b5d71a",
+          "uploadedAt": "2026-02-12T20:10:49.213Z"
+        }
+      },
+      {
+        "index": 3,
+        "zh": {
+          "hash": "3b8077fd3b59e17935b7b33dfecc3b980e94d45510e51349f1f278156efb823d",
+          "uploadedAt": "2026-02-12T20:10:49.336Z"
+        }
+      },
+      {
+        "index": 4,
+        "zh": {
+          "hash": "076e39b2cee8ba1536d4e2ea45f150e89a91c3d3ff659d1569fc007b5e1a5fd4",
+          "uploadedAt": "2026-02-12T20:10:49.473Z"
+        }
+      },
+      {
+        "index": 5,
+        "zh": {
+          "hash": "87de7e57e90ec86a53adae82762d458ad737f8c608722c157a76d9b51190bdc3",
+          "uploadedAt": "2026-02-12T20:10:49.613Z"
+        }
+      },
+      {
+        "index": 6,
+        "zh": {
+          "hash": "88417ab740defbbd97b88686666d6c9bf464e6da2139b104d449970f9faf350c",
+          "uploadedAt": "2026-02-12T20:10:49.737Z"
+        }
+      },
+      {
+        "index": 7,
+        "zh": {
+          "hash": "0d715c2dd78e4dd3e38e42f9fda8023c301b52c6945d3f1969a25b5124cad9ed",
+          "uploadedAt": "2026-02-12T20:10:49.860Z"
+        }
+      },
+      {
+        "index": 8,
+        "zh": {
+          "hash": "307e217f81b0032ce0b73c93a79590ca81b98d8e281f0609d0e2edb97912f469",
+          "uploadedAt": "2026-02-12T20:10:49.991Z"
+        }
+      },
+      {
+        "index": 9,
+        "zh": {
+          "hash": "de47282d0687ac828ff63a39acfa62ff909070f62d6958b7577065750afcbb18",
+          "uploadedAt": "2026-02-12T20:10:50.154Z"
+        }
+      },
+      {
+        "index": 10,
+        "zh": {
+          "hash": "ee88e62f94925a431d01645f4c01c614487219237ebaa28885311cbf13710721",
+          "uploadedAt": "2026-02-12T20:10:50.281Z"
         }
       }
     ]
@@ -1190,6 +2778,38 @@
         "zh": {
           "hash": "dbf7437232a9702bb32f9a578b67f03d4aa6dfd6480a9f8bdfb2586546ac0da3",
           "uploadedAt": "2026-02-10T17:41:19.264Z"
+        }
+      }
+    ]
+  },
+  "lunyu/20/3": {
+    "segments": [
+      {
+        "index": 0,
+        "zh": {
+          "hash": "ab9c3f233ca8e4de80942c7b26499bd807905af4cc1e9445dcb8164c417171f7",
+          "uploadedAt": "2026-02-12T18:41:02.864Z"
+        }
+      },
+      {
+        "index": 1,
+        "zh": {
+          "hash": "bb37a47ca251b3b49445e1303e4de92990f637ee072b5c0261b0b2da45ce754f",
+          "uploadedAt": "2026-02-12T18:41:02.981Z"
+        }
+      },
+      {
+        "index": 2,
+        "zh": {
+          "hash": "1717b23ebc34c971ef3bff4c570c8cd69251a0f9244e98a8a6ece6286112f58b",
+          "uploadedAt": "2026-02-12T18:41:03.104Z"
+        }
+      },
+      {
+        "index": 3,
+        "zh": {
+          "hash": "55523a99ff7bf6a6211ffa16c4eaa3a8206862c50276d6ba2df711f9b1c0d0be",
+          "uploadedAt": "2026-02-12T18:41:03.224Z"
         }
       }
     ]
