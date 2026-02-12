@@ -261,6 +261,10 @@ function parseInputFile(filePath: string): InputContent {
       segment.text.japanese =
         typeof segment.text.japanese === 'string' ? segment.text.japanese : '';
     }
+    // Normalize speaker field (undefined -> null)
+    if (segment.speaker === undefined) {
+      segment.speaker = null;
+    }
     // Normalize and validate hanzi_overrides
     if (!Array.isArray(segment.hanzi_overrides)) {
       segment.hanzi_overrides = undefined;
