@@ -1,5 +1,11 @@
 # Changelog
 
+## [v0.7.0](https://github.com/Rindrics/izuminokami-kanesada/compare/v0.6.0...v0.7.0) - 2026-02-12
+- feat: provide copy button by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/126
+- fix: improve appearance of prev/next button by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/131
+- feat: provide collection functionality by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/128
+- feat: add lunyu contents by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/130
+
 ## [v0.6.0](https://github.com/Rindrics/izuminokami-kanesada/compare/v0.5.0...v0.6.0) - 2026-02-06
 - feat: improve nav UI by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/120
 - feat(mcp): improve content generation workflow with MCP by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/122
