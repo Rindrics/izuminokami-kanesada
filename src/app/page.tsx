@@ -51,14 +51,15 @@ export default function Home() {
               );
               const hasContent = currentChapters > 0;
               const isSingleSection = book.totalSections === 1;
+              const sectionLabel = book.sectionLabel ?? '編';
 
               const progressText = isSingleSection
                 ? `${currentChapters}/${totalChapters}章`
-                : `${currentSections}/${book.totalSections}編、計${currentChapters}章`;
+                : `${currentSections}/${book.totalSections}${sectionLabel}、計${currentChapters}章`;
 
               const disabledText = isSingleSection
                 ? `0/${totalChapters}章`
-                : `0/${book.totalSections}編`;
+                : `0/${book.totalSections}${sectionLabel}`;
 
               return (
                 <li key={book.id}>

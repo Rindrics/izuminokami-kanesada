@@ -1,6 +1,7 @@
 - id: lunyu
   name: 論語
   compositionYear: -479 # 孔子没後、弟子たちが編纂
+  sectionLabel: 篇
   totalSections: 20
   sections:
     - id: '1'
@@ -67,6 +68,7 @@
 - id: mengzi
   name: 孟子
   compositionYear: -300 # 孟子の弟子たちが編纂
+  sectionLabel: 篇
   totalSections: 14
   sections:
     - id: '1'
@@ -115,6 +117,7 @@
 - id: daxue
   name: 大学
   compositionYear: -450 # 曾子の作とされる
+  sectionLabel: 章
   totalSections: 6
   sections:
     - id: '1'
@@ -139,6 +142,7 @@
 - id: zhongyong
   name: 中庸
   compositionYear: -430 # 子思の作とされる
+  sectionLabel: 章
   totalSections: 19
   sections:
     - id: '1'
@@ -203,6 +207,7 @@
 
 - id: yijing
   name: 易経
+  sectionLabel: 経
   totalSections: 2
   sections:
     - id: '1'
@@ -214,6 +219,7 @@
 
 - id: shujing
   name: 書経
+  sectionLabel: 篇
   totalSections: 4
   sections:
     - id: '1'
@@ -231,6 +237,7 @@
 
 - id: shijing
   name: 詩経
+  sectionLabel: 篇
   totalSections: 4
   sections:
     - id: '1'
@@ -248,6 +255,7 @@
 
 - id: liji
   name: 礼記
+  sectionLabel: 篇
   totalSections: 1
   sections:
     - id: '1'
@@ -256,6 +264,7 @@
 
 - id: chunqiu
   name: 春秋左氏伝
+  sectionLabel: 篇
   totalSections: 12
   sections:
     - id: '1'

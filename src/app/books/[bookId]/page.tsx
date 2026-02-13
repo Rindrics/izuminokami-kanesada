@@ -27,6 +27,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return { title: '書籍が見つかりません' };
   }
 
+  const sectionLabel = book.sectionLabel ?? '編';
   const currentSections = book.sections.filter(
     (s) => s.chapters.length > 0,
   ).length;
@@ -36,7 +37,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   );
 
   const title = book.name;
-  const description = `${book.name}の全編を一覧表示。現在${currentSections}/${book.totalSections}編、計${currentChapters}章を収録。白文・訓読み・読み下し文で学習できます。`;
+  const description = `${book.name}の全${sectionLabel}を一覧表示。現在${currentSections}/${book.totalSections}${sectionLabel}、計${currentChapters}章を収録。白文・訓読み・読み下し文で学習できます。`;
 
   return createMetadata({
     title,
@@ -116,7 +117,7 @@ export default async function BookPage({ params }: Props) {
 
       <section>
         <h2 className="mb-4 text-lg font-medium text-zinc-600 dark:text-zinc-400">
-          編一覧
+          {book.sectionLabel ?? '編'}一覧
         </h2>
         <ListWithFavoriteSidebar>
           <ul className="space-y-2">

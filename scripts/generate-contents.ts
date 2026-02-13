@@ -78,6 +78,7 @@ interface InputBook {
   id: string;
   name: string;
   compositionYear?: number;
+  sectionLabel?: string;
   totalSections: number;
   sections: InputSection[];
 }
@@ -102,6 +103,7 @@ interface OutputBook {
   id: string;
   name: string;
   compositionYear?: number;
+  sectionLabel?: string;
   totalSections: number;
   sections: OutputSection[];
 }
@@ -1345,6 +1347,7 @@ export function getAdjacentContentIds(
     id: book.id,
     name: book.name,
     compositionYear: book.compositionYear,
+    sectionLabel: book.sectionLabel,
     totalSections: book.totalSections,
     sections: book.sections.map((section) => ({
       id: section.id,
