@@ -1,6 +1,7 @@
 - id: lunyu
   name: 論語
   compositionYear: -479 # 孔子没後、弟子たちが編纂
+  sectionLabel: 篇
   totalSections: 20
   sections:
     - id: '1'
@@ -67,6 +68,7 @@
 - id: mengzi
   name: 孟子
   compositionYear: -300 # 孟子の弟子たちが編纂
+  sectionLabel: 篇
   totalSections: 14
   sections:
     - id: '1'
@@ -115,25 +117,97 @@
 - id: daxue
   name: 大学
   compositionYear: -450 # 曾子の作とされる
-  totalSections: 1
+  sectionLabel: 章
+  totalSections: 6
   sections:
     - id: '1'
-      name: 大学
-      totalChapters: 11
+      name: 第一章
+      totalChapters: 3
+    - id: '2'
+      name: 第二章
+      totalChapters: 4
+    - id: '3'
+      name: 第三章
+      totalChapters: 1
+    - id: '4'
+      name: 第四章
+      totalChapters: 1
+    - id: '5'
+      name: 第五章
+      totalChapters: 2
+    - id: '6'
+      name: 第六章
+      totalChapters: 4
 
 - id: zhongyong
   name: 中庸
   compositionYear: -430 # 子思の作とされる
-  totalSections: 1
+  sectionLabel: 章
+  totalSections: 19
   sections:
     - id: '1'
-      name: 中庸
-      totalChapters: 33
+      name: 第一章
+      totalChapters: 1
+    - id: '2'
+      name: 第二章
+      totalChapters: 1
+    - id: '3'
+      name: 第三章
+      totalChapters: 1
+    - id: '4'
+      name: 第四章
+      totalChapters: 1
+    - id: '5'
+      name: 第五章
+      totalChapters: 1
+    - id: '6'
+      name: 第六章
+      totalChapters: 1
+    - id: '7'
+      name: 第七章
+      totalChapters: 1
+    - id: '8'
+      name: 第八章
+      totalChapters: 1
+    - id: '9'
+      name: 第九章
+      totalChapters: 1
+    - id: '10'
+      name: 第十章
+      totalChapters: 1
+    - id: '11'
+      name: 第十一章
+      totalChapters: 1
+    - id: '12'
+      name: 第十二章
+      totalChapters: 1
+    - id: '13'
+      name: 第十三章
+      totalChapters: 1
+    - id: '14'
+      name: 第十四章
+      totalChapters: 1
+    - id: '15'
+      name: 第十五章
+      totalChapters: 1
+    - id: '16'
+      name: 第十六章
+      totalChapters: 1
+    - id: '17'
+      name: 第十七章
+      totalChapters: 1
+    - id: '18'
+      name: 第十八章
+      totalChapters: 1
+    - id: '19'
+      name: 第十九章
+      totalChapters: 1
 
 # 五経
 
 - id: yijing
   name: 易経
+  sectionLabel: 経
   totalSections: 2
   sections:
     - id: '1'
@@ -145,6 +219,7 @@
 
 - id: shujing
   name: 書経
+  sectionLabel: 篇
   totalSections: 4
   sections:
     - id: '1'
@@ -162,6 +237,7 @@
 
 - id: shijing
   name: 詩経
+  sectionLabel: 篇
   totalSections: 4
   sections:
     - id: '1'
@@ -179,6 +255,7 @@
 
 - id: liji
   name: 礼記
+  sectionLabel: 篇
   totalSections: 1
   sections:
     - id: '1'
@@ -187,6 +264,7 @@
 
 - id: chunqiu
   name: 春秋左氏伝
+  sectionLabel: 篇
   totalSections: 12
   sections:
     - id: '1'

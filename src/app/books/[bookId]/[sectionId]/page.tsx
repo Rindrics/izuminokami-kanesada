@@ -33,11 +33,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const section = getSectionById(bookId, sectionId);
 
   if (!book || !section) {
-    return { title: '編が見つかりません' };
+    return { title: 'セクションが見つかりません' };
   }
 
+  const sectionLabel = book.sectionLabel ?? '編';
   const title = `${section.name} - ${book.name}`;
-  const description = `${book.name} ${section.name}の全章を一覧表示。現在${section.chapters.length}/${section.totalChapters}章を収録。孔子の教えを白文と訓読みで学習できます。`;
+  const description = `${book.name} ${section.name}の全章を一覧表示。現在${section.chapters.length}/${section.totalChapters}章を収録。白文と訓読みで学習できます。`;
 
   return createMetadata({
     title,
@@ -63,8 +64,13 @@ export default async function SectionPage({ params }: Props) {
   const prevUrl = prevSection ? `/books/${bookId}/${prev}` : null;
   const nextUrl = nextSection ? `/books/${bookId}/${next}` : null;
 
-  const prevLabel = prevSection ? `前の編（${prevSection.name}）へ` : undefined;
-  const nextLabel = nextSection ? `次の編（${nextSection.name}）へ` : undefined;
+  const sectionLabel = book.sectionLabel ?? '編';
+  const prevLabel = prevSection
+    ? `前の${sectionLabel}（${prevSection.name}）へ`
+    : undefined;
+  const nextLabel = nextSection
+    ? `次の${sectionLabel}（${nextSection.name}）へ`
+    : undefined;
 
   return (
     <PageWithSidebar showSidebar={false}>
