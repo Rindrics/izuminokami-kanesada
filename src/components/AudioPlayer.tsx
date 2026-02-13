@@ -66,6 +66,8 @@ export function AudioPlayer({
   const playSegmentRef = useRef<((segmentIndex: number) => void) | null>(null);
   const onEndedRef = useRef<(() => void) | null>(null);
   const onErrorRef = useRef<(() => void) | null>(null);
+  const resumeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const isMountedRef = useRef(true);
 
   // Reset when content changes
   // biome-ignore lint/correctness/useExhaustiveDependencies: contentId change should reset state
@@ -122,6 +124,19 @@ export function AudioPlayer({
     onErrorRef.current = null;
   }, []);
 
+  // Stop audio on unmount (e.g. page navigation)
+  useEffect(() => {
+    isMountedRef.current = true;
+    return () => {
+      isMountedRef.current = false;
+      cleanupAudio();
+      if (resumeTimeoutRef.current !== null) {
+        clearTimeout(resumeTimeoutRef.current);
+        resumeTimeoutRef.current = null;
+      }
+    };
+  }, [cleanupAudio]);
+
   // Play a specific segment
   const playSegment = useCallback(
     (segmentIndex: number) => {
@@ -140,6 +155,7 @@ export function AudioPlayer({
       audioRef.current = audio;
 
       const onEnded = () => {
+        if (!isMountedRef.current) return;
         const next = getNextSelectedSegment(segmentIndex);
         if (next !== null) {
           setCurrentSegment(next);
@@ -160,6 +176,7 @@ export function AudioPlayer({
       };
 
       const onError = () => {
+        if (!isMountedRef.current) return;
         setIsPlaying(false);
         setCurrentSegment(null);
       };
@@ -171,6 +188,7 @@ export function AudioPlayer({
       audio.addEventListener('error', onError);
 
       audio.play().catch((error) => {
+        if (!isMountedRef.current) return;
         console.error('Failed to play audio:', error);
         setIsPlaying(false);
         setCurrentSegment(null);
@@ -226,7 +244,12 @@ export function AudioPlayer({
 
     // Resume playing if it was playing before
     if (wasPlaying && wasSegment !== null) {
-      setTimeout(() => {
+      if (resumeTimeoutRef.current !== null) {
+        clearTimeout(resumeTimeoutRef.current);
+      }
+      resumeTimeoutRef.current = setTimeout(() => {
+        resumeTimeoutRef.current = null;
+        if (!isMountedRef.current) return;
         setIsPlaying(true);
         playSegment(wasSegment);
       }, 100);

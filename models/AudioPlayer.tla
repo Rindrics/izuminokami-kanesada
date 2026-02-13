@@ -156,6 +156,13 @@ PlaySingleSegment(seg) ==
     /\ currentSegment' = seg
     /\ loopEnabled' = TRUE
 
+\* アンマウント (ページ遷移時のクリーンアップ)
+\* どの状態からでも発生し、再生を強制停止する
+Unmount ==
+    /\ playState' = "stopped"
+    /\ currentSegment' = 0
+    /\ UNCHANGED <<loopEnabled, selectedSegments>>
+
 -----------------------------------------------------------------------------
 (* 状態遷移 *)
 Next ==
@@ -167,6 +174,7 @@ Next ==
     \/ SelectAll
     \/ SelectNone
     \/ \E seg \in Segments : PlaySingleSegment(seg)
+    \/ Unmount
 
 -----------------------------------------------------------------------------
 (* 時間的性質 *)
