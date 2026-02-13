@@ -115,11 +115,26 @@
 - id: daxue
   name: 大学
   compositionYear: -450 # 曾子の作とされる
-  totalSections: 1
+  totalSections: 6
   sections:
     - id: '1'
-      name: 大学
-      totalChapters: 11
+      name: 第一章
+      totalChapters: 3
+    - id: '2'
+      name: 第二章
+      totalChapters: 4
+    - id: '3'
+      name: 第三章
+      totalChapters: 1
+    - id: '4'
+      name: 第四章
+      totalChapters: 1
+    - id: '5'
+      name: 第五章
+      totalChapters: 2
+    - id: '6'
+      name: 第六章
+      totalChapters: 4
 
 - id: zhongyong
   name: 中庸
