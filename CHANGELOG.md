@@ -1,5 +1,9 @@
 # Changelog
 
+## [v0.7.1](https://github.com/Rindrics/izuminokami-kanesada/compare/v0.7.0...v0.7.1) - 2026-03-08
+- fix: stop audio on navigation by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/137
+- Fix Japanese translations for clarity and accuracy by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/140
+
 ## [v0.7.0](https://github.com/Rindrics/izuminokami-kanesada/compare/v0.6.0...v0.7.0) - 2026-02-13
 - feat: provide copy button by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/126
 - fix: improve appearance of prev/next button by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/131
