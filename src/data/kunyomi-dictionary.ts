@@ -3144,6 +3144,26 @@ export const kunyomiDictionary: KunyomiEntry[] = [
     text: '任',
     readings: [{ id: '任-まか', ruby: 'まか', is_default: true }],
   },
+  {
+    id: '治',
+    text: '治',
+    readings: [{ id: '治-おさ', ruby: 'おさ', is_default: true }],
+  },
+  {
+    id: '平',
+    text: '平',
+    readings: [{ id: '平-たいら', ruby: 'たいら', is_default: true }],
+  },
+  {
+    id: '意',
+    text: '意',
+    readings: [{ id: '意-い', ruby: 'い', is_default: true }],
+  },
+  {
+    id: '誠',
+    text: '誠',
+    readings: [{ id: '誠-まこと', ruby: 'まこと', is_default: true }],
+  },
 ];
 
 export function getKunyomiEntry(text: string): KunyomiEntry | undefined {
