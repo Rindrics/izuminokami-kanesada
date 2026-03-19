@@ -1,0 +1,58 @@
+segments:
+  - text:
+      original: 古之欲明明德於天下者 先治其國
+      japanese: 古の明徳を天下に明らかにせんと欲する者は、先（ま）づ其の国を治む。
+    speaker: null
+  - text:
+      original: 欲治其國者 先齊其家
+      japanese: 其の国を治めんと欲する者は、先（ま）づ其の家を齊う。
+    speaker: null
+  - text:
+      original: 欲齊其家者 先修其身
+      japanese: 其の家を齊えんと欲する者は、先（ま）づ其の身を修む。
+    speaker: null
+  - text:
+      original: 欲修其身者 先正其心
+      japanese: 其の身を修めんと欲する者は、先（ま）づ其の心を正す。
+    speaker: null
+  - text:
+      original: 欲正其心者 先誠其意
+      japanese: 其の心を正さんと欲する者は、先（ま）づ其の意を誠にす。
+    speaker: null
+  - text:
+      original: 欲誠其意者 先致其知
+      japanese: 其の意を誠にせんと欲する者は、先（ま）づ其の知（ち）を致（きわ）む。
+    speaker: null
+  - text:
+      original: 致知在格物
+      japanese: 知（ち）を致（きわ）むるは物に格（いた）るに在り。
+    speaker: null
+  - text:
+      original: 物格而后知至
+      japanese: 物格（いた）りて后、知（ち）至（きわ）まる。
+    speaker: null
+  - text:
+      original: 知至而后意誠
+      japanese: 知至（きわ）まりて后、意誠なり。
+    speaker: null
+  - text:
+      original: 意誠而后心正
+      japanese: 意誠にして后、心正し。
+    speaker: null
+  - text:
+      original: 心正而后身修
+      japanese: 心正しくして后、身修まる。
+    speaker: null
+  - text:
+      original: 身修而后家齊
+      japanese: 身修まりて后、家齊う。
+    speaker: null
+  - text:
+      original: 家齊而后國治
+      japanese: 家齊いて后、国治まる。
+    speaker: null
+  - text:
+      original: 國治而后天下平
+      japanese: 国治まりて后、天下平かなり。
+    speaker: null
+pinyin_reviewed: true
