@@ -1,5 +1,8 @@
 # Changelog
 
+## [v0.7.2](https://github.com/Rindrics/izuminokami-kanesada/compare/v0.7.1...v0.7.2) - 2026-03-19
+- feat: add content for 大学1-2 by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/141
+
 ## [v0.7.1](https://github.com/Rindrics/izuminokami-kanesada/compare/v0.7.0...v0.7.1) - 2026-03-08
 - fix: stop audio on navigation by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/137
 - Fix Japanese translations for clarity and accuracy by @Rindrics in https://github.com/Rindrics/izuminokami-kanesada/pull/140
